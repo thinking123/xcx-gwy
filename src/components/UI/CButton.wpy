@@ -1,8 +1,8 @@
 <template>
-    <div class="CButton" :class="{'info':type == 'info' , 'primary':type == 'primay'}">
+    <div class="CButton" :class="{'info':type == 'info' , 'primary':type == 'primary'}">
       <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
       <span class="CButtonText">{{text}}</span>
-    <div/>
+    </div>
 </template>
 <script>
   import wepy from '@wepy/core'
@@ -32,10 +32,7 @@
         text:'',
         type:{
           type:String,
-          default:'primary',
-          validator: function (value) {
-            return ['primary', 'info'].indexOf(value) !== -1
-          }
+          default:'primary'
         }
     },
 

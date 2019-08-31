@@ -14,6 +14,8 @@ module.exports = {
       'store': path.join(__dirname , 'src/store/index.js'),
       'UI': path.join(__dirname , 'src/components/UI'),
       'icon': path.join(__dirname , 'static/icon'),
+      'image': path.join(__dirname , 'static/image'),
+      'utils': path.join(__dirname , 'src/common/utils.js'),
     },
     aliasFields: ['wepy', 'weapp'],
     modules: ['node_modules']

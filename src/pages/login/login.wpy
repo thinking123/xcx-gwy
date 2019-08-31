@@ -1,11 +1,11 @@
-<style lang="scss" scoped>
-
-</style>
 <template>
-  <div class="page">
-    登入页面
-    <CButton text="按钮" icon="../../../../../static/icon/icon_wechat.png" @tap.native="handleClick" type="info"/>
-    <image src="~icon/icon_wechat.png"></image>
+  <div class="page login">
+    <image :src="img1" class="row1"/>
+    <div class="row2">
+      让您通透未来
+    </div>
+    <CButton text="微信授权登录" :icon="icon1" @tap.native="handleWxClick"/>
+    <CButton text="手机号码登录" :icon="icon2" @tap.native="handlePhoneClick" type="info"/>
   </div>
 </template>
 
@@ -13,31 +13,62 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrl} from '@/common/utils';
 
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
+    // mixins:[utilMixin],
     computed: {
 
     },
     data: {
-
+      img1:'/static/image/login1.png',
+      icon1:'/static/icon/icon_wechat.png',
+      icon2:'/static/icon/icon_phone.png'
     },
     methods: {
-      handleClick(){
+      handleWxClick(){
+        console.log('click')
+      },
+      handlePhoneClick(){
         console.log('click')
       }
     },
-
+    onShow(){
+      // console.log('show' , this.getImgUrl('sdfsdf'))
+    },
     created () {
+      this.img1 = getImgUrl(this.img1)
+      this.icon1 = getImgUrl(this.icon1)
+      this.icon2 = getImgUrl(this.icon2)
 
-      // const icon = require('../../../static/icon/icon_wechat.png');
 
     }
   });
 </script>
+<style lang="scss" scoped>
+  .login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .row1{
+      width: 320rpx;
+      height: 86rpx;
+      margin-top: 178rpx;
+    }
+    .row2{
+      font-size:40rpx;
+      font-weight:bold;
+      color:#626466;
+      line-height:56rpx;
+      letter-spacing: 20rpx;
+    }
+  }
+
+</style>
 <config>
 {
     navigationBarTitleText: '登入',
