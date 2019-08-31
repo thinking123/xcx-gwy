@@ -9,7 +9,8 @@ module.exports = {
   resolve: {
     alias: {
       counter: path.join(__dirname, 'src/components/counter'),
-      '@': path.join(__dirname, 'src')
+      '@': path.join(__dirname, 'src'),
+      'components': path.join(__dirname , 'src/components')
     },
     aliasFields: ['wepy', 'weapp'],
     modules: ['node_modules']
@@ -17,6 +18,9 @@ module.exports = {
   compilers: {
     less: {
       compress: prod
+    },
+    sass: {
+      outputStyle: 'compressed'
     },
     babel: {
       sourceMap: true,
