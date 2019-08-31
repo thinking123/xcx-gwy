@@ -1,0 +1,113 @@
+<template>
+    <div class="CButton" :class="{'info':type == 'info' , 'primary':type == 'primay'}">
+      <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
+      <span class="CButtonText">{{text}}</span>
+    <div/>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+
+    props:{
+        textColor:{
+          type:String,
+          default:'#4FAC1B'
+        },
+        bgColor:{
+          type:String,
+          default:'#FFFFFF'
+        },
+        className:{
+          type:String,
+          default:'className'
+        },
+        icon:{
+          type:String,
+          default:''
+        },
+        text:'',
+        type:{
+          type:String,
+          default:'primary',
+          validator: function (value) {
+            return ['primary', 'info'].indexOf(value) !== -1
+          }
+        }
+    },
+
+    computed:{
+      typeCls(){
+        const obj = {}
+        obj[this.type] = this.type
+
+        console.log('obj' , obj)
+      }
+    },
+    events: {
+
+    },
+
+    methods: {
+      handleClick(){
+        // this.$emit()
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  $primayColor:#4FAC1B;
+  $infoColor:#FFFFFF;
+  .CButton{
+    width:630rpx;
+    height:100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius:50rpx;
+
+    .CButtonText{
+      font-size:32rpx;
+      font-weight:600;
+      line-height:16px;
+    }
+
+    &.primary{
+      background:$primayColor;
+      border:1px solid $primayColor;
+
+      .CButtonText{
+        color:#FFFFFF;
+      }
+    }
+
+    &.info{
+      background:$infoColor;
+      border:1px solid $primayColor;
+
+
+      .CButtonText{
+        color:$primayColor;
+      }
+    }
+
+
+    .icon{
+      margin-right: 22rpx;
+      width: 40rpx;
+      height: 40rpx;
+    }
+
+  }
+
+  .defaultBtn{
+
+  }
+</style>

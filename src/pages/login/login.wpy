@@ -4,8 +4,11 @@
 <template>
   <div class="page">
     登入页面
+    <CButton text="按钮" icon="../../../../../static/icon/icon_wechat.png" @tap.native="handleClick" type="info"/>
+    <image src="~icon/icon_wechat.png"></image>
   </div>
 </template>
+
 
 <script>
   import wepy from '@wepy/core';
@@ -23,10 +26,14 @@
 
     },
     methods: {
-
+      handleClick(){
+        console.log('click')
+      }
     },
 
     created () {
+
+      // const icon = require('../../../static/icon/icon_wechat.png');
 
     }
   });
@@ -35,6 +42,7 @@
 {
     navigationBarTitleText: '登入',
     usingComponents: {
+      CButton:'~UI/CButton'
     }
 }
 </config>

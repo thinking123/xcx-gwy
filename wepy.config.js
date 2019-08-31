@@ -11,7 +11,9 @@ module.exports = {
       counter: path.join(__dirname, 'src/components/counter'),
       '@': path.join(__dirname, 'src'),
       'components': path.join(__dirname , 'src/components'),
-      'store': path.join(__dirname , 'src/store/index.js')
+      'store': path.join(__dirname , 'src/store/index.js'),
+      'UI': path.join(__dirname , 'src/components/UI'),
+      'icon': path.join(__dirname , 'static/icon'),
     },
     aliasFields: ['wepy', 'weapp'],
     modules: ['node_modules']
