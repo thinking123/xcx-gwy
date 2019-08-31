@@ -1,0 +1,40 @@
+<style lang="scss" scoped>
+
+</style>
+<template>
+  <div class="page">
+    登入页面
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+
+    created () {
+
+    }
+  });
+</script>
+<config>
+{
+    navigationBarTitleText: '登入',
+    usingComponents: {
+    }
+}
+</config>
