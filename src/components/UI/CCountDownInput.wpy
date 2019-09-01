@@ -1,7 +1,9 @@
 <template>
   <div class="CCountDownInput external-cls" :class="{'bottomLine':showLine}">
     <span v-if="!!label" class="label">{{label}}</span>
-    <input @input="handleInput" :value="val"
+    <input @input="handleInput"
+           :type="type"
+           :value="val"
            :placeholder="placeholder"/>
     <image src="/static/icon/btn_reset_gray.png"
            v-show="!!val"
@@ -58,6 +60,10 @@
       countNum:{
         type:Number,
         default:60
+      },
+      type:{
+        type:String,
+        default:'text'
       }
     },
     events: {
