@@ -1,0 +1,103 @@
+<template>
+    <div class="CTab" :class="{'radius':type == 'radius'}">
+      <div class="tabItemWrap external-cls">
+        <div v-for="(tab , index) in tabs" class="tabItem" @tab="handleSelect(tab,index)">
+          <image :src="selectedIndex== index ? tab.iconSel : tab.icon"
+                 v-if="!!tab.icon"
+                 class="icon"/>
+          <span class="text">{{tab.text}}</span>
+        </div>
+      </div>
+
+      <div class="bottomLine bottom-cls" v-if="!!bottomLine && type != 'radius'" :style="bLine"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+      selectedIndex:this.initSelected
+    },
+    externalClasses:[
+      'external-cls',
+      'bottom-cls'
+    ],
+    props:{
+      tabs:{
+        type:Array,
+        default:function () {
+          const obj = {
+            icon:'',
+            iconSel:'',
+            text:''
+          }
+          return [obj]
+        }
+      },
+      bottomLine:{
+        type:Number,
+        default:0
+      },
+      initSelected:{
+        type:Number,
+        default:0
+      },
+      type:{
+        type:String,
+        default:'normal',
+        validator: function (value) {
+          // 这个值必须匹配下列字符串中的一个
+          return ['normal', 'radius'].indexOf(value) !== -1
+        }
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      bLine(){
+        const l = this.tabs.length;
+        const w = (1.0/l)*this.bottomLine;
+        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
+
+        return {
+          transform:`translateX(${tf*100}%)`,
+          width:`${w*100}%`
+        }
+      }
+    },
+    methods: {
+      handleSelect(tab,index){
+        console.log('tab' , tab ,index)
+        this.selectedIndex = index;
+        this.$emit("changeTab" , index , tab)
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CTab{
+    .tabItemWrap{
+      display: flex;
+      .tabItem{
+        flex:1;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    &.radius{
+      .tabItemWrap{
+        .tabItem{
+          border-right: 1px solid;
+        }
+      }
+    }
+  }
+</style>
