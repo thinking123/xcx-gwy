@@ -55,7 +55,7 @@
     navigationBarTitleText: '登入',
     usingComponents: {
     CTab:'~UI/CTab',
-    CTab:'~UI/CLabelInput',
+    CLabelInput:'~UI/CLabelInput'
     }
 }
 </config>
