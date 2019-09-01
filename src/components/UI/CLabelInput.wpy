@@ -2,6 +2,7 @@
     <div class="CLabelInput external-cls" :class="{'bottomLine':showLine}">
       <span v-if="!!label" class="label">{{label}}</span>
       <input @input="handleInput" :value="val"
+             :type="type"
              :placeholder="placeholder"/>
       <image src="/static/icon/btn_reset_gray.png"
              v-show="!!val"
@@ -32,6 +33,10 @@
       showLine:{
         type:Boolean,
         default: true
+      },
+      type:{
+        type:String,
+        default:'text'
       }
     },
     events: {
