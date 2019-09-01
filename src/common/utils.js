@@ -21,3 +21,22 @@ export function showMsg(title , icon = 'none') {
   }
   wx.showToast(obj)
 }
+
+
+export function urlParams(url, params , noEncode = false) {
+  let p = ''
+  if(noEncode){
+    p = Object.keys(params).map(function (key) {
+      return [key, params[key]].join("=");
+    }).join("&");
+  }else{
+    p = Object.keys(params).map(function (key) {
+      return [key, params[key]].map(encodeURIComponent).join("=");
+    }).join("&");
+  }
+
+  if (p.length === 0) {
+    return url
+  }
+  return `${url}?${p}`
+}
