@@ -1,6 +1,6 @@
 <template>
   <div class="page loginInput">
-    <CTab :tabs="tabs" bottomLine="0.2"/>
+    <CTab :tabs="tabs" :bottomLine="bottomLine"/>
   </div>
 </template>
 
@@ -20,7 +20,8 @@
       tabs:[
         {text:'验证码登录'},
         {text:'密码登录'},
-      ]
+      ],
+      bottomLine:32.0/375
     },
     methods: {
 
@@ -34,8 +35,9 @@
   });
 </script>
 <style lang="scss">
+  @import "~basePage";
   .loginInput{
-  
+    background-color: $pageBg;
   }
 </style>
 <config>

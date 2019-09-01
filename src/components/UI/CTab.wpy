@@ -1,7 +1,10 @@
 <template>
-    <div class="CTab" :class="{'radius':type == 'radius'}">
-      <div class="tabItemWrap external-cls">
-        <div v-for="(tab , index) in tabs" class="tabItem" @tab="handleSelect(tab,index)">
+    <div class="CTab  external-cls" :class="{'radius':type == 'radius'}">
+      <div class="tabItemWrap">
+        <div v-for="(tab , index) in tabs"
+             class="tabItem"
+             :class="{'selected':index==selectedIndex}"
+             @click="handleSelect(tab,index)">
           <image :src="selectedIndex== index ? tab.iconSel : tab.icon"
                  v-if="!!tab.icon"
                  class="icon"/>
@@ -18,7 +21,7 @@
 
   wepy.component({
     data: {
-      selectedIndex:this.initSelected
+      selectedIndex:0
     },
     externalClasses:[
       'external-cls',
@@ -64,26 +67,18 @@
 
         const width = `${w*100}%`;
 
+        console.log('width' , width)
         return width;
       },
       bLineTr(){
         const l = this.tabs.length;
         const w = (1.0/l)*this.bottomLine;
-        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
+        const tf = ((1.0/l/2)-w/2)/w + (1.0/l)*this.selectedIndex/w;
         const trfs = `translateX(${tf*100}%)`;
 
+        console.log('translate : ' , trfs)
         return trfs;
       },
-      bLine(){
-        const l = this.tabs.length;
-        const w = (1.0/l)*this.bottomLine;
-        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
-
-        return {
-          transform:`translateX(${tf*100}%)`,
-          width:`${w*100}%`
-        }
-      }
     },
     methods: {
       handleSelect(tab,index){
@@ -92,13 +87,22 @@
         this.$emit("changeTab" , index , tab)
       }
     },
+    attached(){
+      this.selectedIndex = this.initSelected;
+    },
     onLoad () {
 
     }
   });
 </script>
 <style lang="scss">
+  @import "~baseUI";
   .CTab{
+    height: 100rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $white;
     .tabItemWrap{
       display: flex;
       .tabItem{
@@ -107,11 +111,26 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: center;
+
+        font-size:32rpx;
+        font-weight:500;
+        line-height:32rpx;
+        color:#333333;
+        &.selected{
+          color: $primayColor;
+        }
       }
 
-      .bottomLine{
-        height: 20rpx;
-      }
+
+    }
+
+    .bottomLine{
+      height: 10rpx;
+      background-color: $primayColor;
+      margin-top: 24rpx;
+      transition: 0.3s ease-in-out transform;
+      border-radius:5rpx;
     }
 
     &.radius{

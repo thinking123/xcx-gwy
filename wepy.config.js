@@ -16,6 +16,8 @@ module.exports = {
       'icon': path.join(__dirname , 'static/icon'),
       'image': path.join(__dirname , 'static/image'),
       'utils': path.join(__dirname , 'src/common/utils.js'),
+      'baseUI': path.join(__dirname , 'src/css/baseUI.scss'),
+      'basePage': path.join(__dirname , 'src/css/basePage.scss'),
     },
     aliasFields: ['wepy', 'weapp'],
     modules: ['node_modules']
