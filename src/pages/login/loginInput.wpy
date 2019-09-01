@@ -1,6 +1,6 @@
 <template>
   <div class="page loginInput">
-
+    <CTab :tabs="tabs" bottomLine="0.2"/>
   </div>
 </template>
 
@@ -11,16 +11,16 @@
   wepy.page({
     store,
     config: {
-      navigationBarTitleText: '登入',
-      usingComponents: {
-        CTab:'~UI/CTab'
-      }
+      navigationBarTitleText: '登入'
     },
     computed: {
 
     },
     data: {
-
+      tabs:[
+        {text:'验证码登录'},
+        {text:'密码登录'},
+      ]
     },
     methods: {
 
@@ -40,8 +40,9 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '登入',
     usingComponents: {
+    CTab:'~UI/CTab'
     }
 }
 </config>

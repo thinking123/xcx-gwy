@@ -57,7 +57,7 @@
       this.icon1 = getImgUrl(this.icon1)
       this.icon2 = getImgUrl(this.icon2)
 
-
+      navToPage('/pages/login/loginInput')
     }
   });
 </script>

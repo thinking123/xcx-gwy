@@ -9,7 +9,8 @@
         </div>
       </div>
 
-      <div class="bottomLine bottom-cls" v-if="!!bottomLine && type != 'radius'" :style="bLine"/>
+      <div class="bottomLine bottom-cls" v-if="!!bottomLine && type != 'radius'"
+           :style="{width:bLineW,transform: bLineTr}"/>
     </div>
 </template>
 <script>
@@ -56,6 +57,23 @@
 
     },
     computed:{
+      bLineW(){
+        const l = this.tabs.length;
+        const w = (1.0/l)*this.bottomLine;
+        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
+
+        const width = `${w*100}%`;
+
+        return width;
+      },
+      bLineTr(){
+        const l = this.tabs.length;
+        const w = (1.0/l)*this.bottomLine;
+        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
+        const trfs = `translateX(${tf*100}%)`;
+
+        return trfs;
+      },
       bLine(){
         const l = this.tabs.length;
         const w = (1.0/l)*this.bottomLine;
@@ -89,6 +107,10 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+      }
+
+      .bottomLine{
+        height: 20rpx;
       }
     }
 
