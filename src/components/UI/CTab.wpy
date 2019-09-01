@@ -99,6 +99,7 @@
   @import "~baseUI";
   .CTab{
     height: 100rpx;
+    width: 750rpx;
     display: flex;
     flex-direction: column;
     justify-content: center;
