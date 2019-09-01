@@ -71,9 +71,8 @@
     justify-content: center;
 
     border-radius:50rpx;
-
+    font-size:32rpx;
     .CButtonText{
-      font-size:32rpx;
       font-weight:600;
       line-height:16px;
     }
