@@ -12,3 +12,12 @@ export function isPhone(p) {
 
   return phoneReg.test(p);
 }
+
+
+export function showMsg(title , icon = 'none') {
+  const obj = {
+      title,
+      icon
+  }
+  wx.showToast(obj)
+}

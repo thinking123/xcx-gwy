@@ -30,7 +30,7 @@
     props:{
       label:String,
       val:{
-        type:Number
+        type:String
       },
       placeholder:{
         type:String,
@@ -42,7 +42,17 @@
       },
       beforeCheck:{
         type:Object,
-        default:null
+        default:function() {
+          return {
+            check:function() {
+              return true;
+            }
+          }
+        }
+      },
+      beforefun:{
+        type:Function,
+        default:()=>{}
       },
       countNum:{
         type:Number,
@@ -58,7 +68,6 @@
     methods: {
       handleInput(e){
         const v = e.$wx.detail.value
-        console.log('v' ,   v)
         this.$emit('update:val' , v)
       },
       handleClear(){
@@ -68,8 +77,8 @@
         if(this.isCounting){
           return
         }
-        if(isFunction(this.beforeCheck)){
-          if(this.beforeCheck(this.val)){
+        if(this.$parent && isFunction(this.$parent.countCheck)){
+          if(this.$parent.countCheck(this.val)){
             this.countDown()
           }
         }else {
@@ -144,9 +153,10 @@
       width: 44rpx;
       height: 44rpx;
       position: absolute;
-      right: 0;
+      right: 200rpx;
       top:50%;
       transform: translateY(-50%);
+      display: block;
     }
 
     .countDown{
