@@ -3,7 +3,7 @@
     <CTab :tabs="tabs" :bottomLine="bottomLine"/>
     <div class="form">
       <CLabelInput placeholder="请输入手机号码" label="手机号" :val.sync="phone" @update:val="handlev"/>
-      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handlev" showLine="false"/>
+      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handlev" showLine="false" :before-check="phoneCheck"/>
     </div>
 
     <CButton text="登录"
@@ -15,6 +15,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {isPhone} from '@/common/utils';
 
   wepy.page({
     store,
@@ -40,6 +41,10 @@
       handlev(v){
         console.log('hv : ' , v)
         this.phone = v;
+      },
+      phoneCheck(v){
+        console.log('phone c : ' , v , this.phone)
+        return isPhone(this.phone);
       }
     },
     onShow(){

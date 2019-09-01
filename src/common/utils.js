@@ -6,3 +6,9 @@ export function getImgUrl(url) {
 export function isFunction(functionToCheck) {
   return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }
+
+export function isPhone(p) {
+  const phoneReg = /^1[3456789]\d{9}$/;
+
+  return phoneReg.test(p);
+}
