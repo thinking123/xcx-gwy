@@ -1,5 +1,5 @@
 <template>
-    <div class="CButton" :class="{'info':type == 'info' , 'primary':type == 'primary'}">
+    <div class="CButton external-cls" :class="{'info':type == 'info' , 'primary':type == 'primary'}">
       <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
       <span class="CButtonText">{{text}}</span>
     </div>
@@ -11,7 +11,9 @@
     data: {
 
     },
-
+    externalClasses:[
+      'external-cls'
+    ],
     props:{
         textColor:{
           type:String,
