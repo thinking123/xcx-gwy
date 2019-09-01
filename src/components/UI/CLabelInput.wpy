@@ -5,6 +5,7 @@
              :placeholder="placeholder"/>
       <image src="/static/icon/btn_reset_gray.png"
              v-show="!!val"
+             @click="handleClear"
              class="close"/>
     </div>
 </template>
@@ -21,7 +22,9 @@
     ],
     props:{
       label:String,
-      val:String,
+      val:{
+        type:String
+      },
       placeholder:{
         type:String,
         default:"请输入"
@@ -35,8 +38,12 @@
     },
     methods: {
       handleInput(e){
-        const v = e.detail.value
-        this.$emit('@update:val' , v)
+        const v = e.$wx.detail.value
+        console.log('v' ,   v)
+        this.$emit('update:val' , v)
+      },
+      handleClear(){
+        this.$emit('update:val' , '')
       }
     },
     onLoad () {
