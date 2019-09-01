@@ -60,7 +60,8 @@ wepy.app({
 {
     pages: [
       'pages/login/login',
-      'pages/login/loginInput'
+      'pages/login/loginInput',
+      'pages/login/register',
     ],
     window: {
       backgroundTextStyle: 'light',

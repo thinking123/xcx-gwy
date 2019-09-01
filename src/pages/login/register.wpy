@@ -1,15 +1,16 @@
 <template>
-  <div class="page loginInput">
-    <CTab :tabs="tabs" :bottomLine="bottomLine" @changeTab="handleTab"/>
+  <div class="page register">
     <div class="form">
       <CLabelInput placeholder="请输入手机号码" label="手机号" :val.sync="phone" @update:val="handlev"/>
-      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handleCode" showLine="false" v-if="selectedTab == 0"/>
-      <CLabelInput placeholder="请输入登录密码" label="密 码" :val.sync="pw"
+      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handleCode" />
+      <CLabelInput placeholder="请设置登录密码" label="密 码"
+                   :val.sync="pw"
+                   showLine="false"
                    type="password"
-                   @update:val="handlePw" v-else/>
+                   @update:val="handlePw"/>
     </div>
 
-    <CButton text="登录"
+    <CButton text="注册"
              @tap.native="handleSubmit"
              external-cls="submit"/>
   </div>
@@ -22,21 +23,12 @@
 
   wepy.page({
     store,
-    config: {
-      navigationBarTitleText: '登入'
-    },
     computed: {
 
     },
     data: {
-      tabs:[
-        {text:'验证码登录'},
-        {text:'密码登录'},
-      ],
-      bottomLine:32.0/375,
       phone:'',
       code:'',
-      selectedTab:0,
       pw:''
     },
     methods: {
@@ -65,17 +57,11 @@
         }
         return isOk;
       },
-      handleTab({tab ,index}){
-        console.log('tab' , tab , index)
-        this.selectedTab = index
-      },
       verify(){
         let isOk = isPhone(this.phone)
-        if(this.selectedTab == 0){
-          isOk = isOk && /\d{4}/.test(this.code)
-        }else{
-          isOk = isOk && !!this.pw
-        }
+
+        isOk = isOk && /\d{4}/.test(this.code)
+        isOk = isOk && !!this.pw
 
         return isOk;
       }
@@ -90,7 +76,7 @@
 </script>
 <style lang="scss">
   @import "~basePage";
-  .loginInput{
+  .register{
     background-color: $pageBg;
     display: flex;
     flex-direction: column;
@@ -110,12 +96,11 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '登入',
+    navigationBarTitleText: '注册',
     usingComponents: {
-    CTab:'~UI/CTab',
-    CLabelInput:'~UI/CLabelInput',
-    CButton:'~UI/CButton',
-    CCountDownInput:'~UI/CCountDownInput',
+      CLabelInput:'~UI/CLabelInput',
+      CButton:'~UI/CButton',
+      CCountDownInput:'~UI/CCountDownInput',
     }
 }
 </config>

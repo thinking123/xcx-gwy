@@ -95,7 +95,8 @@
       color: #CCCCCC;
     }
     .label{
-      margin-right: 40rpx;
+      width: 166rpx;
+      /*margin-right: 40rpx;*/
       color: #666666;
       font-size:32rpx;
       font-weight:400;
