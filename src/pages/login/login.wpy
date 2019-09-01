@@ -18,6 +18,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {getImgUrl} from '@/common/utils';
+  import {navToPage} from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -38,7 +39,8 @@
         console.log('click')
       },
       handlePhoneClick(){
-        console.log('click')
+        // console.log('click')
+        navToPage('/pages/login/loginInput')
       },
       handlegoto(){
         console.log('handlegoto')

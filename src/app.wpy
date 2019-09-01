@@ -59,7 +59,8 @@ wepy.app({
 <config>
 {
     pages: [
-      'pages/login/login'
+      'pages/login/login',
+      'pages/login/loginInput'
     ],
     window: {
       backgroundTextStyle: 'light',

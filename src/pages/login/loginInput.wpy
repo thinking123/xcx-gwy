@@ -1,0 +1,47 @@
+<template>
+  <div class="page loginInput">
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: '登入',
+      usingComponents: {
+        CTab:'~UI/CTab'
+      }
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .loginInput{
+  
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+    }
+}
+</config>
