@@ -84,7 +84,7 @@
       handleSelect(tab,index){
         console.log('tab' , tab ,index)
         this.selectedIndex = index;
-        this.$emit("changeTab" , index , tab)
+        this.$emit("changeTab" , {tab,index})
       }
     },
     attached(){

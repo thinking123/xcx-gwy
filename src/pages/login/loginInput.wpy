@@ -1,9 +1,9 @@
 <template>
   <div class="page loginInput">
-    <CTab :tabs="tabs" :bottomLine="bottomLine"/>
+    <CTab :tabs="tabs" :bottomLine="bottomLine" @changeTab="handleTab"/>
     <div class="form">
       <CLabelInput placeholder="请输入手机号码" label="手机号" :val.sync="phone" @update:val="handlev"/>
-      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handlev" showLine="false"/>
+      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handleCode" showLine="false"/>
     </div>
 
     <CButton text="登录"
@@ -31,7 +31,8 @@
         {text:'密码登录'},
       ],
       bottomLine:32.0/375,
-      phone:'123'
+      phone:'123',
+      code:''
     },
     methods: {
       handleSubmit(){
@@ -41,12 +42,19 @@
         console.log('hv : ' , v)
         this.phone = v;
       },
+      handleCode(v){
+        console.log('code' , v)
+        this.code = v
+      },
       countCheck(v){
         const isOk = isPhone(this.phone);
         if(!isOk){
           showMsg("请输入正确手机号")
         }
         return isOk;
+      },
+      handleTab({tab ,index}){
+        console.log('tab' , tab , index)
       }
     },
     onShow(){

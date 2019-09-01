@@ -30,7 +30,8 @@
     props:{
       label:String,
       val:{
-        type:String
+        type:String,
+        default:''
       },
       placeholder:{
         type:String,
@@ -156,7 +157,6 @@
       right: 200rpx;
       top:50%;
       transform: translateY(-50%);
-      display: block;
     }
 
     .countDown{
