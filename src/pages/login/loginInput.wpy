@@ -1,6 +1,9 @@
 <template>
   <div class="page loginInput">
     <CTab :tabs="tabs" :bottomLine="bottomLine"/>
+    <div class="form">
+      <CLabelInput placeholder="请输入手机号码" label="手机号"/>
+    </div>
   </div>
 </template>
 
@@ -38,13 +41,21 @@
   @import "~basePage";
   .loginInput{
     background-color: $pageBg;
+    .form{
+      padding: 0 30rpx;
+
+      background:$white;
+      box-shadow:0px 4px 8px 0px rgba(0,0,0,0.05);
+      border-radius:16px;
+    }
   }
 </style>
 <config>
 {
     navigationBarTitleText: '登入',
     usingComponents: {
-    CTab:'~UI/CTab'
+    CTab:'~UI/CTab',
+    CTab:'~UI/CLabelInput',
     }
 }
 </config>
