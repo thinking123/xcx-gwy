@@ -76,6 +76,7 @@
 </script>
 <style lang="scss">
   @import "~basePage";
+  @import "~baseUI";
   .register{
     background-color: $pageBg;
     display: flex;

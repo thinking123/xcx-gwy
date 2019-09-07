@@ -61,8 +61,8 @@
   });
 </script>
 <style lang="scss">
-  $primayColor:#4FAC1B;
-  $infoColor:#FFFFFF;
+  @import "~baseUI";
+
   .CButton{
     width:630rpx;
     height:100rpx;
@@ -78,8 +78,8 @@
     }
 
     &.primary{
-      background:$primayColor;
-      border:1px solid $primayColor;
+      background:$primaryColor;
+      border:1px solid $primaryColor;
 
       .CButtonText{
         color:#FFFFFF;
@@ -88,11 +88,11 @@
 
     &.info{
       background:$infoColor;
-      border:1px solid $primayColor;
+      border:1px solid $primaryColor;
 
 
       .CButtonText{
-        color:$primayColor;
+        color:$primaryColor;
       }
     }
 
