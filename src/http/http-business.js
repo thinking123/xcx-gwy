@@ -1,63 +1,122 @@
-import {get, post} from "./http";
-import {urlParams} from '@/common/utils';
+import { get, post } from './http';
+import { urlParams } from '@/common/utils';
 
 function parseRes(res, errMsg, resolveStatus = []) {
-    if (!!res && res.status && res.status.indexOf('2') > -1) {
-        // return res.rows ? res.rows : res
-        return res.rows
-    } else {
-        const msg = res && res.message ? res.message : errMsg
-        throw new Error(msg ? msg : 'error')
-    }
+  if (!!res && res.status && res.status.indexOf('2') > -1) {
+    // return res.rows ? res.rows : res
+    return res.rows;
+  } else {
+    const msg = res && res.message ? res.message : errMsg;
+    throw new Error(msg ? msg : 'error');
+  }
 }
 
-//登入
-export function wxLogin(code, userHead, userName, userSex) {
-    const url = '/api/login/wxlogin'
-    const loadingText = '正在登入...'
-    const errMsg = '登入失败'
-    const data = {
-        code: code,
-        userHead: userHead,
-        userName: userName,
-        userSex: userSex
-    }
-    return post(url, data, loadingText).then(res => parseRes(res, errMsg))
+/**
+ * /wap/login/checkPhone
+ 验证手机号是否注册
+ * @param userPhone
+ * @returns {Promise<T | never>}
+ */
+export function checkPhone(userPhone) {
+  let url = '/wap/login/checkPhone';
+  const loadingText = '';
+  const errMsg = '';
+
+  url = urlParams(url, { userPhone });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
+ * /wap/login/loginByPhone
+ 手机号登陆 --编号 003
+
+
+ * @param userPhone
+ * @param userPwd
+ * @param deviceId
+ * @returns 请求已完成 rows 直接返回token
+ */
+export function loginByPhone(userPhone, userPwd, deviceId) {
+  let url = '/wap/login/loginByPhone';
+  const loadingText = '正在登入...';
+  const errMsg = '登入失败';
+
+  url = urlParams(url, { userPhone, userPwd, deviceId });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
+ * /wap/login/loginByWx
+ 微信登陆 --编号
+ * @param openid
+ * @param deviceId
+ * @returns 请求已完成 rows 直接返回token
+ */
+export function loginByWx(openid, deviceId) {
+  let url = '/wap/login/loginByWx';
+  const loadingText = '正在登入...';
+  const errMsg = '登入失败';
+
+  url = urlParams(url, { openid, deviceId });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
+ * /wap/login/registerByPhone
+ 手机号注册
+ * @param userPhone
+ * @param userPwd
+ * @returns 请求已完成 ROW 直接返回 TOKEN
+ */
+export function registerByPhone(userPhone, userPwd) {
+  let url = '/wap/login/loginByWx';
+  const loadingText = '正在注册...';
+  const errMsg = '注册失败';
+
+  url = urlParams(url, { userPhone, userPwd });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 
 
-//是否注册过
-export function isSignUp() {
-    const url = '/api/singUp/isSingUp'
-    const data = {}
-    return post(url, data).then(res => {
-        console.log('isSignUp', res)
-        if (res && res.status == '9006') {
-            return true
-        } else if (res && res.status == '9007') {
-            return false
-        }  else {
-            throw new Error(res.message ? res.message : '请求失败')
-        }
-    })
-}
+// //是否注册过
+// export function isSignUp() {
+//   const url = '/api/singUp/isSingUp';
+//   const data = {};
+//   return post(url, data).then(res => {
+//     console.log('isSignUp', res);
+//     if (res && res.status == '9006') {
+//       return true;
+//     } else if (res && res.status == '9007') {
+//       return false;
+//     } else {
+//       throw new Error(res.message ? res.message : '请求失败');
+//     }
+//   });
+// }
 
-//注册
-export function signUp(userName,
-                       userPhone,
-                       userProvinceId,
-                       userPointId,
-                       userSchoolName) {
-    const url = '/api/singUp'
-    const loadingText = '正在注册...'
-    const errMsg = '注册失败'
-    const data = {
-        userName: userName,
-        userPhone: userPhone,
-        userPointId: userPointId,
-        userProvinceId: userProvinceId,
-        userSchoolName: userSchoolName,
-    }
-    return post(url, data, loadingText).then(res => parseRes(res, errMsg))
+/**
+ * /wap/login/registerByWx
+ 微信注册 --编号 004
+ * @param openid
+ * @param userHead
+ * @param userName
+ * @param userPhone
+ * @returns 请求已完成 ROW 直接返回 TOKEN
+ */
+export function registerByWx(
+  openid,
+  userHead,
+  userName,
+  userPhone) {
+  const url = '/api/singUp';
+  const loadingText = '正在注册...';
+  const errMsg = '注册失败';
+  const data = {
+    openid,
+    userHead,
+    userName,
+    userPhone
+  };
+  return post(url, data, loadingText).then(res => parseRes(res, errMsg));
 
 }
