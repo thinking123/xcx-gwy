@@ -33,9 +33,10 @@
       pw:''
     },
     methods: {
-      handleSubmit(){
+      async handleSubmit(){
         if(this.verify()){
           console.log('submit')
+          registerByPhone()
         }else{
           showMsg("请输入正确的内容")
         }

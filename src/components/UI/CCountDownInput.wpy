@@ -93,13 +93,20 @@
           this.countDown();
         }
       },
+      reset(){
+        if(this.time){
+          clearInterval(this.time)
+          this.time = null
+        }
+      },
       countDown(){
         this.isCounting = true;
         this.countDownText = this.countNum
         this.time = setInterval(()=>{
-          if(this.countDownText > 0){
+          if(this.countDownText > 1){
             this.countDownText = --this.countDownText;
           }else{
+            this.reset();
             this.isCounting = false;
             this.countDownText = this.end;
           }
@@ -108,8 +115,7 @@
       }
     },
     onUnload(){
-      clearInterval(this.time);
-      this.time = null;
+      this.reset();
     },
     onLoad () {
       this.close = getImgUrl(this.close);
