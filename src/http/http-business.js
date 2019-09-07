@@ -12,13 +12,13 @@ function parseRes(res, errMsg, resolveStatus = []) {
 }
 
 /**
- * /wap/login/checkPhone
+ * / api/login/checkPhone
  验证手机号是否注册
  * @param userPhone
  * @returns {Promise<T | never>}
  */
 export function checkPhone(userPhone) {
-  let url = '/wap/login/checkPhone';
+  let url = '/api/login/checkPhone';
   const loadingText = '';
   const errMsg = '';
 
@@ -27,7 +27,7 @@ export function checkPhone(userPhone) {
 }
 
 /**
- * /wap/login/loginByPhone
+ * / api/login/loginByPhone
  手机号登陆 --编号 003
 
 
@@ -37,7 +37,7 @@ export function checkPhone(userPhone) {
  * @returns 请求已完成 rows 直接返回token
  */
 export function loginByPhone(userPhone, userPwd, deviceId) {
-  let url = '/wap/login/loginByPhone';
+  let url = '/api/login/loginByPhone';
   const loadingText = '正在登入...';
   const errMsg = '登入失败';
 
@@ -46,14 +46,14 @@ export function loginByPhone(userPhone, userPwd, deviceId) {
 }
 
 /**
- * /wap/login/loginByWx
+ * / api/login/loginByWx
  微信登陆 --编号
  * @param openid
  * @param deviceId
  * @returns 请求已完成 rows 直接返回token
  */
 export function loginByWx(openid, deviceId) {
-  let url = '/wap/login/loginByWx';
+  let url = '/api/login/loginByWx';
   const loadingText = '正在登入...';
   const errMsg = '登入失败';
 
@@ -62,14 +62,14 @@ export function loginByWx(openid, deviceId) {
 }
 
 /**
- * /wap/login/registerByPhone
+ * /api/login/registerByPhone
  手机号注册
  * @param userPhone
  * @param userPwd
  * @returns 请求已完成 ROW 直接返回 TOKEN
  */
 export function registerByPhone(userPhone, userPwd) {
-  let url = '/wap/login/loginByWx';
+  let url = '/api/login/loginByWx';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
 
@@ -95,7 +95,7 @@ export function registerByPhone(userPhone, userPwd) {
 // }
 
 /**
- * /wap/login/registerByWx
+ * / api/login/registerByWx
  微信注册 --编号 004
  * @param openid
  * @param userHead
@@ -108,7 +108,7 @@ export function registerByWx(
   userHead,
   userName,
   userPhone) {
-  const url = '/api/singUp';
+  const url = '/api/login/registerByWx';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
   const data = {

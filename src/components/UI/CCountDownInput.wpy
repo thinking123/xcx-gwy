@@ -80,16 +80,17 @@
       handleClear(){
         this.$emit('update:val' , '')
       },
-      handleCountDown(){
-        if(this.isCounting){
-          return
+      async handleCountDown() {
+        if (this.isCounting) {
+          return;
         }
-        if(this.$parent && isFunction(this.$parent.countCheck)){
-          if(this.$parent.countCheck(this.val)){
-            this.countDown()
+        if (this.$parent && isFunction(this.$parent.countCheck)) {
+          const isOk = await this.$parent.countCheck(this.val);
+          if (isOk) {
+            this.countDown();
           }
-        }else {
-          this.countDown()
+        } else {
+          this.countDown();
         }
       },
       countDown(){

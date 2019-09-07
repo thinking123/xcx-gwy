@@ -20,6 +20,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {isPhone , showMsg} from '@/common/utils';
+  import {registerByPhone , checkPhone} from '@/http/http-business';
 
   wepy.page({
     store,
@@ -50,12 +51,20 @@
         console.log('code' , v)
         this.code = v
       },
-      countCheck(v){
-        const isOk = isPhone(this.phone);
-        if(!isOk){
-          showMsg("请输入正确手机号")
+      async countCheck(v) {
+        let isOk = false;
+        try {
+          if (!isPhone(this.phone)) {
+            showMsg('请输入正确手机号');
+            return;
+          }
+          await checkPhone(this.phone);
+          isOk = true;
+        } catch (e) {
+          showMsg(e);
+        } finally {
+          return isOk;
         }
-        return isOk;
       },
       verify(){
         let isOk = isPhone(this.phone)
@@ -67,7 +76,6 @@
       }
     },
     onShow(){
-      
     },
     created () {
 
