@@ -1,12 +1,13 @@
 <template>
   <div class="page home">
-    <div class="signed" v-if="isSigned">
+    <div class="signed" v-if="'sdf'">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
       </CCircleImg>
       <div class="title">
         <div class="row1">
-
+          <span>nickName</span>
+          <CTag text="登录"/>
         </div>
         <div class="row2">
 
@@ -31,14 +32,16 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import { mapGetters } from '@wepy/x';
+  import { mapGetters , mapState} from '@wepy/x';
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters(['isSigned'])
+      ...mapGetters(['isSigned']),
+      ...mapState(['nickName']),
+
     },
     data: {
 
@@ -96,6 +99,7 @@
       CTabbar:'~UI/CTabbar',
       CCircleImg:'~UI/CCircleImg',
       CButton:'~UI/CButton',
+  CTag:'~UI/CTag',
     }
 }
 </config>

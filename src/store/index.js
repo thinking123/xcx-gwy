@@ -9,7 +9,8 @@ export default new Vuex.Store({
     token:null,
     queue:[],
     activeTabIndex:0,
-    tabbar
+    tabbar,
+    nickName:'default Nickname'
   },
   mutations: {
     increment (state) {
