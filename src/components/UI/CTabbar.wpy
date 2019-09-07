@@ -10,10 +10,10 @@
     </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+  import wepy from '@wepy/core';
   import store from 'store';
-  import { mapState, mapActions ,mapMutations} from '@wepy/x';
-  import {redirectTo} from '@/common/navUtils';
+  import { mapMutations, mapState } from '@wepy/x';
+  import { redirectTo } from '@/common/navUtils';
 
   wepy.component({
     store,

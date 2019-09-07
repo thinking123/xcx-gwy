@@ -22,6 +22,11 @@ export default new Vuex.Store({
       state.activeTabIndex = index
     }
   },
+  getters:{
+    isSigned(state){
+      return !!state.token;
+    }
+  },
   actions: {
     increment ({ commit }) {
       commit('increment');

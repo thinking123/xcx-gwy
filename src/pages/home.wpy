@@ -1,5 +1,29 @@
 <template>
   <div class="page home">
+    <div class="signed" v-if="isSigned">
+      <CCircleImg external-cls="cirImg">
+        <open-data type="userAvatarUrl"></open-data>
+      </CCircleImg>
+      <div class="title">
+        <div class="row1">
+
+        </div>
+        <div class="row2">
+
+        </div>
+      </div>
+      <div class="right">
+
+      </div>
+    </div>
+    <div class="notSigned" v-else>
+      <CCircleImg external-cls="cirImg"/>
+      <span class="title">Hi，欢迎来到开通联众</span>
+      <CButton text="登录"
+               @tap.native="handleSign"
+               type="info"
+               external-cls="signBtn"/>
+    </div>
     <CTabbar/>
   </div>
 </template>
@@ -7,20 +31,22 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-
+  import { mapGetters } from '@wepy/x';
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
     computed: {
-
+      ...mapGetters(['isSigned'])
     },
     data: {
 
     },
     methods: {
+      handleSign(){
 
+      }
     },
     onShow(){
       
@@ -32,7 +58,35 @@
 </script>
 <style lang="scss">
   .home{
-  
+    width: initial;
+    margin: 32rpx 30rpx 0;
+    .cirImg{
+      height: 80rpx;
+      width: 80rpx;
+    }
+  .notSigned{
+      display: flex;
+      align-items: center;
+    justify-content: space-between;
+    .title{
+      margin-left: 20rpx;
+      font-size:32rpx;
+      font-weight:normal;
+      color:#000000;
+      line-height:32rpx;
+      flex:1;
+      margin-left: 20rpx;
+    }
+
+    .signBtn{
+      width:128rpx;
+      height:64rpx;
+      font-size:32rpx;
+    }
+
+
+  }
+
   }
 </style>
 <config>
@@ -40,6 +94,8 @@
     navigationBarTitleText: '',
     usingComponents: {
       CTabbar:'~UI/CTabbar',
+      CCircleImg:'~UI/CCircleImg',
+      CButton:'~UI/CButton',
     }
 }
 </config>
