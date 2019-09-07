@@ -87,7 +87,7 @@
       font-weight:400;
       color:#000000;
       line-height:32rpx;
-      caret-color: $primayColor;
+      caret-color: $primaryColor;
       padding-right: 50rpx;
       flex:1;
     }

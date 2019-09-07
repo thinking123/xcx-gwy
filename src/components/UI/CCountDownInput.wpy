@@ -142,7 +142,7 @@
       font-weight:400;
       color:#000000;
       line-height:32rpx;
-      caret-color: $primayColor;
+      caret-color: $primaryColor;
       padding-right: 50rpx;
       width:256rpx;
     }
@@ -171,7 +171,7 @@
       align-items: center;
       justify-content: center;
         width: 190rpx;
-        color:$primayColor;
+        color: $primaryColor;
       position: relative;
       font-size:32rpx;
       font-weight:400;
