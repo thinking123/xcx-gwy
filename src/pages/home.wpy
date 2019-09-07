@@ -1,0 +1,45 @@
+<template>
+  <div class="page home">
+    <CTabbar/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .home{
+  
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+      CTabbar:'~UI/CTabbar',
+    }
+}
+</config>

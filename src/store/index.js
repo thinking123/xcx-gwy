@@ -1,10 +1,15 @@
 import Vuex from '@wepy/x';
 
+const tabbar = [
+
+];
 export default new Vuex.Store({
   state: {
     counter: 0,
     token:null,
-    queue:[]
+    queue:[],
+    activeTabIndex:0,
+    tabbar
   },
   mutations: {
     increment (state) {
@@ -12,6 +17,9 @@ export default new Vuex.Store({
     },
     decrement (state) {
       state.counter--;
+    },
+    changeTabbar(index){
+      state.activeTabIndex = index
     }
   },
   actions: {
