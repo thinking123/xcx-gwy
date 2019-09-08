@@ -55,6 +55,8 @@
   import store from 'store';
   import {getImgUrlEx} from '@/common/utils';
   import { mapGetters , mapState} from '@wepy/x';
+  import {navToPage} from '@/common/navUtils';
+
   wepy.page({
     store,
     config: {

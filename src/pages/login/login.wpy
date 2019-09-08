@@ -4,8 +4,9 @@
     <div class="row2">
       让您通透未来
     </div>
-    <CWXButton text="微信授权登录" :icon="icon1" @tap.native="handleWxLoginClick"
+    <CWXButton text="微信授权登录" :icon="icon1"
                v-if="showWxBtn"
+               @getuserinfo="handleGetUerInfo"
                external-cls="row3"/>
     <CButton text="微信授权登录" :icon="icon1" @tap.native="handleWxClick"
              v-else
@@ -23,9 +24,11 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import {getImgUrl} from '@/common/utils';
+  import { getImgUrl, showMsg } from '@/common/utils';
   import {navToPage} from '@/common/navUtils';
-  import { mapGetters , mapState} from '@wepy/x';
+  import { mapGetters , mapState , mapMutations} from '@wepy/x';
+  import {loginByWx} from '@/http/http-business';
+
   wepy.page({
     store,
     config: {
@@ -44,19 +47,28 @@
       icon2:'/static/icon/icon_phone.png'
     },
     methods: {
-      wxLogin(){
-        if(this.wx.userInfo){
+      ...mapMutations(['setToken']),
+      async wxLogin(){
+        try {
+          const wx = this.wx;
+          const {token} = await loginByWx(
+            wx.code,
+            wx.userInfo.avatarUrl,
+            wx.userInfo.nickName,
+            wx.userInfo.gender,
+          );
 
-        }else{
-
+          this.setToken(token);
+          reLaunch('/pages/home')
+        }catch (e) {
+          showMsg(e);
         }
       },
-      handleWxLoginClick(){
-
+      handleGetUerInfo(){
+        this.wxLogin();
       },
       handleWxClick(){
-        console.log('click')
-
+        this.wxLogin();
       },
       handlePhoneClick(){
         // console.log('click')

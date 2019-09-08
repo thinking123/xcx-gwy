@@ -1,7 +1,8 @@
 import { get, post } from './http';
 import { urlParams } from '@/common/utils';
 
-const reg = /^2/
+const reg = /^2/;
+
 function parseRes(res, errMsg, resolveStatus = []) {
   if (!!res && reg.test(res.status)) {
     // return res.rows ? res.rows : res
@@ -34,12 +35,12 @@ export function checkPhone(userPhone) {
  * @param vcode
  * @returns {Promise<any | never>}
  */
-export function checkVCode(phone,vcode) {
+export function checkVCode(phone, vcode) {
   let url = '/api/vcode/checkVCode';
   const loadingText = '';
   const errMsg = '';
 
-  url = urlParams(url, { phone,vcode });
+  url = urlParams(url, { phone, vcode });
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 
@@ -97,19 +98,32 @@ export function loginByVcode(userPhone, vcode, deviceId) {
 }
 
 /**
- * / api/login/loginByWx
- 微信登陆 --编号
- * @param openid
- * @param deviceId
- * @returns 请求已完成 rows 直接返回token
+ * /api/login/wxlogin
+ 小程序用户登录 1 rows 直接返回TOKEN
+
+
+ * @param code
+ * @param userHead
+ * @param userName
+ * @param userSex
+ * @returns {Promise<T | never>}
  */
-export function loginByWx(openid, deviceId) {
-  let url = '/api/login/loginByWx';
+export function loginByWx(
+  code,
+  userHead,
+  userName,
+  userSex
+) {
+  let url = '/api/login/wxlogin';
   const loadingText = '正在登入...';
   const errMsg = '登入失败';
-
-  url = urlParams(url, { openid, deviceId });
-  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+  const data = {
+    code,
+    userHead,
+    userName,
+    userSex
+  };
+  return post(url, data, loadingText).then(res => parseRes(res, errMsg));
 }
 
 /**
@@ -119,12 +133,12 @@ export function loginByWx(openid, deviceId) {
  * @param userPwd
  * @returns 请求已完成 ROW 直接返回 TOKEN
  */
-export function registerByPhone(userPhone, vcode ,userPwd) {
+export function registerByPhone(userPhone, vcode, userPwd) {
   let url = '/api/login/registerByPhone';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
 
-  url = urlParams(url, { userPhone, vcode ,userPwd });
+  url = urlParams(url, { userPhone, vcode, userPwd });
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 

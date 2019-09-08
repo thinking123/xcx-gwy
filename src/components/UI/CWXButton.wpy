@@ -1,6 +1,7 @@
 <template>
     <button class="CWXButton external-cls"
             @click="handleBtn($event)"
+            @getuserinfo="handleGotUserInfo"
             :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading}"
             open-type="getUserInfo">
       <div class="btnWrap">
@@ -13,7 +14,7 @@
 <script>
   import wepy from '@wepy/core'
   import store from 'store';
-  import { mapGetters} from '@wepy/x';
+  import { mapGetters , mapMutations} from '@wepy/x';
 
   wepy.component({
     store,
@@ -59,6 +60,7 @@
       }
     },
     methods: {
+      ...mapMutations(['setWxUserInfo']),
       handleClick(){
         // this.$emit()
       },
@@ -66,6 +68,20 @@
         if(this.isLoading){
           e && e.stopPropagation();
         }
+      },
+      handleGotUserInfo(e){
+        try{
+          const d = e.$wx.detail
+
+          if(d.userInfo){
+            this.$emit('getuserinfo', d.userInfo)
+            this.setWxUserInfo(d.userInfo);
+          }
+
+        }catch (e) {
+          console.log('用户拒绝授权')
+        }
+
       }
     },
     onLoad () {
