@@ -2,9 +2,11 @@
 
     <div class="CTabbar external-cls">
       <div class="wrap">
-        <div v-for="(item , index) in items" class="tabItem" @click="handleTab(item , index)">
-          <image :src="item.tab == activeTabIndex ? item.activeIcon : item.icon"/>
-          <span :class="{'active':item.tab == activeTabIndex}"
+        <div v-for="(item , index) in tabbar" class="tabItem"
+             :class="{'active': index == activeTabIndex}"
+             @click="handleTab(item , index)">
+          <image :src="index == activeTabIndex ? item.activeIcon : item.icon"/>
+          <span
                 class="text">
               {{item.text}}
             </span>
@@ -30,7 +32,7 @@
     events: {
 
     },
-    computed: mapState([ 'activeTabIndex' ]),
+    computed: mapState([ 'activeTabIndex','tabbar' ]),
     methods: {
       ...mapMutations([
         'changeTabbar'
@@ -80,9 +82,11 @@
           color:#626466;
           line-height:20rpx;
 
-          .active{
-            color: $primaryColor;
-          }
+
+        }
+
+        &.active .text{
+          color: $primaryColor;
         }
       }
     }

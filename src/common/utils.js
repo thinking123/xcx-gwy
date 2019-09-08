@@ -5,6 +5,9 @@ export function getImgUrl(url) {
 
 export function getImgUrlEx(url) {
   console.log('image url: ' , url)
+  if(url.indexOf('.png') == -1){
+    url = `${url}.png`
+  }
   url = `/static/icon/${url}`
   return url;
 }
