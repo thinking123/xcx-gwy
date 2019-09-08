@@ -38,7 +38,7 @@
     computed: {
       ...mapState(['wx']),
       showWxBtn(){
-        return !wx.userInfo;
+        return !this.wx.userInfo;
       }
     },
     data: {
@@ -48,14 +48,16 @@
     },
     methods: {
       ...mapMutations(['setToken']),
-      async wxLogin(){
+      async wxLogin(userInfo){
         try {
           const wx = this.wx;
+          userInfo = !!userInfo ? userInfo : wx.userInfo;
+          console.log('userInfo' , userInfo)
           const {token} = await loginByWx(
             wx.code,
-            wx.userInfo.avatarUrl,
-            wx.userInfo.nickName,
-            wx.userInfo.gender,
+            userInfo.avatarUrl,
+            userInfo.nickName,
+            userInfo.gender,
           );
 
           this.setToken(token);
@@ -64,8 +66,8 @@
           showMsg(e);
         }
       },
-      handleGetUerInfo(){
-        this.wxLogin();
+      handleGetUerInfo(userInfo){
+        this.wxLogin(userInfo);
       },
       handleWxClick(){
         this.wxLogin();
