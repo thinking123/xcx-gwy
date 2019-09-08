@@ -99,7 +99,7 @@
   });
 </script>
 <style lang="scss" scoped>
-  @import "~baseUI";
+  @import "~basePage";
   .login{
     display: flex;
     flex-direction: column;
