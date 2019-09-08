@@ -1,5 +1,6 @@
 <template>
   <div class="page home">
+    <LearningFloat external-cls="LearningFloat"/>
     <div class="signed" v-if="isSigned">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
@@ -92,7 +93,7 @@
     },
     methods: {
       handleSign(){
-
+        navToPage('/pages/login/login')
       },
       handleIconText(index){
 
@@ -119,6 +120,10 @@
   .home{
     width: initial;
     margin: 32rpx 30rpx 0;
+    .LearningFloat{
+      top: 172rpx;
+      right: 10rpx;
+    }
     .cirImg{
       height: 80rpx;
       width: 80rpx;
@@ -201,6 +206,7 @@
       CButton:'~UI/CButton',
   CTag:'~UI/CTag',
   IconText:'~Custom/IconText',
+  LearningFloat:'~Custom/LearningFloat',
     }
 }
 </config>

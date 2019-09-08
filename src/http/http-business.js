@@ -103,7 +103,7 @@ export function loginByWx(openid, deviceId) {
  * @returns 请求已完成 ROW 直接返回 TOKEN
  */
 export function registerByPhone(userPhone, vcode ,userPwd) {
-  let url = '/api/login/loginByWx';
+  let url = '/api/login/registerByPhone';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
 

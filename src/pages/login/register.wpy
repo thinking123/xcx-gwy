@@ -50,6 +50,7 @@
               this.pw
             )
 
+            console.log('token' , token)
             this.setToken(token);
             redirectTo('/pages/home')
           }catch (e) {
