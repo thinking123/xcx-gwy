@@ -148,6 +148,8 @@
       margin-bottom: 32rpx;
       width: 690rpx;
       height: 380rpx;
+      background-color: #A1CBFF;
+      border-radius:8px;
     }
 
     .titleIcons{
@@ -172,7 +174,7 @@
       >image{
         width: 330rpx;
         height: 180rpx;
-
+        margin-bottom: 40rpx;
       }
       >image:nth-child(1) ,>image:nth-child(2){
         margin: 48rpx 0 30rpx;
