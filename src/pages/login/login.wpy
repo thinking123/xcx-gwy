@@ -53,6 +53,7 @@
     },
     onShow(){
       // console.log('show' , this.getImgUrl('sdfsdf'))
+      console.log('store ;' , store.state)
     },
     created () {
       this.img1 = getImgUrl(this.img1)

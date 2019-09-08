@@ -23,8 +23,8 @@ export function _wxGetSetting() {
     return new Promise((resolve, reject) => {
         wx.getSetting({
             success: res => {
-              commit('setWxSetting' , res)
-              resolve(res)
+              commit('setWxSetting' , res.authSetting)
+              resolve(res.authSetting)
             },
             fail: reject
         })
@@ -35,8 +35,8 @@ export function _wxGetUserInfo() {
     return new Promise((resolve, reject) => {
         wx.getUserInfo({
             success: res => {
-              commit('setWxUserInfo' , res)
-              resolve(res)
+              commit('setWxUserInfo' , res.userInfo)
+              resolve(res.userInfo)
             },
             fail: reject
         })

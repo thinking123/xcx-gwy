@@ -53,13 +53,13 @@ export default new Vuex.Store({
       state.queue.pop();
     },
     setWxCode(state , code){
-      state.wx = {...wx , code}
+      state.wx = {...state.wx , code}
     },
     setWxSetting(state , setting){
-      state.wx = {...wx , setting}
+      state.wx = {...state.wx , setting:{...setting}}
     },
     setWxUserInfo(state , userInfo){
-      state.wx = {...wx , userInfo}
+      state.wx = {...state.wx , userInfo:{...userInfo}}
     }
   },
   getters:{
