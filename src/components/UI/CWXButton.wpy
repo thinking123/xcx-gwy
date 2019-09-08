@@ -1,0 +1,138 @@
+<template>
+    <button class="CWXButton external-cls"
+            @click="handleBtn($event)"
+            :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading}"
+            open-type="getUserInfo">
+      <div class="btnWrap">
+        <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
+        <span class="CButtonText">{{text}}</span>
+      </div>
+    </button>
+
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
+
+  wepy.component({
+    store,
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      textColor:{
+        type:String,
+        default:'#4FAC1B'
+      },
+      bgColor:{
+        type:String,
+        default:'#FFFFFF'
+      },
+      className:{
+        type:String,
+        default:'className'
+      },
+      icon:{
+        type:String,
+        default:''
+      },
+      text:'',
+      type:{
+        type:String,
+        default:'primary'
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['isLoading']),
+      typeCls(){
+        const obj = {}
+        obj[this.type] = this.type
+
+        console.log('obj' , obj)
+      }
+    },
+    methods: {
+      handleClick(){
+        // this.$emit()
+      },
+      handleBtn(e){
+        if(this.isLoading){
+          e && e.stopPropagation();
+        }
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+  .CWXButton{
+    width:630rpx;
+    height:100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius:50rpx;
+    font-size:32rpx;
+    .CButtonText{
+      font-weight:600;
+      line-height:16px;
+    }
+
+    .btnWrap{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.primary{
+      background:$primaryColor;
+      border:1px solid $primaryColor;
+
+      .CButtonText{
+        color:$white;
+      }
+
+
+      &.disabled{
+        background: $disabledColor;
+        border-color: $disabledColor;
+      }
+    }
+
+    &.info{
+      background:$infoColor;
+      border:1px solid $primaryColor;
+
+
+      .CButtonText{
+        color:$primaryColor;
+      }
+
+      &.disabled{
+        background: $disabledColor;
+        border-color: $disabledColor;
+        .CButtonText{
+          color: $white;
+        }
+      }
+    }
+
+
+    .icon{
+      margin-right: 22rpx;
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+</style>

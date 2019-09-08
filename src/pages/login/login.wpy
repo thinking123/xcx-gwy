@@ -4,7 +4,13 @@
     <div class="row2">
       让您通透未来
     </div>
-    <CButton text="微信授权登录" :icon="icon1" @tap.native="handleWxClick" external-cls="row3"/>
+    <CWXButton text="微信授权登录" :icon="icon1" @tap.native="handleWxLoginClick"
+               v-if="showWxBtn"
+               external-cls="row3"/>
+    <CButton text="微信授权登录" :icon="icon1" @tap.native="handleWxClick"
+             v-else
+             external-cls="row3"/>
+
     <CButton text="手机号码登录" :icon="icon2" @tap.native="handlePhoneClick" type="info"  external-cls="row4"/>
     <div class="row5">
       <CRightButtonIcon text="随便逛逛" external-cls="col1" @tap.native="handlegoto"/>
@@ -19,7 +25,7 @@
   import store from 'store';
   import {getImgUrl} from '@/common/utils';
   import {navToPage} from '@/common/navUtils';
-
+  import { mapGetters , mapState} from '@wepy/x';
   wepy.page({
     store,
     config: {
@@ -27,7 +33,10 @@
     },
     // mixins:[utilMixin],
     computed: {
-
+      ...mapState(['wx']),
+      showWxBtn(){
+        return !wx.userInfo;
+      }
     },
     data: {
       img1:'/static/image/login1.png',
@@ -35,8 +44,19 @@
       icon2:'/static/icon/icon_phone.png'
     },
     methods: {
+      wxLogin(){
+        if(this.wx.userInfo){
+
+        }else{
+
+        }
+      },
+      handleWxLoginClick(){
+
+      },
       handleWxClick(){
         console.log('click')
+
       },
       handlePhoneClick(){
         // console.log('click')
@@ -120,7 +140,8 @@
     navigationBarTitleText: '登入',
     usingComponents: {
       CButton:'~UI/CButton',
-      CRightButtonIcon:'~UI/CRightButtonIcon'
+      CRightButtonIcon:'~UI/CRightButtonIcon',
+      CWXButton:'~UI/CWXButton',
     }
 }
 </config>
