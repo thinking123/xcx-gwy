@@ -44,7 +44,7 @@
               this.phone,
               this.code
             )
-            const {token} = registerByPhone(
+            const {token} = await registerByPhone(
               this.phone,
               this.code,
               this.pw
@@ -53,7 +53,7 @@
             this.setToken(token);
             redirectTo('/pages/home')
           }catch (e) {
-
+            showMsg(e);
           }
 
         }else{

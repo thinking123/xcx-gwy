@@ -1,5 +1,6 @@
 <template>
     <div class="CButton external-cls"
+         @click="handleBtn($event)"
          :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading}">
       <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
       <span class="CButtonText">{{text}}</span>
@@ -57,6 +58,11 @@
     methods: {
       handleClick(){
         // this.$emit()
+      },
+      handleBtn(e){
+        if(this.isLoading){
+          e && e.stopPropagation();
+        }
       }
     },
     onLoad () {

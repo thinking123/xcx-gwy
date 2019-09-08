@@ -1,8 +1,9 @@
 import { get, post } from './http';
 import { urlParams } from '@/common/utils';
 
+const reg = /^2/
 function parseRes(res, errMsg, resolveStatus = []) {
-  if (!!res && res.status && res.status.indexOf('2') > -1) {
+  if (!!res && reg.test(res.status)) {
     // return res.rows ? res.rows : res
     return res.rows;
   } else {
