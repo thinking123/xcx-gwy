@@ -2,18 +2,23 @@ import { baseUrl } from '@/common/constant';
 import store from 'store';
 
 let queue = [];
-const delay = null;
+let delay = null;
 const state = store.state;
 
-function showLoading() {
+function showLoading(loadingText='') {
   delay = setTimeout(()=>{
-    !!loadingText && wx.showLoading({
+    wx.showLoading({
       title: loadingText,
       mask: true
     });
   } , 100)
 }
 
+function hideLoading(loadingText='') {
+  wx.hideLoading();
+  clearInterval(delay)
+  delay = null;
+}
 function http(url, data, loadingText, header, method = 'GET') {
 
   // const app = getApp();
@@ -33,7 +38,7 @@ function http(url, data, loadingText, header, method = 'GET') {
   console.log('url', _url);
   queue.push(url);
 
-  showLoading();
+  showLoading(loadingText);
 
 
   return new Promise((resolve, reject) => {
@@ -43,18 +48,14 @@ function http(url, data, loadingText, header, method = 'GET') {
       header: header,
       method: method,
       success: res => {
-        clearTimeout(delay);
-        delay = null;
+        hideLoading(loadingText);
         resolve(res ? res.data : null);
         queue.pop();
-        !!loadingText && wx.hideLoading();
       },
       fail: err => {
-        clearTimeout(delay);
-        delay = null;
+        hideLoading(loadingText);
         reject(err);
         queue.pop();
-        !!loadingText && wx.hideLoading();
       }
     });
   });

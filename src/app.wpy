@@ -59,8 +59,8 @@ wepy.app({
 <config>
 {
     pages: [
-      'pages/home',
       'pages/login/login',
+      'pages/home',
       'pages/login/loginInput',
       'pages/login/register',
     ],

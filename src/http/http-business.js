@@ -27,6 +27,39 @@ export function checkPhone(userPhone) {
 }
 
 /**
+ * /api/vcode/checkVCode
+ 验证验证码
+ * @param phone
+ * @param vcode
+ * @returns {Promise<any | never>}
+ */
+export function checkVCode(phone,vcode) {
+  let url = '/api/vcode/checkVCode';
+  const loadingText = '';
+  const errMsg = '';
+
+  url = urlParams(url, { phone,vcode });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
+ * GET /api/vcode/get
+ 发送验证码 30分钟有效
+
+
+ * @param phone
+ * @returns {Promise<any | never>}
+ */
+export function getPhoneCode(phone) {
+  let url = '/api/vcode/get';
+  const loadingText = '发送验证码...';
+  const errMsg = '';
+
+  url = urlParams(url, { phone });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
  * / api/login/loginByPhone
  手机号登陆 --编号 003
 
