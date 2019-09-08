@@ -27,7 +27,9 @@ function http(url, data, loadingText, header, method = 'GET') {
   }
 
 
-  if (state.token && url && url.indexOf('login') == -1) {
+  if (state.token && url
+    && url.indexOf('login') == -1
+    && url.indexOf('vcode') == -1) {
     //授权token
     header.token = state.token;
   }

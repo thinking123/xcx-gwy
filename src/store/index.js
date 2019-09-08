@@ -34,13 +34,15 @@ export default new Vuex.Store({
     queue:[],
     activeTabIndex:0,
     tabbar,
-    nickName:'default Nickname'
+    nickName:'default Nickname',
+    deviceId:'deviceId'
   },
   mutations: {
     changeTabbar(state , index){
       state.activeTabIndex = index
     },
     setToken(state , token){
+      console.log('token' , token)
       state.token = token
     },
     pushQueue(state , url){

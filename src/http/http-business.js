@@ -80,6 +80,23 @@ export function loginByPhone(userPhone, userPwd, deviceId) {
 }
 
 /**
+ * GET /api/login/loginByVcode
+ 验证码登陆
+ * @param userPhone
+ * @param vcode
+ * @param deviceId
+ * @returns {Promise<any | never>}
+ */
+export function loginByVcode(userPhone, vcode, deviceId) {
+  let url = '/api/login/loginByVcode';
+  const loadingText = '正在登入...';
+  const errMsg = '登入失败';
+
+  url = urlParams(url, { userPhone, vcode, deviceId });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
  * / api/login/loginByWx
  微信登陆 --编号
  * @param openid

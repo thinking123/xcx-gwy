@@ -21,7 +21,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { mapState , mapMutations} from '@wepy/x';
   import {isPhone , showMsg} from '@/common/utils';
+  import {checkVCode , getPhoneCode , loginByPhone , loginByVcode , checkPhone} from '@/http/http-business';
+  import { redirectTo } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -29,7 +32,7 @@
       navigationBarTitleText: '登入'
     },
     computed: {
-
+      ...mapState(['deviceId'])
     },
     data: {
       tabs:[
@@ -37,17 +40,38 @@
         {text:'密码登录'},
       ],
       bottomLine:32.0/375,
-      phone:'',
+      phone:'15968846096',
       code:'',
       selectedTab:0,
       pw:''
     },
     methods: {
+      ...mapMutations(['setToken']),
       handleSubmit(){
         if(this.verify()){
-          console.log('submit')
+          this.login();
         }else{
           showMsg("请输入正确的内容")
+        }
+      },
+      async login(){
+        try {
+          let token = null;
+          if(this.selectedTab == 0){
+           token = await loginByPhone(this.phone , this.pw , this.deviceId)
+
+          }else{
+            await checkVCode(
+              this.phone,
+              this.code
+            )
+            token = await loginByVcode(this.phone , this.code , this.deviceId)
+          }
+
+          this.setToken(token);
+          redirectTo('/pages/home')
+        }catch (e) {
+          showMsg(e)
         }
       },
       handlev(v){
@@ -61,12 +85,21 @@
         console.log('code' , v)
         this.code = v
       },
-      countCheck(v){
-        const isOk = isPhone(this.phone);
-        if(!isOk){
-          showMsg("请输入正确手机号")
+      async countCheck(v) {
+        let isOk = false;
+        try {
+          if (!isPhone(this.phone)) {
+            showMsg('请输入正确手机号');
+            return;
+          }
+          // await checkPhone(this.phone);
+          getPhoneCode(this.phone)
+          isOk = true;
+        } catch (e) {
+          showMsg(e);
+        } finally {
+          return isOk;
         }
-        return isOk;
       },
       handleTab({tab ,index}){
         console.log('tab' , tab , index)

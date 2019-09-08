@@ -30,7 +30,7 @@
 
     },
     data: {
-      phone:'15968846096',
+      phone:'',
       code:'',
       pw:''
     },
@@ -44,15 +44,13 @@
               this.phone,
               this.code
             )
-            const {token} = await registerByPhone(
+            await registerByPhone(
               this.phone,
               this.code,
               this.pw
             )
 
-            console.log('token' , token)
-            this.setToken(token);
-            redirectTo('/pages/home')
+            redirectTo('/pages/login/login')
           }catch (e) {
             showMsg(e);
           }
