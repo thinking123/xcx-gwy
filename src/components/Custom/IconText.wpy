@@ -15,7 +15,8 @@
       'external-cls'
     ],
     props:{
-      
+      src:String,
+      text:String
     },
     events: {
 
@@ -38,16 +39,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    font-size:24rpx;
+    font-weight:500;
+    color:$textColor;
     >image{
       height: 100rpx;
       width: 100rpx;
-      margin-bottom: 16rpx;
     }
-    >span{
-      font-size:24rpx;
-      font-weight:500;
-      color:$textColor;
-      line-height:32rpx;
+    span{
+
     }
   }
 </style>

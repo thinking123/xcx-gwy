@@ -33,6 +33,7 @@
     </div>
     <div class="titleIcons">
         <IconText v-for="(item , index) in titleIcons"
+                  external-cls="titleIcon"
                   :text="item.text" :src="item.src"/>
     </div>
     <div class="line">
@@ -97,6 +98,7 @@
     created () {
       this.titleIcons = this.titleIcons.map(m=>{
         m.src = getImgUrlEx(m.src)
+        return m
       })
       this.panelIcons = this.panelIcons.map(getImgUrlEx)
     }
@@ -139,24 +141,30 @@
       color:$textBlack;
       line-height:48rpx;
       margin: 50rpx 0 32rpx;
+      font-weight: bold;
     }
 
     .map{
       margin-bottom: 32rpx;
+      width: 690rpx;
+      height: 380rpx;
     }
 
     .titleIcons{
       display: flex;
-      >*{
-        flex:1;
+      justify-content: space-between;
+      >.titleIcon{
       }
       align-items: center;
-      justify-content: center;
-      margin-bottom: 48rxp;
+      margin-bottom: 48rpx;
     }
     .line{
       height: 24rpx;
       background-color: $pageBgGray;
+      position: relative;
+      width: 750rpx;
+      left: 50%;
+      transform: translateX(-50%);
     }
     .panelIcons{
       display: flex;
@@ -164,6 +172,9 @@
       >image{
         width: 330rpx;
         height: 180rpx;
+
+      }
+      >image:nth-child(1) ,>image:nth-child(2){
         margin: 48rpx 0 30rpx;
       }
       flex-wrap: wrap;

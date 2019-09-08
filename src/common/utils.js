@@ -5,7 +5,7 @@ export function getImgUrl(url) {
 
 export function getImgUrlEx(url) {
   console.log('image url: ' , url)
-  url = `static/icon/${url}`
+  url = `/static/icon/${url}`
   return url;
 }
 export function isFunction(functionToCheck) {

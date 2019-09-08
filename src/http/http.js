@@ -6,7 +6,7 @@ const delay = null;
 const state = store.state;
 
 function showLoading() {
-  delay = setTimeout(()->{
+  delay = setTimeout(()=>{
     !!loadingText && wx.showLoading({
       title: loadingText,
       mask: true
