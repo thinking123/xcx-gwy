@@ -24,7 +24,7 @@
   import { mapState , mapMutations} from '@wepy/x';
   import {isPhone , showMsg} from '@/common/utils';
   import {checkVCode , getPhoneCode , loginByPhone , loginByVcode , checkPhone} from '@/http/http-business';
-  import { redirectTo } from '@/common/navUtils';
+  import { reLaunch } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -68,7 +68,7 @@
           }
 
           this.setToken(res.token);
-          redirectTo('/pages/home')
+          reLaunch('/pages/home')
         }catch (e) {
           showMsg(e)
         }

@@ -12,3 +12,11 @@ export function redirectTo(toUrl) {
   }
   wx.redirectTo(nav)
 }
+
+export function reLaunch(toUrl) {
+  console.log('nav to page : ' , toUrl)
+  const nav = {
+    url:toUrl
+  }
+  wx.reLaunch(nav)
+}
