@@ -25,7 +25,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrl, showMsg } from '@/common/utils';
-  import {navToPage} from '@/common/navUtils';
+  import {navToPage , reLaunch} from '@/common/navUtils';
   import { mapGetters , mapState , mapMutations} from '@wepy/x';
   import {loginByWx} from '@/http/http-business';
 
