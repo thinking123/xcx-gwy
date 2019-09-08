@@ -33,6 +33,7 @@
     </div>
     <div class="titleIcons">
         <IconText v-for="(item , index) in titleIcons"
+                  @click.native="handleIconText(index)"
                   external-cls="titleIcon"
                   :text="item.text" :src="item.src"/>
     </div>
@@ -40,7 +41,9 @@
 
     </div>
     <div class="panelIcons">
-      <image v-for="(item , index) in panelIcons" :src="item"/>
+      <image v-for="(item , index) in panelIcons"
+             @click="handleImage(index)"
+             :src="item"/>
     </div>
     <CTabbar/>
   </div>
@@ -89,6 +92,12 @@
     },
     methods: {
       handleSign(){
+
+      },
+      handleIconText(index){
+
+      },
+      handleImage(index){
 
       }
     },

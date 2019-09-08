@@ -38,6 +38,9 @@
         'changeTabbar'
       ]),
       handleTab(item , index){
+        if(index == this.activeTabIndex){
+          return
+        }
         redirectTo(item.page);
         this.changeTabbar(index);
       }

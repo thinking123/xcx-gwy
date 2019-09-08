@@ -5,19 +5,19 @@ const tabbar = [
   {
     icon:'tabbar01@3x',
     activeIcon:'tabbar01_pre@3x',
-    page:'pages/home',
+    page:'/pages/home',
     text:'开通联众'
   },
   {
     icon:'tabbar02@3x',
     activeIcon:'tabbar02_pre@3x',
-    page:'pages/home',
+    page:'/pages/home',
     text:'开明真题'
   },
   {
     icon:'tabbar03@3x',
     activeIcon:'tabbar03_pre@3x',
-    page:'pages/home',
+    page:'/pages/home',
     text:'开悟自我'
   }
 ].map(m=>{
@@ -37,13 +37,7 @@ export default new Vuex.Store({
     nickName:'default Nickname'
   },
   mutations: {
-    increment (state) {
-      state.counter++;
-    },
-    decrement (state) {
-      state.counter--;
-    },
-    changeTabbar(index){
+    changeTabbar(state , index){
       state.activeTabIndex = index
     }
   },
