@@ -1,6 +1,6 @@
 <template>
   <div class="page home">
-    <div class="signed" v-if="'sdf'">
+    <div class="signed" v-if="isSigned">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
       </CCircleImg>
@@ -25,6 +25,22 @@
                type="info"
                external-cls="signBtn"/>
     </div>
+    <div class="title">
+      学习打卡
+    </div>
+    <div class="map">
+
+    </div>
+    <div class="titleIcons">
+        <IconText v-for="(item , index) in titleIcons"
+                  :text="item.text" :src="item.src"/>
+    </div>
+    <div class="line">
+
+    </div>
+    <div class="panelIcons">
+      <image v-for="(item , index) in panelIcons" :src="item"/>
+    </div>
     <CTabbar/>
   </div>
 </template>
@@ -32,6 +48,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
   import { mapGetters , mapState} from '@wepy/x';
   wepy.page({
     store,
@@ -44,7 +61,30 @@
 
     },
     data: {
-
+      titleIcons:[
+        {
+          text:'起床睡觉',
+          src:'home_icon_nav01.png'
+        },
+        {
+          text:'学习计时',
+          src:'home_icon_nav02.png'
+        },
+        {
+          text:'学习日记',
+          src:'home_icon_nav03.png'
+        },
+        {
+          text:'学习计划',
+          src:'home_icon_nav04.png'
+        }
+      ],
+      panelIcons:[
+        'home_img_huiyuan@3x.png',
+        'home_img_kaiming@3x.png',
+        'home_img_luntan@3x.png',
+        'home_img_fujin@3x.png',
+      ]
     },
     methods: {
       handleSign(){
@@ -55,11 +95,16 @@
       
     },
     created () {
-
+      this.titleIcons = this.titleIcons.map(m=>{
+        m.src = getImgUrlEx(m.src)
+      })
+      this.panelIcons = this.panelIcons.map(getImgUrlEx)
     }
   });
 </script>
 <style lang="scss">
+  @import "~basePage";
+  @import "~baseUI";
   .home{
     width: initial;
     margin: 32rpx 30rpx 0;
@@ -70,26 +115,59 @@
   .notSigned{
       display: flex;
       align-items: center;
-    justify-content: space-between;
-    .title{
-      margin-left: 20rpx;
-      font-size:32rpx;
-      font-weight:normal;
-      color:#000000;
-      line-height:32rpx;
-      flex:1;
-      margin-left: 20rpx;
-    }
+      justify-content: space-between;
+      .title{
+        margin-left: 20rpx;
+        font-size:32rpx;
+        font-weight:normal;
+        color:#000000;
+        line-height:32rpx;
+        flex:1;
+        margin-left: 20rpx;
+      }
 
     .signBtn{
       width:128rpx;
       height:64rpx;
       font-size:32rpx;
     }
-
-
   }
 
+    .title{
+      font-size:40rpx;
+      font-weight:normal;
+      color:$textBlack;
+      line-height:48rpx;
+      margin: 50rpx 0 32rpx;
+    }
+
+    .map{
+      margin-bottom: 32rpx;
+    }
+
+    .titleIcons{
+      display: flex;
+      >*{
+        flex:1;
+      }
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 48rxp;
+    }
+    .line{
+      height: 24rpx;
+      background-color: $pageBgGray;
+    }
+    .panelIcons{
+      display: flex;
+      justify-content: space-between;
+      >image{
+        width: 330rpx;
+        height: 180rpx;
+        margin: 48rpx 0 30rpx;
+      }
+      flex-wrap: wrap;
+    }
   }
 </style>
 <config>
@@ -100,6 +178,7 @@
       CCircleImg:'~UI/CCircleImg',
       CButton:'~UI/CButton',
   CTag:'~UI/CTag',
+  IconText:'~Custom/IconText',
     }
 }
 </config>
