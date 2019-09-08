@@ -35,7 +35,8 @@ export default new Vuex.Store({
     activeTabIndex:0,
     tabbar,
     nickName:'default Nickname',
-    deviceId:'deviceId'
+    deviceId:'deviceId',
+    wx:{}
   },
   mutations: {
     changeTabbar(state , index){
@@ -50,6 +51,15 @@ export default new Vuex.Store({
     },
     popQueue(state){
       state.queue.pop();
+    },
+    setWxCode(state , code){
+      state.wx = {...wx , code}
+    },
+    setWxSetting(state , setting){
+      state.wx = {...wx , setting}
+    },
+    setWxUserInfo(state , userInfo){
+      state.wx = {...wx , userInfo}
     }
   },
   getters:{

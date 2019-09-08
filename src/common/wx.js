@@ -1,9 +1,13 @@
+import store from 'store'
+const commit = store.commit;
+
 export function _wxLogin() {
     return new Promise((resolve, reject) => {
         wx.login({
             success: res => {
                 // 发送 res.code 到后台换取 openId, sessionKey, unionId
                 //此处通过code 获取 服务端token
+                commit('setWxCode' , res.code)
                 resolve(res.code)
             },
             fail: err => {
@@ -18,7 +22,10 @@ export function _wxLogin() {
 export function _wxGetSetting() {
     return new Promise((resolve, reject) => {
         wx.getSetting({
-            success: resolve,
+            success: res => {
+              commit('setWxSetting' , res)
+              resolve(res)
+            },
             fail: reject
         })
     })
@@ -27,7 +34,10 @@ export function _wxGetSetting() {
 export function _wxGetUserInfo() {
     return new Promise((resolve, reject) => {
         wx.getUserInfo({
-            success: resolve,
+            success: res => {
+              commit('setWxUserInfo' , res)
+              resolve(res)
+            },
             fail: reject
         })
     })
