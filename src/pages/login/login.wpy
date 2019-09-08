@@ -63,6 +63,8 @@
   });
 </script>
 <style lang="scss" scoped>
+  @import "~basePage";
+  @import "~baseUI";
   .login{
     display: flex;
     flex-direction: column;

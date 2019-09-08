@@ -93,6 +93,7 @@
 </script>
 <style lang="scss">
   @import "~basePage";
+  @import "~baseUI";
   .loginInput{
     background-color: $pageBg;
     display: flex;

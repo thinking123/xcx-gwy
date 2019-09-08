@@ -101,12 +101,12 @@ export function loginByWx(openid, deviceId) {
  * @param userPwd
  * @returns 请求已完成 ROW 直接返回 TOKEN
  */
-export function registerByPhone(userPhone, userPwd) {
+export function registerByPhone(userPhone, vcode ,userPwd) {
   let url = '/api/login/loginByWx';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
 
-  url = urlParams(url, { userPhone, userPwd });
+  url = urlParams(url, { userPhone, vcode ,userPwd });
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 

@@ -1,9 +1,9 @@
 import { baseUrl } from '@/common/constant';
 import store from 'store';
 
-let queue = [];
 let delay = null;
 const state = store.state;
+const {commit} = store;
 
 function showLoading(loadingText='') {
   delay = setTimeout(()=>{
@@ -11,7 +11,7 @@ function showLoading(loadingText='') {
       title: loadingText,
       mask: true
     });
-  } , 100)
+  } , 300)
 }
 
 function hideLoading(loadingText='') {
@@ -36,8 +36,8 @@ function http(url, data, loadingText, header, method = 'GET') {
   header['Content-Type'] = 'application/json';
   const _url = `${baseUrl}${url}`;
   console.log('url', _url);
-  queue.push(url);
 
+  commit('pushQueue' , url)
   showLoading(loadingText);
 
 
@@ -49,13 +49,14 @@ function http(url, data, loadingText, header, method = 'GET') {
       method: method,
       success: res => {
         hideLoading(loadingText);
+        commit('popQueue')
         resolve(res ? res.data : null);
-        queue.pop();
+
       },
       fail: err => {
         hideLoading(loadingText);
+        commit('popQueue')
         reject(err);
-        queue.pop();
       }
     });
   });

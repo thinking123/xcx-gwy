@@ -39,11 +39,23 @@ export default new Vuex.Store({
   mutations: {
     changeTabbar(state , index){
       state.activeTabIndex = index
+    },
+    setToken(state , token){
+      state.token = token
+    },
+    pushQueue(state , url){
+      state.queue.push(url);
+    },
+    popQueue(state){
+      state.queue.pop();
     }
   },
   getters:{
     isSigned(state){
       return !!state.token;
+    },
+    isLoading(state){
+      return state.queue.length > 0;
     }
   },
   actions: {

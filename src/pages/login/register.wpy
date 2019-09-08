@@ -19,8 +19,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { mapMutations} from '@wepy/x';
   import {isPhone , showMsg} from '@/common/utils';
-  import {registerByPhone , checkPhone} from '@/http/http-business';
+  import {redirectTo} from '@/common/navUtils';
+  import {registerByPhone , checkPhone , getPhoneCode , checkVCode} from '@/http/http-business';
 
   wepy.page({
     store,
@@ -28,15 +30,32 @@
 
     },
     data: {
-      phone:'',
+      phone:'15968846096',
       code:'',
       pw:''
     },
     methods: {
+      ...mapMutations(['setToken']),
       async handleSubmit(){
         if(this.verify()){
           console.log('submit')
-          registerByPhone()
+          try {
+            await checkVCode(
+              this.phone,
+              this.code
+            )
+            const {token} = registerByPhone(
+              this.phone,
+              this.code,
+              this.pw
+            )
+
+            this.setToken(token);
+            redirectTo('/pages/home')
+          }catch (e) {
+
+          }
+
         }else{
           showMsg("请输入正确的内容")
         }
@@ -60,6 +79,7 @@
             return;
           }
           await checkPhone(this.phone);
+          getPhoneCode(this.phone)
           isOk = true;
         } catch (e) {
           showMsg(e);
