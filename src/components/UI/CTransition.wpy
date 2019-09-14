@@ -2,11 +2,11 @@
   <div
     v-if="inited"
     class="c-transition custom-class"
-    v-bind:class="cls"
-    v-bind:style="sty"
+    v-bind:class="classes"
+    :style="{ transitionDuration:td,_webkitTransitionDuration:td, display:dis}"
     bind:transitionend="onTransitionEnd"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>
 <script>
@@ -31,7 +31,22 @@
     events: {
 
     },
+    watch:{
+      classes(v){
+        console.log('classes : ' , v )
+      }
+    },
     computed:{
+      td(){
+        const {currentDuration , display , customStyle} = this;
+        const td = `${currentDuration}ms`
+        console.log('td : ' , td)
+        return td;
+      },
+      dis(){
+        const {currentDuration , display , customStyle} = this;
+        return display ? 'initial' : 'none';
+      },
       sty(){
         const {currentDuration , display , customStyle} = this;
         const td = `${currentDuration}ms`
@@ -46,8 +61,10 @@
         return res;
       },
       cls(){
-        const res = {...this.classes}
-        console.log('res: ' , res)
+        // const res = {...this.classes}
+        // console.log('res: ' , res)
+        const res = {};
+        res[this.classes] = true;
         return res;
       }
     },

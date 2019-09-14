@@ -1,12 +1,14 @@
 <template>
   <CTransition
     :show="show"
-    custom-class="van-overlay"
-    :custom-style="customStyle"
+    custom-class="c-overlay"
+    :custom-style="cs"
     :duration="duration"
     bind:tap="onClick"
     catch:touchmove="noop"
-  />
+  >
+    <slot></slot>
+  </CTransition>
 
 </template>
 <script>
@@ -24,15 +26,15 @@
       customStyle: String,
       duration: {
         type: null,
-        value: 300
+        default: 300
       },
       zIndex: {
         type: Number,
-        value: 1
+        default: 1
       }
     },
     computed:{
-      customStyle(){
+      cs(){
         const sty = `z-index: ${ this.zIndex }; ${ this.customStyle }`;
         return sty;
       }
@@ -53,7 +55,7 @@
 <style lang="less">
   @import '~lessUI';
 
-  .van-overlay {
+  .c-overlay {
     position: fixed;
     top: 0;
     left: 0;

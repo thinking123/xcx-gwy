@@ -3,7 +3,17 @@
 </style>
 <template>
   <div class="container">
-    <CTransition/>
+    <COverlay :show="show">
+     <div>
+       this is COverlay
+     </div>
+    </COverlay>
+
+    <CTransition >
+     <div>
+       this is CTransition
+     </div>
+    </CTransition>
   </div>
 </template>
 
@@ -28,7 +38,7 @@
     mixins: [],
 
     data: {
-
+      show:true
     },
 
 
@@ -45,6 +55,7 @@
     navigationBarTitleText: '公务员',
     usingComponents: {
 
+  COverlay:'~UI/COverlay',
   CTransition:'~UI/CTransition',
     }
 }

@@ -17,25 +17,27 @@ export const transition = function (showDefaultValue) {
       // @ts-ignore
       show: {
         type: Boolean,
-        value: showDefaultValue,
+        default: showDefaultValue,
         // observer: 'observeShow'
       },
       // @ts-ignore
       duration: {
-        type: null,
-        value: 300,
+        type: Number,
+        default: 300,
         // observer: 'observeDuration'
       },
       name: {
         type: String,
-        value: 'fade'
+        default: 'fade'
       }
     },
 
     data: {
       type: '',
       inited: false,
-      display: false
+      display: false,
+      classes:'',
+      currentDuration:''
     },
 
     attached() {
@@ -64,25 +66,37 @@ export const transition = function (showDefaultValue) {
 
         this.status = 'enter';
 
+
+
         Promise.resolve()
           .then(nextTick)
           .then(() => {
             this.checkStatus('enter');
 
-            this.setData({
-              inited: true,
-              display: true,
-              classes: classNames.enter,
-              currentDuration
-            });
+            // this.$wx.setData({
+            //   inited: true,
+            //   display: true,
+            //   classes: classNames.enter,
+            //   currentDuration
+            // });
+            //
+            //
+            this.inited = true;
+            this.display = true;
+            // this.$set(this , 'classes' ,classNames.enter )
+            this.classes = classNames.enter;
+            this.currentDuration = currentDuration;
+
           })
           .then(nextTick)
-          .then(() => {
-            this.checkStatus('enter');
 
-            this.setData({
-              classes: classNames['enter-to']
-            });
+      .then(() => {
+        this.checkStatus('enter');
+
+        // this.$wx.setData({
+        //   classes: classNames['enter-to']
+        // });
+        this.classes = classNames['enter-to'];
           })
           .catch(() => {});
       },
@@ -99,7 +113,7 @@ export const transition = function (showDefaultValue) {
           .then(() => {
             this.checkStatus('leave');
 
-            this.setData({
+            this.$wx.setData({
               classes: classNames.leave,
               currentDuration
             });
@@ -108,7 +122,7 @@ export const transition = function (showDefaultValue) {
           .then(nextTick)
           .then(() => {
             this.checkStatus('leave');
-            this.setData({
+            this.$wx.setData({
               classes: classNames['leave-to']
             });
           })
