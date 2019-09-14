@@ -3,7 +3,7 @@
 </style>
 <template>
   <div class="container">
-
+    <CTransition/>
   </div>
 </template>
 
@@ -44,6 +44,8 @@
 {
     navigationBarTitleText: '公务员',
     usingComponents: {
+
+  CTransition:'~UI/CTransition',
     }
 }
 </config>

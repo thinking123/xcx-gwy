@@ -155,7 +155,7 @@
     usingComponents: {
       CButton:'~UI/CButton',
       CRightButtonIcon:'~UI/CRightButtonIcon',
-      CWXButton:'~UI/CWXButton',
+      CWXButton:'~UI/CWXButton'
     }
 }
 </config>

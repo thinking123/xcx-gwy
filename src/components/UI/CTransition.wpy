@@ -2,8 +2,8 @@
   <div
     v-if="inited"
     class="c-transition custom-class"
-    :class="{cls}"
-    :style="sty"
+    v-bind:class="cls"
+    v-bind:style="sty"
     bind:transitionend="onTransitionEnd"
   >
     <slot />
@@ -33,24 +33,29 @@
     },
     computed:{
       sty(){
-        const {currentDuration , display , customStyle} = this.data;
+        const {currentDuration , display , customStyle} = this;
         const td = `${currentDuration}ms`
-        return {
+        const res = {
           '-webkit-transition-duration':td,
           'transition-duration':td,
           display:display ? '' : 'none',
           ...customStyle
         }
+
+        console.log('res dsf: ' , res)
+        return res;
       },
       cls(){
-        return this.data.classes;
+        const res = {...this.classes}
+        console.log('res: ' , res)
+        return res;
       }
     },
     methods: {
 
     },
     onLoad () {
-
+      console.log('cls : ' , this.sty , this.cls)
     }
   });
 </script>

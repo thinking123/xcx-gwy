@@ -11,20 +11,20 @@ const getClassNames = (name) => ({
 const nextTick = () => new Promise(resolve => setTimeout(resolve, 1000 / 30));
 
 export const transition = function (showDefaultValue) {
-  return Behavior({
-    properties: {
+  return {
+    props: {
       customStyle: String,
       // @ts-ignore
       show: {
         type: Boolean,
         value: showDefaultValue,
-        observer: 'observeShow'
+        // observer: 'observeShow'
       },
       // @ts-ignore
       duration: {
         type: null,
         value: 300,
-        observer: 'observeDuration'
+        // observer: 'observeDuration'
       },
       name: {
         type: String,
@@ -39,11 +39,15 @@ export const transition = function (showDefaultValue) {
     },
 
     attached() {
-      if (this.data.show) {
+      if (this.show) {
         this.enter();
       }
     },
-
+    watch:{
+      show(v){
+        this.observeShow(v)
+      }
+    },
     methods: {
       observeShow(value) {
         if (value) {
@@ -54,7 +58,7 @@ export const transition = function (showDefaultValue) {
       },
 
       enter() {
-        const { duration, name } = this.data;
+        const { duration, name } = this;
         const classNames = getClassNames(name);
         const currentDuration = isObj(duration) ? duration.enter : duration;
 
@@ -84,7 +88,7 @@ export const transition = function (showDefaultValue) {
       },
 
       leave() {
-        const { duration, name } = this.data;
+        const { duration, name } = this;
         const classNames = getClassNames(name);
         const currentDuration = isObj(duration) ? duration.leave : duration;
 
@@ -118,11 +122,11 @@ export const transition = function (showDefaultValue) {
       },
 
       onTransitionEnd() {
-        if (!this.data.show) {
+        if (!this.show) {
           this.set({ display: false });
           this.$emit('transitionend');
         }
       }
     }
-  });
+  }
 };
