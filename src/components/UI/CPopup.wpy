@@ -1,0 +1,283 @@
+<template>
+  <wxs src="./wxs/utils.wxs" module="utils" />
+
+  <COverlay
+    v-if="overlay"
+    :show="show"
+    :z-index="zIndex"
+    :custom-style="overlayStyle"
+    :duration="duration"
+    bind:click="onClickOverlay"
+  />
+  <div
+    v-if="inited"
+    :class="{classes,utils.bem('popup', [position, { round, safe: isIPhoneX && safeAreaInsetBottom }])}"
+    :style="sty"
+    bind:transitionend="onTransitionEnd"
+  >
+    <slot />
+  </div>
+
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import { transition } from '@/mixins/transition';
+  import { safeArea } from '@/mixins/safe-area';
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'enter-class',
+      'enter-active-class',
+      'enter-to-class',
+      'leave-class',
+      'leave-active-class',
+      'leave-to-class'
+    ],
+
+    mixins: [transition(false), safeArea()],
+    computed:{
+      sty(){
+        const {zIndex , currentDuration , display , safeAreaInsetTop , statusBarHeight , customStyle} = this.data;
+        const td = `${currentDuration}ms`;
+        return {
+          zIndex,
+          '-webkit-transition-duration':td,
+          'transition-duration':td,
+          display:display ? '' : 'display: none;',
+          'padding-top':safeAreaInsetTop ?  statusBarHeight + 'px;' : '',
+          ...customStyle
+        }
+      }
+
+    },
+    props: {
+      round: Boolean,
+      closeable: Boolean,
+      customStyle: String,
+      overlayStyle: String,
+      transition: {
+        type: String,
+        observer: 'observeClass'
+      },
+      zIndex: {
+        type: Number,
+        value: 100
+      },
+      overlay: {
+        type: Boolean,
+        value: true
+      },
+      closeIcon: {
+        type: String,
+        value: 'cross'
+      },
+      closeOnClickOverlay: {
+        type: Boolean,
+        value: true
+      },
+      position: {
+        type: String,
+        value: 'center',
+        observer: 'observeClass'
+      }
+    },
+
+    created() {
+      this.observeClass();
+    },
+
+    methods: {
+      onClickCloseIcon() {
+        this.$emit('close');
+      },
+
+      onClickOverlay() {
+        this.$emit('click-overlay');
+
+        if (this.data.closeOnClickOverlay) {
+          this.$emit('close');
+        }
+      },
+
+      observeClass() {
+        const { transition, position } = this.data;
+
+        const updateData: { [key: string]: any } = {
+          name: transition || position
+        };
+
+        if (transition === 'none') {
+          updateData.duration = 0;
+        }
+
+        this.setData(updateData);
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="less">
+  @import "~lessUI";
+
+  .c-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: @white;
+    transition-timing-function: ease;
+    animation: ease both;
+    -webkit-overflow-scrolling: touch;
+
+    &--center {
+      transform: translate3d(-50%, -50%, 0);
+
+      &.c-popup--round {
+        border-radius: @popup-round-border-radius;
+      }
+    }
+
+    &--top {
+      top: 0;
+      right: auto;
+      bottom: auto;
+      left: 50%;
+      width: 100%;
+      transform: translate3d(-50%, 0, 0);
+
+      &.c-popup--round {
+        border-radius: 0 0 @popup-round-border-radius @popup-round-border-radius;
+      }
+    }
+
+    &--right {
+      top: 50%;
+      right: 0;
+      bottom: auto;
+      left: auto;
+      transform: translate3d(0, -50%, 0);
+
+      &.c-popup--round {
+        border-radius: @popup-round-border-radius 0 0 @popup-round-border-radius;
+      }
+    }
+
+    &--bottom {
+      top: auto;
+      right: auto;
+      bottom: 0;
+      left: 50%;
+      width: 100%;
+      transform: translate3d(-50%, 0, 0);
+
+      &.c-popup--round {
+        border-radius: @popup-round-border-radius @popup-round-border-radius 0 0;
+      }
+    }
+
+    &--left {
+      top: 50%;
+      right: auto;
+      bottom: auto;
+      left: 0;
+      transform: translate3d(0, -50%, 0);
+
+      &.c-popup--round {
+        border-radius: 0 @popup-round-border-radius @popup-round-border-radius 0;
+      }
+    }
+
+    &--bottom&--safe {
+      padding-bottom: @safe-area-inset-bottom;
+    }
+
+    &__close-icon {
+      position: absolute;
+      top: @popup-close-icon-margin;
+      right: @popup-close-icon-margin;
+      z-index: @popup-close-icon-z-index;
+      color: @popup-close-icon-color;
+      font-size: @popup-close-icon-size;
+
+      &:active {
+        opacity: .6;
+      }
+    }
+  }
+
+  .c-scale-enter-active,
+  .c-scale-leave-active {
+    transition-property: opacity, transform;
+  }
+
+  .c-scale-enter,
+  .c-scale-leave-to {
+    transform: translate3d(-50%, -50%, 0) scale(0.7);
+    opacity: 0;
+  }
+
+  .c-fade-enter-active,
+  .c-fade-leave-active {
+    transition-property: opacity;
+  }
+
+  .c-fade-enter,
+  .c-fade-leave-to {
+    opacity: 0;
+  }
+
+  .c-center-enter-active,
+  .c-center-leave-active {
+    transition-property: opacity;
+  }
+
+  .c-center-enter,
+  .c-center-leave-to {
+    opacity: 0;
+  }
+
+  .c-bottom-enter-active,
+  .c-bottom-leave-active,
+  .c-top-enter-active,
+  .c-top-leave-active,
+  .c-left-enter-active,
+  .c-left-leave-active,
+  .c-right-enter-active,
+  .c-right-leave-active {
+    transition-property: transform;
+  }
+
+  .c-bottom-enter,
+  .c-bottom-leave-to {
+    transform: translate3d(-50%, 100%, 0);
+  }
+
+  .c-top-enter,
+  .c-top-leave-to {
+    transform: translate3d(-50%, -100%, 0);
+  }
+
+  .c-left-enter,
+  .c-left-leave-to {
+    transform: translate3d(-100%, -50%, 0);
+  }
+
+  .c-right-enter,
+  .c-right-leave-to {
+    transform: translate3d(100%, -50%, 0);
+  }
+
+</style>
+<config>
+  {
+  usingComponents: {
+  COverlay:'./COverlay',
+  }
+  }
+</config>

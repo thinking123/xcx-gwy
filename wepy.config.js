@@ -18,6 +18,7 @@ module.exports = {
       'image': path.join(__dirname , 'static/image'),
       'utils': path.join(__dirname , 'src/common/utils.js'),
       'baseUI': path.join(__dirname , 'src/css/baseUI.scss'),
+      'lessUI': path.join(__dirname , 'src/css/var.less'),
       'basePage': path.join(__dirname , 'src/css/basePage.scss'),
     },
     aliasFields: ['wepy', 'weapp'],

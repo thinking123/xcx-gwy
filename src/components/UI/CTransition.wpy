@@ -1,0 +1,138 @@
+<template>
+  <div
+    v-if="inited"
+    class="c-transition custom-class"
+    :class="{cls}"
+    :style="sty"
+    bind:transitionend="onTransitionEnd"
+  >
+    <slot />
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import { transition } from '@/mixins/transition';
+  wepy.component({
+    data: {
+
+    },
+    mixins: [transition(true)],
+    externalClasses:[
+      'enter-class',
+      'enter-active-class',
+      'enter-to-class',
+      'leave-class',
+      'leave-active-class',
+      'leave-to-class'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      sty(){
+        const {currentDuration , display , customStyle} = this.data;
+        const td = `${currentDuration}ms`
+        return {
+          '-webkit-transition-duration':td,
+          'transition-duration':td,
+          display:display ? '' : 'none',
+          ...customStyle
+        }
+      },
+      cls(){
+        return this.data.classes;
+      }
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="less">
+  .c-transition {
+    transition-timing-function: ease;
+  }
+
+  .c-fade-enter-active,
+  .c-fade-leave-active {
+    transition-property: opacity;
+  }
+
+  .c-fade-enter,
+  .c-fade-leave-to {
+    opacity: 0;
+  }
+
+  .c-fade-up-enter-active,
+  .c-fade-up-leave-active,
+  .c-fade-down-enter-active,
+  .c-fade-down-leave-active,
+  .c-fade-left-enter-active,
+  .c-fade-left-leave-active,
+  .c-fade-right-enter-active,
+  .c-fade-right-leave-active {
+    transition-property: opacity, transform;
+  }
+
+  .c-fade-up-enter,
+  .c-fade-up-leave-to {
+    transform: translate3d(0, 100%, 0);
+    opacity: 0;
+  }
+
+  .c-fade-down-enter,
+  .c-fade-down-leave-to {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+
+  .c-fade-left-enter,
+  .c-fade-left-leave-to {
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+
+  .c-fade-right-enter,
+  .c-fade-right-leave-to {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+
+  .c-slide-up-enter-active,
+  .c-slide-up-leave-active,
+  .c-slide-down-enter-active,
+  .c-slide-down-leave-active,
+  .c-slide-left-enter-active,
+  .c-slide-left-leave-active,
+  .c-slide-right-enter-active,
+  .c-slide-right-leave-active {
+    transition-property: transform;
+  }
+
+  .c-slide-up-enter,
+  .c-slide-up-leave-to {
+    transform: translate3d(0, 100%, 0);
+  }
+
+  .c-slide-down-enter,
+  .c-slide-down-leave-to {
+    transform: translate3d(0, -100%, 0);
+  }
+
+  .c-slide-left-enter,
+  .c-slide-left-leave-to {
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  .c-slide-right-enter,
+  .c-slide-right-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+
+</style>

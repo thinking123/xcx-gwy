@@ -1,0 +1,73 @@
+<template>
+  <CTransition
+    :show="show"
+    custom-class="van-overlay"
+    :custom-style="customStyle"
+    :duration="duration"
+    bind:tap="onClick"
+    catch:touchmove="noop"
+  />
+
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props: {
+      show: Boolean,
+      customStyle: String,
+      duration: {
+        type: null,
+        value: 300
+      },
+      zIndex: {
+        type: Number,
+        value: 1
+      }
+    },
+    computed:{
+      customStyle(){
+        const sty = `z-index: ${ this.zIndex }; ${ this.customStyle }`;
+        return sty;
+      }
+    },
+    methods: {
+      onClick() {
+        this.$emit('click');
+      },
+
+      // for prevent touchmove
+      noop() {}
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="less">
+  @import '~lessUI';
+
+  .van-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: @overlay-background-color;
+  }
+
+</style>
+
+<config>
+  {
+  usingComponents: {
+  CTransition:'./CTransition',
+  }
+  }
+</config>
