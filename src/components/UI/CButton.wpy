@@ -10,6 +10,8 @@
   import wepy from '@wepy/core'
   import store from 'store';
   import { mapGetters} from '@wepy/x';
+  import {getImgUrlEx} from '@/common/utils';
+
   wepy.component({
     store,
     data: {

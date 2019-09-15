@@ -57,7 +57,10 @@
           <span class="text1">起床睡觉</span>
           <CloseIconBtn @click="handleClosegetup" external-cls="closeText"/>
         </div>
-        this is CPopup
+        <CButton text="起床" :icon="getupicon1" @tap.native="handleWxClick"
+                 external-cls="btn1"/>
+        <CButton text="睡觉" :icon="getupicon2" @tap.native="handleWxClick"
+                 external-cls="btn2"/>
       </div>
     </CPopup>
   </div>
@@ -105,7 +108,9 @@
         'home_img_luntan@3x.png',
         'home_img_fujin@3x.png',
       ],
-      getupShow:false
+      getupShow:false,
+      getupicon1:'icon_get_up@3x',
+      getupicon2:'icon_sleep@3x',
     },
     methods: {
       handleSign(){
@@ -135,6 +140,9 @@
         return m
       })
       this.panelIcons = this.panelIcons.map(getImgUrlEx)
+
+      this.getupicon1 = getImgUrlEx(this.getupicon1)
+      this.getupicon2 = getImgUrlEx(this.getupicon2)
     }
   });
 </script>
@@ -145,6 +153,40 @@
     width: initial;
     margin: 32rpx 30rpx 0;
 
+    .btn1{
+
+      width:690rpx;
+      height:96rpx;
+      box-shadow:0px 8px 16px -4px rgba(237,200,0,0.3);
+      border-radius:48px;
+
+
+      font-size:36rpx;
+      font-weight:600;
+      color:rgba(255,255,255,1);
+      background:rgba(237,200,0,1) !important;
+      border-color: rgba(237,200,0,1) !important;
+
+      margin: 48rpx 30rpx;
+    }
+    .btn2{
+
+      width:690rpx;
+      height:96rpx;
+      box-shadow:0px 8px 16px -4px rgba(107,144,213,0.3);
+      border-radius:48px;
+
+
+      font-size:36rpx;
+      font-weight:600;
+      color:rgba(255,255,255,1);
+      background:rgba(107,144,213,1) !important;
+
+      border-color: rgba(107,144,213,1) !important;
+
+      margin: 48rpx 30rpx;
+    }
+
     .getup{
       height: 472rpx;
 
@@ -153,6 +195,9 @@
         border-bottom: 1px solid #E6E6E6;
         padding: 0 40rpx;
         position: relative;
+
+
+
         &>label{
 
         }
