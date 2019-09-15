@@ -1,5 +1,13 @@
 <template>
 
+  <COverlay
+    v-if="overlay"
+    :show="show"
+    :z-index="zIndex"
+    :custom-style="overlayStyle"
+    :duration="duration"
+    bind:click="onClickOverlay"
+  />
   <div
     v-if="inited"
     v-bind:style="sty"
@@ -29,7 +37,8 @@
       'enter-to-class',
       'leave-class',
       'leave-active-class',
-      'leave-to-class'
+      'leave-to-class',
+      'custom-class'
     ],
 
     mixins: [transition(false), safeArea()],

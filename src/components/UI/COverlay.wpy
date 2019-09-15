@@ -7,7 +7,7 @@
     bind:tap="onClick"
     catch:touchmove="noop"
   >
-    <slot></slot>
+
   </CTransition>
 
 </template>
@@ -19,14 +19,15 @@
 
     },
     externalClasses:[
-      'external-cls'
+      'external-cls',
+      'custom-class'
     ],
     props: {
       show: Boolean,
       customStyle: String,
       duration: {
         type: null,
-        default: 300
+        default: 3000
       },
       zIndex: {
         type: Number,
