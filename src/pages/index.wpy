@@ -21,6 +21,11 @@
     width: 200px;
     background-color: #07c160;
   }
+  .c{
+    width: 100%;
+    height: 100px;
+    background-color: #1989fa;
+  }
 </style>
 <template>
   <div class="container">
@@ -38,6 +43,15 @@
         this is dialog
       </div>
     </CDialog>
+
+
+    <CSwipeCell right-width="{{ 65 }}" left-width="{{ 65 }}">
+      <view slot="left">选择</view>
+     <div class="c">
+       sdfdsf
+     </div>
+      <view slot="right">删除</view>
+    </CSwipeCell>
 
     <button @click="pop" class="btn">pop</button>
   </div>
@@ -91,7 +105,8 @@
   COverlay:'~UI/COverlay',
   CTransition:'~UI/CTransition',
   CPopup:'~UI/CPopup',
-  CDialog:'~UI/CDialog'
+  CDialog:'~UI/CDialog',
+  CSwipeCell:'~UI/CSwipeCell'
     }
 }
 </config>
