@@ -35,7 +35,10 @@
     },
     computed:{
       cs(){
-        const sty = `z-index: ${ this.zIndex }; ${ this.customStyle }`;
+        let sty = `z-index: ${ this.zIndex };`;
+        if(this.customStyle){
+          sty +=  this.customStyle;
+        }
         return sty;
       }
     },

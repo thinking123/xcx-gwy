@@ -3,7 +3,7 @@
     v-if="inited"
     class="c-transition custom-class"
     v-bind:class="classes"
-    :style="{ transitionDuration:td,_webkitTransitionDuration:td, display:dis}"
+    v-bind:style="sty"
     bind:transitionend="onTransitionEnd"
   >
     <slot></slot>
@@ -37,35 +37,27 @@
       }
     },
     computed:{
-      td(){
-        const {currentDuration , display , customStyle} = this;
-        const td = `${currentDuration}ms`
-        console.log('td : ' , td)
-        return td;
-      },
-      dis(){
-        const {currentDuration , display , customStyle} = this;
-        return display ? 'initial' : 'none';
-      },
       sty(){
         const {currentDuration , display , customStyle} = this;
         const td = `${currentDuration}ms`
         const res = {
-          '-webkit-transition-duration':td,
-          'transition-duration':td,
-          display:display ? '' : 'none',
-          ...customStyle
+          _webkitTransitionDuration:td,
+          transitionDuration:td,
+          display:display ? 'initial' : 'none'
         }
 
-        console.log('res dsf: ' , res)
-        return res;
-      },
-      cls(){
-        // const res = {...this.classes}
-        // console.log('res: ' , res)
-        const res = {};
-        res[this.classes] = true;
-        return res;
+        let str = '';
+        Object.keys(res).forEach(key=>{
+          str += `${key}:${res[key]};`
+        })
+
+        if(!!customStyle && customStyle != 'null'){
+          str += customStyle;
+        }
+
+
+        console.log('str:' , str)
+        return str;
       }
     },
     methods: {
