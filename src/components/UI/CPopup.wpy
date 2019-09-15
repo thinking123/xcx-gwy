@@ -48,7 +48,7 @@
         const td = `${currentDuration}ms`;
 
         const res = {
-          zIndex,
+          'z-index':zIndex,
             '-webkit-transition-duration':td,
           'transition-duration':td,
           display:display ? 'initial' : 'none;',
@@ -63,7 +63,7 @@
           str += customStyle;
         }
 
-        console.log('sty : ' , str)
+        console.log('sty in pop: ' , str)
         return str;
       },
       cls(){
@@ -71,7 +71,7 @@
 
         let str = utils.bem('popup', [position, { round, safe: isIPhoneX && safeAreaInsetBottom }]);
 
-        str += " "+classes;
+        str += " custom-class "+classes;
 
 
         console.log("cls : " , str)
@@ -171,7 +171,6 @@
     transition-timing-function: ease;
     animation: ease both;
     -webkit-overflow-scrolling: touch;
-
     &--center {
       transform: translate3d(-50%, -50%, 0);
 

@@ -7,7 +7,7 @@
     bind:tap="onClick"
     catch:touchmove="noop"
   >
-
+    <slot></slot>
   </CTransition>
 
 </template>
@@ -40,6 +40,9 @@
         if(this.customStyle){
           sty +=  this.customStyle;
         }
+
+        console.log('cs overly : ' , sty)
+
         return sty;
       }
     },

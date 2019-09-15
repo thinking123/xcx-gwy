@@ -2,6 +2,19 @@
  .btn{
    margin-top: 200rpx;
  }
+
+  .p{
+    height: 200rpx;
+    width: 100%;
+    background-color: #4FAC1B;
+  }
+
+  .cls{
+
+    position: fixed;
+    z-index: 102;
+
+  }
 </style>
 <template>
   <div class="container">
