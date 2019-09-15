@@ -15,6 +15,12 @@
     z-index: 102;
 
   }
+
+  .d{
+    height: 200px;
+    width: 200px;
+    background-color: #07c160;
+  }
 </style>
 <template>
   <div class="container">
@@ -26,6 +32,12 @@
         this is CPopup
       </div>
     </CPopup>
+
+    <CDialog :show.sync="df" closeOnClickOverlay="{{true}}">
+      <div class="d">
+        this is dialog
+      </div>
+    </CDialog>
 
     <button @click="pop" class="btn">pop</button>
   </div>
@@ -48,20 +60,26 @@
     mixins: [],
 
     data: {
-      show:false
+      show:false,
+      df:false
     },
 
 
     methods: {
       pop(){
-        this.show = !this.show;
+        this.df = true;
+
+        console.log('df : ' , this.df)
       },
       handleClose(){
         this.show = false;
+        this.df = false;
+
       }
     },
 
     created () {
+
     }
   });
 </script>
@@ -72,7 +90,8 @@
 
   COverlay:'~UI/COverlay',
   CTransition:'~UI/CTransition',
-  CPopup:'~UI/CPopup'
+  CPopup:'~UI/CPopup',
+  CDialog:'~UI/CDialog'
     }
 }
 </config>
