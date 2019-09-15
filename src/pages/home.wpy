@@ -47,6 +47,19 @@
              :src="item"/>
     </div>
     <CTabbar/>
+    <CPopup  :show="getupShow"
+             position="bottom"
+             @close="getupShow=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="getup">
+        <div class="header">
+          <span class="text1">起床睡觉</span>
+          <CloseIconBtn @click="handleClosegetup" external-cls="closeText"/>
+        </div>
+        this is CPopup
+      </div>
+    </CPopup>
   </div>
 </template>
 
@@ -91,17 +104,26 @@
         'home_img_kaiming@3x.png',
         'home_img_luntan@3x.png',
         'home_img_fujin@3x.png',
-      ]
+      ],
+      getupShow:false
     },
     methods: {
       handleSign(){
         navToPage('/pages/login/login')
       },
       handleIconText(index){
-
+        switch (index) {
+          case 0:
+            this.getupShow = true;
+            break;
+        }
       },
       handleImage(index){
 
+      },
+      handleClosegetup(){
+
+        this.getupShow = false;
       }
     },
     onShow(){
@@ -122,6 +144,68 @@
   .home{
     width: initial;
     margin: 32rpx 30rpx 0;
+
+    .getup{
+      height: 472rpx;
+
+      .header{
+        height: 120rpx;
+        border-bottom: 1px solid #E6E6E6;
+        padding: 0 40rpx;
+        position: relative;
+        &>label{
+
+        }
+        .lineHB{
+          background-color: $primaryColor;
+          width:8rpx;
+          height:44rpx;
+          display: inline-block;
+        }
+
+        .text1{
+          font-weight:normal;
+          color:$textColor;
+          font-size:36rpx;
+          font-weight: bold;
+          position: absolute;
+          top:50%;
+          transform: translateY(-50%);
+          &::before{
+            background-color: $primaryColor;
+            width:8rpx;
+            height:44rpx;
+            display: inline-block;
+            content: '';
+            position: absolute;
+            top:50%;
+            left: -16rpx;
+            transform: translateY(-50%);
+          }
+
+          .closeText{
+            float: right;
+
+            position: relative;
+            top:50%;
+            transform: translateY(-50%);
+          }
+
+        }
+
+        .closeText{
+          font-size:36rpx;
+          font-weight:400;
+          color:$textColorGray1;
+          line-height:44rpx;
+          float: right;
+
+          position: relative;
+          top:50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
     .LearningFloat{
       top: 172rpx;
       right: 10rpx;
@@ -209,6 +293,9 @@
   CTag:'~UI/CTag',
   IconText:'~Custom/IconText',
   LearningFloat:'~Custom/LearningFloat',
+  CloseIconBtn:'~Custom/CloseIconBtn',
+
+  CPopup:'~UI/CPopup'
     }
 }
 </config>
