@@ -1,5 +1,5 @@
-var array = require('./array.wxs');
-var object = require('./object.wxs');
+import array from './array'
+import object from './object'
 var PREFIX = 'c-';
 
 function join(name, mods) {
@@ -29,10 +29,10 @@ function traversing(mods, conf) {
   }
 }
 
-function bem(name, conf) {
+export function bem(name, conf) {
   var mods = [];
   traversing(mods, conf);
   return join(name, mods);
 }
 
-module.exports.bem = bem;
+// module.exports.bem = bem;

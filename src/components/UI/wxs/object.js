@@ -1,5 +1,4 @@
-/* eslint-disable */
-var REGEXP = getRegExp('{|}|"', 'g');
+const REGEXP = new RegExp('{|}|"', 'g');
 
 function keys(obj) {
   return JSON.stringify(obj)
@@ -10,4 +9,6 @@ function keys(obj) {
     });
 }
 
-module.exports.keys = keys;
+export default {
+  keys
+}

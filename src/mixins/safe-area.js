@@ -26,22 +26,22 @@ function getSafeArea() {
 export const safeArea = ({
   safeAreaInsetBottom = true,
   safeAreaInsetTop = false
-} = {}) =>
-  Behavior({
-    properties: {
+} = {}) =>({
+    props: {
       safeAreaInsetTop: {
         type: Boolean,
-        value: safeAreaInsetTop
+        default: safeAreaInsetTop
       },
       safeAreaInsetBottom: {
         type: Boolean,
-        value: safeAreaInsetBottom
+        default: safeAreaInsetBottom
       }
     },
 
     created() {
       getSafeArea().then(({ isIPhoneX, statusBarHeight }) => {
-        this.setData({ isIPhoneX, statusBarHeight });
+        this.isIPhoneX = isIPhoneX;
+        this.statusBarHeight = statusBarHeight;
       });
     }
   });

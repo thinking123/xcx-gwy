@@ -1,19 +1,19 @@
 <style lang="less">
-
+ .btn{
+   margin-top: 200rpx;
+ }
 </style>
 <template>
   <div class="container">
-    <COverlay :show="show">
-     <div>
-       this is COverlay
-     </div>
-    </COverlay>
+    <CPopup  show="{{ show }}"
+             position="top"
+             overlay="{{ false }}">
+      <div>
+        this is CPopup
+      </div>
+    </CPopup>
 
-    <CTransition >
-     <div>
-       this is CTransition
-     </div>
-    </CTransition>
+    <button @click="pop" class="btn">pop</button>
   </div>
 </template>
 
@@ -38,12 +38,14 @@
     mixins: [],
 
     data: {
-      show:true
+      show:false
     },
 
 
     methods: {
-
+      pop(){
+        this.show = !this.show;
+      }
     },
 
     created () {
@@ -57,6 +59,7 @@
 
   COverlay:'~UI/COverlay',
   CTransition:'~UI/CTransition',
+  CPopup:'~UI/CPopup'
     }
 }
 </config>

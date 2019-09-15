@@ -37,17 +37,22 @@ export const transition = function (showDefaultValue) {
       inited: false,
       display: false,
       classes:'',
-      currentDuration:''
+      currentDuration:'',
+      loaded:false
     },
 
     attached() {
+      this.loaded = true;
       if (this.show) {
         this.enter();
       }
     },
     watch:{
       show(v){
-        this.observeShow(v)
+        if(this.loaded){
+          this.observeShow(v)
+        }
+
       }
     },
     methods: {
@@ -113,18 +118,22 @@ export const transition = function (showDefaultValue) {
           .then(() => {
             this.checkStatus('leave');
 
-            this.$wx.setData({
-              classes: classNames.leave,
-              currentDuration
-            });
+            this.classes = classNames.leave;
+            this.currentDuration = currentDuration;
+            // this.$wx.setData({
+            //   classes: classNames.leave,
+            //   currentDuration
+            // });
           })
           .then(() => setTimeout(() => this.onTransitionEnd(), currentDuration))
           .then(nextTick)
           .then(() => {
             this.checkStatus('leave');
-            this.$wx.setData({
-              classes: classNames['leave-to']
-            });
+
+            this.classes = classNames['leave-to'];
+            // this.$wx.setData({
+            //   classes: classNames['leave-to']
+            // });
           })
           .catch(() => {});
       },
@@ -137,7 +146,8 @@ export const transition = function (showDefaultValue) {
 
       onTransitionEnd() {
         if (!this.show) {
-          this.set({ display: false });
+          this.display = false;
+          // this.set({ display: false });
           this.$emit('transitionend');
         }
       }

@@ -1,6 +1,4 @@
 <template>
-  <wxs src="./wxs/utils.wxs" module="utils" />
-
   <COverlay
     v-if="overlay"
     :show="show"
@@ -11,11 +9,14 @@
   />
   <div
     v-if="inited"
-    :class="{classes,utils.bem('popup', [position, { round, safe: isIPhoneX && safeAreaInsetBottom }])}"
-    :style="sty"
+    v-bind:style="sty"
+
+    class="custom-class"
+    v-bind:class="cls"
+
     bind:transitionend="onTransitionEnd"
   >
-    <slot />
+    <slot></slot>
   </div>
 
 </template>
@@ -23,6 +24,8 @@
   import wepy from '@wepy/core'
   import { transition } from '@/mixins/transition';
   import { safeArea } from '@/mixins/safe-area';
+  import utils from './wxs/utils'
+
   wepy.component({
     data: {
 
@@ -39,16 +42,39 @@
     mixins: [transition(false), safeArea()],
     computed:{
       sty(){
-        const {zIndex , currentDuration , display , safeAreaInsetTop , statusBarHeight , customStyle} = this.data;
+        const {zIndex , currentDuration , display , safeAreaInsetTop , statusBarHeight , customStyle} = this;
         const td = `${currentDuration}ms`;
-        return {
+
+        const res = {
           zIndex,
-          '-webkit-transition-duration':td,
+            '-webkit-transition-duration':td,
           'transition-duration':td,
-          display:display ? '' : 'display: none;',
-          'padding-top':safeAreaInsetTop ?  statusBarHeight + 'px;' : '',
-          ...customStyle
+          display:display ? 'initial' : 'none;',
+          'padding-top':safeAreaInsetTop ?  statusBarHeight + 'px;' : ''
         }
+        let str = '';
+        Object.keys(res).forEach(key=>{
+          str += `${key}:${res[key]};`
+        })
+
+        if(!!customStyle && customStyle != 'null'){
+          str += customStyle;
+        }
+
+        console.log('sty : ' , str)
+        return str;
+      },
+      cls(){
+        const {isIPhoneX , safeAreaInsetBottom , classes , position ,round} = this;
+
+        let str = utils.bem('popup', [position, { round, safe: isIPhoneX && safeAreaInsetBottom }]);
+
+        str += classes;
+
+
+        console.log("cls : " , str)
+        return str;
+
       }
 
     },
@@ -58,34 +84,41 @@
       customStyle: String,
       overlayStyle: String,
       transition: {
-        type: String,
-        observer: 'observeClass'
+        type: String
       },
       zIndex: {
         type: Number,
-        value: 100
+        default: 100
       },
       overlay: {
         type: Boolean,
-        value: true
+        default: true
       },
       closeIcon: {
         type: String,
-        value: 'cross'
+        default: 'cross'
       },
       closeOnClickOverlay: {
         type: Boolean,
-        value: true
+        default: true
       },
       position: {
         type: String,
-        value: 'center',
-        observer: 'observeClass'
+        default: 'center'
       }
     },
-
+    watch:{
+      transition(){
+        this.observeClass();
+      },
+      position(){
+        this.observeClass();
+      }
+    },
     created() {
       this.observeClass();
+
+      console.log('utils : ' , this.utils)
     },
 
     methods: {
@@ -96,23 +129,25 @@
       onClickOverlay() {
         this.$emit('click-overlay');
 
-        if (this.data.closeOnClickOverlay) {
+        if (this.closeOnClickOverlay) {
           this.$emit('close');
         }
       },
 
       observeClass() {
-        const { transition, position } = this.data;
+        const { transition, position } = this;
 
-        const updateData: { [key: string]: any } = {
+        const updateData = {
           name: transition || position
         };
 
         if (transition === 'none') {
-          updateData.duration = 0;
+          // updateData.duration = 0;
+          this.duration = 0;
         }
 
-        this.setData(updateData);
+        this.name = updateData.name;
+        // this.setData(updateData);
       }
     },
     onLoad () {
@@ -277,7 +312,7 @@
 <config>
   {
   usingComponents: {
-  COverlay:'./COverlay',
+  COverlay:'~UI/COverlay',
   }
   }
 </config>
