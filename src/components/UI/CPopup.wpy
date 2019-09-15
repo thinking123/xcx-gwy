@@ -1,12 +1,5 @@
 <template>
-  <COverlay
-    v-if="overlay"
-    :show="show"
-    :z-index="zIndex"
-    :custom-style="overlayStyle"
-    :duration="duration"
-    bind:click="onClickOverlay"
-  />
+
   <div
     v-if="inited"
     v-bind:style="sty"
@@ -69,7 +62,7 @@
 
         let str = utils.bem('popup', [position, { round, safe: isIPhoneX && safeAreaInsetBottom }]);
 
-        str += classes;
+        str += " "+classes;
 
 
         console.log("cls : " , str)

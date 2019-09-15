@@ -27,18 +27,14 @@
       navigationBarTitleText: 'test'
     },
 
-    hooks: {
-      // Page 级别 hook, 只对当前 Page 的 setData 生效。
-      'before-setData': function (dirty) {
-      }
-    },
+
 
  
 
     mixins: [],
 
     data: {
-      show:false
+      show:true
     },
 
 

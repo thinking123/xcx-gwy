@@ -8,6 +8,8 @@ function join(name, mods) {
     return name + '--' + mod;
   });
   mods.unshift(name);
+
+  console.log('mods join : ' , mods)
   return mods.join(' ');
 }
 
@@ -24,9 +26,12 @@ function traversing(mods, conf) {
     });
   } else if (typeof conf === 'object') {
     object.keys(conf).forEach(function(key) {
+      console.log('key:' , key)
       conf[key] && mods.push(key);
     });
   }
+
+  console.log('mods' , mods)
 }
 
 export function bem(name, conf) {
