@@ -53,16 +53,23 @@
              zIndex="999"
              overlay="{{ true }}">
       <div class="getup">
-        <div class="header">
-          <VerticalTextBar text="起床睡觉" class="text1"/>
-          <CloseIconBtn @click="handleClosegetup" external-cls="closeText"/>
-        </div>
+        <HeaderClose text="起床睡觉"  external-cls="header" @click="handleClosegetup"/>
         <CButton text="起床" :icon="getupicon1" @tap.native="handleWxClick"
                  external-cls="btn1"/>
         <CButton text="睡觉" :icon="getupicon2" @tap.native="handleWxClick"
                  external-cls="btn2"/>
       </div>
     </CPopup>
+    <CPopup  :show="learnShow"
+             position="bottom"
+             @close="learnShow=false"
+             zIndex="999"
+             overlay="{{ true }}">
+    <div class="learn">
+
+    </div>
+    </CPopup>
+
   </div>
 </template>
 
@@ -111,6 +118,8 @@
       getupShow:false,
       getupicon1:'icon_get_up@3x',
       getupicon2:'icon_sleep@3x',
+      learnShow:false,
+
     },
     methods: {
       handleSign(){
@@ -191,38 +200,7 @@
       height: 472rpx;
 
       .header{
-        height: 120rpx;
-        border-bottom: 1px solid #E6E6E6;
-        padding: 0 40rpx;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
 
-
-        &>label{
-
-        }
-        .lineHB{
-          background-color: $primaryColor;
-          width:8rpx;
-          height:44rpx;
-          display: inline-block;
-        }
-
-        .text1{
-
-
-        }
-
-        .closeText{
-          font-size:36rpx;
-          font-weight:400;
-          color:$textColorGray1;
-          line-height:44rpx;
-
-          position: relative;
-        }
       }
     }
     .LearningFloat{
@@ -312,9 +290,7 @@
   CTag:'~UI/CTag',
   IconText:'~Custom/IconText',
   LearningFloat:'~Custom/LearningFloat',
-  CloseIconBtn:'~Custom/CloseIconBtn',
-  VerticalTextBar:'~Custom/VerticalTextBar',
-
+  HeaderClose:'~Custom/HeaderClose',
   CPopup:'~UI/CPopup'
     }
 }
