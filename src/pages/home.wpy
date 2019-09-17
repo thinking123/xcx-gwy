@@ -53,7 +53,7 @@
              zIndex="999"
              overlay="{{ true }}">
       <div class="getup">
-        <HeaderClose text="起床睡觉"  external-cls="header" @click="handleClosegetup"/>
+        <HeaderClose text="起床睡觉"  external-cls="header" @click="getupShow=false"/>
         <CButton text="起床" :icon="getupicon1" @tap.native="handleWxClick"
                  external-cls="btn1"/>
         <CButton text="睡觉" :icon="getupicon2" @tap.native="handleWxClick"
@@ -66,7 +66,12 @@
              zIndex="999"
              overlay="{{ true }}">
     <div class="learn">
-
+      <HeaderClose text="学习计时"  external-cls="header" @click="learnShow=false"/>
+      <div class="body">
+        <CTopLabelInput label="本次学习内容"/>
+        <CTopLabelInput label="设置学习结束提醒"/>
+        <CButton text="开始学习"  @tap.native="handleWxClick"/>
+      </div>
     </div>
     </CPopup>
 
@@ -130,14 +135,13 @@
           case 0:
             this.getupShow = true;
             break;
+          case 1:
+            this.learnShow = true;
+            break;
         }
       },
       handleImage(index){
 
-      },
-      handleClosegetup(){
-
-        this.getupShow = false;
       }
     },
     onShow(){
@@ -198,9 +202,15 @@
 
     .getup{
       height: 472rpx;
+    }
 
-      .header{
-
+    .learn{
+      height: 712rpx;
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 46rpx;
       }
     }
     .LearningFloat{
@@ -291,7 +301,8 @@
   IconText:'~Custom/IconText',
   LearningFloat:'~Custom/LearningFloat',
   HeaderClose:'~Custom/HeaderClose',
-  CPopup:'~UI/CPopup'
+  CPopup:'~UI/CPopup',
+  CTopLabelInput:'~UI/CTopLabelInput'
     }
 }
 </config>
