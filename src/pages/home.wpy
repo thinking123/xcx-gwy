@@ -54,7 +54,7 @@
              overlay="{{ true }}">
       <div class="getup">
         <div class="header">
-          <span class="text1">起床睡觉</span>
+          <VerticalTextBar text="起床睡觉" class="text1"/>
           <CloseIconBtn @click="handleClosegetup" external-cls="closeText"/>
         </div>
         <CButton text="起床" :icon="getupicon1" @tap.native="handleWxClick"
@@ -132,7 +132,7 @@
       }
     },
     onShow(){
-      
+
     },
     created () {
       this.titleIcons = this.titleIcons.map(m=>{
@@ -195,7 +195,9 @@
         border-bottom: 1px solid #E6E6E6;
         padding: 0 40rpx;
         position: relative;
-
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
 
         &>label{
@@ -209,32 +211,7 @@
         }
 
         .text1{
-          font-weight:normal;
-          color:$textColor;
-          font-size:36rpx;
-          font-weight: bold;
-          position: absolute;
-          top:50%;
-          transform: translateY(-50%);
-          &::before{
-            background-color: $primaryColor;
-            width:8rpx;
-            height:44rpx;
-            display: inline-block;
-            content: '';
-            position: absolute;
-            top:50%;
-            left: -16rpx;
-            transform: translateY(-50%);
-          }
 
-          .closeText{
-            float: right;
-
-            position: relative;
-            top:50%;
-            transform: translateY(-50%);
-          }
 
         }
 
@@ -243,11 +220,8 @@
           font-weight:400;
           color:$textColorGray1;
           line-height:44rpx;
-          float: right;
 
           position: relative;
-          top:50%;
-          transform: translateY(-50%);
         }
       }
     }
@@ -339,6 +313,7 @@
   IconText:'~Custom/IconText',
   LearningFloat:'~Custom/LearningFloat',
   CloseIconBtn:'~Custom/CloseIconBtn',
+  VerticalTextBar:'~Custom/VerticalTextBar',
 
   CPopup:'~UI/CPopup'
     }

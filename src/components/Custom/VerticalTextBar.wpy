@@ -1,0 +1,53 @@
+<template>
+    <span class="VerticalTextBar external-cls">
+        {{text}}
+    </span>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      text:'',
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+  .VerticalTextBar{
+    font-weight:normal;
+    color:$textColor;
+    font-size:36rpx;
+    font-weight: bold;
+    position: relative;
+    &::before{
+      background-color: $primaryColor;
+      width:8rpx;
+      height:44rpx;
+      display: inline-block;
+      content: '';
+      position: relative;
+      top:50%;
+      margin-right: 16rpx;
+      transform: translateY(20%);
+    }
+  }
+</style>
