@@ -4,10 +4,17 @@
           {{label}}
         </div>
         <div class="input">
-          <input @input="handleInput" :value="val"
-                 :type="type"
-                 :placeholder="placeholder"/>
-          <span class="btn" v-if="btn">{{btn}}</span>
+          <div class="inputWrap">
+            <input @input="handleInput" :value="val"
+                   :type="type"
+                   :placeholder="placeholder"/>
+            <image src="/static/icon/btn_reset_gray.png"
+                   v-show="!!val"
+                   @click="handleClear"
+                   class="close"/>
+          </div>
+
+          <span class="btn" v-if="btn" @click="handleBtn">{{btn}}</span>
         </div>
     </div>
 </template>
@@ -25,7 +32,8 @@
       label:String,
       val:{
         type:String,
-        default:''
+        default:'',
+        twoWay: true
       },
       placeholder:{
         type:String,
@@ -51,8 +59,15 @@
     methods: {
       handleInput(e){
         const v = e.$wx.detail.value
-        this.$emit('update:val' , v)
+        this.$emit('update' , v)
       },
+      handleBtn(){
+        this.$emit('click')
+      },
+      handleClear(){
+        console.log('clear')
+        this.$emit('update' , '')
+      }
     },
     onLoad () {
 
@@ -83,14 +98,20 @@
       line-height:44rpx;
       margin-bottom: 24rpx;
     }
+    .inputWrap{
+      position: relative;
+      flex:1;
+    }
 
     .input{
       padding-bottom: 48rpx;
+      display: flex;
+      align-items: center;
     }
     input{
       font-size:32rpx;
       font-weight:400;
-      color:#000000;
+      color:$primaryColor;
       line-height:32rpx;
       caret-color: $primaryColor;
       padding-right: 50rpx;
@@ -98,6 +119,24 @@
     }
     input::placeholder {
       color: #CCCCCC;
+    }
+
+    .btn{
+      color:$primaryColor;
+      font-size:32rpx;
+      font-weight:400;
+      width:96rpx;
+      padding-left: 16rpx;
+    }
+
+    .close{
+      width: 44rpx;
+      height: 44rpx;
+      position: absolute;
+      right: 0;
+      top:50%;
+      transform: translateY(-50%);
+      padding: 16rpx;
     }
   }
 </style>

@@ -68,9 +68,14 @@
     <div class="learn">
       <HeaderClose text="学习计时"  external-cls="header" @click="learnShow=false"/>
       <div class="body">
-        <CTopLabelInput label="本次学习内容"/>
-        <CTopLabelInput label="设置学习结束提醒"/>
-        <CButton text="开始学习"  @tap.native="handleWxClick"/>
+        <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
+                        @update="handlelearnContent"
+                        :val.sync="learnContent"/>
+        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" btn="去设置" @click="handleLearnTip"
+                        :val.sync="learnTip"
+                        @update="handlelearnTip"
+                        external-cls="row"/>
+        <CButton text="开始学习"  @tap.native="handleStartLearn" external-cls="row"/>
       </div>
     </div>
     </CPopup>
@@ -125,6 +130,8 @@
       getupicon2:'icon_sleep@3x',
       learnShow:false,
 
+      learnContent:'sdf',
+      learnTip:''
     },
     methods: {
       handleSign(){
@@ -142,6 +149,18 @@
       },
       handleImage(index){
 
+      },
+      handleLearnTip(){
+
+      },
+      handleStartLearn(){
+        console.log(this.learnContent)
+      },
+      handlelearnContent(v){
+        this.learnContent = v;
+      },
+      handlelearnTip(v){
+        this.learnTip = v;
       }
     },
     onShow(){
@@ -210,7 +229,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 46rpx;
+        .row{
+          margin-top: 46rpx;
+        }
       }
     }
     .LearningFloat{
