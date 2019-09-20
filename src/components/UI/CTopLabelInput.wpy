@@ -125,7 +125,7 @@
       color:$primaryColor;
       font-size:32rpx;
       font-weight:400;
-      width:96rpx;
+      min-width:96rpx;
       padding-left: 16rpx;
     }
 

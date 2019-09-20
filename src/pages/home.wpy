@@ -71,7 +71,7 @@
         <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
                         @update="handlelearnContent"
                         :val.sync="learnContent"/>
-        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" btn="去设置" @click="handleLearnTip"
+        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @click="handleLearnTip"
                         :val.sync="learnTip"
                         @update="handlelearnTip"
                         external-cls="row"/>
@@ -79,7 +79,21 @@
       </div>
     </div>
     </CPopup>
+    <CPopup  :show="timeShow"
+             position="bottom"
+             @close="timeShow=false"
+             zIndex="1000"
+             overlay="{{ true }}">
+      <div class="time">
+        <HeaderClose text="选择学习时间"  external-cls="header" @click="timeShow=false"/>
+        <div class="body">
+          <CTimePickerView @change="hanleTime" external-cls="row1"/>
+          <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
+        </div>
 
+      </div>
+
+    </CPopup>
   </div>
 </template>
 
@@ -98,7 +112,16 @@
     computed: {
       ...mapGetters(['isSigned']),
       ...mapState(['nickName']),
+      timeTip(){
+        if(this.time && this.time.length > 0){
+          const time = this.time;
+          const t = time[0] * 60 + time[1];
 
+          return `${t}分钟`;
+        }
+
+        return '去设置';
+      }
     },
     data: {
       titleIcons:[
@@ -130,6 +153,9 @@
       getupicon2:'icon_sleep@3x',
       learnShow:false,
 
+      timeShow:false,
+      time:[],
+      setTime:[],
       learnContent:'sdf',
       learnTip:''
     },
@@ -151,7 +177,7 @@
 
       },
       handleLearnTip(){
-
+        this.timeShow = true;
       },
       handleStartLearn(){
         console.log(this.learnContent)
@@ -161,6 +187,14 @@
       },
       handlelearnTip(v){
         this.learnTip = v;
+      },
+      hanleTime(v){
+        console.log('time:' , v)
+        this.setTime = v;
+      },
+      handleSetTime(){
+        this.timeShow = false;
+        this.time = this.setTime;
       }
     },
     onShow(){
@@ -233,6 +267,23 @@
           margin-top: 46rpx;
         }
       }
+    }
+
+    .time{
+
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row1{
+          margin: 62rpx 0 64rpx 0;
+        }
+
+        .row2{
+          margin-bottom: 62rpx;
+        }
+      }
+
     }
     .LearningFloat{
       top: 172rpx;
@@ -323,7 +374,8 @@
   LearningFloat:'~Custom/LearningFloat',
   HeaderClose:'~Custom/HeaderClose',
   CPopup:'~UI/CPopup',
-  CTopLabelInput:'~UI/CTopLabelInput'
+  CTopLabelInput:'~UI/CTopLabelInput',
+  CTimePickerView:'~UI/CTimePickerView'
     }
 }
 </config>
