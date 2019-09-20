@@ -62,7 +62,7 @@
         this.$emit('update' , v)
       },
       handleBtn(){
-        this.$emit('click')
+        this.$emit('clickBtn')
       },
       handleClear(){
         console.log('clear')

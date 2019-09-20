@@ -71,7 +71,7 @@
         <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
                         @update="handlelearnContent"
                         :val.sync="learnContent"/>
-        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @click="handleLearnTip"
+        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @clickBtn="handleLearnTip"
                         :val.sync="learnTip"
                         @update="handlelearnTip"
                         external-cls="row"/>
