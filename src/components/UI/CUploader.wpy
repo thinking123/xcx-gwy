@@ -1,0 +1,101 @@
+<template>
+    <div class="CUploader external-cls">
+      <view class="CUploader__hd" v-if="title">
+        <view class="CUploader__overview">
+          <view class="CUploader__title">{{title}}</view>
+          <view class="CUploader__info">{{files.length}}/2</view>
+        </view>
+      </view>
+
+      <view class="CUploader__bd">
+        <view class="CUploader__files" id="uploaderFiles">
+          <view class="CUploader__file" @click="previewImage" id="{{item}}" v-for="item in files" :key="item">
+            <image class="CUploader__img" src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
+        <view class="CUploader__input-box">
+          <image class="CUploader__input" @click="chooseImage" :src="uploadImg" mode="scaleToFill"></image>
+        </view>
+      </view>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      files: [],
+      uploadImg:'btn_upload@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      title:String,
+      count:{
+        type:Number,
+        default:5
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      chooseImage: function (e) {
+        wx.chooseImage({
+          count:this.count,
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: res => {
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            console.log('res' , res,this.files)
+            this.files = [...this.files , ...res.tempFilePaths]
+          }
+        })
+      },
+      previewImage: function(e){
+        wx.previewImage({
+          current: e.currentTarget.id, // 当前显示图片的http链接
+          urls: this.files // 需要预览的图片http链接列表
+        })
+      }
+    },
+    created(){
+      this.uploadImg = getImgUrlEx(this.uploadImg);
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CUploader{
+
+    .CUploader__bd{
+      .CUploader__files{
+        display: flex;
+        flex-wrap: wrap;
+
+        .CUploader__file{
+          margin: 0 10rpx 0 0;
+        }
+        .CUploader__img{
+          width:240rpx;
+          height:240rpx;
+        }
+      }
+
+      .CUploader__input-box{
+        .CUploader__input{
+          width:240rpx;
+          height:240rpx;
+        }
+
+      }
+    }
+  }
+</style>

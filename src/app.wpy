@@ -76,8 +76,9 @@ wepy.app({
 <config>
 {
     pages: [
-
+  'pages/section1/learnLog',
   'pages/home',
+
       'pages/login/login',
       'pages/login/loginInput',
       'pages/login/register',
