@@ -6,7 +6,7 @@
                 :rightWidth="rightSwipeWidth"
     >
 
-      <div v-for="r in rightTexts" :key="r" slot="right">
+      <div v-for="r in rightTexts" :key="r" slot="right" >
         {{r}}
       </div>
       <div class="body-cls">
@@ -32,7 +32,8 @@
       multipleSlots: true // 在组件定义时的选项中启用多slot支持
     },
     data: {
-      checked:''
+      checked:'',
+      rightWidth:''
     },
     externalClasses:[
       'external-cls'
@@ -83,6 +84,17 @@
     color: $white;
     line-height:50rpx;
     align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &>view{
+      flex:1;
+      text-align: center;
+    }
+  }
+
+  .rightText{
+    text-align: center;
   }
 
   .SwipeItem{

@@ -1,4 +1,4 @@
-import store from 'store';
+
 
 export function getImgUrl(url) {
   console.log('image url: ' , url)
@@ -89,8 +89,10 @@ export function isObj(x) {
 }
 
 export function rpxTopx(rpx) {
-  if(store.state.systemInfo){
-      const {windowWidth}  = store.state.systemInfo;
+  const app = getApp();
+  // app.$wepy.$options
+  const {globalData:{systemInfo:{windowWidth}}} = app.$wepy.$options;
+  if(windowWidth){
       return rpx*windowWidth / 750;
   }else {
     console.error('not get store.state.systemInfo');

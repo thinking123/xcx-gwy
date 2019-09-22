@@ -14,7 +14,7 @@
         <slot name="left" />
       </view>
       <slot />
-      <view wx:if="{{ rightWidth }}" class="c-swipe-cell__right right-cls" data-key="right" catch:tap="onClick">
+      <view wx:if="{{ rightWidth }}" class="c-swipe-cell__right right-cls" data-key="right" catch:tap="onClick" :style="{width:rightWidthPx}">
         <slot name="right" />
       </view>
     </view>
@@ -34,7 +34,8 @@
     },
     data: {
       catchMove: false,
-      wrapperStyle:''
+      wrapperStyle:'',
+      rightWidthPx:''
     },
     externalClasses:[
       'external-cls',
@@ -55,6 +56,13 @@
     },
     events: {
 
+    },
+    watch:{
+      rightWidth(v){
+        // if(v > 0 && v){
+        //   this.rightWidthPx = rpxTopx(v);
+        // }
+      }
     },
     computed:{
 
@@ -174,8 +182,16 @@
     created(){
       this.offset = 0;
     },
-    onLoad () {
+    attached(){
+      setTimeout(()=>{
 
+        this.rightWidthPx = rpxTopx(this.rightWidth) + 'px';
+        console.log('this.rightWidthPx' , this.rightWidthPx);
+      } , 500)
+    },
+    onLoad () {
+      this.rightWidthPx = rpxTopx(this.rightWidth);
+      console.log('this.rightWidthPx' , this.rightWidthPx)
     }
   });
 </script>

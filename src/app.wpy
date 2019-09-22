@@ -14,7 +14,7 @@ page{
 import wepy from '@wepy/core';
 import './index'
 import eventHub from './common/eventHub';
-import { _wxGetSetting, _wxGetUserInfo, _wxLogin } from '@/common/wx';
+import { _wxGetSetting, _wxGetUserInfo, _wxLogin ,wx_getSystemInfo} from '@/common/wx';
 import { showMsg } from '@/common/utils';
 import {commit} from 'store';
 
@@ -28,7 +28,7 @@ wepy.app({
     }
   },
   globalData: {
-    userInfo: null
+    systemInfo: {}
   },
 
   onLaunch() {
@@ -58,7 +58,8 @@ wepy.app({
         }
 
         const systemInfo = await wx_getSystemInfo();
-        commit('setSystemInfo' , systemInfo);
+        console.log('systemInfo' , systemInfo)
+        this.$options.globalData.systemInfo = systemInfo;
       }catch (e) {
         showMsg(e);
       }
