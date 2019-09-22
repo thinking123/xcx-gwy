@@ -4,14 +4,16 @@
                 right-cls="right-cls"
                 c-swipe-cell__left="left-cls"
                 :rightWidth="rightSwipeWidth"
+                :disabled="disabled"
     >
 
       <div v-for="r in rightTexts" :key="r" slot="right" >
         {{r}}
       </div>
-      <div class="body-cls">
+      <div class="body-cls" :class="{'body-cls--disabled':disabled}">
         <checkbox :checked="checked" @change="onChange"
                   class="col1"
+                  :disabled="disabled"
                   color="#4FAC1B"/>
         <div class="col2">
           <span>{{text1}}</span>
@@ -50,6 +52,10 @@
       text2:String,
       btnText:{
         default:'完成'
+      },
+      disabled:{
+        type:Boolean,
+        default:false
       }
 
     },
@@ -109,6 +115,21 @@
       width: 750rpx;
       box-sizing: border-box;
       height: 100%;
+
+      &.body-cls--disabled{
+        color:$disabledColor;
+
+
+        .col2{
+          &>label:first-child{
+            color:$disabledColor;
+          }
+
+          & > label:last-child {
+            color:$disabledColor;
+          }
+        }
+      }
       .col2{
         display: flex;
         flex-direction: column;

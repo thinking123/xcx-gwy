@@ -12,6 +12,7 @@
     </div>
     <SwipeItem v-for="c in waitComp"
                external-cls="row1"
+               :disabled="c.disabled"
       :text1="c.text1"
       :text2="c.text2"
     />
@@ -61,6 +62,7 @@
         const obj = {
           text1:`学习申论-第四章`,
           text2:`明天 10:30`,
+          disabled:i%2
         }
         res.push(obj);
       }
