@@ -171,6 +171,12 @@
           case 1:
             this.learnShow = true;
             break;
+          case 2:
+            navToPage('/pages/section1/learnLog')
+            break;
+          case 2:
+            navToPage('/pages/section1/learnPlan')
+            break;
         }
       },
       handleImage(index){

@@ -1,5 +1,5 @@
 <template>
-    <div class="CTab  external-cls" :class="{'radius':type == 'radius'}">
+    <div class="CTab  external-cls" :class="{'CTab--radius':type == 'radius'}">
       <div class="tabItemWrap">
         <div v-for="(tab , index) in tabs"
              class="tabItem"
@@ -105,6 +105,12 @@
     justify-content: center;
     background-color: $white;
     position: relative;
+    color:$textBlack;
+
+    font-size:32rpx;
+    font-weight:500;
+    line-height:32rpx;
+
     .tabItemWrap{
       display: flex;
       .tabItem{
@@ -115,15 +121,35 @@
         align-items: center;
         justify-content: center;
 
-        font-size:32rpx;
-        font-weight:500;
-        line-height:32rpx;
-        color:#333333;
+
+
         &.selected{
           color: $primaryColor;
         }
       }
+    }
 
+
+    &.CTab--radius{
+      border: 1px solid $primaryColor;
+      border-radius: 9999rpx;
+      height: 80rpx;
+      background-color: $white;
+      color: $primaryColor;
+      overflow: hidden;
+      .tabItemWrap{
+        height: 100%;
+        .tabItem{
+
+          &:not(:last-child){
+            border-right: 1px solid $primaryColor;
+          }
+          &.selected{
+            background-color: $primaryColor;
+            color:$white;
+          }
+        }
+      }
 
     }
 

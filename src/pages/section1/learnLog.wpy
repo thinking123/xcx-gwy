@@ -2,8 +2,7 @@
   <div class="page learnLog">
     <CButton text="确认"  @tap.native="handleSetTime" external-cls="btn" type="info"/>
     <textarea bindblur="bindTextAreaBlur" placeholder="分享学习心得，记录学习点滴…"
-              class="textarea"
-              maxlength="10"/>
+              class="textarea"/>
     <CUploader external-cls="uploader"/>
   </div>
 </template>
@@ -11,6 +10,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {navBack} from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -24,7 +24,9 @@
 
     },
     methods: {
-
+      handleSetTime(){
+        navBack();
+      }
     },
     onShow(){
 

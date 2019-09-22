@@ -20,3 +20,7 @@ export function reLaunch(toUrl) {
   }
   wx.reLaunch(nav)
 }
+
+export function navBack() {
+  wx.navigateBack();
+}

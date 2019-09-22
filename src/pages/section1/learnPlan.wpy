@@ -1,0 +1,63 @@
+<template>
+  <div class="page learnPlan">
+    <div class="header">
+      <CTab type="radius" :tabs="tabs"
+            @changeTab="handleTab"
+            external-cls="ctab"/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      tabs:[
+        {text:'待完成'},
+        {text:'已完成'},
+      ],
+      selectedTab:0,
+    },
+    methods: {
+      handleTab({tab ,index}){
+        this.selectedTab = index
+      },
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .learnPlan{
+
+    .header{
+      margin: 32rpx 30rpx;
+      .ctab{
+        width: 460rpx;
+      }
+    }
+
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+
+  CTab:'~UI/CTab'
+    }
+}
+</config>
