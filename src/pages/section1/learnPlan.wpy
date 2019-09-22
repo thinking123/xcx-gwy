@@ -4,6 +4,11 @@
       <CTab type="radius" :tabs="tabs"
             @changeTab="handleTab"
             external-cls="ctab"/>
+
+      <IconText @click.native="handleIconText(index)"
+                external-cls="titleIcon"
+                external-img="titleImg"
+                :text="iconText.text" :src="iconText.src"/>
     </div>
   </div>
 </template>
@@ -11,6 +16,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.page({
     store,
@@ -26,6 +32,10 @@
         {text:'已完成'},
       ],
       selectedTab:0,
+      iconText:{
+        text:'添加计划',
+        src:'btn_add_plan@3x'
+      }
     },
     methods: {
       handleTab({tab ,index}){
@@ -36,17 +46,36 @@
       
     },
     created () {
-
+      this.iconText.src = getImgUrlEx(this.iconText.src);
     }
   });
 </script>
 <style lang="scss">
+  @import "~basePage";
+  @import "~baseUI";
   .learnPlan{
 
     .header{
       margin: 32rpx 30rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       .ctab{
         width: 460rpx;
+      }
+      .titleIcon{
+        font-size:28rpx;
+        font-weight:400;
+        color:$primaryColor;
+        line-height:28rpx;
+        >image{
+          width: 44rpx;
+          height: 48rpx;
+          margin-bottom: 16rpx;
+        }
+      }
+      .titleImg{
+
       }
     }
 
@@ -57,7 +86,9 @@
     navigationBarTitleText: '',
     usingComponents: {
 
-  CTab:'~UI/CTab'
+  CTab:'~UI/CTab',
+
+  IconText:'~Custom/IconText'
     }
 }
 </config>
