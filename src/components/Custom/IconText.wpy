@@ -47,8 +47,8 @@
       height: 100rpx;
       width: 100rpx;
     }
-    span{
-
+    >label{
+      white-space: nowrap;
     }
   }
 </style>

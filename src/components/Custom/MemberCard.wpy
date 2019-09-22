@@ -1,0 +1,84 @@
+<template>
+    <div class="MemberCard external-cls">
+      <div class="row1">
+        <span>当前等级</span>
+        <span class="line"/>
+        <span>{{curLevel}}</span>
+      </div>
+      <div class="row2">开明悟通VIP会员卡</div>
+      <div class="row3">{{total}}人已开通</div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      curLevel:{
+        type:String,
+        default:'普通会员'
+      },
+      total:{
+        type:Number,
+        default: 12000
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~newBase";
+  .MemberCard{
+    box-sizing: border-box;
+
+    width:670rpx;
+    background:linear-gradient(135deg,rgba(249,187,112,1) 0%,rgba(255,88,69,1) 100%);
+    border-radius:16rpx;
+    padding: 30rpx 40rpx 42rpx;
+    color:$white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .row1{
+      font-size:28rpx;
+      font-weight:600;
+      align-self: stretch;
+      line-height:28rpx;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-bottom: 78rpx;
+      .line{
+        height: 2rpx;
+        width: 286rpx;
+        background-color: $white;
+        opacity:0.3;
+      }
+    }
+
+    .row2{
+      font-size:48rpx;
+      font-weight:600;
+      line-height:48px;
+      text-shadow:0px 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 66rpx;
+    }
+  }
+</style>

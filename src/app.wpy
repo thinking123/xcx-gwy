@@ -83,6 +83,7 @@ wepy.app({
 {
     pages: [
 
+  'pages/section1/MemberCenter',
   'pages/section1/learnPlan',
   'pages/home',
   'pages/section1/learnLog',
