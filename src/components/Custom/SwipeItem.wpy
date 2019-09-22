@@ -1,0 +1,140 @@
+<template>
+    <CSwipeCell
+                external-cls="SwipeItem external-cls"
+                right-cls="right-cls"
+                c-swipe-cell__left="left-cls"
+                :rightWidth="rightSwipeWidth"
+    >
+
+      <div v-for="r in rightTexts" :key="r" slot="right">
+        {{r}}
+      </div>
+      <div class="body-cls">
+        <checkbox :checked="checked" @change="onChange"
+                  class="col1"
+                  color="#4FAC1B"/>
+        <div class="col2">
+          <span>{{text1}}</span>
+          <span>{{text2}}</span>
+        </div>
+
+        <CButton :text="btnText"
+                 @tap.native="handleSubmit"
+                 external-cls="col3"/>
+      </div>
+    </CSwipeCell>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    options: {
+      multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    data: {
+      checked:''
+    },
+    externalClasses:[
+      'external-cls',
+      'left-cls',
+      'right-cls'
+    ],
+    props:{
+      rightSwipeWidth:{
+        default:200
+      },
+      rightTexts:{
+        type:Array,
+        default: ['删除']
+      },
+      text1:String,
+      text2:String,
+      btnText:{
+        default:'完成'
+      }
+
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onChange(e){
+        console.log('onChange' , e)
+      },
+      handleSubmit(){
+
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+
+  .right-cls{
+    height:160rpx;
+    background-color: $redColor;
+
+    font-size:36rpx;
+    font-weight:normal;
+    color: $white;
+    line-height:50rpx;
+  }
+
+  .SwipeItem{
+      height: 160rpx;
+      display: flex;
+      align-items: center;
+      background-color: $white;
+
+    .body-cls{
+      display: flex;
+      align-items: center;
+      padding: 0 40rpx;
+      width: 750rpx;
+      box-sizing: border-box;
+
+      .col2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex:1;
+        padding-left: 40rpx;
+        &>label:first-child{
+          font-size:36rpx;
+          font-weight:400;
+          color:$textBlack;
+          line-height:44rpx;
+        }
+
+        & > label:last-child {
+          font-size: 28rpx;
+          font-weight: 400;
+          color: $textColorGray;
+          line-height: 36rpx;
+        }
+
+
+      }
+
+      .col3{
+        width:160rpx;
+        height:80rpx;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  usingComponents: {
+  CSwipeCell:'~UI/CSwipeCell',
+  CButton:'~UI/CButton'
+  }
+  }
+</config>

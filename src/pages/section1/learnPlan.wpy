@@ -10,6 +10,11 @@
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
     </div>
+    <SwipeItem v-for="c in waitComp"
+               external-cls="row1"
+      :text1="c.text1"
+      :text2="c.text2"
+    />
   </div>
 </template>
 
@@ -35,7 +40,10 @@
       iconText:{
         text:'添加计划',
         src:'btn_add_plan@3x'
-      }
+      },
+      waitComp:[
+
+      ]
     },
     methods: {
       handleTab({tab ,index}){
@@ -47,6 +55,17 @@
     },
     created () {
       this.iconText.src = getImgUrlEx(this.iconText.src);
+
+      const res = [];
+      for(let i = 0 ; i < 10 ; i++){
+        const obj = {
+          text1:`学习申论-第四章`,
+          text2:`明天 10:30`,
+        }
+        res.push(obj);
+      }
+
+      this.waitComp = res;
     }
   });
 </script>
@@ -54,12 +73,15 @@
   @import "~basePage";
   @import "~baseUI";
   .learnPlan{
-
+    background-color: $pageBg;
+    overflow-y: auto;
     .header{
-      margin: 32rpx 30rpx;
+      padding: 0 30rpx;
+      height: 144rpx;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background-color: $white;
       .ctab{
         width: 460rpx;
       }
@@ -77,6 +99,12 @@
       .titleImg{
 
       }
+
+
+    }
+
+    .row1{
+      margin-top: 24rpx;
     }
 
   }
@@ -88,7 +116,8 @@
 
   CTab:'~UI/CTab',
 
-  IconText:'~Custom/IconText'
+  IconText:'~Custom/IconText',
+  SwipeItem:'~Custom/SwipeItem'
     }
 }
 </config>

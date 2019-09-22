@@ -1,6 +1,6 @@
 <template>
   <view
-    class="van-swipe-cell"
+    class="c-swipe-cell external-cls right-cls"
     data-key="cell"
     catchtap="onClick"
     bindtouchstart="startDrag"
@@ -10,11 +10,11 @@
     catchtouchcancel="endDrag"
   >
     <view v-bind:style="wrapperStyle">
-      <view wx:if="{{ leftWidth }}" class="van-swipe-cell__left" data-key="left" catch:tap="onClick">
+      <view wx:if="{{ leftWidth }}" class="c-swipe-cell__left left-cls" data-key="left" catch:tap="onClick">
         <slot name="left" />
       </view>
       <slot />
-      <view wx:if="{{ rightWidth }}" class="van-swipe-cell__right" data-key="right" catch:tap="onClick">
+      <view wx:if="{{ rightWidth }}" class="c-swipe-cell__right right-cls" data-key="right" catch:tap="onClick">
         <slot name="right" />
       </view>
     </view>
@@ -178,7 +178,7 @@
 <style lang="less">
 
   @import "~lessUI";
-  .van-swipe-cell {
+  .c-swipe-cell {
     position: relative;
     overflow: hidden;
 
