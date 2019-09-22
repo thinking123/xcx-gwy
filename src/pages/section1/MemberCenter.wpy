@@ -20,6 +20,23 @@
       info="考点：资料分析秒杀综述"
       :src="classImg"
       external-cls="row5"/>
+
+    <ClassCard1
+    num1="2"
+    num2="2"
+    free="free"
+    title="真题讲课程名称课程名称课程名称课程名称"
+    good="good"
+    external-cls="row6"
+    />
+
+    <PayFixBtns
+      opened
+      nowPrice="999"
+      originPrice="1999"
+      continuePrice="888"
+      date="2019-12-12"
+    />
   </div>
 </template>
 
@@ -86,9 +103,17 @@
 <style lang="scss">
   @import "~newBase";
   $textColor:#797D80;
+  page{
+    background:$pageBg;
+    height:auto !important;
+  }
   .MemberCenter{
+    background:$white;
+    padding-top:32rpx;
+    height:auto !important;
+    margin-bottom:44rpx;
     .row1{
-      margin: 32rpx auto 100rpx;
+      margin: 0 auto 100rpx;
     }
     .row2{
 
@@ -133,7 +158,10 @@
       margin: 0 auto 32rpx;
     }
 
+    .row6 {
+      margin: 0 auto;
 
+    }
   }
 </style>
 <config>
@@ -144,6 +172,8 @@
   IconText:'~Custom/IconText',
   CCircleImg:'~UI/CCircleImg',
   ClassCard:'~Custom/ClassCard',
+  ClassCard1:'~Custom/ClassCard1',
+  PayFixBtns:'~Custom/PayFixBtns'
     }
 }
 </config>
