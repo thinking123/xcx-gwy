@@ -20,9 +20,13 @@ module.exports = {
       'baseUI': path.join(__dirname , 'src/css/baseUI.scss'),
       'lessUI': path.join(__dirname , 'src/css/var.less'),
       'basePage': path.join(__dirname , 'src/css/basePage.scss'),
+      'baseCss': path.join(__dirname , 'src/css/base.scss'),
+      'newBase': path.join(__dirname , 'src/css/newBase.scss'),
     },
     aliasFields: ['wepy', 'weapp'],
-    modules: ['node_modules']
+    modules: ['node_modules'],
+
+    extensions: ['.wpy', '.js', '.scss', '.less']
   },
   compilers: {
     less: {

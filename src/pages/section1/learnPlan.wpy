@@ -70,8 +70,7 @@
   });
 </script>
 <style lang="scss">
-  @import "~basePage";
-  @import "~baseUI";
+  @import "~newBase";
   .learnPlan{
     background-color: $pageBg;
     overflow-y: auto;
