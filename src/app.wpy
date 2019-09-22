@@ -82,12 +82,13 @@ wepy.app({
 <config>
 {
     pages: [
-
+  'pages/login/login',
+  'pages/home',
   'pages/section1/MemberCenter',
   'pages/section1/learnPlan',
-  'pages/home',
+
   'pages/section1/learnLog',
-      'pages/login/login',
+
       'pages/login/loginInput',
       'pages/login/register',
     ],

@@ -174,13 +174,26 @@
           case 2:
             navToPage('/pages/section1/learnLog')
             break;
-          case 2:
+          case 3:
             navToPage('/pages/section1/learnPlan')
             break;
         }
       },
       handleImage(index){
-
+        switch (index) {
+          case 0:
+            navToPage('/pages/section1/MemberCenter')
+            break;
+          case 1:
+            navToPage('/pages/section1/learnLog')
+            break;
+          case 2:
+            navToPage('/pages/section1/learnLog')
+            break;
+          case 3:
+            navToPage('/pages/section1/learnPlan')
+            break;
+        }
       },
       handleLearnTip(){
         this.timeShow = true;

@@ -1,37 +1,40 @@
 <template>
     <div class="PayFixBtns external-cls">
-      <div class="col1">
-        <block v-if="opened">
-          <div class="row1">
-            已开通
-          </div>
-          <div class="row2">
-            {{date}}<span>到期</span>
-          </div>
-        </block>
-        <block v-else>
-          <div class="no-opend-row1">
-            <span class="row3">{{nowPrice}}/年</span>
-            <span class="row4">¥{{originPrice}}</span>
-          </div>
+      <div class="wrap">
+        <div class="col1">
+          <block v-if="opened">
+            <div class="row1">
+              已开通
+            </div>
+            <div class="row2">
+              {{date}}<span>到期</span>
+            </div>
+          </block>
+          <block v-else>
+            <div class="no-opend-row1">
+              <span class="row3">{{nowPrice}}/年</span>
+              <span class="row4">¥{{originPrice}}</span>
+            </div>
 
-        </block>
+          </block>
 
+        </div>
+        <div class="col2">
+          <block  v-if="opened">
+            <div class="row1">
+              续费
+            </div>
+            <div class="row2">
+              ¥{{continuePrice}}/年
+            </div>
+          </block>
+          <block v-else>
+            <span class="row3">立即开通</span>
+          </block>
+
+        </div>
       </div>
-      <div class="col2">
-        <block  v-if="opened">
-          <div class="row1">
-            续费
-          </div>
-          <div class="row2">
-            ¥{{continuePrice}}/年
-          </div>
-        </block>
-        <block v-else>
-          <span class="row3">立即开通</span>
-        </block>
 
-      </div>
     </div>
 </template>
 <script>
@@ -72,15 +75,21 @@
 
   $originColor:#FF6600;
   .PayFixBtns{
-    position: fixed;
-    bottom:0;
-    left: 0;
-    right: 0;
     width:750rpx;
     height:96rpx;
     background:$white;
-    box-shadow:0rpx -4rpx 16rpx 0rpx rgba(0,0,0,0.06);
-    display: flex;
+
+    .wrap{
+      position: fixed;
+      bottom:0;
+      left: 0;
+      right: 0;
+      width:750rpx;
+      height:96rpx;
+      background:$white;
+      box-shadow:0rpx -4rpx 16rpx 0rpx rgba(0,0,0,0.06);
+      display: flex;
+    }
     .col1{
       flex: 1;
       display: flex;
