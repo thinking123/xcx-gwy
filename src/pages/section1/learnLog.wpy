@@ -1,7 +1,9 @@
 <template>
   <div class="page learnLog">
     <CButton text="确认"  @tap.native="handleSetTime" external-cls="btn" type="info"/>
-    <textarea bindblur="bindTextAreaBlur" auto-height placeholder="分享学习心得，记录学习点滴…" maxlength="10"/>
+    <textarea bindblur="bindTextAreaBlur" placeholder="分享学习心得，记录学习点滴…"
+              class="textarea"
+              maxlength="10"/>
     <CUploader external-cls="uploader"/>
   </div>
 </template>
@@ -38,12 +40,21 @@
     padding: 0 30rpx;
     display: flex;
     flex-direction: column;
-    .btn{
-      width:160rpx;
-      height:80rpx;
+
+    &>cbutton{
       align-self: flex-end;
     }
 
+    .btn{
+      width:160rpx;
+      height:80rpx;
+
+    }
+
+    .textarea{
+      margin-top: 48rpx;
+      height: 400rpx;
+    }
     .uploader{
       position: fixed;
       left: 30rpx;
