@@ -36,9 +36,14 @@ export default new Vuex.Store({
     tabbar,
     nickName:'default Nickname',
     deviceId:'deviceId',
-    wx:{}
+    wx:{},
+    systemInfo:{}
   },
   mutations: {
+    setSystemInfo(state , systemInfo){
+      console.log('systemInfo' , systemInfo)
+      state.systemInfo = systemInfo
+    },
     changeTabbar(state , index){
       state.activeTabIndex = index
     },

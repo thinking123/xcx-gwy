@@ -1,3 +1,5 @@
+import store from 'store';
+
 export function getImgUrl(url) {
   console.log('image url: ' , url)
   return url;
@@ -84,6 +86,16 @@ export function urlParams(url, params , noEncode = false) {
 export function isObj(x) {
   const type = typeof x;
   return x !== null && (type === 'object' || type === 'function');
+}
+
+export function rpxTopx(rpx) {
+  if(store.state.systemInfo){
+      const {windowWidth}  = store.state.systemInfo;
+      return rpx*windowWidth / 750;
+  }else {
+    console.error('not get store.state.systemInfo');
+    return rpx;
+  }
 }
 
 // export function isNumber(value) {

@@ -1,6 +1,6 @@
 <template>
   <view
-    class="c-swipe-cell external-cls right-cls"
+    class="c-swipe-cell external-cls"
     data-key="cell"
     catchtap="onClick"
     bindtouchstart="startDrag"
@@ -24,7 +24,7 @@
 <script>
   import wepy from '@wepy/core'
   import {touch} from '@/mixins/touch';
-
+  import {rpxTopx} from '@/common/utils';
 
   const THRESHOLD = 0.3;
 
@@ -37,7 +37,8 @@
       wrapperStyle:''
     },
     externalClasses:[
-      'external-cls'
+      'external-cls',
+      'right-cls'
     ],
     mixins: [touch],
     props:{
@@ -56,12 +57,14 @@
 
     },
     computed:{
-      
+
     },
     methods: {
 
       open(position) {
-        const { leftWidth, rightWidth } = this;
+        let { leftWidth, rightWidth } = this;
+        rightWidth = rpxTopx(rightWidth);
+
         const offset = position === 'left' ? leftWidth : -rightWidth;
         this.swipeMove(offset);
       },
@@ -87,9 +90,10 @@
       },
 
       swipeLeaveTransition() {
-        const { leftWidth, rightWidth } = this;
+        let { leftWidth, rightWidth } = this;
         const { offset } = this;
 
+        rightWidth = rpxTopx(rightWidth);
         if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
           this.open('right');
         } else if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {

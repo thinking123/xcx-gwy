@@ -35,9 +35,7 @@
       checked:''
     },
     externalClasses:[
-      'external-cls',
-      'left-cls',
-      'right-cls'
+      'external-cls'
     ],
     props:{
       rightSwipeWidth:{
@@ -77,19 +75,19 @@
   @import "~baseUI";
 
   .right-cls{
-    height:160rpx;
+    height:100%;
     background-color: $redColor;
 
     font-size:36rpx;
     font-weight:normal;
     color: $white;
     line-height:50rpx;
+    align-self: stretch;
   }
 
   .SwipeItem{
       height: 160rpx;
       display: flex;
-      align-items: center;
       background-color: $white;
 
     .body-cls{
@@ -98,11 +96,10 @@
       padding: 0 40rpx;
       width: 750rpx;
       box-sizing: border-box;
-
+      height: 100%;
       .col2{
         display: flex;
         flex-direction: column;
-        align-items: center;
         flex:1;
         padding-left: 40rpx;
         &>label:first-child{
@@ -110,6 +107,7 @@
           font-weight:400;
           color:$textBlack;
           line-height:44rpx;
+          margin-bottom: 16rpx;
         }
 
         & > label:last-child {
@@ -125,6 +123,7 @@
       .col3{
         width:160rpx;
         height:80rpx;
+        font-size:32rpx;
       }
     }
   }

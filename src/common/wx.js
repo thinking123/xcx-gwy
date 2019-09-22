@@ -149,6 +149,3 @@ export function wx_getSystemInfo() {
     })
   })
 }
-
-
-

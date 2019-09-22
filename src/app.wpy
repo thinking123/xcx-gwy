@@ -16,7 +16,7 @@ import './index'
 import eventHub from './common/eventHub';
 import { _wxGetSetting, _wxGetUserInfo, _wxLogin } from '@/common/wx';
 import { showMsg } from '@/common/utils';
-
+import {commit} from 'store';
 
 wepy.app({
   hooks: {
@@ -47,6 +47,8 @@ wepy.app({
     },
     async loginWx(){
       try{
+
+
         await _wxLogin();
         const setting = await _wxGetSetting();
         console.log('setting' , setting)
@@ -54,6 +56,9 @@ wepy.app({
           //授权过用户信息
           await _wxGetUserInfo()
         }
+
+        const systemInfo = await wx_getSystemInfo();
+        commit('setSystemInfo' , systemInfo);
       }catch (e) {
         showMsg(e);
       }
