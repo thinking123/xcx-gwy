@@ -30,7 +30,7 @@
     },
     onLoad(){
       const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
-      this.endTime = this.endTime.setTime(this.startTime.getTime() + offset);
+      this.endTime = new Date(this.endTime.setTime(new Date().getTime() + offset));
     },
     created () {
 

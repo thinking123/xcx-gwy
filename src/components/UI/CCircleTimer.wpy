@@ -24,8 +24,14 @@
         type:Number,
         default:750
       },
-      startTime:Object,
-      endTime:Object,
+      startTime:{
+        type:Date,
+        default:new Date()
+      },
+      endTime:{
+        type:Date,
+        default:new Date()
+      },
       secRadius:{
         type:Number,
         default:430
@@ -42,7 +48,9 @@
     watch:{
       endTime(v){
         if(this.circle){
-          this.circle.setTimeRange(this.startTime , v);
+          const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
+          const t = new Date(new Date().setTime(new Date().getTime() + offset));
+          this.circle.setTimeRange(new Date() , t);
         }
       }
     },
@@ -55,19 +63,19 @@
     methods: {
 
     },
-    created(){
-
-    },
-    onLoad () {
+    attached(){
       this.circle = new Circle({
-        startTime: this.startTime,
-        endTime: this.endTime,
+        startTime: new Date(),
+        endTime:  new Date(),
         width: this.width,
         height: this.height,
         secRadius: this.secRadius,
         minRadius: this.minRadius,
         hourRadius: this.hourRadius,
       });
+    },
+    onLoad () {
+
 
       // this.circle.render();
     }

@@ -115,11 +115,15 @@ export default class Circle {
     const c = this.ctx;
     const offset = this.degreeToRadian(-90);
     c.beginPath();
-    c.lineWidth = lineWidth;
-    c.strokeStyle = strokeStyle;
+    // c.lineWidth = lineWidth;
+    c.setLineWidth(lineWidth);
+    // c.strokeStyle = strokeStyle;
+    c.setStrokeStyle(strokeStyle);
     c.arc(x, y, r, offset + start, offset + end);
-    c.stroke();
     c.closePath();
+    c.stroke();
+    c.draw(true);
+
   }
 
 
@@ -265,7 +269,7 @@ export default class Circle {
 
   setTimeRange(startTime , endTime){
     this.opts.startTime = startTime || this.opts.startTime;
-    this.opts.endTime = startTime || this.opts.endTime;
+    this.opts.endTime = endTime || this.opts.endTime;
 
     this.opts.countDown = this.opts.endTime.getTime() - this.opts.startTime.getTime();
 
