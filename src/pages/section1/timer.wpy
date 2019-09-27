@@ -28,16 +28,12 @@
 
 
     },
-    onLoad(){
-      let offset = 1000 * (26 + 3 * 60 + 0 * 3600);
-      this.endTime =this.endTime + offset;
+    onLoad({startTime , endTime}){
+      this.startTime = startTime;
+      this.endTime = endTime;
 
 
-      setTimeout(()=>{
 
-        let offset = 1000 * (2600 + 3 * 60 + 2 * 3600);
-        this.endTime =this.endTime + offset;
-      } , 5000)
     },
     created () {
 

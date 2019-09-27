@@ -1,5 +1,10 @@
-export function navToPage(toUrl) {
+export function navToPage(toUrl , query) {
   console.log('nav to page : ' , toUrl)
+  if(query){
+    toUrl = Object.keys(query).reduce((f , key , index)=>{
+      return `${f}${index == 0 ? '' : '&'}${key}=${query[key]}`
+    } , `${toUrl}?`);
+  }
   const nav = {
     url:toUrl
   }

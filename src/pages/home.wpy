@@ -199,7 +199,15 @@
         this.timeShow = true;
       },
       handleStartLearn(){
-        console.log(this.learnContent)
+        const t = this.time;
+        if(t && t.length == 3){
+          const offset = (t[0] * 3600 + t[1] * 60 + t[0]) * 1000
+          navToPage('/pages/section1/timer' , {
+            startTime:new Date().getTime(),
+            endTime:(new Date().getTime() + offset)
+          })
+        }
+
       },
       handlelearnContent(v){
         this.learnContent = v;

@@ -8,7 +8,7 @@
       {{isStop ? '已结束' : '结束'}}
     </button>
     <button bindtap="handlePause" class="btn btn--pause" wx:if="{{!isStop}}">
-      {{isPause ? '启动' : '暂停'}}
+      {{isPause ? '继续' : '暂停'}}
     </button>
   </view>
 
