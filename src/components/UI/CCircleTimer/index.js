@@ -63,7 +63,7 @@ Component({
       ratio:10
     });
     //
-    const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
+    const offset = 1000 * (26 + 2 * 60 + 0 * 3600);
     const t = new Date(new Date().setTime(new Date().getTime() + offset));
     this.circle.setTimeRange(new Date() , t);
     //

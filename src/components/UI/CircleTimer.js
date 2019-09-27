@@ -207,8 +207,17 @@ export default class Circle {
     const [h, m, s] = this.timeToDate(diff);
 
 
-    if (s <= 1000) {
-      this.clear();
+    if (this.opts.down) {
+      if (diff <= 0) {
+        console.log(h, m , s)
+        this.end();
+        return;
+      }
+    } else {
+      if (diff >= countDown) {
+        this.end();
+        return;
+      }
     }
 
     this.renderTimeBg([h, m, s]);
@@ -235,9 +244,12 @@ export default class Circle {
 
   end() {
     if (this.opts.down) {
-      this.ctx.clearRect(0, 0, this.width, this.height);
-      this.renderBg();
+      // this.ctx.clearRect(0, 0, this.width, this.height);
+      this.renderTimeBg([0,0,0])
     }
+
+
+    this.isStop = true;
 
     this.opts.endCb();
   }
