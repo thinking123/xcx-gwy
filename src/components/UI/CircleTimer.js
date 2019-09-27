@@ -41,7 +41,8 @@ export default class Circle {
       canvasId:'canvas',
       width:'',
       height:'',
-      fontSize:'40'
+      fontSize:'40',
+      attached:null
     };
 
     this.opts = { ...def, ...options };
@@ -88,8 +89,8 @@ export default class Circle {
 
   get canvasContext(){
     if(!this.ctx){
-      const {canvasId} = this.opts;
-      this.ctx = wx.createCanvasContext(canvasId);
+      const {canvasId , attached} = this.opts;
+      this.ctx = wx.createCanvasContext(canvasId , attached);
     }
     return this.ctx;
   }
@@ -277,7 +278,8 @@ export default class Circle {
     if(this.opts.down){
       const [h, m, s] = this.timeToDate(this.opts.countDown);
       this.clear();
-      this.renderTimeBg([h, m, s]);
+      // this.renderTimeBg([h, m, s]);
+      this.render();
     }
 
   }

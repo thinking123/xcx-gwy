@@ -1,0 +1,5 @@
+<view class="CCircleTimer external-cls">
+  <canvas style="width: 750rpx; height: 1260rpx;" canvas-id="canvas" class="canvas">
+
+  </canvas>
+</view>

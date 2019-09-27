@@ -46,7 +46,7 @@
 {
     navigationBarTitleText: '',
     usingComponents: {
-  CCircleTimer:'~UI/CCircleTimer'
+  CCircleTimer:'~UI/CCircleTimer/index'
     }
 }
 </config>
