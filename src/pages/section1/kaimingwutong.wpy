@@ -1,36 +1,31 @@
 <template>
     <div class="kaimingwutong external-cls">
+      <button @click="expanded=!expanded">
+        button
+      </button>
+
+
       <CExpand :expanded="expanded">
         <div v-for="item in items" class="item">
           {{item}}
         </div>
       </CExpand>
+
+
     </div>
 </template>
 <script>
   import wepy from '@wepy/core'
 
-  wepy.component({
+  wepy.page({
     data: {
       expanded:false,
       items:[]
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      
-    },
-    events: {
-
-    },
-    computed:{
-      
-    },
     methods: {
 
     },
-    onLoad () {
+    created () {
       let arr = []
       for(let i = 0 ; i < 5 ; i++){
         arr.push(`ddfdfff ${i}`);
@@ -43,10 +38,16 @@
 <style lang="scss">
   .kaimingwutong{
 
+    button{
+      margin: 20rpx;
+    }
     .item{
       height: 100rpx;
       background-color: #07c160;
 
+      &:nth-child(odd){
+        background-color: #1989fa;
+      }
 
     }
   }

@@ -3,7 +3,10 @@
          style="height: {{ contentHeight }};"
          bind:transitionend="onTransitionEnd"
     >
-      <slot></slot>
+      <div class="CExpand--content">
+        <slot></slot>
+      </div>
+
     </div>
 </template>
 <script>
@@ -28,8 +31,8 @@
     },
     watch:{
       expanded(expanded){
-
-        this.getRect('.CExpand')
+        console.log('expand' , expanded)
+        this.getRect('.CExpand--content')
           .then((rect) => rect.height)
           .then((height) => {
             if (expanded) {
@@ -43,7 +46,9 @@
               .then(() => {
                 this.contentHeight = 0;
               });
-          });
+          }).catch(e=>{
+            conole.log('err' , e)
+        });
 
       }
     },
@@ -67,6 +72,7 @@
 </script>
 <style lang="scss">
   .CExpand{
-
+    overflow: hidden;
+    transition: height 300ms ease-in-out;
   }
 </style>

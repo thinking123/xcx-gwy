@@ -7,8 +7,9 @@ export const basic = {
     getRect(selector, all) {
       return new Promise(resolve => {
         wx.createSelectorQuery()
-          .in(this)[all ? 'selectAll' : 'select'](selector)
+          .in(this.$wx)[all ? 'selectAll' : 'select'](selector)
           .boundingClientRect(rect => {
+            console.log('rect' , rect)
             if (all && Array.isArray(rect) && rect.length) {
               resolve(rect);
             }
@@ -16,8 +17,7 @@ export const basic = {
             if (!all && rect) {
               resolve(rect);
             }
-          })
-          .exec();
+          }).exec();
       });
     }
   }
