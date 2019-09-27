@@ -31,7 +31,6 @@
     />
 
     <PayFixBtns
-      opened
       nowPrice="999"
       originPrice="1999"
       continuePrice="888"
