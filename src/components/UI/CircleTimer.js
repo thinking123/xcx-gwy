@@ -10,11 +10,11 @@ export default class Circle {
   constructor(options) {
     const def = {
       bgColor: '#FFF',
-      secColor: '#3291a8',
-      minColor: '#3291a8',
-      hourColor: '#3291a8',
-      runColor: 'yellow',
-      drawColor: '#12F',
+      secColor: '#FFF',
+      minColor: '#FFF',
+      hourColor: '#FFF',
+      runColor: '#FFF',
+      drawColor: '#FFF',
 
       endCb: () => {
         console.log('end');
@@ -42,12 +42,17 @@ export default class Circle {
       width:'',
       height:'',
       fontSize:'80',
-      attached:null
+      fontColor:'#FFF',
+      attached:null,
+      lineWidth:4,
+      secLineWidth:4,
+      minLineWidth:4,
+      hourLineWidth:4,
     };
 
     this.opts = { ...def, ...options };
 
-    let { secRadius, minRadius, hourRadius, width, height, fontSize, countDown } = this.opts;
+    let { secRadius, minRadius, hourRadius, width, height, fontSize, countDown ,lineWidth,secLineWidth,minLineWidth,hourLineWidth} = this.opts;
 
     if (!countDown) {
       const { startTime, endTime } = this.opts;
@@ -60,7 +65,15 @@ export default class Circle {
     width = this.rpxTopx(width);
     height = this.rpxTopx(height);
     fontSize = this.rpxTopx(fontSize);
+    lineWidth = this.rpxTopx(lineWidth);
+    secLineWidth = this.rpxTopx(secLineWidth);
+    minLineWidth = this.rpxTopx(minLineWidth);
+    hourLineWidth = this.rpxTopx(hourLineWidth);
 
+    this.secLineWidth = secLineWidth;
+    this.minLineWidth = minLineWidth;
+    this.lineWidth = lineWidth;
+    this.hourLineWidth = hourLineWidth;
     this.fontSize = fontSize;
     this.width = width;
     this.height = height;
@@ -120,15 +133,17 @@ export default class Circle {
     const { x, y } = this.center;
     const c = this.ctx;
     const deg360 = this.degreeToRadian(360);
-    this.renderCircle(0, deg360, this.secRadius, this.opts.runColor);
-    this.renderCircle(0, deg360, this.minRadius, this.opts.runColor);
-    this.renderCircle(0, deg360, this.hourRadius, this.opts.hourColor);
+    this.renderCircle(0, deg360, this.secRadius, this.opts.secColor , this.secLineWidth,0.2);
+    this.renderCircle(0, deg360, this.minRadius, this.opts.minColor, this.minLineWidth,0.3);
+    this.renderCircle(0, deg360, this.hourRadius, this.opts.hourColor, this.hourLineWidth,0.1);
   }
 
-  renderCircle(start, end, r, strokeStyle, lineWidth = 2) {
+  renderCircle(start, end, r, strokeStyle, lineWidth = 2 , opticy = 1) {
     const { x, y } = this.center;
     const c = this.ctx;
     const offset = this.degreeToRadian(-90);
+
+    c.setGlobalAlpha(opticy);
     c.beginPath();
     // c.lineWidth = lineWidth;
     c.setLineWidth(lineWidth);
@@ -168,11 +183,14 @@ export default class Circle {
 
   renderText([h, m, s]){
     const strTime = this.formatTime([h, m, s]);
-    this.ctx.fillText(strTime, this.center.x, this.center.y);
+    this.ctx.setGlobalAlpha(1);
     this.ctx.textAlign = 'center';
     // this.ctx.font = `${this.fontSize}px`;
+    this.ctx.setFillStyle(this.opts.fontColor);
     this.ctx.setFontSize(this.fontSize);
     this.ctx.textBaseline = 'middle';
+
+    this.ctx.fillText(strTime, this.center.x, this.center.y);
   }
 
   renderTime() {
@@ -261,7 +279,7 @@ export default class Circle {
   }
 
   renderTimeToCircle(deg, r) {
-    this.renderCircle(0, deg, r, this.opts.drawColor, 6);
+    this.renderCircle(0, deg, r, this.opts.drawColor, this.lineWidth);
   }
 
 
