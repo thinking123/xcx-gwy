@@ -51,20 +51,21 @@ Component({
 
 
     //
-    // this.circle = new Circle({
-    //   startTime: new Date(),
-    //   endTime:  new Date(),
-    //   width: this.data.width,
-    //   height: this.data.height,
-    //   secRadius: this.data.secRadius,
-    //   minRadius: this.data.minRadius,
-    //   hourRadius: this.data.hourRadius,
-    //   attached:this
-    // });
+    this.circle = new Circle({
+      startTime: new Date(),
+      endTime:  new Date(),
+      width: this.data.width,
+      height: this.data.height,
+      secRadius: this.data.secRadius,
+      minRadius: this.data.minRadius,
+      hourRadius: this.data.hourRadius,
+      attached:this,
+      ratio:10
+    });
     //
-    // const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
-    // const t = new Date(new Date().setTime(new Date().getTime() + offset));
-    // this.circle.setTimeRange(new Date() , t);
+    const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
+    const t = new Date(new Date().setTime(new Date().getTime() + offset));
+    this.circle.setTimeRange(new Date() , t);
     //
 
 

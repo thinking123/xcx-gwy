@@ -41,7 +41,7 @@ export default class Circle {
       canvasId:'canvas',
       width:'',
       height:'',
-      fontSize:'40',
+      fontSize:'80',
       attached:null
     };
 
@@ -96,11 +96,25 @@ export default class Circle {
   }
 
   get requestAnimationFrame(){
+    return this.fakeAnimationFrame;
       if(this.ctx){
           return this.ctx.requestAnimationFrame
       }else{
           return setTimeout
       }
+  }
+
+  fakeAnimationFrame(callback){
+    var start,
+      finish;
+    setTimeout(function(){
+      start = +new Date();
+      callback(start);
+      finish = +new Date();
+
+      //   //console.log(finish - start);
+
+    },16);
   }
   renderBg() {
     const { x, y } = this.center;
@@ -121,9 +135,9 @@ export default class Circle {
     // c.strokeStyle = strokeStyle;
     c.setStrokeStyle(strokeStyle);
     c.arc(x, y, r, offset + start, offset + end);
-    c.closePath();
+    // c.closePath();
     c.stroke();
-    c.draw(true);
+
 
   }
 
@@ -156,7 +170,8 @@ export default class Circle {
     const strTime = this.formatTime([h, m, s]);
     this.ctx.fillText(strTime, this.center.x, this.center.y);
     this.ctx.textAlign = 'center';
-    this.ctx.font = `${this.fontSize} serif`
+    // this.ctx.font = `${this.fontSize}px`;
+    this.ctx.setFontSize(this.fontSize);
     this.ctx.textBaseline = 'middle';
   }
 
@@ -291,5 +306,6 @@ export default class Circle {
     this.renderTimeToCircle(this.degreeToRadian(6 * s), this.secRadius);
     this.renderTimeToCircle(this.degreeToRadian(6 * m), this.minRadius);
     this.renderTimeToCircle(this.degreeToRadian(6 * h), this.hourRadius);
+    this.ctx.draw();
   }
 }
