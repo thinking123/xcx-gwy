@@ -1,8 +1,12 @@
+const {windowWidth} = wx.getSystemInfoSync();
+
+
 export default class Circle {
 
   keyRunTime = 'local-circle-timer-run-time';
   isPause = false;
   isStop = false;
+  keyFrames = 1000/60;
   constructor(options) {
     const def = {
       bgColor: '#FFF',
@@ -10,8 +14,8 @@ export default class Circle {
       minColor: '#3291a8',
       hourColor: '#3291a8',
       runColor: 'yellow',
-      attached: 'body',
-      drawColor: '#FFFFFF',
+      drawColor: '#12F',
+
       endCb: () => {
         console.log('end');
       },
@@ -28,24 +32,35 @@ export default class Circle {
       endTime: new Date().getTime(),
       curTime: new Date().getTime(),
       countDown: '',
-      down: false,
+      down: true,
       secRadius:0,
       minRadius:0,
       hourRadius:0,
       ratio:1,
-      step:false
+      step:false,
+      canvasId:'canvas',
+      width:'',
+      height:'',
+      fontSize:'40'
     };
 
     this.opts = { ...def, ...options };
-    const {secRadius , minRadius , hourRadius} = this.opts;
 
-    let root = document.getElementById(this.opts.attached);
-    if (!root) {
-      root = document.body;
+    let { secRadius, minRadius, hourRadius, width, height, fontSize, countDown } = this.opts;
+
+    if (!countDown) {
+      const { startTime, endTime } = this.opts;
+
+      this.opts.countDown = endTime.getTime() - startTime.getTime();
     }
+    secRadius = this.rpxTopx(secRadius);
+    minRadius = this.rpxTopx(minRadius);
+    hourRadius = this.rpxTopx(hourRadius);
+    width = this.rpxTopx(width);
+    height = this.rpxTopx(height);
+    fontSize = this.rpxTopx(fontSize);
 
-    this.root = root;
-    const { width, height } = root.getBoundingClientRect();
+    this.fontSize = fontSize;
     this.width = width;
     this.height = height;
     const radius = Math.min(width, height) - 2;
@@ -57,21 +72,35 @@ export default class Circle {
       y: height / 2
     };
 
-    const canvas = document.createElement('canvas');
-    root.appendChild(canvas);
-    canvas.id = this.getId();
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.zIndex = 100;
+    this.ctx = this.canvasContext;
 
-    const ctx = canvas.getContext('2d');
-    this.ctx = ctx;
+    this.renderBg();
   }
+
+  rpxTopx(rpx){
+    return windowWidth/750 * rpx;
+  }
+
 
   degreeToRadian(deg) {
     return (Math.PI / 180) * deg;
   }
 
+  get canvasContext(){
+    if(!this.ctx){
+      const {canvasId} = this.opts;
+      this.ctx = wx.createCanvasContext(canvasId);
+    }
+    return this.ctx;
+  }
+
+  get requestAnimationFrame(){
+      if(this.ctx){
+          return this.ctx.requestAnimationFrame
+      }else{
+          return setTimeout
+      }
+  }
   renderBg() {
     const { x, y } = this.center;
     const c = this.ctx;
@@ -122,7 +151,7 @@ export default class Circle {
     const strTime = this.formatTime([h, m, s]);
     this.ctx.fillText(strTime, this.center.x, this.center.y);
     this.ctx.textAlign = 'center';
-    this.ctx.font = '48px serif';
+    this.ctx.font = `${this.fontSize} serif`
     this.ctx.textBaseline = 'middle';
   }
 
@@ -141,28 +170,29 @@ export default class Circle {
 
 
     if (s <= 1000) {
-      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.clear();
     }
-    this.renderBg();
-    this.renderText([h, m, s]);
-    this.renderTimeToCircle(this.degreeToRadian(6 * s), this.secRadius);
-    this.renderTimeToCircle(this.degreeToRadian(6 * m), this.minRadius);
-    this.renderTimeToCircle(this.degreeToRadian(6 * h), this.hourRadius);
+
+    this.renderTimeBg([h, m, s]);
 
     if (this.opts.down) {
       if (diff > 0) {
-        requestAnimationFrame(this.renderTime.bind(this));
+        this.requestAnimationFrame(this.renderTime.bind(this) , this.keyFrames);
       } else {
         this.end();
       }
     } else {
       if (diff < countDown) {
-        requestAnimationFrame(this.renderTime.bind(this));
+        this.requestAnimationFrame(this.renderTime.bind(this), this.keyFrames);
       } else {
         this.end();
       }
     }
 
+  }
+
+  clear(){
+    this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   end() {
@@ -231,5 +261,29 @@ export default class Circle {
 
       return [h, m, s];
     }
+  }
+
+  setTimeRange(startTime , endTime){
+    this.opts.startTime = startTime || this.opts.startTime;
+    this.opts.endTime = startTime || this.opts.endTime;
+
+    this.opts.countDown = this.opts.endTime.getTime() - this.opts.startTime.getTime();
+
+
+    if(this.opts.down){
+      const [h, m, s] = this.timeToDate(this.opts.countDown);
+      this.clear();
+      this.renderTimeBg([h, m, s]);
+    }
+
+  }
+
+
+  renderTimeBg([h, m, s]){
+    this.renderBg();
+    this.renderText([h, m, s]);
+    this.renderTimeToCircle(this.degreeToRadian(6 * s), this.secRadius);
+    this.renderTimeToCircle(this.degreeToRadian(6 * m), this.minRadius);
+    this.renderTimeToCircle(this.degreeToRadian(6 * h), this.hourRadius);
   }
 }

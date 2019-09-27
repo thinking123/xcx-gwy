@@ -1,0 +1,52 @@
+<template>
+  <div class="page timer">
+    <CCircleTimer :startTime="startTime" :endTime="endTime" />
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      startTime:new Date(),
+      endTime:new Date(),
+
+    },
+    methods: {
+
+    },
+    onShow(){
+
+
+    },
+    onLoad(){
+      const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
+      this.endTime = this.endTime.setTime(this.startTime.getTime() + offset);
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .timer{
+  
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CCircleTimer:'~UI/CCircleTimer'
+    }
+}
+</config>
