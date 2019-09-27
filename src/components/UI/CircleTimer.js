@@ -268,7 +268,7 @@ export default class Circle {
       success: ({data:diff}) => {
         if(this.opts.down){
           // this.opts.countDown -= diff;
-          this.start = (new Date()).getTime() + diff;
+          this.start = (new Date()).getTime() - diff;
         }else{
           this.start = diff;
         }
