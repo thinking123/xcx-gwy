@@ -45,7 +45,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '倒计时',
     usingComponents: {
   CCircleTimer:'~UI/CCircleTimer/index'
     }

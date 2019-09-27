@@ -74,11 +74,33 @@ Component({
 
   },
   data: {
-    // 这里是一些组件内部数据
-    someData: {}
+    isStop:false,
+    isPause:false
   },
   methods: {
-    // 这里是一个自定义方法
-    customMethod: function(){}
+    handleStop: function() {
+      if(this.data.isStop){
+        return;
+      }
+      if(this.circle){
+        this.circle.stop();
+        this.setData({
+          isStop:true
+        })
+      }
+    },
+    handlePause: function() {
+      if(this.data.isPause){
+        this.circle.resume();
+        this.setData({
+          isPause:false
+        })
+      }else{
+        this.circle.pause();
+        this.setData({
+          isPause:true
+        })
+      }
+    }
   }
 })

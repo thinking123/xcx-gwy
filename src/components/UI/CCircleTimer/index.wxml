@@ -1,5 +1,15 @@
 <view class="CCircleTimer external-cls">
-  <canvas style="width: 750rpx; height: 1260rpx;" canvas-id="canvas" class="canvas">
+  <canvas style="width: 750rpx; height: 750rpx;" canvas-id="canvas" class="canvas">
 
   </canvas>
+
+  <view class="btn-wrap">
+    <button bindtap="handleStop" class="btn btn--stop">
+      {{isStop ? '已结束' : '结束'}}
+    </button>
+    <button bindtap="handlePause" class="btn btn--pause" wx:if="{{!isStop}}">
+      {{isPause ? '启动' : '暂停'}}
+    </button>
+  </view>
+
 </view>

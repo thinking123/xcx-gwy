@@ -267,7 +267,8 @@ export default class Circle {
       key:this.keyRunTime,
       success: ({data:diff}) => {
         if(this.opts.down){
-          this.opts.countDown -= diff;
+          // this.opts.countDown -= diff;
+          this.start = (new Date()).getTime() + diff;
         }else{
           this.start = diff;
         }
