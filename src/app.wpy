@@ -82,6 +82,7 @@ wepy.app({
 <config>
 {
     pages: [
+  'pages/section1/timer',
   'pages/login/login',
   'pages/home',
   'pages/section1/MemberCenter',
