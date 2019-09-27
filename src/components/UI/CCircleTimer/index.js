@@ -1,4 +1,6 @@
 import Circle from '../CircleTimer'
+import {isEmptyObject} from '@/common/utils';
+
 Component({
   properties: {
     // 这里定义了innerText属性，属性值可以在组件使用时指定
@@ -15,12 +17,12 @@ Component({
       value:750
     },
     startTime:{
-      type:Date,
-      value:new Date()
+      type:Number,
+      value:new Date().getTime()
     },
     endTime:{
-      type:Date,
-      value:new Date()
+      type:Number,
+      value:new Date().getTime()
     },
     secRadius:{
       type:Number,
@@ -35,6 +37,14 @@ Component({
       value:315
     },
   },
+  observers: {
+    startTime() {
+      this.updateTime()
+    },
+    endTime() {
+      this.updateTime()
+    },
+  },
   attached(){
     // const ctx = wx.createCanvasContext('canvas' , this)
     // ctx.rect(10, 10, 150, 75)
@@ -43,12 +53,12 @@ Component({
     // ctx.draw()
 
 
-    const sel = this.createSelectorQuery().select('.canvas');
-    console.log('sel:' , sel);
-    sel.node(function(res){
-      console.log('res.node' , res) // 节点对应的 Canvas 实例。
-    }).exec()
-
+    // const sel = this.createSelectorQuery().select('.canvas');
+    // console.log('sel:' , sel);
+    // sel.node(function(res){
+    //   console.log('res.node' , res) // 节点对应的 Canvas 实例。
+    // }).exec()
+    //
 
     //
     this.circle = new Circle({
@@ -63,9 +73,9 @@ Component({
       ratio:10
     });
     //
-    const offset = 1000 * (26 + 2 * 60 + 0 * 3600);
-    const t = new Date(new Date().setTime(new Date().getTime() + offset));
-    this.circle.setTimeRange(new Date() , t);
+    // const offset = 1000 * (26 + 2 * 60 + 0 * 3600);
+    // const t = new Date(new Date().setTime(new Date().getTime() + offset));
+    // this.circle.setTimeRange(new Date() , t);
     //
 
 
@@ -78,6 +88,18 @@ Component({
     isPause:false
   },
   methods: {
+    updateTime(){
+      // if(isEmptyObject(this.data.startTime) ||
+      //   isEmptyObject(this.data.endTime)
+      // ){
+      //   return;
+      // }
+      if(this.circle){
+        this.circle.setTimeRange(
+          new Date(this.data.startTime) ,
+          new Date(this.data.endTime));
+      }
+    },
     handleStop: function() {
       if(this.data.isStop){
         return;

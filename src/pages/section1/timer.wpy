@@ -17,8 +17,8 @@
 
     },
     data: {
-      startTime:new Date(),
-      endTime:new Date(),
+      startTime:new Date().getTime(),
+      endTime:new Date().getTime(),
 
     },
     methods: {
@@ -29,8 +29,15 @@
 
     },
     onLoad(){
-      const offset = 1000 * (26 + 3 * 60 + 2 * 3600);
-      this.endTime = new Date(this.endTime.setTime(new Date().getTime() + offset));
+      let offset = 1000 * (26 + 3 * 60 + 0 * 3600);
+      this.endTime =this.endTime + offset;
+
+
+      setTimeout(()=>{
+
+        let offset = 1000 * (2600 + 3 * 60 + 2 * 3600);
+        this.endTime =this.endTime + offset;
+      } , 5000)
     },
     created () {
 
