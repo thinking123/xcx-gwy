@@ -1,0 +1,72 @@
+<template>
+    <div class="CExpand external-cls"
+         style="height: {{ contentHeight }};"
+         bind:transitionend="onTransitionEnd"
+    >
+      <slot></slot>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {basic} from '@/mixins/basic';
+
+  const nextTick = () => new Promise(resolve => setTimeout(resolve, 20));
+
+  wepy.component({
+    data: {
+      contentHeight:0
+    },
+    mixins:[basic],
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      expanded:{
+        type:Boolean,
+        default:false
+      }
+    },
+    watch:{
+      expanded(expanded){
+
+        this.getRect('.CExpand')
+          .then((rect) => rect.height)
+          .then((height) => {
+            if (expanded) {
+              this.contentHeight = height ? `${height}px` : 'auto';
+              return
+            }
+
+            this.contentHeight = `${height}px`
+
+            return nextTick()
+              .then(() => {
+                this.contentHeight = 0;
+              });
+          });
+
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      onTransitionEnd(){
+        if (this.expanded) {
+          this.contentHeight = 'auto';
+        }
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CExpand{
+
+  }
+</style>

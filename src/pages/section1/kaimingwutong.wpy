@@ -1,0 +1,63 @@
+<template>
+    <div class="kaimingwutong external-cls">
+      <CExpand :expanded="expanded">
+        <div v-for="item in items" class="item">
+          {{item}}
+        </div>
+      </CExpand>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+      expanded:false,
+      items:[]
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    onLoad () {
+      let arr = []
+      for(let i = 0 ; i < 5 ; i++){
+        arr.push(`ddfdfff ${i}`);
+      }
+
+      this.items = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  .kaimingwutong{
+
+    .item{
+      height: 100rpx;
+      background-color: #07c160;
+
+
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CExpand:'~UI/CExpand'
+  }
+  }
+</config>
+
