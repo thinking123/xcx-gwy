@@ -1,0 +1,56 @@
+<template>
+    <div class="CExpandPop external-cls">
+      <div class="CExpandPop-header">
+        <slot/>
+      </div>
+      <div class="CExpandPop-body">
+
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    relations: {
+      './cexpandicon': {
+        type: 'child', // 关联的目标节点应为子节点
+        linked: function(target) {
+          // 每次有custom-li被插入时执行，target是该节点实例对象，触发在该节点attached生命周期之后
+        },
+        linkChanged: function(target) {
+          // 每次有custom-li被移动后执行，target是该节点实例对象，触发在该节点moved生命周期之后
+        },
+        unlinked: function(target) {
+          // 每次有custom-li被移除时执行，target是该节点实例对象，触发在该节点detached生命周期之后
+        }
+      }
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CExpandPop{
+    
+  }
+</style>

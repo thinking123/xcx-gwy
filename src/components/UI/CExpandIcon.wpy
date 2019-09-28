@@ -1,0 +1,61 @@
+<template>
+    <div class="CExpandIcon external-cls" @click="handleShow">
+      <span>{{text}}</span>
+      <image :src="icon"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      iconDown:'icon_arrowdown@3x',
+      iconUp:'icon_arrowup@3x',
+      show:false
+    },
+    relations: {
+      './cexpandpop': {
+        type: 'parent', // 关联的目标节点应为父节点
+        linked: function(target) {
+          // 每次被插入到custom-ul时执行，target是custom-ul节点实例对象，触发在attached生命周期之后
+        },
+        linkChanged: function(target) {
+          // 每次被移动后执行，target是custom-ul节点实例对象，触发在moved生命周期之后
+        },
+        unlinked: function(target) {
+          // 每次被移除时执行，target是custom-ul节点实例对象，触发在detached生命周期之后
+        }
+      }
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      text:String
+    },
+    events: {
+
+    },
+    computed:{
+      icon(){
+        return this.show ? this.iconUp : this.iconDown;
+      }
+    },
+    methods: {
+      handleShow(){
+        this.show = !this.show;
+        this.$emit('change' , this.show);
+      }
+    },
+    created () {
+      this.iconDown = getImgUrlEx(this.iconDown);
+      this.iconUp = getImgUrlEx(this.iconUp);
+    }
+  });
+</script>
+<style lang="scss">
+  .CExpandIcon{
+    
+  }
+</style>

@@ -1,0 +1,129 @@
+<template>
+    <div class="CCollapseItem external-cls">
+      <div
+        class="collapse-item"
+        :class="{'collapse-item--expanded':expanded}"
+        bind:click="onClick"
+      >
+        <span>{{title}}</span>
+        <image :src="icon"/>
+      </div>
+      <view
+        :class="{'collapse-item--transition':transition}"
+        style="height: {{ contentHeight }};"
+        bind:transitionend="onTransitionEnd"
+      >
+        <view
+          class="c-collapse-item__content content-class"
+        >
+          <slot />
+        </view>
+      </view>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+  import {basic} from '@/mixins/basic';
+
+  const nextTick = () => new Promise(resolve => setTimeout(resolve, 20));
+  wepy.component({
+    externalClasses: ['title-class', 'content-class' , 'external-cls'],
+
+    relation: {
+      name: 'ccollapse',
+      type: 'ancestor',
+      linked(parent) {
+        this.parent = parent;
+      }
+    },
+    mixins:[basic],
+    props: {
+      title: null,
+      value: null
+    },
+
+    data: {
+      contentHeight: 0,
+      expanded: false,
+      transition: false,
+      icon:'icon_arrowdown@3x'
+    },
+
+    created(){
+      this.icon = getImgUrlEx(this.icon);
+    },
+    attached() {
+      this.parent = this.$wx.parent;
+      this.updateExpanded()
+        .then(nextTick)
+        .then(() => {
+          this.transition = true;
+          if (this.expanded) {
+            this.contentHeight = 'auto';
+          }
+        });
+    },
+
+    methods: {
+      updateExpanded() {
+        if (!this.parent) {
+          return Promise.resolve();
+        }
+
+        const { value, accordion } = this.parent.data;
+        const { children = [] } = this.parent;
+        const { name } = this.data;
+
+        const index = children.indexOf(this);
+        const currentName = name == null ? index : name;
+
+        const expanded = accordion
+          ? value === currentName
+          : (value || []).some((name) => name === currentName);
+
+        const stack = [];
+
+        if (expanded !== this.expanded) {
+          this.updateStyle(expanded);
+        }
+
+        this.index = index;
+        this.expanded = expanded;
+      },
+
+      updateStyle(expanded) {
+        return this.getRect('.c-collapse-item__content')
+          .then((rect) => rect.height)
+          .then((height) => {
+            if (expanded) {
+              this.contentHeight =  height ? `${height}px` : 'auto';
+              return;
+            }
+            this.contentHeight =  `${height}px`;
+
+            return nextTick().then(() => this.contentHeight = 0);
+          });
+      },
+
+      onClick() {
+        const { name, expanded } = this;
+        const index = this.parent.children.indexOf(this);
+        const currentName = name == null ? index : name;
+
+        this.parent.switch(currentName, !expanded);
+      },
+
+      onTransitionEnd() {
+        if (this.expanded) {
+          this.contentHeight = 'auto';
+        }
+      }
+    }
+  });
+</script>
+<style lang="scss">
+  .CCollapseItem{
+    
+  }
+</style>
