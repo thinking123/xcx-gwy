@@ -236,6 +236,8 @@
 
       this.getupicon1 = getImgUrlEx(this.getupicon1)
       this.getupicon2 = getImgUrlEx(this.getupicon2)
+
+      navToPage('/pages/section1/kaimingwutong')
     }
   });
 </script>

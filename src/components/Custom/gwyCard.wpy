@@ -1,0 +1,145 @@
+<template>
+    <div class="gwyCard external-cls">
+      <CCircleImg :src="obj.header" external-cls="header"/>
+      <div class="row1">
+          <span>
+            {{obj.name}}
+          </span>
+        <span class="level level--1">
+          {{obj.level}}
+        </span>
+      </div>
+      <div class="row2">
+        {{obj.bm}}
+      </div>
+      <div class="row3">
+        {{obj.desc}}
+      </div>
+      <CButton text="立即咨询"
+               @tap.native="handleBtn($event)"
+               external-cls="btn"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      obj:{
+        type:Object,
+        default:{}
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      handleBtn(e){
+        // e && e.stopPropagation();
+        this.$emit('btn' , this.item)
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~newBase";
+  .gwyCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width:330rpx;
+    height:484rpx;
+    background:rgba(255,255,255,1);
+    border-radius:16rpx;
+    .header{
+      margin-top: 40rpx;
+      width:120rpx;
+      height:120rpx;
+    }
+
+    .row1{
+      margin-top: 34rpx;
+      display: flex;
+      align-items: center;
+      >label:nth-child(1){
+        font-size:36rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:$textBlack;
+        line-height:32rpx;
+        margin-right: 8rpx;
+      }
+      .level{
+        width:80rpx;
+        height:36rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size:24rpx;
+        font-family:PingFangSC-Regular,PingFangSC;
+        font-weight:400;
+        line-height:24rpx;
+        border-radius:180rpx 200rpx 200rpx 0rpx;
+
+        &.level--1{
+          background:rgba(255,211,0,0.3);
+          box-shadow:0px 4rpx 4rpx -2rpx rgba(255,211,0,0.3);
+          color:rgba(201,139,6,1);
+        }
+        &.level--2{
+          background:rgba(237,246,232,1);
+          color:$primaryColor;
+        }
+
+      }
+    }
+    .row2{
+      margin-top: 30rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+      line-height:28rpx;
+    }
+    .row3{
+      margin-top: 32rpx;
+      width:260rpx;
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+      line-height:24rpx;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .btn{
+      margin-top: 32rpx;
+      width:210rpx;
+      height:72rpx;
+    }
+
+  }
+</style>
+
+<config>
+  {
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg',
+  CButton:'~UI/CButton'
+  }
+  }
+</config>
