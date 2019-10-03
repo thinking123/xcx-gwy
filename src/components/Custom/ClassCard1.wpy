@@ -16,6 +16,9 @@
           <span v-if="free" class="text2">
             免费
           </span>
+          <span v-else class="text3">
+            ¥{{price}}
+          </span>
         </div>
       </div>
     </div>
@@ -36,6 +39,7 @@
       title:String,
       num1:Number,
       num2:Number,
+      price:Number,
       free:{
         type:Boolean
       },
@@ -126,6 +130,14 @@
           font-family:PingFangSCSemibold-,PingFangSCSemibold;
           font-weight:normal;
           color: $primaryColor;
+          line-height:40rpx;
+        }
+
+        .text3{
+          font-size:28rpx;
+          font-family:PingFangSCSemibold-,PingFangSCSemibold;
+          font-weight:normal;
+          color:rgba(255,102,0,1);
           line-height:40rpx;
         }
 

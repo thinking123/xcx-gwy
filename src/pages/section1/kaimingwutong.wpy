@@ -16,10 +16,24 @@
 <!--        </div>-->
 <!--      </CExpand>-->
 
-      <div class="gwyCard" v-show="selectedTab == 0">
-        <gwyCard v-for="item in items1" :obj="item" external-cls="gwyCard-item"/>
+      <div class="gwyCard" v-if="selectedTab == 0">
+        <gwyCard v-for="item in items1" :obj="item"
+                 :key="item.id"
+                 external-cls="gwyCard-item"/>
       </div>
-
+      <div class="gwtRecord" v-if="selectedTab == 1">
+        <ClassCard1
+          v-for="item in items2"
+          :key="item.id"
+          :num1="item.num1"
+          :num2="item.num2"
+          :free="item.free"
+          :title="item.title"
+          :good="item.good"
+          :price="item.price"
+          external-cls="gwtRecord-item"
+        />
+      </div>
     </div>
 </template>
 <script>
@@ -30,6 +44,7 @@
     data: {
       expanded:false,
       items1:[],
+      items2:[],
 
       tabs:[
         {text:'公务员'},
@@ -54,11 +69,26 @@
           name:'name',
           level:'省部',
           bm:'湖南 | 行政部',
-          desc:'答疑解惑，我们的职责,答疑解惑，我们的职责'
+          desc:'答疑解惑，我们的职责,答疑解惑，我们的职责',
+          id:i
         });
       }
 
       this.items1 = arr;
+
+      arr = []
+      for(let i = 0 ; i < 20 ; i++){
+        arr.push({
+          num1:'2',
+          num2:'2',
+          free:i % 2,
+          price:i*6,
+          title:'真题讲课程名称课程名称课程名称课程名称',
+          good:'good',
+          id:i
+        });
+      }
+      this.items2 = arr;
 
       this.iconText.src = getImgUrlEx(this.iconText.src);
     }
@@ -124,6 +154,18 @@
 
       }
     }
+
+    .gwtRecord{
+      display: flex;
+      flex-direction: column;
+      background:rgba(242,242,242,1);
+      padding: 32rpx 30rpx;
+      .gwtRecord-item{
+        margin-bottom:32rpx;
+
+      }
+    }
+
   }
 </style>
 
@@ -134,7 +176,8 @@
   CExpand:'~UI/CExpand',
   CTab:'~UI/CTab',
   IconText:'~Custom/IconText',
-  gwyCard:'~Custom/gwyCard'
+  gwyCard:'~Custom/gwyCard',
+  ClassCard1:'~Custom/ClassCard1'
   }
   }
 </config>
