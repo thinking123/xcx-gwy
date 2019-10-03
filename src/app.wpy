@@ -84,8 +84,7 @@ wepy.app({
     pages: [
   'pages/home',
   'pages/section1/MemberCenter',
-
-
+  'pages/section1/question',
   'pages/section1/kaimingwutong',
   'pages/login/login',
 
