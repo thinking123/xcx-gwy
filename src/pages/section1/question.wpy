@@ -1,6 +1,10 @@
 <template>
   <div class="page question">
-
+      <div class="form">
+        <CLabelRightButton text="问题类型"
+                           rightText="请选择"
+                           @click.native="handleClick1"/>
+      </div>
   </div>
 </template>
 
@@ -20,7 +24,9 @@
 
     },
     methods: {
+      handleClick1(){
 
+      }
     },
     onShow(){
       
@@ -39,6 +45,7 @@
 {
     navigationBarTitleText: '',
     usingComponents: {
+  CLabelRightButton:'~UI/CLabelRightButton',
     }
 }
 </config>

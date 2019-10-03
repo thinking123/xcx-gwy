@@ -1,0 +1,82 @@
+<template>
+    <div class="CLabelRightButton external-cls" :class="{'showLine':showLine}">
+      <span class="left">
+        {{text}}
+      </span>
+      <div class="right">
+        <span>
+          {{rightText}}
+        </span>
+        <image :src="icon"/>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'btn_arrowr@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      text:String,
+      rightText:String,
+      showLine:{
+        type:Boolean,
+        default:true
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon);
+    }
+  });
+</script>
+<style lang="scss">
+
+  .CLabelRightButton{
+    width: 630rpx;
+    height: 120rpx;
+    font-size:32rpx;
+    font-family:PingFangSC-Regular,PingFangSC;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+    line-height:32rpx;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    &.showLine::after{
+      content: '';
+      background:rgba(204,204,204,1);
+      position: absolute;
+      bottom:0;
+      left: 0;
+      width: 630rpx;
+      height: 1px;
+      transform: scale(0.5);
+    }
+
+    .right{
+      >image{
+        margin-left: 16rpx;
+        width:16rpx;
+        height:28rpx
+      }
+    }
+  }
+</style>
