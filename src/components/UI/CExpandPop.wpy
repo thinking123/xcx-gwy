@@ -1,31 +1,57 @@
 <template>
     <div class="CExpandPop external-cls">
       <div class="CExpandPop-header">
-        <slot/>
+        <div v-for="header in headers" :key="header.id" @click="handleHeaderClick(header)" class="header">
+          <span class="header-text">{{header.text}}</span>
+          <image :src="iconSelHeader" v-if="curHeader==header.id" class="header-icon"/>
+          <image :src="iconNoSelHeader" v-else class="header-icon"/>
+        </div>
       </div>
-      <div class="CExpandPop-body">
 
-      </div>
+      <CTransition
+        :show="show"
+        bind:tap="onClick"
+        catch:touchmove="noop"
+      >
+        <div class="CExpandPop-body">
+          <div v-for="item in items" :key="item.id" class="item"
+          :class="{'item--selected':item.selected}"
+               @click="handleItemSelected(item)"
+          >
+            <span>
+              {{item.text}}
+            </span>
+            <image :src="itemSelectedIcon" v-show="item.selected" class="item--icon"/>
+          </div>
+        </div>
+      </CTransition>
+
+
     </div>
 </template>
 <script>
   import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.component({
     data: {
-
+      curHeader:'',
+      iconSelHeader:'icon_arrowup@3x',
+      iconNoSelHeader:'icon_arrowdown@3x',
+      iconSelected:'icon_success@3x',
+      show:false
     },
     relations: {
       './cexpandicon': {
-        type: 'child', // 关联的目标节点应为子节点
+        type: 'child',
         linked: function(target) {
-          // 每次有custom-li被插入时执行，target是该节点实例对象，触发在该节点attached生命周期之后
+
         },
         linkChanged: function(target) {
-          // 每次有custom-li被移动后执行，target是该节点实例对象，触发在该节点moved生命周期之后
+
         },
         unlinked: function(target) {
-          // 每次有custom-li被移除时执行，target是该节点实例对象，触发在该节点detached生命周期之后
+
         }
       }
     },
@@ -33,24 +59,84 @@
       'external-cls'
     ],
     props:{
-      
+      headers:{
+        type:Array,
+        default:[{
+          text:'',
+          id:'',
+          items:[
+            {
+              text:'',
+              id:''
+            }
+          ]
+        }]
+      },
+      isMutil:{
+        type:Boolean,
+        default: false
+      },
+      show: Boolean,
+      customStyle: String,
+      duration: {
+        type: null,
+        default: 3000
+      },
+      zIndex: {
+        type: Number,
+        default: 1
+      }
     },
     events: {
 
     },
     computed:{
-      
+      items(){
+        if(this.curHeader){
+          const items = this.headers[this.curHeader].items;
+
+          return items;
+        }
+
+        return [];
+      }
     },
     methods: {
+      handleHeaderClick(header){
 
+      },
+      handleItemSelected(item){
+
+      },
+      onClick() {
+        this.$emit('click');
+      },
+      noop() {}
     },
     created () {
-
+      this.iconSelHeader = getImgUrlEx(this.iconSelHeader);
+      this.iconNoSelHeader = getImgUrlEx(this.iconNoSelHeader);
+      this.iconSelected = getImgUrlEx(this.iconSelected);
     }
   });
 </script>
 <style lang="scss">
   .CExpandPop{
-    
+    .CExpandPop-header{
+      .header{
+        .header-text{
+
+        }
+      }
+    }
   }
 </style>
+
+<config>
+  {
+  usingComponents: {
+  CTransition:'./CTransition',
+  }
+  }
+</config>
+
