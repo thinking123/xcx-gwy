@@ -1,0 +1,57 @@
+<template>
+  <div class="page luntan">
+    <div class="selector">
+
+    </div>
+    <LunTanHeader title="申论" tieziNum="2008" followNum="100" @btn="handleGz"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+      handleGz(){
+
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .luntan{
+
+    .selector{
+      width:750rpx;
+      height:100rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0px 4rpx 12rpx 0px rgba(0,0,0,0.06)
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+
+  LunTanHeader:'~Custom/LunTanHeader',
+    }
+}
+</config>

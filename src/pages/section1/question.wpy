@@ -133,7 +133,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '提问',
     usingComponents: {
   CLabelRightButtonWithSelector:'~UI/CLabelRightButtonWithSelector',
 
