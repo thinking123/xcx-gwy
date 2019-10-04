@@ -17,7 +17,11 @@
                  :name="item.name"
                  :content="item.content"
                  :publishDate="item.publishDate"
-                 :key="item.id"/>
+                 :key="item.id"
+                 @click.native="handleCommentItem(item)"
+    />
+
+    <FixedCommentInput  @click.native="handleComment"/>
 
   </div>
 </template>
@@ -41,7 +45,12 @@
       items:[]
     },
     methods: {
+      handleCommentItem(item){
+        console.log('item:' , item)
+      },
+      handleComment(){
 
+      }
     },
     onShow(){
       
@@ -111,6 +120,7 @@
     usingComponents: {
   LunTanDetailHeader:'~Custom/LunTanDetailHeader',
   CommentItem:'~Custom/CommentItem',
+  FixedCommentInput:'~Custom/FixedCommentInput',
     }
 }
 </config>

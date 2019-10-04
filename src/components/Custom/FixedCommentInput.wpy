@@ -1,0 +1,74 @@
+<template>
+  <div class="FixedCommentInput external-cls">
+    <div class="fixed">
+      <div class="comment">
+        <span>
+           留言评价
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .FixedCommentInput{
+    width:750rpx;
+    height:120rpx;
+    .fixed{
+      background:rgba(255,255,255,1);
+      box-shadow:0px -4rpx 12rpx 0px rgba(0,0,0,0.06);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height:120rpx;
+      width:750rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .comment{
+        width:718rpx;
+        height:80rpx;
+        background:rgba(242,242,242,1);
+        border-radius:40rpx;
+
+        >label{
+          margin: 26rpx 30rpx 0;
+          font-size:28rpx;
+          font-family:PingFangSC-Regular,PingFangSC;
+          font-weight:400;
+          color:rgba(147,150,153,1);
+          line-height:28rpx;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+  }
+</style>
