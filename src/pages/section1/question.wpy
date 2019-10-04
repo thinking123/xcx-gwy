@@ -1,10 +1,14 @@
 <template>
   <div class="page question">
       <div class="form">
-        <CLabelRightButton
+        <CLabelRightButtonWithSelector
           v-for="(item,index) in items"
           :showLine="index!=items.length-1"
+          :items="item.items"
           :text="item.text"
+          :val="item.sel"
+          :item="item"
+          @change="selChange"
                            :rightText="item.rightText"
                            @click.native="handleClick(index)"
 
@@ -14,6 +18,7 @@
     <CButton text="提交"
              @tap.native="handleSubmit"
              external-cls="btn"/>
+
   </div>
 </template>
 
@@ -34,22 +39,52 @@
         {
           text:'问题类型',
           rightText:'请选择',
+          items:[
+            '北京',
+            '南京',
+            '天津'
+          ],
+          sel:-1
         },
         {
           text:'级别',
           rightText:'请选择',
+          items:[
+            '北京',
+            '南京',
+            '天津'
+          ],
+          sel:-1
         },
         {
           text:'地区',
           rightText:'请选择',
+          items:[
+            '北京',
+            '南京',
+            '天津'
+          ],
+          sel:-1
         },
         {
           text:'部门',
           rightText:'请选择',
+          items:[
+            '北京',
+            '南京',
+            '天津'
+          ],
+          sel:-1
         },
         {
           text:'预约日期',
           rightText:'请选择',
+          items:[
+            '北京',
+            '南京',
+            '天津'
+          ],
+          sel:-1
         },
       ]
     },
@@ -60,6 +95,10 @@
       },
       handleSubmit(){
 
+      },
+      selChange([v , item]){
+        console.log('v , item' , v , item)
+        item.sel = v;
       }
     },
     onShow(){
@@ -96,7 +135,7 @@
 {
     navigationBarTitleText: '',
     usingComponents: {
-  CLabelRightButton:'~UI/CLabelRightButton',
+  CLabelRightButtonWithSelector:'~UI/CLabelRightButtonWithSelector',
 
   CButton:'~UI/CButton',
     }
