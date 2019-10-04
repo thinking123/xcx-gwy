@@ -5,6 +5,24 @@
     <CInput placeholder="标题"  :val.sync="title" @update:val="handlev"/>
     <textarea bindblur="bindTextAreaBlur" placeholder="分享帖子，记录学习点滴…"
               class="textarea"/>
+
+    <SelectorRightButton text="帖子分类" :rightText="selText" @click.native="show=true"/>
+
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="1000"
+             overlay="{{ true }}">
+      <div class="time">
+        <HeaderClose text="选择学习时间"  external-cls="header" @click="show=false"/>
+        <div class="body">
+          <TwoColumnPickerView @change="hanleTime" external-cls="row1"  :hours="hs" :mins="ms"/>
+          <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
+        </div>
+
+      </div>
+
+    </CPopup>
   </div>
 </template>
 
@@ -22,17 +40,43 @@
 
     },
     data: {
-      title:''
+      title:'',
+      selText:'去添加',
+      show:false,
+      hs:[
+        '一级分类',
+        '一级分类',
+        '一级分类',
+        '一级分类',
+      ],
+      ms:[
+        '言语理解与表达',
+        '数量关系'
+      ],
+      setTime:[],
+      time:[],
     },
     methods: {
       handleSubmit(){
-
+        navBack();
       },
       bindTextAreaBlur(){
 
       },
       handlev(v){
         this.title = v;
+      },
+      handleSelText(){
+
+      },
+      hanleTime(v){
+        console.log('time:' , v)
+        this.setTime = v;
+      },
+      handleSetTime(){
+        this.show = false;
+        this.time = this.setTime;
+        this.selText = this.time.join('|');
       }
     },
     onShow(){
@@ -70,6 +114,23 @@
       bottom: 30rpx;
     }
   }
+
+  .time{
+
+    .body{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row1{
+        margin: 62rpx 0 64rpx 0;
+      }
+
+      .row2{
+        margin-bottom: 62rpx;
+      }
+    }
+
+  }
 </style>
 <config>
 {
@@ -77,6 +138,10 @@
     usingComponents: {
       'CButton':'~UI/CButton',
       'CInput':'~UI/CInput',
+      'SelectorRightButton':'~Custom/SelectorRightButton',
+  CPopup:'~UI/CPopup',
+  HeaderClose:'~Custom/HeaderClose',
+  TwoColumnPickerView:'~Custom/TwoColumnPickerView',
     }
 }
 </config>

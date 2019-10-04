@@ -1,0 +1,81 @@
+<template>
+    <div class="TwoColumnPickerView external-cls">
+      <picker-view indicator-class="indicatorCls" style="width: 630rpx; height: 100%;"
+                   value="{{val}}" bindchange="bindChange">
+        <picker-view-column>
+          <view wx:for="{{hours}}" style="line-height: 50px;" class="item">{{item}}</view>
+        </picker-view-column>
+        <picker-view-column>
+          <view wx:for="{{mins}}" style="line-height: 50px" class="item">{{item}}</view>
+        </picker-view-column>
+      </picker-view>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      hours:{
+        type:Array,
+        default:[]
+      },
+      mins:{
+        type:Array,
+        default:[]
+      },
+      val:{
+        type:Array,
+        default:[0,0]
+      }
+    },
+    events: {
+    },
+    computed:{
+
+    },
+    methods: {
+
+      bindChange(e){
+        console.log(e)
+        const time = e.$wx.detail.value;
+        const v = [this.hours[time[0]] , this.mins[time[1]]]
+        this.$emit("change" , v)
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+
+  .TwoColumnPickerView{
+    height: 476rpx;
+
+    .indicatorCls{
+      height: 124rpx;
+      color: $primaryColor;
+      border-color: $primaryColor;
+      margin: 0 30rpx;
+
+      font-size:36rpx;
+      font-weight:400;
+
+    }
+
+    .item{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+  }
+</style>
