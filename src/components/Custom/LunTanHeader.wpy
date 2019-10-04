@@ -59,7 +59,7 @@
       position: absolute;
       width: 100%;
       content: '';
-      top:100%;
+      bottom:0;
       height: 1px;
       left: 0;
       transform: scaleY(0.5);

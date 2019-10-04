@@ -1,0 +1,122 @@
+<template>
+    <div class="LunTanTopItem external-cls" :class="{'f1':type=='f1','f2':type=='f2','f3':type=='f3' , 'showLine':showLine}">
+      <span class="topText">
+        {{topText}}
+      </span>
+      <span class="desc">
+        {{desc}}
+      </span>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      topText:{
+        type:String,
+        default:'置顶'
+      },
+      desc:String,
+      type:{
+        type:String,
+        default:'f1'
+      },
+      showLine:{
+        type:Boolean,
+        default:true
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .LunTanTopItem{
+    width:750rpx;
+    height:112rpx;
+    background:rgba(255,255,255,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    .topText{
+      width:64rpx;
+      height:40rpx;
+      border-radius:4rpx;
+      margin-right: 16rpx;
+
+      font-size:24rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.showLine::after{
+      content: '';
+      background:rgba(204,204,204,1);
+      position: absolute;
+      bottom:0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      transform: scaleY(0.5);
+    }
+
+
+    .desc{
+      display: inline-block;
+      font-size:28rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      line-height:40rpx;
+      width: 630rpx;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &.f1{
+      .topText{
+        background:rgba(255,13,0,1);
+      }
+      .desc{
+        color:#FF0D00;
+      }
+    }
+    &.f2{
+      .topText{
+        background:#8F2A90;
+      }
+      .desc{
+        color:#8F2A90;
+      }
+    }
+    &.f3{
+      .topText{
+        background:#3C9D40;
+      }
+      .desc{
+        color:#3C9D40;
+      }
+    }
+
+  }
+</style>
