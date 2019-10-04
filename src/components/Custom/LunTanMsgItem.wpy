@@ -1,0 +1,105 @@
+<template>
+    <div class="LunTanMsgItem external-cls">
+      <div class="title">
+        {{title}}
+      </div>
+      <div class="footer">
+        <div class="footer-icon">
+          <CCircleImg external-cls="cirImg" :src="icon"/>
+          <span>{{name}}</span>
+        </div>
+
+        <span>{{readerNum}}阅读</span>
+        <span>{{publishDate}}发布</span>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      title:String,
+      src:String,
+      name:String,
+      readerNum:Number,
+      publishDate:String
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .LunTanMsgItem{
+    width:750rpx;
+    height:240rpx;
+    background:rgba(255,255,255,1);
+    padding: 32rpx 30rpx 0;
+    box-sizing: border-box;
+    position: relative;
+
+    &::after{
+      position: absolute;
+      width: 100%;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 0;
+      transform: scaleY(0.5);
+      background:rgba(204,204,204,1);
+    }
+    .title{
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      color:rgba(49,50,51,1);
+      line-height:44rpx;
+      margin-bottom: 32rpx;
+    }
+
+    .footer{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(147,150,153,1);
+      line-height:24px;
+      .footer-icon{
+        display: flex;
+        .cirImg{
+          width:56rpx;
+          height:56rpx;
+          margin-right: 20rpx;
+        }
+      }
+
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg'
+  }
+  }
+</config>

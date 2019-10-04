@@ -7,7 +7,14 @@
     <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f1"/>
     <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f2"/>
     <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f3"
-    showLine="{{false}}"/>
+    showLine="{{false}}" external-cls="last-top-item"/>
+    <LunTanMsgItem v-for="item in msgItems" :key="item.id"
+      :title="item.title"
+      :name="item.name"
+      :readerNum="item.readerNum"
+      :publishDate="item.publishDate"
+                   @click.native="handleMsgItem(item)"
+    />
   </div>
 </template>
 
@@ -24,10 +31,13 @@
 
     },
     data: {
-
+      msgItems:[]
     },
     methods: {
       handleGz(){
+
+      },
+      handleMsgItem(item){
 
       }
     },
@@ -35,7 +45,20 @@
       
     },
     created () {
+      const arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        const v = {
+          title:'[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
+          name:'Smile',
+          readerNum:'123213',
+          publishDate:'2019-08-12',
+          id:i,
+        }
 
+        arr.push(v);
+      }
+
+      this.msgItems = arr;
     }
   });
 </script>
@@ -48,6 +71,10 @@
       background:rgba(255,255,255,1);
       box-shadow:0px 4rpx 12rpx 0px rgba(0,0,0,0.06)
     }
+
+    .last-top-item{
+      margin-bottom: 24rpx;
+    }
   }
 </style>
 <config>
@@ -57,6 +84,7 @@
 
   LunTanHeader:'~Custom/LunTanHeader',
   LunTanTopItem:'~Custom/LunTanTopItem',
+  LunTanMsgItem:'~Custom/LunTanMsgItem',
     }
 }
 </config>
