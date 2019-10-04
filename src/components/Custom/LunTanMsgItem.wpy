@@ -5,7 +5,7 @@
       </div>
       <div class="footer">
         <div class="footer-icon">
-          <CCircleImg external-cls="cirImg" :src="icon"/>
+          <CCircleImg external-cls="cirImg" :src="icon" v-if="type == 'user'"/>
           <span>{{name}}</span>
         </div>
 
@@ -29,7 +29,11 @@
       src:String,
       name:String,
       readerNum:Number,
-      publishDate:String
+      publishDate:String,
+      type:{
+        type:String,
+        default:'user'
+      }
     },
     events: {
 
