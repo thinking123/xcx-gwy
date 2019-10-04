@@ -116,7 +116,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '论坛详情',
     usingComponents: {
   LunTanDetailHeader:'~Custom/LunTanDetailHeader',
   CommentItem:'~Custom/CommentItem',

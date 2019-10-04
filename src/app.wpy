@@ -83,6 +83,7 @@ wepy.app({
 {
     pages: [
   'pages/home',
+  'pages/section1/luntanPublish',
   'pages/section1/luntanDetail',
   'pages/section1/MemberCenter',
   'pages/section1/luntan',

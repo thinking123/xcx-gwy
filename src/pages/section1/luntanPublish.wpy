@@ -1,0 +1,82 @@
+<template>
+  <div class="page luntanPublish">
+    <CButton text="发布"  @tap.native="handleSubmit" external-cls="btn" type="info"/>
+
+    <CInput placeholder="标题"  :val.sync="title" @update:val="handlev"/>
+    <textarea bindblur="bindTextAreaBlur" placeholder="分享帖子，记录学习点滴…"
+              class="textarea"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import {navBack} from '@/common/navUtils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      title:''
+    },
+    methods: {
+      handleSubmit(){
+
+      },
+      bindTextAreaBlur(){
+
+      },
+      handlev(v){
+        this.title = v;
+      }
+    },
+    onShow(){
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .luntanPublish{
+    width:auto;
+    padding: 0 30rpx;
+    display: flex;
+    flex-direction: column;
+
+    &>cbutton{
+      align-self: flex-end;
+    }
+
+    .btn{
+      width:160rpx;
+      height:80rpx;
+
+    }
+
+    .textarea{
+      margin-top: 48rpx;
+      height: 400rpx;
+    }
+    .uploader{
+      position: fixed;
+      left: 30rpx;
+      bottom: 30rpx;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '论坛发帖',
+    usingComponents: {
+      'CButton':'~UI/CButton',
+      'CInput':'~UI/CInput',
+    }
+}
+</config>

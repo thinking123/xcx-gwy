@@ -1,0 +1,91 @@
+<template>
+    <input class="CInput external-cls"@input="handleInput" :value="val"
+           :type="type"
+           :placeholder="placeholder">
+
+    </input>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      val:{
+        type:String
+      },
+      placeholder:{
+        type:String,
+        default:"请输入"
+      },
+      showLine:{
+        type:Boolean,
+        default: true
+      },
+      type:{
+        type:String,
+        default:'text'
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      handleInput(e){
+        const v = e.$wx.detail.value
+        console.log('v' ,   v)
+        this.$emit('update:val' , v)
+      },
+      handleClear(){
+        this.$emit('update:val' , '')
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+  .CInput{
+    width: 690rpx;
+    height: 120rpx;
+    position: relative;
+
+
+    font-size:36rpx;
+    font-family:PingFangSC-Regular,PingFangSC;
+    font-weight:400;
+
+    line-height:44rpx;
+
+    color:#000000;
+    caret-color: $primaryColor;
+
+    &::after{
+      position: absolute;
+      width: 100%;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 0;
+      transform: scaleY(0.5);
+      background:rgba(204,204,204,1);
+    }
+
+    &::placeholder {
+      color:rgba(204,204,204,1);
+    }
+
+  }
+
+
+</style>
