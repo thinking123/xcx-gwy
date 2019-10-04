@@ -11,7 +11,7 @@ const tabbar = [
   {
     icon:'tabbar02@3x',
     activeIcon:'tabbar02_pre@3x',
-    page:'/pages/home',
+    page:'/pages/homeSection2',
     text:'开明真题'
   },
   {

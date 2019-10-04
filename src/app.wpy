@@ -82,6 +82,7 @@ wepy.app({
 <config>
 {
     pages: [
+  'pages/homeSection2',
   'pages/home',
   'pages/section1/nearPage',
   'pages/section1/nearDetailPage',

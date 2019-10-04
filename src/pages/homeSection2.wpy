@@ -1,0 +1,87 @@
+<template>
+  <div class="page homeSection2">
+    <div class="header">
+      <CSearch :val="search" @change="inputChange" external-cls="search" type="readonly"/>
+      <ClassCard
+        title="课程名称，如资料分析"
+        info="考点：资料分析秒杀综述"
+        :src="classImg"
+        external-cls="classCard"/>
+
+      <CTab type="radius" :tabs="tabs"
+            @changeTab="handleTab"
+            external-cls="ctab"/>
+      <CTabbar/>
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      search:'',
+      tabs:[
+        {text:'随听音频'},
+        {text:'部委课堂'},
+        {text:'精炼题目'},
+      ],
+      selectedTab:0,
+
+    },
+    methods: {
+      inputChange(v){
+        this.search = v;
+      },
+      handleTab({tab ,index}){
+        this.selectedTab = index
+      },
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .homeSection2{
+    background:rgba(242,242,242,1);
+    .header{
+      background:rgba(255,255,255,1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .search{
+        margin:32rpx;
+      }
+
+      .ctab{
+        width:690rpx;
+        margin-bottom:32rpx;
+      }
+    }
+
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '开明真题',
+    usingComponents: {
+  CTabbar:'~UI/CTabbar',
+  CSearch:'~UI/CSearch',
+  CTab:'~UI/CTab',
+    }
+}
+</config>
