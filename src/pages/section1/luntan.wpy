@@ -15,6 +15,7 @@
       :publishDate="item.publishDate"
                    @click.native="handleMsgItem(item)"
     />
+    <FixedPublishBtn/>
   </div>
 </template>
 
@@ -85,6 +86,7 @@
   LunTanHeader:'~Custom/LunTanHeader',
   LunTanTopItem:'~Custom/LunTanTopItem',
   LunTanMsgItem:'~Custom/LunTanMsgItem',
+  FixedPublishBtn:'~Custom/FixedPublishBtn',
     }
 }
 </config>

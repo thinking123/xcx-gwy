@@ -1,0 +1,63 @@
+<template>
+    <div class="FixedPublishBtn external-cls">
+      <image :src="icon" class="icon"/>
+      <image :src="iconTip" class="iconTip" v-if="showTip"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'icon_fatie@3x',
+      iconTip:'label_fatie@3x',
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      showTip:{
+        type:Boolean,
+        default:true
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon);
+      this.iconTip = getImgUrlEx(this.iconTip);
+    }
+  });
+</script>
+<style lang="scss">
+  .FixedPublishBtn{
+
+    position: fixed;
+    right: 10rpx;
+    bottom: 60rpx;
+
+    .icon{
+      width:100rpx;
+      height:100rpx;
+    }
+
+    .iconTip{
+      position: absolute;
+      top:-40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width:72rpx;
+      height:42rpx
+    }
+
+  }
+</style>

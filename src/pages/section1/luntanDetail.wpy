@@ -1,0 +1,44 @@
+<template>
+  <div class="page luntanDetail">
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .luntanDetail{
+  
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+    }
+}
+</config>
