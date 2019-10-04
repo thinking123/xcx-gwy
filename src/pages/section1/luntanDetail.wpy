@@ -1,6 +1,6 @@
 <template>
   <div class="page luntanDetail">
-
+    <LunTanDetailHeader name="张小碗儿" publishDate="2019-08-12" followed="{{true}}"/>
   </div>
 </template>
 
@@ -39,6 +39,7 @@
 {
     navigationBarTitleText: '',
     usingComponents: {
+  LunTanDetailHeader:'~Custom/LunTanDetailHeader',
     }
 }
 </config>

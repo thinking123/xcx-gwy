@@ -1,7 +1,7 @@
 <template>
     <div class="CButton external-cls"
          @click="handleBtn($event)"
-         :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading}">
+         :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading || disabled}">
       <image :src="icon" v-if="!!icon" class="icon" mode="aspectFit"/>
       <span class="CButtonText">{{text}}</span>
     </div>
@@ -41,6 +41,10 @@
         type:{
           type:String,
           default:'primary'
+        },
+        disabled:{
+          type:Boolean,
+          default:false
         }
     },
 
