@@ -1,10 +1,6 @@
 <template>
     <div class="NearItem external-cls">
-      <div class="header">
-        <CCircleImg external-cls="cirImg" :src="header"/>
-        <span class="tag" v-if="tag">{{tag}}</span>
-      </div>
-
+      <TagHeaderCircleImg :tag="tag" :header="header" external-cls="header"/>
       <div class="content">
         <div class="row1">
           {{name}}
@@ -80,27 +76,6 @@
     box-sizing: border-box;
     .header{
       margin-right: 30rpx;
-      position: relative;
-
-      .cirImg{
-        width:150rpx;
-        height:150rpx;
-      }
-
-      .tag{
-        padding: 4rpx 8rpx;
-        background:rgba(79,172,27,1);
-        border-radius:48rpx;
-        position: absolute;
-        left: 50%;
-        top: 100%;
-        transform: translate(-50% , -50%);
-        font-size:24rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(255,255,255,1);
-        line-height:24rpx;
-      }
 
     }
 
@@ -147,7 +122,8 @@
   {
   navigationBarTitleText: '',
   usingComponents: {
-  CCircleImg:'~UI/CCircleImg'
+  CCircleImg:'~UI/CCircleImg',
+  TagHeaderCircleImg:'~Custom/TagHeaderCircleImg',
   }
   }
 </config>

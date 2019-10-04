@@ -1,0 +1,38 @@
+<template>
+    <image class="CircleIconButton external-cls" :src="src" mode="aspectFit">
+
+    </image>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      src:String
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CircleIconButton{
+    width:100rpx;
+    height:100rpx;
+  }
+</style>
