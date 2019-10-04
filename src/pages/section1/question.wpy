@@ -1,10 +1,19 @@
 <template>
   <div class="page question">
       <div class="form">
-        <CLabelRightButton text="问题类型"
-                           rightText="请选择"
-                           @click.native="handleClick1"/>
+        <CLabelRightButton
+          v-for="(item,index) in items"
+          :showLine="index!=items.length-1"
+          :text="item.text"
+                           :rightText="item.rightText"
+                           @click.native="handleClick(index)"
+
+        />
       </div>
+
+    <CButton text="提交"
+             @tap.native="handleSubmit"
+             external-cls="btn"/>
   </div>
 </template>
 
@@ -21,10 +30,35 @@
 
     },
     data: {
-
+      items:[
+        {
+          text:'问题类型',
+          rightText:'请选择',
+        },
+        {
+          text:'级别',
+          rightText:'请选择',
+        },
+        {
+          text:'地区',
+          rightText:'请选择',
+        },
+        {
+          text:'部门',
+          rightText:'请选择',
+        },
+        {
+          text:'预约日期',
+          rightText:'请选择',
+        },
+      ]
     },
     methods: {
-      handleClick1(){
+      handleClick(index){
+        const item = this.items[index];
+        console.log('item:' , item);
+      },
+      handleSubmit(){
 
       }
     },
@@ -38,7 +72,24 @@
 </script>
 <style lang="scss">
   .question{
-  
+    width: initial;
+    padding: 40rpx 30rpx 0;
+    background:rgba(242,242,242,1);
+    .form{
+      display: flex;
+      flex-direction: column;
+
+      background:rgba(255,255,255,1);
+      box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
+      border-radius:16rpx;
+      padding: 0 30rpx;
+      margin-bottom: 48rpx;
+    }
+
+    .btn{
+      font-size:36rpx;
+      margin: 0 auto;
+    }
   }
 </style>
 <config>
@@ -46,6 +97,8 @@
     navigationBarTitleText: '',
     usingComponents: {
   CLabelRightButton:'~UI/CLabelRightButton',
+
+  CButton:'~UI/CButton',
     }
 }
 </config>
