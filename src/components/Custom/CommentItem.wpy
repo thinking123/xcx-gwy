@@ -1,0 +1,113 @@
+<template>
+    <div class="CommentItem external-cls">
+      <CCircleImg external-cls="cirImg" :src="src"/>
+      <div class="content">
+        <div class="row1">
+          {{name}}
+        </div>
+        <div class="row2">
+          {{content}}
+        </div>
+        <div class="row3">
+          {{publishDate}}
+        </div>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      src:String,
+      name:String,
+      content:String,
+      publishDate:String,
+
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CommentItem{
+    padding: 32rpx 30rpx 0;
+    box-sizing: border-box;
+    display: flex;
+    background:rgba(255,255,255,1);
+    .cirImg{
+      width:64rpx;
+      height:64rpx;
+      align-self: flex-start;
+      margin-right: 16rpx;
+
+    }
+    .content{
+      position: relative;
+      flex:1;
+      .row1{
+        font-size:28rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(98,100,102,1);
+        line-height:36rpx;
+        margin-top: 14rpx;
+        margin-bottom: 34rpx;
+      }
+
+      .row2{
+        font-size:32rpx;
+        font-family:PingFangSC-Regular,PingFangSC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        line-height:40rpx;
+        margin-bottom: 24rpx;
+      }
+
+      .row3{
+        font-size:24rpx;
+        font-family:PingFangSC-Regular,PingFangSC;
+        font-weight:400;
+        color:rgba(147,150,153,1);
+        line-height:24rpx;
+        margin-bottom: 30rpx;
+      }
+
+      &::after{
+        position: absolute;
+        width: 100%;
+        content: '';
+        bottom:0;
+        height: 1px;
+        left: 0;
+        transform: scaleY(0.5);
+        background:rgba(204,204,204,1);
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg'
+  }
+  }
+</config>
