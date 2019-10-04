@@ -1,0 +1,79 @@
+<template>
+  <div class="page nearPage">
+    <NearItem v-for="item in items" :key="item.id"
+      :name="item.name"
+      :school="item.school"
+      :distance="item.distance"
+      :desc="item.desc"
+      :sex="item.sex"
+      :tag="item.tag"
+              external-cls="item"
+              @click.native="handleNearItem(item.id)"
+    />
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import {navToPage} from '@/common/navUtils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      items:[]
+    },
+    methods: {
+      handleNearItem(id){
+        navToPage('/pages/section1/nearDetailPage' , {
+          id
+        });
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+      const arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          name:'追风筝的人',
+          school:'浙江理工大学',
+          distance:'300米以内',
+          desc:'目标：学习申论和行测和行测和行测',
+          sex:i%2 ? 'men' : 'women',
+          tag:'学神'
+        })
+      }
+      this.items = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  .nearPage{
+    background:rgba(242,242,242,1);
+    height: initial;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    padding: 30rpx 0 38rpx 0;
+    .item{
+      margin-bottom: 20rpx;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '附近的人',
+    usingComponents: {
+
+  'NearItem':'~Custom/NearItem'
+    }
+}
+</config>

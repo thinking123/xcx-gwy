@@ -38,10 +38,8 @@
     events: {
     },
     computed:{
-
     },
     methods: {
-
       bindChange(e){
         console.log(e)
         const time = e.$wx.detail.value;

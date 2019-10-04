@@ -1,0 +1,153 @@
+<template>
+    <div class="NearItem external-cls">
+      <div class="header">
+        <CCircleImg external-cls="cirImg" :src="header"/>
+        <span class="tag" v-if="tag">{{tag}}</span>
+      </div>
+
+      <div class="content">
+        <div class="row1">
+          {{name}}
+          <image :src="sexType" mode="aspectFit"></image>
+        </div>
+        <div class="row2">
+          <span class="col1">
+             {{school}}
+          </span>
+          <span class="col2">
+             {{distance}}
+          </span>
+        </div>
+        <div class="row3">
+          {{desc}}
+        </div>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      men:'icon_men@3x',
+      women:'icon_women@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      name:String,
+      school:String,
+      distance:String,
+      desc:String,
+      sex:{
+        type:String,
+        default:'men'
+      },
+      tag:String,
+      header:String,
+    },
+    events: {
+
+    },
+    computed:{
+      sexType(){
+        if(this.sex == 'men'){
+          return  this.men;
+        }
+        return this.women;
+      }
+    },
+    methods: {
+
+    },
+    created () {
+      this.men = getImgUrlEx(this.men);
+      this.women = getImgUrlEx(this.women);
+    }
+  });
+</script>
+<style lang="scss">
+  .NearItem{
+    width:690rpx;
+    height:210rpx;
+    background:rgba(255,255,255,1);
+    border-radius:8px;
+    display: flex;
+    align-items: center;
+    padding: 30rpx;
+    box-sizing: border-box;
+    .header{
+      margin-right: 30rpx;
+      position: relative;
+
+      .cirImg{
+        width:150rpx;
+        height:150rpx;
+      }
+
+      .tag{
+        padding: 4rpx 8rpx;
+        background:rgba(79,172,27,1);
+        border-radius:48rpx;
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        transform: translate(-50% , -50%);
+        font-size:24rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:24rpx;
+      }
+
+    }
+
+    .content{
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+      line-height:28rpx;
+      flex:1;
+
+      .row1{
+        font-size:32rpx;
+        font-family:PingFangSCSemibold-,PingFangSCSemibold;
+        font-weight:normal;
+        color:rgba(0,0,0,1);
+        line-height:32rpx;
+        margin-bottom: 24rpx;
+
+        >image{
+          width:32rpx;
+          height:32rpx;
+          margin-left: 8rpx;
+        }
+      }
+
+      .row2{
+        margin-bottom: 24rpx;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .row3{
+        width:260rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg'
+  }
+  }
+</config>
