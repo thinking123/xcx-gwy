@@ -1,0 +1,90 @@
+<template>
+  <div class="page mediaDetail">
+    <MediaHeaderCard
+      :title="user.title"
+      :desc="user.desc"
+      :header="user.header"
+    />
+    <div class="row1">
+      <CSelector :items="selItems" @change="onChange" :sel="sel"/>
+      <span class="col1">
+        已更新{{user.updateNum}}讲
+      </span>
+      <OrderItems :order="order" @change="onOrder"/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      user:{
+        header:'',
+        title:'课程名称，如资料分析',
+        desc:'大雷-资深公考讲师',
+        updateNum:646
+      },
+      selItems:['全部' , '好评'],
+      sel:-1,
+      order:0
+    },
+    methods: {
+      onChange(index){
+        this.sel = index;
+      },
+      onOrder(order){
+        this.order = order;
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .mediaDetail{
+
+    .row1{
+      display: flex;
+      align-items: center;
+      padding: 24rpx 30rpx;
+      background:rgba(255,255,255,1);
+      justify-content: space-between;
+      .col1{
+        font-size:24rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(147,150,153,1);
+        line-height:32rpx;
+        margin-left: 20rpx;
+        flex: 1;
+      }
+    }
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '音频详情',
+  usingComponents: {
+  CSelector:'~UI/CSelector',
+  MediaHeaderCard:'~Custom/MediaHeaderCard',
+  OrderItems:'~Custom/OrderItems'
+  }
+  }
+</config>

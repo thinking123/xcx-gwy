@@ -1,0 +1,90 @@
+<template>
+    <div class="OrderItems external-cls">
+      <image :src="icon"  class="icon" mode="aspectFit" v-if="order == 0||order == 2" @click="onClick('p')"/>
+      <image :src="iconP"  class="iconP" mode="aspectFit" v-if="order == 1" @click="onClick('p')"/>
+      <span @click="onClick('p')" class="text1">正序</span>
+      <image :src="icon"  class="icon" mode="aspectFit" v-if="order == 0||order == 1" @click="onClick('r')"/>
+      <image :src="iconR"  class="iconR" mode="aspectFit" v-if="order == 2" @click="onClick('r')"/>
+      <span @click="onClick('r')">倒序</span>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+        icon:'icon_sort_default02@3x',
+        iconP:'icon_sort_zheng@3x',
+        iconR:'icon_sort_dao@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      //0 no order , 1 p order , 2 re order
+      order:{
+        type:Number,
+        default:0
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClick(t){
+        let order = 0;
+        if(t == 'p'){
+          order = this.order == 1 ? 0 : 1;
+        }else{
+          order = this.order == 2 ? 0 : 2;
+        }
+
+        this.$emit('change' , order);
+      }
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon);
+      this.iconP = getImgUrlEx(this.iconP);
+      this.iconR = getImgUrlEx(this.iconR);
+    }
+  });
+</script>
+<style lang="scss">
+  .OrderItems{
+    height: 40rpx;
+    font-size:28rpx;
+    font-family:PingFangSC-,PingFangSC;
+    font-weight:normal;
+    color:rgba(51,51,51,1);
+    line-height:40rpx;
+    display: flex;
+    align-items: center;
+    >image{
+      width: 30rpx;
+      height: 32rpx;
+      margin-right: 10rpx;
+
+      &:first-child{
+        margin-right: 10rpx;
+      }
+    }
+
+    >label{
+      width: 56rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:first-child{
+
+      }
+    }
+
+    .text1{
+      margin-right: 50rpx;
+    }
+  }
+</style>
