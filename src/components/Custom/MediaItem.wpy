@@ -1,20 +1,40 @@
 <template>
-    <div class="MediaItem external-cls">
+    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning}">
+      <div class="row1">
+        {{title}}
+      </div>
+      <div class="row2">
+       <span>{{publishDate}}</span> |  <span>{{learnNum}}</span>人学过 | 已学 <span>{{rate*100}}</span>%
+      </div>
+      <div class="row3">
+        <span>学友评价</span>
+        <CRate :rate="rate" external-cls="cRate"/>
+      </div>
 
+      <image :src="icon1" v-if="isLearning" class="icon" mode="aspectFit" @click="onClick"/>
+      <image :src="icon2" v-else class="icon" mode="aspectFit" @click="onClick"/>
     </div>
 </template>
 <script>
   import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.component({
     data: {
-
+      icon2:'icon_video_play@3x',
+      icon1:'btn_audio_on@3x',
     },
     externalClasses:[
       'external-cls'
     ],
     props:{
-      
+      title:String,
+      publishDate:String,
+      learnNum:Number,
+      learned:Number,
+      rate:Number,
+      isLearning:Boolean,
+
     },
     events: {
 
@@ -23,15 +43,102 @@
       
     },
     methods: {
-
+      onClick(){
+        this.$emit('change' , !this.isLearning);
+      }
     },
     created () {
-
+      this.icon2 = getImgUrlEx(this.icon2);
+      this.icon1 = getImgUrlEx(this.icon1);
     }
   });
 </script>
 <style lang="scss">
   .MediaItem{
-    
+    box-sizing: border-box;
+    width:690rpx;
+    height:240rpx;
+    position: relative;
+    padding: 40rpx 30rpx;
+    background:rgba(255,255,255,1);
+
+    position: relative;
+
+    &::after{
+      position: absolute;
+      width: 100%;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 0;
+      background:rgba(242,242,242,1);
+    }
+
+    .row1{
+      font-size:36rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      line-height:44rpx;
+      margin-bottom: 32rpx;
+    }
+
+    .row2{
+      font-size:28rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(98,100,102,1);
+      line-height:36rpx;
+      margin-bottom: 18rpx;
+
+      >label{
+        margin: 0 8rpx;
+      }
+    }
+
+    .row3{
+      font-size:24rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(147,150,153,1);
+      line-height:32rpx;
+      display: flex;
+      align-items:center;
+      >label{
+        margin-right: 16rpx;
+        display: inline-block;
+        white-space: nowrap;
+      }
+    }
+    .cRate{
+      transform: scale(0.5);
+      transform-origin: left center;
+    }
+
+    .icon{
+      width:64rpx;
+      height:48rpx;
+      position: absolute;
+      right: 40rpx;
+      bottom: 40rpx;
+    }
+
+
+    &.MediaItem__isLearning{
+      .row1{
+        color:rgba(79,172,27,1);
+      }
+
+    }
+
   }
 </style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CRate:'~UI/CRate'
+  }
+  }
+</config>
