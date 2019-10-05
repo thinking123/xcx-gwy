@@ -1,0 +1,103 @@
+<template>
+    <div class="JinLianItem external-cls">
+      <image  mode="aspectFit" class=" icon1" :src="icon1" @click="onClick1"/>
+      <div class="content">
+        <div class="row1">
+          {{title}}
+        </div>
+        <div class="row2">
+          <span>正确率：{{rightRatio}}</span>
+          <span>已答错：{{wrong}}/{{total}}</span>
+        </div>
+      </div>
+      <image  mode="aspectFit" class=" icon2" :src="icon2" @click="onClick2"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon1:'icon_unfold@3x',
+      icon2:'btn_edit@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      title:String,
+      total:Number,
+      wrong:Number,
+      id:String
+    },
+    events: {
+
+    },
+    computed:{
+      rightRatio(){
+        if(this.total && this.wrong){
+          const str = (1 - this.wrong/this.total) * 100;
+          return `${str.toFixed(2)}%`;
+        }
+
+        return '-';
+      }
+    },
+    methods: {
+      onClick1(){
+        this.$emit('add' , this.id);
+      },
+      onClick1(){
+        this.$emit('edit' , this.id);
+      }
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+    }
+  });
+</script>
+<style lang="scss">
+  .JinLianItem{
+    background:rgba(255,255,255,1);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 24rpx 36rpx 24rpx 30rpx;
+    width:690rpx;
+    font-size:24rpx;
+    font-family:PingFang-SC-Regular,PingFang-SC;
+    font-weight:400;
+    color:rgba(147,150,153,1);
+    line-height:34rpx;
+
+    .icon1{
+      width:60rpx;
+      height:60rpx;
+      margin-right: 24rpx;
+    }
+    .icon2{
+      width:48rpx;
+      height:48rpx;
+    }
+
+    .content{
+      flex:1;
+      .row1{
+        font-size:32rpx;
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        line-height:44rpx;
+        margin-bottom: 8rpx;
+      }
+      .row2{
+        >label:first-child{
+          margin-right: 60rpx;
+        }
+      }
+    }
+
+  }
+</style>

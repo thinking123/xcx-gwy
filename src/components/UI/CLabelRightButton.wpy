@@ -3,11 +3,12 @@
       <span class="left">
         {{text}}
       </span>
-      <div class="right">
+      <div class="right" :class="{'rightText' : type != 'normal'}">
         <span>
           {{rightText}}
         </span>
-        <image :src="icon" mode="scaleToFill"/>
+        <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
+        <image :src="iconPrimary" mode="scaleToFill" v-else/>
       </div>
     </div>
 </template>
@@ -17,7 +18,8 @@
 
   wepy.component({
     data: {
-      icon:'btn_arrowr@3x'
+      icon:'btn_arrowr@3x',
+      iconPrimary:'btn_arrowr_green@3x'
     },
     externalClasses:[
       'external-cls'
@@ -28,6 +30,10 @@
       showLine:{
         type:Boolean,
         default:true
+      },
+      type:{
+        type:String,
+        default:'normal'
       }
     },
     events: {
@@ -41,6 +47,7 @@
     },
     created () {
       this.icon = getImgUrlEx(this.icon);
+      this.iconPrimary = getImgUrlEx(this.iconPrimary);
     }
   });
 </script>
@@ -54,7 +61,7 @@
     font-weight:400;
     color:rgba(102,102,102,1);
     line-height:32rpx;
-
+    background:rgba(255,255,255,1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -72,10 +79,20 @@
     }
 
     .right{
+      display: flex;
+      align-items: center;
       >image{
         margin-left: 16rpx;
         width:28rpx;
         height:28rpx
+      }
+
+      &.rightText{
+        font-size:28rpx;
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(79,172,27,1);
+        line-height:40rpx;
       }
     }
   }
