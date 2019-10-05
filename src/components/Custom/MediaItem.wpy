@@ -18,8 +18,11 @@
 <script>
   import wepy from '@wepy/core'
   import {getImgUrlEx} from '@/common/utils';
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
 
   wepy.component({
+    store,
     data: {
       icon2:'icon_video_play@3x',
       icon1:'btn_audio_on@3x',
@@ -32,13 +35,16 @@
         type:Object,
         default:{}
       },
-      isLearning:Boolean
     },
     events: {
 
     },
     computed:{
-      
+      ...mapGetters(['playMedia' , 'isMediaPlaying']),
+      isLearning(){
+        return this.playMedia && this.media.id == this.playMedia.id && this.isMediaPlaying;
+      },
+
     },
     methods: {
       onClick(){

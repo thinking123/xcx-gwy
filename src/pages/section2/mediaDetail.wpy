@@ -18,7 +18,6 @@
     <MediaItem  v-for="item in mediaItems"
                 :media="item"
                 :key="item.id"
-                :isLearning="playMedia.id == item.id"
                 @change="onPlay"
     />
 
@@ -96,6 +95,10 @@
       }
       this.mediaItems = arr;
 
+      //
+      // this.setPlayMedia(arr[0]);
+      // this.setMediaPlaying(true);
+      // this.setShowMediaPlay(true);
     }
   });
 </script>
