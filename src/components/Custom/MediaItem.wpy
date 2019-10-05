@@ -1,14 +1,14 @@
 <template>
     <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning}">
       <div class="row1">
-        {{title}}
+        {{media.title}}
       </div>
       <div class="row2">
-       <span>{{publishDate}}</span> |  <span>{{learnNum}}</span>人学过 | 已学 <span>{{rate*100}}</span>%
+       <span>{{media.publishDate}}</span> |  <span>{{media.learnNum}}</span>人学过 | 已学 <span>{{media.rate*100}}</span>%
       </div>
       <div class="row3">
         <span>学友评价</span>
-        <CRate :rate="rate" external-cls="cRate"/>
+        <CRate :rate="media.rate" external-cls="cRate"/>
       </div>
 
       <image :src="icon1" v-if="isLearning" class="icon" mode="aspectFit" @click="onClick"/>
@@ -28,13 +28,11 @@
       'external-cls'
     ],
     props:{
-      title:String,
-      publishDate:String,
-      learnNum:Number,
-      learned:Number,
-      rate:Number,
-      isLearning:Boolean,
-
+      media:{
+        type:Object,
+        default:{}
+      },
+      isLearning:Boolean
     },
     events: {
 
@@ -44,7 +42,7 @@
     },
     methods: {
       onClick(){
-        this.$emit('change' , !this.isLearning);
+        this.$emit('change' , this.media);
       }
     },
     created () {

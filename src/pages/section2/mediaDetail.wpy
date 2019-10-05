@@ -15,19 +15,21 @@
     <div class="row2">
       第一章：言语理解与表达
     </div>
-    <MediaItem  v-for="item in mediaItems" :key="item.id"
-                :title="item.title"
-                :publishDate="item.publishDate"
-                :learnNum="item.learnNum"
-                :isLearning="item.isLearning"
-                :rate="item.rate"
-                :learned="item.learned"/>
+    <MediaItem  v-for="item in mediaItems"
+                :media="item"
+                :key="item.id"
+                :isLearning="playMedia.id == item.id"
+                @change="onPlay"
+    />
+
+    <MediaPlayBar :user="user"/>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { mapGetters , mapMutations} from '@wepy/x';
 
   wepy.page({
     store,
@@ -35,14 +37,15 @@
       navigationBarTitleText: ''
     },
     computed: {
-
+      ...mapGetters(['isMediaPlaying' , 'playMedia']),
     },
     data: {
       user:{
         header:'',
         title:'课程名称，如资料分析',
         desc:'大雷-资深公考讲师',
-        updateNum:646
+        updateNum:646,
+        date:'12:00'
       },
       selItems:['全部' , '好评'],
       sel:-1,
@@ -51,6 +54,7 @@
       mediaItems:[]
     },
     methods: {
+      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
       onChange(index){
         this.sel = index;
       },
@@ -61,6 +65,18 @@
         console.log(rate)
         this.rate = rate;
       },
+      onPlay(media){
+        console.log('media' , media);
+        let isMediaPlaying = false;
+        if(this.playMedia == media){
+          isMediaPlaying = !this.isMediaPlaying;
+        }else{
+          isMediaPlaying = true;
+        }
+        this.setPlayMedia(media);
+        this.setMediaPlaying(isMediaPlaying);
+        this.setShowMediaPlay(true);
+      }
     },
     onShow(){
       
@@ -73,7 +89,7 @@
           publishDate:'2019-07-15',
           learnNum:'10006',
           learned:'0.6',
-          isLearning:i%2,
+          isLearning:false,
           rate:i%6,
           id:i
         });
@@ -131,6 +147,7 @@
   CRate:'~UI/CRate',
   MediaHeaderCard:'~Custom/MediaHeaderCard',
   MediaItem:'~Custom/MediaItem',
+  MediaPlayBar:'~Custom/MediaPlayBar',
   OrderItems:'~Custom/OrderItems'
   }
   }

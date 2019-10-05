@@ -37,7 +37,10 @@ export default new Vuex.Store({
     nickName:'default Nickname',
     deviceId:'deviceId',
     wx:{},
-    systemInfo:{}
+    systemInfo:{},
+    showMediaPlay:false,
+    isMediaPlaying:false,
+    playMedia:{}
   },
   mutations: {
     setSystemInfo(state , systemInfo){
@@ -46,6 +49,15 @@ export default new Vuex.Store({
     },
     changeTabbar(state , index){
       state.activeTabIndex = index
+    },
+    setShowMediaPlay(state , showMediaPlay){
+      state.showMediaPlay = showMediaPlay
+    },
+    setMediaPlaying(state , isMediaPlaying){
+      state.isMediaPlaying = isMediaPlaying
+    },
+    setPlayMedia(state , playMedia){
+      state.playMedia = playMedia
     },
     setToken(state , token){
       console.log('token' , token)
@@ -73,6 +85,15 @@ export default new Vuex.Store({
     },
     isLoading(state){
       return state.queue.length > 0;
+    },
+    isMediaPlaying(state){
+      return state.isMediaPlaying;
+    },
+    showMediaPlay(state){
+      return state.showMediaPlay;
+    },
+    playMedia(state){
+      return state.playMedia;
     }
   },
   actions: {

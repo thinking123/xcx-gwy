@@ -1,0 +1,157 @@
+<template>
+    <div class="MediaPlayBar external-cls" v-show="showMediaPlay">
+      <image :src="icon1"  class="icon1" mode="aspectFit" @click="onClose"/>
+      <image :src="user.header"  class="header" mode="aspectFit" @click="onUser"/>
+      <div class="content">
+        <div class="row1">
+          {{user.title}}
+        </div>
+        <div class="row2">
+          <span class="col1">
+            {{user.date}}
+          </span>
+          -
+          <span class="col2">
+            {{user.desc}}
+          </span>
+        </div>
+      </div>
+      <image :src="icon2"  class="icon2" mode="aspectFit"/>
+      <image :src="icon3"  class="icon3" mode="aspectFit" v-if="isMediaPlaying" @click="onPlay"/>
+      <image :src="icon4"  class="icon4" mode="aspectFit" v-else @click="onPlay"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import store from 'store';
+  import { mapGetters , mapMutations} from '@wepy/x';
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    store,
+    data: {
+      icon1:'btn_bottom_close@3x',
+      icon2:'btn_arrowup@3x',
+      icon3:'btn_audio_playoff@3x',
+      icon4:'btn_audio_playon@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      user:{
+        type:Object,
+        default:{
+          header:'',
+          title:'',
+          desc:'',
+          date:''
+        }
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['showMediaPlay' , 'isMediaPlaying', 'playMedia']),
+    },
+    methods: {
+      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
+      onPlay(){
+        const play = !this.isMediaPlaying;
+        this.setMediaPlaying(play);
+        play && this.setShowMediaPlay(true);
+        this.$emit('play' , play);
+        console.log('play' , play);
+      },
+      onUser(){
+
+      },
+      onClose(){
+        this.setShowMediaPlay(false);
+        this.setMediaPlaying(false);
+      },
+
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+      this.icon3 = getImgUrlEx(this.icon3);
+      this.icon4 = getImgUrlEx(this.icon4);
+    }
+  });
+</script>
+<style lang="scss">
+  .MediaPlayBar{
+    width:690px;
+    height:140px;
+    background:rgba(49,50,51,1);
+    border-radius:16px;
+    opacity:0.9;
+    position: fixed;
+    bottom: 30rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+
+
+    .icon1{
+      width:48rpx;
+      height:48rpx;
+      margin-right: 20rpx;
+    }
+    .icon2{
+      width:100rpx;
+      height:100rpx;
+      border-radius:4rpx;
+      background-color: #EEE;
+      margin-right: 16rpx;
+    }
+
+    .content{
+      flex: 1;
+
+      .row1{
+        width:220rpx;
+        font-size:28rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:36rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 16rpx;
+      }
+      .row2{
+        display: flex;
+        align-items: center;
+        font-size:24rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:32rpx;
+        >label{
+          margin: 0 8rpx;
+        }
+      }
+    }
+
+    .icon3{
+      width:48rpx;
+      height:20rpx;
+      margin-right: 40rpx;
+    }
+    .icon4{
+      width:80rpx;
+      height:80rpx;
+      margin-right: 64rpx;
+    }
+
+
+
+  }
+</style>
