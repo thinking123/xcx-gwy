@@ -1,0 +1,67 @@
+<template>
+    <div class="CRate external-cls">
+      <div class="CRate--icon" v-for="index in total" :key="index" @click="onClick(index)">
+        <image :src="icon1"  class="icon" mode="aspectFit" v-if="index >= rate"/>
+        <image :src="icon2"  class="icon" mode="aspectFit" v-else/>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon1:'star_default@3x',
+      icon2:'star_current@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      total:{
+        type:Number,
+        default:5
+      },
+      rate:{
+        type:Number,
+        default:0
+      },
+      size:{
+        type:Number,
+        default:1
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClick(index){
+        this.$emit('change' , index + 1);
+      }
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+    }
+  });
+</script>
+<style lang="scss">
+  .CRate{
+    display: flex;
+    image{
+      width:80rpx;
+      height:76rpx;
+      &:last-child{
+        margin-right: 0;
+      }
+    }
+
+    .CRate--icon{
+      margin-right: 40rpx;
+    }
+  }
+</style>

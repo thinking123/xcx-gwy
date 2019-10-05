@@ -12,6 +12,7 @@
       </span>
       <OrderItems :order="order" @change="onOrder"/>
     </div>
+    <CRate :rate="rate" @change="onRate"/>
   </div>
 </template>
 
@@ -36,7 +37,8 @@
       },
       selItems:['全部' , '好评'],
       sel:-1,
-      order:0
+      order:0,
+      rate:0
     },
     methods: {
       onChange(index){
@@ -44,7 +46,11 @@
       },
       onOrder(order){
         this.order = order;
-      }
+      },
+      onRate(rate){
+        console.log(rate)
+        this.rate = rate;
+      },
     },
     onShow(){
       
@@ -83,6 +89,7 @@
   navigationBarTitleText: '音频详情',
   usingComponents: {
   CSelector:'~UI/CSelector',
+  CRate:'~UI/CRate',
   MediaHeaderCard:'~Custom/MediaHeaderCard',
   OrderItems:'~Custom/OrderItems'
   }
