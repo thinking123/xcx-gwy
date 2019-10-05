@@ -4,6 +4,10 @@
         <image :src="icon"  mode="aspectFit"/>
         <input @input="handleInput" :value="val"
                :placeholder="placeholder"/>
+        <image src="/static/icon/btn_reset_gray.png"
+               v-show="!!val"
+               @click="handleClear"
+               class="close"/>
       </block>
       <block v-else>
         <image :src="icon"  mode="aspectFit"/>
@@ -20,7 +24,8 @@
 
   wepy.component({
     data: {
-      icon:'icon_search@3x'
+      icon:'icon_search@3x',
+      close:'btn_reset_gray'
     },
     externalClasses:[
       'external-cls'
@@ -51,9 +56,13 @@
         const v = e.$wx.detail.value
         this.$emit('change' , v)
       },
+      handleClear(){
+        this.$emit('change' , '')
+      }
     },
     created () {
       this.icon = getImgUrlEx(this.icon);
+      this.close = getImgUrlEx(this.close);
     }
   });
 </script>
@@ -66,7 +75,7 @@
     border-radius:8rpx;
     display: flex;
     align-items: center;
-
+    position: relative;
     &.readonly{
       justify-content: center;
 
@@ -95,6 +104,15 @@
     }
     >input::placeholder {
       color: #CCCCCC;
+    }
+
+    .close{
+      width: 44rpx;
+      height: 44rpx;
+      position: absolute;
+      right: 0;
+      top:50%;
+      transform: translateY(-50%);
     }
   }
 </style>
