@@ -11,14 +11,31 @@
     </div>
 
     <block v-if="selectedTab == 0">
+
       <ClassCard
         v-for="item in items1"
         :key="item.id"
         :title="item.title"
         :info="item.info"
         external-cls="classCard"/>
-      <CTabbar/>
+
     </block>
+      <block v-if="selectedTab == 1">
+
+        <ClassCard1
+          v-for="item in items2"
+          :key="item.id"
+          :num1="item.num1"
+          :num2="item.num2"
+          :free="item.free"
+          :title="item.title"
+          :price="item.price"
+          :good="item.good"
+          external-cls="classCard1"
+        />
+
+      </block>
+    <CTabbar/>
 
   </div>
 </template>
@@ -69,6 +86,21 @@
       }
 
       this.items1 = arr;
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          num1:'2',
+          num2:'2',
+          free:i%2,
+          price:'123.12',
+          title:'真题讲课程名称课程名称课程名称课程名称',
+          good:'good',
+          id:i
+        });
+      }
+
+      this.items2 = arr;
     }
   });
 </script>
@@ -95,6 +127,10 @@
       margin: 32rpx auto;
     }
 
+    .classCard1{
+      margin: 30rpx 32rpx;
+    }
+
   }
 </style>
 <config>
@@ -105,6 +141,7 @@
   CSearch:'~UI/CSearch',
   CTab:'~UI/CTab',
   ClassCard:'~Custom/ClassCard',
+  ClassCard1:'~Custom/ClassCard1',
     }
 }
 </config>
