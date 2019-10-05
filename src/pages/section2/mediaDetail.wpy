@@ -4,6 +4,7 @@
       :title="user.title"
       :desc="user.desc"
       :header="user.header"
+      @click.native="onCard"
     />
     <div class="row1">
       <CSelector :items="selItems" @change="onChange" :sel="sel"/>
@@ -29,6 +30,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { mapGetters , mapMutations} from '@wepy/x';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -75,6 +77,9 @@
         this.setPlayMedia(media);
         this.setMediaPlaying(isMediaPlaying);
         this.setShowMediaPlay(true);
+      },
+      onCard(){
+        navToPage('/pages/section2/mediaIntro');
       }
     },
     onShow(){

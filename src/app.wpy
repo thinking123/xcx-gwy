@@ -83,6 +83,7 @@ wepy.app({
 {
     pages: [
   'pages/section2/mediaDetail',
+  'pages/section2/mediaIntro',
   'pages/section2/searchPage',
   'pages/homeSection2',
   'pages/home',
