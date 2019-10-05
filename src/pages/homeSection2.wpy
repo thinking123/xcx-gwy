@@ -2,17 +2,23 @@
   <div class="page homeSection2">
     <div class="header">
       <CSearch :val="search" @change="inputChange" external-cls="search" type="readonly"/>
-      <ClassCard
-        title="课程名称，如资料分析"
-        info="考点：资料分析秒杀综述"
-        :src="classImg"
-        external-cls="classCard"/>
+
 
       <CTab type="radius" :tabs="tabs"
             @changeTab="handleTab"
             external-cls="ctab"/>
-      <CTabbar/>
+
     </div>
+
+    <block v-if="selectedTab == 0">
+      <ClassCard
+        v-for="item in items1"
+        :key="item.id"
+        :title="item.title"
+        :info="item.info"
+        external-cls="classCard"/>
+      <CTabbar/>
+    </block>
 
   </div>
 </template>
@@ -37,7 +43,9 @@
         {text:'精炼题目'},
       ],
       selectedTab:0,
-
+      items1:[],
+      items2:[],
+      items3:[],
     },
     methods: {
       inputChange(v){
@@ -51,13 +59,23 @@
       
     },
     created () {
+      let arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          title:'课程名称，如资料分析',
+          info:'考点：资料分析秒杀综述',
+          id:i
+        });
+      }
 
+      this.items1 = arr;
     }
   });
 </script>
 <style lang="scss">
   .homeSection2{
     background:rgba(242,242,242,1);
+    height: auto;
     .header{
       background:rgba(255,255,255,1);
       display: flex;
@@ -73,6 +91,10 @@
       }
     }
 
+    .classCard{
+      margin: 32rpx auto;
+    }
+
   }
 </style>
 <config>
@@ -82,6 +104,7 @@
   CTabbar:'~UI/CTabbar',
   CSearch:'~UI/CSearch',
   CTab:'~UI/CTab',
+  ClassCard:'~Custom/ClassCard',
     }
 }
 </config>
