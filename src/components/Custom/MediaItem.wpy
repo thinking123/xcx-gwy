@@ -8,7 +8,7 @@
           {{media.title}}
         </div>
         <div class="row2">
-          <span>{{media.publishDate}}</span> |  <span>{{media.learnNum}}</span>人学过 | 已学 <span>{{media.rate*100}}</span>%
+          <span>{{media.publishDate}}</span> |  <span>{{media.learnNum}}</span>人学过 | 已学 <span>{{media.learned*100}}</span>%
         </div>
         <div class="row3" v-if="type != 'text'">
           <span>学友评价</span>
@@ -43,12 +43,13 @@
     props:{
       media:{
         type:Object,
-        default:{}
+        default:{
+        }
       },
       type:{
         type:String,
         //play , text
-        default:'text'
+        default:'play'
       }
     },
     events: {
@@ -57,7 +58,7 @@
     computed:{
       ...mapGetters(['playMedia' , 'isMediaPlaying']),
       isLearning(){
-        if(this.type == 'text'){
+        if(this.type == 'play'){
           return false;
         }
         return this.playMedia && this.media.id == this.playMedia.id && this.isMediaPlaying;
@@ -66,6 +67,9 @@
     },
     methods: {
       onClick(){
+        this.$emit('change' , this.media);
+      },
+      onPlay(){
         this.$emit('change' , this.media);
       }
     },
@@ -94,11 +98,14 @@
     }
     &.MediaItem__text{
       display: flex;
-
+      align-items: center;
       .wrap{
         width: auto;
         flex:1;
       }
+
+      width:690rpx;
+      height:192rpx;
     }
     &::after{
       position: absolute;

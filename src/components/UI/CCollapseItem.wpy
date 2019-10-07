@@ -1,16 +1,17 @@
 <template>
     <div class="CCollapseItem external-cls">
       <div
-        class="c-collapse-item"
+        class="c-collapse-item collapse-item"
         :class="{'collapse-item--expanded':expanded}"
         bind:click="onClick"
       >
-        <span>{{title}}</span>
+        <span class="c-collapse-title">{{title}}</span>
         <image :src="icon" class="icon"/>
       </div>
       <view
         :class="{'collapse-item--transition':transition}"
         style="height: {{ contentHeight }};"
+        class="c-collapse__wrapper"
         bind:transitionend="onTransitionEnd"
       >
         <view
@@ -28,7 +29,7 @@
 
   const nextTick = () => new Promise(resolve => setTimeout(resolve, 20));
   wepy.component({
-    externalClasses: ['title-class', 'content-class' , 'external-cls'],
+    externalClasses: ['title-class', 'content-class' , 'external-cls','collapse-item'],
 
     relations: {
       './CCollapse': {
@@ -54,7 +55,7 @@
       contentHeight: 0,
       expanded: false,
       transition: false,
-      icon:'icon_arrowdown@3x'
+      icon:'btn_arrowdown_gray@3x'
     },
 
     created(){
@@ -148,12 +149,47 @@
 <style lang="less">
   @import '~lessUI';
 
-  .c-collapse-item {
+  /*.c-collapse-item {*/
+  /*  width:750rpx;*/
+  /*  height:120rpx;*/
+  /*  background:rgba(242,242,242,1);*/
+  /*  padding: 40rpx 30rpx;*/
+  /*  box-sizing: border-box;*/
+  /*  display: flex;*/
+  /*  align-items: center;*/
+  /*  justify-content: space-between;*/
+  /*  .icon{*/
+  /*    width:28rpx;*/
+  /*    height:20rpx;*/
+  /*  }*/
 
-    .icon{
-      width:28rpx;
-      height:16rpx;
+
+  /*}*/
+
+  .c-collapse{
+
+    &-item {
+      width:750rpx;
+      height:120rpx;
+      padding: 40rpx 30rpx;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .icon{
+        width:28rpx;
+        height:20rpx;
+        transition: all 0.3s;
+      }
+
     }
+
+    &--expanded{
+      .icon{
+        transform: rotate(90);
+      }
+    }
+
     &__title {
       .c-cell__right-icon {
         transform: rotate(90deg);

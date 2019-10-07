@@ -17,10 +17,13 @@
     </block>
 
     <block v-if="selectedTab == 1">
-      <CCollapse>
+      <CCollapse :value="expandItems" @change="onExpand">
         <CCollapseItem v-for="item in items1" :key="item.id"
+                       collapse-item="collapse-item"
                        :title="item.text" :name="item.id">
-          <MediaItem v-for="m in item" :key="m.id" :media="m" type="text"/>
+          <MediaItem v-for="m in item.items" :key="m.id" :media="m"
+                     external-cls="mediaItem"
+                     type="text"/>
         </CCollapseItem>
       </CCollapse>
     </block>
@@ -54,7 +57,8 @@
       buyed:false,
       icon1:'btn_video_edit@3x',
       icon2:'btn_like@3x',
-      items1:[]
+      items1:[],
+      expandItems:[]
     },
     methods: {
 
@@ -73,6 +77,9 @@
 
         }
       },
+      onExpand(exp){
+        this.expandItems = exp;
+      }
     },
     onShow(){
       
@@ -111,6 +118,9 @@
   });
 </script>
 <style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
   .bwktDetail{
 
     video{
@@ -135,6 +145,18 @@
       right:20rpx;
       bottom:180rpx;
       position:fixed;
+    }
+
+    .collapse-item{
+      font-size:32rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(51,51,51,1);
+      line-height:40rpx;
+    }
+
+    .mediaItem{
+      margin: 0 auto;
     }
   }
 </style>
