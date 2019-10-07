@@ -1,0 +1,86 @@
+<template>
+  <div class="PlayController external-cls">
+    <image :src="icon1" class="icon1" mode="aspectFill" @click="onPre"/>
+    <image :src="icon2" class="icon2" mode="aspectFill" @click="onPlay" v-if="isMediaPlaying"/>
+    <image :src="icon3" class="icon3" mode="aspectFill" @click="onPlay" v-else/>
+    <image :src="icon4" class="icon4" mode="aspectFill" @click="onNext"/>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core';
+  import { getImgUrlEx } from '@/common/utils';
+  import store from 'store';
+  import { mapGetters, mapMutations } from '@wepy/x';
+
+  wepy.component({
+    store,
+    data: {
+      icon1: 'btn_last@3x',
+      icon2: 'btn_audio_on_big@3x',
+      icon3: 'btn_audio_off_big@3x',
+      icon4: 'btn_next@3x'
+    },
+    externalClasses: [
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['playMedia' , 'isMediaPlaying']),
+    },
+    methods: {
+      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
+      onPre(){
+        this.$emit('pre');
+      },
+      onPlay(){
+        const play = !this.isMediaPlaying;
+        this.setMediaPlaying(play);
+        play && this.setShowMediaPlay(true);
+        this.$emit('play' , play);
+      },
+      onNext(){
+        this.$emit('next');
+      },
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+      this.icon3 = getImgUrlEx(this.icon3);
+      this.icon4 = getImgUrlEx(this.icon4);
+    }
+  });
+</script>
+<style lang="scss">
+  .PlayController{
+    display: flex;
+    height: 120rpx;
+    width: 360rpx;
+    justify-content: space-between;
+    align-items: center;
+    .icon1 {
+      width: 48rpx;
+      height: 48rpx;
+    }
+
+    .icon4 {
+      width: 48rpx;
+      height: 48rpx;
+    }
+
+    .icon2 {
+      width: 120rpx;
+      height: 120rpx;
+    }
+
+    .icon3 {
+      width: 120rpx;
+      height: 120rpx;
+    }
+
+  }
+</style>
