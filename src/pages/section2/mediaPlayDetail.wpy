@@ -23,6 +23,15 @@
       :title="item.title"
       :info="item.info"
       external-cls="classCard"/>
+
+    <FixedBottomComment
+      :commentNum="detail.commentNum"
+      :likeNum="detail.likeNum"
+      :liked="detail.liked"
+      @change="onInput"
+      @comment="onComment"
+      @like="onLike"
+    />
   </div>
 </template>
 
@@ -43,7 +52,10 @@
     data: {
       detail:{
         title:'第一期 | 课程名称，如方法综述',
-        header:''
+        header:'',
+        commentNum:20,
+        likeNum:9992,
+        liked:true
       },
       media:{
         total:530,
@@ -55,6 +67,15 @@
     },
     methods: {
       ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
+      onInput(v){
+
+      },
+      onComment(v){
+
+      },
+      onLike(v){
+        this.detail.liked = v;
+      },
     },
     onShow(){
       
@@ -133,6 +154,7 @@
   PlayController:'~Custom/PlayController',
   IconText:'~Custom/IconText',
   ClassCard:'~Custom/ClassCard',
+  FixedBottomComment:'~Custom/FixedBottomComment',
   }
   }
 </config>

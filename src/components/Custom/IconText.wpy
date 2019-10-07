@@ -44,8 +44,8 @@
     font-weight:500;
     color:$textColor;
     >image{
-      height: 100rpx;
-      width: 100rpx;
+      height: 100%;
+      width: 100%;
     }
     >label{
       white-space: nowrap;

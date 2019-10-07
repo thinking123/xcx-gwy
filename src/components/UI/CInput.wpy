@@ -80,7 +80,21 @@
     &.CInput__radius{
       background:rgba(242,242,242,1);
       border-radius:999px;
+      font-size:28rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      line-height:28rpx;
+      padding-left: 30rpx;
+      caret-color: $primaryColor;
+      &::after{
+        background-color: transparent;
+      }
+
+      &::placeholder {
+        color:rgba(147,150,153,1);
+      }
     }
+
     &::after{
       position: absolute;
       width: 100%;

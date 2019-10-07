@@ -3,21 +3,24 @@
 
       <div class="FixedBottomComment__body">
         <CInput placeholder="留言评价"  :val.sync="val"
+                theme="radius"
                 external-cls="cInput"
-                @update:val="handlev"/>
-        <CTagIcon  external-cls="cTagIcon1" :icon="icon1" :text="commentNum"/>
-        <CTagIcon  external-cls="cTagIcon2" :icon="icon2" :text="likeNum"/>
+                @update:val="handleInput"/>
+        <CTagIcon  external-cls="cTagIcon1" :icon="icon1" :text="_commentNum" @click="onComment"/>
+        <CTagIcon  external-cls="cTagIcon2" :icon="_icon" :text="_likeNum" @click="onLike"/>
       </div>
 
     </div>
 </template>
 <script>
   import wepy from '@wepy/core'
+  import {getImgUrlEx ,ellipseNumber} from '@/common/utils';
 
   wepy.component({
     data: {
-      icon1:'',
-      icon2:'',
+      icon1:'btn_msg_small@3x',
+      icon2:'btn_liked_small@3x',
+      icon3:'btn_like_small@3x',
     },
     externalClasses:[
       'external-cls'
@@ -28,21 +31,44 @@
       },
       commentNum:Number,
       likeNum:Number,
+      liked:{
+        type:Boolean,
+        default:false
+      }
     },
     events: {
 
     },
     computed:{
+      _commentNum(v){
+        return ellipseNumber(this.commentNum);
+      },
+      _likeNum(v){
+        return ellipseNumber(this.likeNum);
+      },
+      _icon(){
+        if(this.liked){
+          return this.icon2;
+        }
 
+        return this.icon3;
+      }
     },
     methods: {
-      handleInput(e){
-        const v = e.$wx.detail.value
-        this.$emit('update:val' , v)
+      handleInput(v){
+        this.$emit('change' , v)
       },
+      onComment(){
+        this.$emit('comment')
+      },
+      onLike(){
+        this.$emit('like' , !this.liked)
+      }
     },
     created () {
-
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+      this.icon3 = getImgUrlEx(this.icon3);
     }
   });
 </script>
@@ -50,17 +76,31 @@
   .FixedBottomComment{
     width:750rpx;
     height:120rpx;
+    margin-top: 24rpx;
 
     &__body{
       position: fixed;
       width:750rpx;
       height:120rpx;
-    }
-    .cInput{
-      width:462px;
-      height:80px;
+      background:rgba(255,255,255,1);
+      box-shadow:0px 4rpx 16rpx 4rpx rgba(0,0,0,0.06);
+      bottom: 0;
+      left: 0;
+      padding: 20rpx 0 20rpx 16rpx;
+      box-sizing: border-box;
+      display: flex;
+      align-items:center;
     }
 
+    .cInput{
+      width:462rpx;
+      height:80rpx;
+      margin-right: 56rpx;
+    }
+
+    .cTagIcon1{
+      margin-right: 70rpx;
+    }
 
   }
 </style>

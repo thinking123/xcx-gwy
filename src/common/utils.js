@@ -170,3 +170,12 @@ export function numberToDate(date) {
 
   return res || '0:00';
 }
+
+
+export function ellipseNumber(num , max = 999){
+  if(num > max){
+    return `${max}+`;
+  }
+
+  return num;
+}
