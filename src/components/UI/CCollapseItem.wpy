@@ -39,8 +39,8 @@
     },
     mixins:[basic],
     props: {
-      title: null,
-      value: null
+      title: String,
+      value: String
     },
 
     data: {
@@ -54,7 +54,7 @@
       this.icon = getImgUrlEx(this.icon);
     },
     attached() {
-      this.parent = this.$wx.parent;
+      this.parent = this.$parent.$wx;
       this.updateExpanded()
         .then(nextTick)
         .then(() => {

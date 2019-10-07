@@ -1,18 +1,27 @@
 <template>
-    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning}">
-      <div class="row1">
-        {{media.title}}
-      </div>
-      <div class="row2">
-       <span>{{media.publishDate}}</span> |  <span>{{media.learnNum}}</span>人学过 | 已学 <span>{{media.rate*100}}</span>%
-      </div>
-      <div class="row3">
-        <span>学友评价</span>
-        <CRate :rate="media.rate" external-cls="cRate"/>
+    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning , 'MediaItem__text':type == 'text'}">
+
+      <image :src="icon3"  class="icon3" mode="aspectFit" @click="onPlay" v-if="type == 'text'"/>
+
+      <div class="wrap">
+        <div class="row1">
+          {{media.title}}
+        </div>
+        <div class="row2">
+          <span>{{media.publishDate}}</span> |  <span>{{media.learnNum}}</span>人学过 | 已学 <span>{{media.rate*100}}</span>%
+        </div>
+        <div class="row3" v-if="type != 'text'">
+          <span>学友评价</span>
+          <CRate :rate="media.rate" external-cls="cRate"/>
+        </div>
+
+        <block  v-if="type != 'text'">
+          <image :src="icon1" v-if="isLearning" class="icon" mode="aspectFit" @click="onClick"/>
+          <image :src="icon2" v-else class="icon" mode="aspectFit" @click="onClick"/>
+        </block>
+
       </div>
 
-      <image :src="icon1" v-if="isLearning" class="icon" mode="aspectFit" @click="onClick"/>
-      <image :src="icon2" v-else class="icon" mode="aspectFit" @click="onClick"/>
     </div>
 </template>
 <script>
@@ -26,6 +35,7 @@
     data: {
       icon2:'icon_video_play@3x',
       icon1:'btn_audio_on@3x',
+      icon3:'icon_video_play@3x',
     },
     externalClasses:[
       'external-cls'
@@ -35,6 +45,11 @@
         type:Object,
         default:{}
       },
+      type:{
+        type:String,
+        //play , text
+        default:'text'
+      }
     },
     events: {
 
@@ -42,6 +57,9 @@
     computed:{
       ...mapGetters(['playMedia' , 'isMediaPlaying']),
       isLearning(){
+        if(this.type == 'text'){
+          return false;
+        }
         return this.playMedia && this.media.id == this.playMedia.id && this.isMediaPlaying;
       },
 
@@ -54,6 +72,7 @@
     created () {
       this.icon2 = getImgUrlEx(this.icon2);
       this.icon1 = getImgUrlEx(this.icon1);
+      this.icon3 = getImgUrlEx(this.icon3);
     }
   });
 </script>
@@ -68,6 +87,19 @@
 
     position: relative;
 
+
+    .wrap{
+      width: 100%;
+      height: 100%;
+    }
+    &.MediaItem__text{
+      display: flex;
+
+      .wrap{
+        width: auto;
+        flex:1;
+      }
+    }
     &::after{
       position: absolute;
       width: 100%;
@@ -78,6 +110,13 @@
       background:rgba(242,242,242,1);
     }
 
+
+    .icon3{
+      width:56rpx;
+      height:56rpx;
+      margin-left: 40rpx;
+      margin-right: 32rpx;
+    }
     .row1{
       font-size:36rpx;
       font-family:PingFang-SC-Regular,PingFang-SC;

@@ -7,6 +7,21 @@
           @changeTab="handleTab"/>
     <block v-if="selectedTab == 0">
       <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
+
+      <CircleIconButton :src="icon1" @click.native="handleIconBtn($event)"
+                        external-cls="circleIconButton1"
+                        data-set="edit"/>
+      <CircleIconButton :src="icon2" @click.native="handleIconBtn($event)"
+                        external-cls="circleIconButton2"
+                        data-set="like"/>
+    </block>
+
+    <block v-if="selectedTab == 1">
+      <CCollapse>
+        <CCollapseItem v-for="item in items1" :key="item.id">
+          <MediaItem v-for="m in item" :key="m.id" :media="m" type="text"/>
+        </CCollapseItem>
+      </CCollapse>
     </block>
 
   </div>
@@ -15,6 +30,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.page({
     store,
@@ -32,11 +48,12 @@
         {text:'学友评论'},
       ],
       bottomLine:1,
-      selectedTab:0,
+      selectedTab:1,
       price:200,
       buyed:false,
       icon1:'btn_video_edit@3x',
       icon2:'btn_like@3x',
+      items1:[]
     },
     methods: {
 
@@ -46,13 +63,49 @@
       },
       onBuy(){
         this.buyed = !this.buyed;
-      }
+      },
+      handleIconBtn(e){
+        const type = e.$wx.target.dataset.set;
+        if(type == 'edit'){
+
+        }else{
+
+        }
+      },
     },
     onShow(){
       
     },
     created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
 
+      let arr = [];
+      for (let i = 0; i < 10; i++) {
+        let obj = [];
+        for (let j = 0; j < 5; j++) {
+          const v = {
+            title:'课程名称，如资料分析',
+            publishDate:'2019-07-15',
+            learnNum:'10006',
+            learned:'0.6',
+            isLearning:false,
+            rate:j%6,
+            id: j
+          };
+
+          obj.push(v);
+        }
+
+        arr.push({
+          items:obj,
+          text:'第一期 | 课程名称，如方法综述',
+          id:i
+        })
+
+      }
+
+      this.items1 = arr;
     }
   });
 </script>
@@ -71,6 +124,17 @@
       height:6rpx !important;
       border-radius: 0 !important;
     }
+
+    .circleIconButton1{
+      right:20rpx;
+      bottom:320rpx;
+      position:fixed;
+    }
+    .circleIconButton2{
+      right:20rpx;
+      bottom:180rpx;
+      position:fixed;
+    }
   }
 </style>
 <config>
@@ -79,6 +143,10 @@
     usingComponents: {
   CTab:'~UI/CTab',
   FixedBottomBuyBtn:'~Custom/FixedBottomBuyBtn',
+  CircleIconButton:'~Custom/CircleIconButton',
+  MediaItem:'~Custom/MediaItem',
+  CCollapse:'~UI/CCollapse',
+  CCollapseItem:'~UI/CCollapseItem',
     }
 }
 </config>
