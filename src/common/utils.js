@@ -79,9 +79,9 @@ export function urlParams(url, params , noEncode = false) {
 }
 
 
-// export function isDef(value: any): boolean {
-//   return value !== undefined && value !== null;
-// }
+export function isDef(value) {
+  return value !== undefined && value !== null;
+}
 
 export function isObj(x) {
   const type = typeof x;
@@ -104,10 +104,10 @@ export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-// export function isNumber(value) {
-//   return /^\d+$/.test(value);
-// }
-//
+export function isNumber(value) {
+  return /^\d+$/.test(value);
+}
+
 // export function range(num: number, min: number, max: number) {
 //   return Math.min(Math.max(num, min), max);
 // }
@@ -127,11 +127,46 @@ export function isEmptyObject(obj) {
 //   return systemInfo;
 // }
 //
-// export function addUnit(value?: string | number): string | undefined {
-//   if (!isDef(value)) {
-//     return undefined;
-//   }
-//
-//   value = String(value);
-//   return isNumber(value) ? `${value}px` : value;
-// }
+export function addUnit(value){
+  if (!isDef(value)) {
+    return undefined;
+  }
+
+  value = String(value);
+  return isNumber(value) ? `${value}px` : value;
+}
+
+export function twoBits(d) {
+  if (d > 9) {
+    return d;
+  } else {
+    return `0${d}`;
+  }
+}
+
+/**
+ * 输入秒数 -> 时间的小数
+ * @param date
+ */
+export function numberToDate(date) {
+  let h = Math.floor(date / 3600);
+  let m = Math.floor((date - h * 3600) / 60);
+  let s = date - h * 3600 - m * 60;
+  let res = '';
+  if (h > 0) {
+    res = `${twoBits(h)}:`;
+  }
+
+  if (m > 0) {
+    res += `${m}:`;
+  }else{
+    res += '0:'
+  }
+
+  if (s > 0) {
+    res += `${twoBits(s)}`;
+  }
+
+
+  return res || '0:00';
+}

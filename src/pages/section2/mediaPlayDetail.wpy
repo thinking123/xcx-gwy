@@ -1,0 +1,74 @@
+<template>
+  <div class="page mediaPlayDetail">
+    <div class="row1">
+      {{detail.title}}
+    </div>
+    <image :src="detail.header"  class="row2" mode="aspectFit"/>
+    <CSlider :max="media.total" :val="media.val"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { mapGetters , mapMutations} from '@wepy/x';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+      ...mapGetters(['isMediaPlaying' , 'playMedia']),
+    },
+    data: {
+      detail:{
+        title:'第一期 | 课程名称，如方法综述',
+        header:''
+      },
+      media:{
+        total:530,
+        val:99,
+      }
+    },
+    methods: {
+      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .mediaPlayDetail{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .row1{
+      font-size:40rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(0,0,0,1);
+      line-height:48rpx;
+      margin: 60rpx 0 64rpx;
+    }
+    .row2{
+      width:400rpx;
+      height:500rpx;
+      box-shadow:0px 16rpx 32rpx -4rpx rgba(0,0,0,0.2);
+      border-radius:8rpx;
+      margin-bottom: 80rpx;
+    }
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CSlider:'~UI/CSlider'
+  }
+  }
+</config>

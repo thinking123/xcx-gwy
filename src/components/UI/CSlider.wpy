@@ -1,0 +1,235 @@
+<template>
+  <view
+    class="CSlider external-cls c-slider"
+        :class="{'c-slider__disabled':disabled}"
+  style="{{ inactiveColor ? 'background:' + inactiveColor : '' }}"
+  bind:tap="onClick"
+  >
+  <view
+    class="c-slider__bar"
+    style="{{ barStyle }}; {{ activeColor ? 'background:' + activeColor : '' }}"
+  >
+    <view
+      class="c-slider__button-wrapper"
+      bind:touchstart="onTouchStart"
+      catch:touchmove="onTouchMove"
+      bind:touchend="onTouchEnd"
+      bind:touchcancel="onTouchEnd"
+    >
+      <slot
+        wx:if="{{ useButtonSlot }}"
+        name="button"
+      />
+      <view
+        wx:else
+        class="c-slider__button"
+      >
+        {{progress}}
+      </view>
+    </view>
+  </view>
+  </view>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {touch} from '@/mixins/touch';
+  import {addUnit , numberToDate} from '@/common/utils';
+  import {basic} from '@/mixins/basic';
+
+  wepy.component({
+    data: {
+      startValue:0,
+      value:0,
+      barStyle:''
+    },
+    mixins:[touch , basic],
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      disabled: Boolean,
+      useButtonSlot: Boolean,
+      activeColor: String,
+      inactiveColor: String,
+      max: {
+        type: Number,
+        default: 100
+      },
+      min: {
+        type: Number,
+        default: 0
+      },
+      step: {
+        type: Number,
+        default: 1
+      },
+      val: {
+        type: Number,
+        default: 0
+      },
+      barHeight: {
+        type: null,
+        default: '12rpx'
+      },
+      draggable:{
+        type:Boolean,
+        default:true
+      },
+      type:{
+        type:String,
+        //date , normal
+        default:'date'
+      },
+
+    },
+    events: {
+
+    },
+    computed:{
+      progress(){
+        const p = `${numberToDate(this.value)} / ${numberToDate(this.max)}`;
+        return p;
+      }
+    },
+    watch: {
+      val(value) {
+        this.updateValue(value, false);
+      }
+    },
+    methods: {
+
+      onTouchStart(event) {
+        if (this.disabled || !this.draggable) return;
+
+        this.touchStart(event);
+        this.startValue = this.format(this.value);
+      },
+
+      onTouchMove(event) {
+        if (this.disabled|| !this.draggable) return;
+
+        this.touchMove(event);
+        this.getRect('.c-slider').then((rect) => {
+          const diff = this.deltaX / rect.width * 100;
+          this.newValue = this.startValue + diff;
+          this.updateValue(this.newValue, false, true);
+        });
+      },
+
+      onTouchEnd() {
+        if (this.disabled|| !this.draggable) return;
+        this.updateValue(this.newValue, true);
+      },
+
+      onClick(event) {
+        if (this.disabled || !this.draggable) return;
+
+        const { min } = this;
+
+        this.getRect('.c-slider').then((rect) => {
+          const value = (event.$wx.detail.x - rect.left) / rect.width * this.getRange() + min;
+          this.updateValue(value, true);
+        });
+      },
+
+      updateValue(value, end, drag) {
+        console.log('udate')
+        value = this.format(value);
+        const { barHeight, min } = this;
+        const width = `${((value - min) * 100) / this.getRange()}%`;
+
+        this.value = value;
+        this.barStyle = `width: ${width}; height: ${addUnit(barHeight)};`;
+
+
+        if (drag) {
+          this.$emit('drag', { value });
+        }
+
+        if (end) {
+          this.$emit('change', value);
+        }
+      },
+
+      getRange() {
+        const { max, min } = this;
+        return max - min;
+      },
+
+      format(value) {
+        const { max, min, step } = this;
+        return Math.round(Math.max(min, Math.min(value, max)) / step) * step;
+      }
+    },
+    created () {
+
+      this.updateValue(this.val);
+    }
+  });
+</script>
+<style lang="less">
+  @black: #000;
+  @white: #fff;
+  @red: #ee0a24;
+  @blue: #1989fa;
+  @gray-light: #e5e5e5;
+  @primaryColor:#4FAC1B;
+  .c-slider {
+    position: relative;
+    /*border-radius: 999px;*/
+
+    width:550rpx;
+    height:12rpx;
+    background:rgba(216,216,216,1);
+    border-radius:6rpx;
+
+    &__bar {
+      position: relative;
+      border-radius: inherit;
+      background-color: @primaryColor;
+    }
+
+    &__button {
+      background-color: @white;
+      border-radius: 50%;
+
+
+      width:120rpx;
+      height:40rpx;
+      background:rgba(49,50,51,1);
+      box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.2);
+      border-radius:24rpx;
+
+
+      font-size:20rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &-wrapper {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate3d(50%, -50%, 0);
+        /* use pseudo element to expand touch area */
+        &::after {
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          content: '';
+        }
+      }
+    }
+
+    &--disabled {
+      opacity: .3;
+    }
+  }
+
+</style>
