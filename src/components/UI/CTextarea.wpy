@@ -1,0 +1,103 @@
+<template>
+    <div class="CTextarea external-cls" :class="{'topLine':showLine}">
+
+    <textarea @input="bindinput($event)" :value="val" :placeholder="placeholder"
+              class="textarea"/>
+
+      <div class="tip">
+        {{tip}}
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      val:{
+        type:String,
+        default:''
+      },
+      placeholder:{
+        type:String,
+        default:"请输入"
+      },
+      showLine:{
+        type:Boolean,
+        default: true
+      },
+      total:{
+        type:Number,
+        default:140
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      tip(){
+        return `${this.val.length}/${this.total}`;
+      }
+    },
+    methods: {
+      bindinput(e){
+        const v = e.$wx.detail.value;
+        console.log('v' , v)
+        this.$emit('change' , v);
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  @import "~baseUI";
+  .CTextarea{
+    position: relative;
+
+
+    font-size:36rpx;
+    font-family:PingFangSC-Regular,PingFangSC;
+    font-weight:400;
+    line-height:44rpx;
+    padding-top:48rpx;
+
+    &.topLine::after{
+      position: absolute;
+      top: 0;
+      left:50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 1px;
+      background-color: $lineColor;
+      content: '';
+    }
+
+    ::placeholder {
+      color:rgba(204,204,204,1);
+    }
+
+    textarea {
+      color: $primaryColor;
+      caret-color: $primaryColor;
+      width: 690 rpx;
+      height: 500 rpx;
+    }
+
+    .tip{
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(79,172,27,1);
+      line-height:24rpx;
+      text-align: right;
+    }
+  }
+</style>

@@ -43,7 +43,7 @@
 </style>
 <config>
   {
-  navigationBarTitleText: '',
+  navigationBarTitleText: '评论留言',
   usingComponents: {
   MediaCommentItem:'~Custom/MediaCommentItem'
   }

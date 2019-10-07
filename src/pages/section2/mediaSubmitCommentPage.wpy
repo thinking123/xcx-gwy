@@ -1,0 +1,90 @@
+<template>
+  <div class="page mediaSubmitCommentPage">
+    <LineText text="课程打分" external-cls="lineText"/>
+    <CRate :rate="rate" external-cls="cRate" @change="onRate"/>
+    <CTextarea :val="val" @change="onChange"/>
+    <CButton text="确认评价"
+             @tap.native="handleSubmit"
+             external-cls="col3"/>
+
+    <CDialog >
+
+    </CDialog>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      rate:0,
+      val:''
+    },
+    methods: {
+      onRate(v){
+        this.rate = v;
+      },
+      onChange(v){
+        this.val = v;
+      },
+      handleSubmit(){
+
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .mediaSubmitCommentPage{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    .lineText{
+      margin-top: 92rpx;
+    }
+  .cRate{
+    margin-top: 64rpx;
+    margin-bottom: 120rpx;
+  }
+
+    .col3{
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      color:rgba(255,255,255,1);
+      line-height:36rpx;
+      width:690rpx;
+      height:96rpx;
+      position: fixed;
+      bottom:40rpx;
+      left:50%;
+      transform:translateX(-50%);
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '我要评价',
+    usingComponents: {
+  CRate:'~UI/CRate',
+  CDialog:'~UI/CDialog',
+  LineText:'~Custom/LineText',
+  CButton:'~UI/CButton',
+  CTextarea:'~UI/CTextarea',
+    }
+}
+</config>

@@ -1,0 +1,64 @@
+<template>
+    <div class="LineText external-cls">
+      {{text}}
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      text:String
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .LineText{
+    font-size:32rpx;
+    font-family:PingFangSC-Regular,PingFangSC;
+    font-weight:400;
+    color:rgba(147,150,153,1);
+    line-height:40rpx;
+    position: relative;
+
+    &::before{
+      width:120rpx;
+      height:1px;
+      background:rgba(196,200,204,1);
+      right: 100%;
+      transform: scaleY(0.5)  translateY(-50%) translateX(-40rpx);
+      top: 50%;
+      content: '';
+      position: absolute;
+    }
+    &::after{
+      width:120rpx;
+      height:1px;
+      background:rgba(196,200,204,1);
+      left: 100%;
+      transform: scaleY(0.5)  translateY(-50%) translateX(40rpx);
+      top: 50%;
+      content: '';
+      position: absolute;
+    }
+
+  }
+</style>
