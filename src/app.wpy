@@ -82,6 +82,7 @@ wepy.app({
 <config>
 {
     pages: [
+  'pages/section2/mediaCommentPage',
   'pages/section2/mediaPlayDetail',
   'pages/section2/mediaDetail',
   'pages/section2/mediaIntro',
