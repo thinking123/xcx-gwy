@@ -1,12 +1,12 @@
 <template>
     <div class="CCollapseItem external-cls">
       <div
-        class="collapse-item"
+        class="c-collapse-item"
         :class="{'collapse-item--expanded':expanded}"
         bind:click="onClick"
       >
         <span>{{title}}</span>
-        <image :src="icon"/>
+        <image :src="icon" class="icon"/>
       </div>
       <view
         :class="{'collapse-item--transition':transition}"
@@ -30,15 +30,22 @@
   wepy.component({
     externalClasses: ['title-class', 'content-class' , 'external-cls'],
 
-    relation: {
-      name: 'ccollapse',
-      type: 'ancestor',
-      linked(parent) {
-        this.parent = parent;
-      }
+    relations: {
+      './CCollapse': {
+        type: 'ancestor', // 关联的目标节点应为父节点
+        linked(parent) {
+          this.$wepy.parent = parent.$wepy;
+        }
+      },
+      // name: 'CCollapse',
+      // type: 'ancestor',
+      // linked(parent) {
+      //   this.parent = parent;
+      // }
     },
     mixins:[basic],
     props: {
+      name: String,
       title: String,
       value: String
     },
@@ -54,15 +61,29 @@
       this.icon = getImgUrlEx(this.icon);
     },
     attached() {
-      this.parent = this.$parent.$wx;
+      // this.parent = this.$parent;
+      // this.updateExpanded()
+      //   .then(nextTick)
+      //   .then(() => {
+      //     this.transition = true;
+      //     if (this.expanded) {
+      //       this.contentHeight = 'auto';
+      //     }
+      //   });
+
       this.updateExpanded()
         .then(nextTick)
         .then(() => {
-          this.transition = true;
+          const data = { transition: true };
+
           if (this.expanded) {
             this.contentHeight = 'auto';
           }
+
+          // this.setData(data);
+          this.transition = true;
         });
+
     },
 
     methods: {
@@ -71,9 +92,9 @@
           return Promise.resolve();
         }
 
-        const { value, accordion } = this.parent.data;
+        const { value, accordion } = this.parent;
         const { children = [] } = this.parent;
-        const { name } = this.data;
+        const { name } = this;
 
         const index = children.indexOf(this);
         const currentName = name == null ? index : name;
@@ -85,11 +106,13 @@
         const stack = [];
 
         if (expanded !== this.expanded) {
-          this.updateStyle(expanded);
+          stack.push(this.updateStyle(expanded));
         }
 
         this.index = index;
         this.expanded = expanded;
+
+        return Promise.all(stack);
       },
 
       updateStyle(expanded) {
@@ -122,8 +145,53 @@
     }
   });
 </script>
-<style lang="scss">
-  .CCollapseItem{
-    
+<style lang="less">
+  @import '~lessUI';
+
+  .c-collapse-item {
+
+    .icon{
+      width:28rpx;
+      height:16rpx;
+    }
+    &__title {
+      .c-cell__right-icon {
+        transform: rotate(90deg);
+        transition: transform @collapse-item-transition-duration;
+      }
+
+      &--expanded {
+        .c-cell__right-icon {
+          transform: rotate(-90deg);
+        }
+      }
+
+      &--disabled {
+        .c-cell,
+        .c-cell__right-icon {
+          color: @collapse-item-title-disabled-color !important;
+        }
+
+        .c-cell--hover {
+          background-color: @white !important;
+        }
+      }
+    }
+
+    &__wrapper {
+      overflow: hidden;
+
+      &--transition {
+        transition: height 300ms ease-in-out;
+      }
+    }
+
+    &__content {
+      padding: @collapse-item-content-padding;
+      color: @collapse-item-content-text-color;
+      font-size: @collapse-item-content-font-size;
+      line-height: @collapse-item-content-line-height;
+      background-color: @collapse-item-content-background-color;
+    }
   }
 </style>

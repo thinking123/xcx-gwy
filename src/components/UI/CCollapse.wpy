@@ -13,31 +13,49 @@
     externalClasses:[
       'external-cls'
     ],
-    relation: {
-      name: 'ccollapseitem',
-      type: 'descendant',
-      linked(child) {
-        this.children.push(child);
+    relations: {
+      './CCollapseItem': {
+        type: 'descendant', // 关联的目标节点应为父节点
+        linked(child) {
+          this.$wepy.children.push(child.$wepy);
+        },
+        unlinked(child) {
+          this.$wepy.children = this.$wepy.children.filter(
+            (item) => item !== child.$wepy
+          );
+        }
       },
-      unlinked(child) {
-        this.children = this.children.filter(
-          (item) => item !== child
-        );
-      }
+      // name: 'CCollapseItem',
+      // type: 'descendant',
+      // linked(child) {
+      //   this.children.push(child);
+      // },
+      // unlinked(child) {
+      //   this.children = this.children.filter(
+      //     (item) => item !== child
+      //   );
+      // }
     },
+    watch:{
+      value(){
+        this.updateExpanded()
+      },
 
+      accordion(){
+        this.updateExpanded()
+      },
+
+    },
     props: {
       value: {
-        type: null,
-        observer: 'updateExpanded'
+        type: Object,
       },
       accordion: {
         type: Boolean,
-        observer: 'updateExpanded'
       },
       border: {
         type: Boolean,
-        value: true
+        default: true
       }
     },
 
@@ -53,7 +71,7 @@
       },
 
       switch(name, expanded) {
-        const { accordion, value } = this.data;
+        const { accordion, value } = this;
         if (!accordion) {
           name = expanded
             ? (value || []).concat(name)

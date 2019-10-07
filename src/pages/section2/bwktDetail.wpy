@@ -18,7 +18,8 @@
 
     <block v-if="selectedTab == 1">
       <CCollapse>
-        <CCollapseItem v-for="item in items1" :key="item.id">
+        <CCollapseItem v-for="item in items1" :key="item.id"
+                       :title="item.text" :name="item.id">
           <MediaItem v-for="m in item" :key="m.id" :media="m" type="text"/>
         </CCollapseItem>
       </CCollapse>
