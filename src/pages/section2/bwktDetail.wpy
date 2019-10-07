@@ -22,8 +22,7 @@
                        collapse-item="collapse-item"
                        :title="item.text" :name="item.id">
           <MediaItem v-for="m in item.items" :key="m.id" :media="m"
-                     external-cls="mediaItem"
-                     type="text"/>
+                     external-cls="mediaItem"/>
         </CCollapseItem>
       </CCollapse>
       <CircleIconButton :src="icon1" @click.native="handleIconBtn($event)"
