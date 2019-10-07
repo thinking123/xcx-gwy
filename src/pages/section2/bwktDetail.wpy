@@ -26,6 +26,11 @@
                      type="text"/>
         </CCollapseItem>
       </CCollapse>
+      <CircleIconButton :src="icon1" @click.native="handleIconBtn($event)"
+                        external-cls="circleIconButton3"
+                        data-set="edit"/>
+
+      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
     </block>
 
   </div>
@@ -142,6 +147,12 @@
       position:fixed;
     }
     .circleIconButton2{
+      right:20rpx;
+      bottom:180rpx;
+      position:fixed;
+    }
+
+    .circleIconButton3{
       right:20rpx;
       bottom:180rpx;
       position:fixed;

@@ -78,11 +78,9 @@ wepy.app({
     }
   }
 });
-</script>
-<config>
-{
-    pages: [
-  'pages/section2/bwktDetail',
+
+/*
+*
   'pages/section2/mediaSubmitCommentPage',
   'pages/section2/mediaCommentPage',
   'pages/section2/mediaPlayDetail',
@@ -109,6 +107,13 @@ wepy.app({
 
       'pages/login/loginInput',
       'pages/login/register',
+* */
+</script>
+<config>
+{
+    pages: [
+  'pages/section2/bwktDetail',
+
     ],
     window: {
       backgroundTextStyle: 'light',
