@@ -48,7 +48,10 @@
       asyncClose: Boolean,
       messageAlign: String,
       showCancelButton: Boolean,
-      closeOnClickOverlay: Boolean,
+      closeOnClickOverlay: {
+        type:Boolean,
+        default:true
+      },
       confirmButtonOpenType: String,
       zIndex: {
         type: Number,

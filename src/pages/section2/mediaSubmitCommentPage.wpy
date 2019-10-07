@@ -7,8 +7,8 @@
              @tap.native="handleSubmit"
              external-cls="col3"/>
 
-    <CDialog >
-
+    <CDialog :show="show">
+      <MediaCommentSuc :count="count"/>
     </CDialog>
   </div>
 </template>
@@ -27,7 +27,9 @@
     },
     data: {
       rate:0,
-      val:''
+      val:'',
+      show:true,
+      count:5
     },
     methods: {
       onRate(v){
@@ -37,7 +39,7 @@
         this.val = v;
       },
       handleSubmit(){
-
+        this.show = true;
       }
     },
     onShow(){
@@ -83,6 +85,7 @@
   CRate:'~UI/CRate',
   CDialog:'~UI/CDialog',
   LineText:'~Custom/LineText',
+  MediaCommentSuc:'~Custom/MediaCommentSuc',
   CButton:'~UI/CButton',
   CTextarea:'~UI/CTextarea',
     }
