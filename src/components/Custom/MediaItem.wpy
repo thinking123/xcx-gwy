@@ -1,7 +1,7 @@
 <template>
-    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning , 'MediaItem__text':type == 'text'}">
+    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning , 'MediaItem__text':typeItem == 'text'}">
 
-      <image :src="icon3"  class="icon3" mode="aspectFit" @click="onPlay" v-if="type == 'text'"/>
+      <image :src="icon3"  class="icon3" mode="aspectFit" @click="onPlay" v-show="typeItem == 'text'"/>
 
       <div class="wrap">
         <div class="row1">
@@ -15,7 +15,7 @@
           <CRate :rate="media.rate" external-cls="cRate"/>
         </div>
 
-        <block  v-if="type != 'text'">
+        <block  v-if="typeItem != 'text'">
           <image :src="icon1" v-if="isLearning" class="icon" mode="aspectFit" @click="onClick"/>
           <image :src="icon2" v-else class="icon" mode="aspectFit" @click="onClick"/>
         </block>
@@ -46,9 +46,9 @@
         default:{
         }
       },
-      type:{
+      //play , text
+      typeItem:{
         type:String,
-        //play , text
         default:'play'
       }
     },
@@ -58,7 +58,7 @@
     computed:{
       ...mapGetters(['playMedia' , 'isMediaPlaying']),
       isLearning(){
-        if(this.type == 'play'){
+        if(this.typeItem == 'text'){
           return false;
         }
         return this.playMedia && this.media.id == this.playMedia.id && this.isMediaPlaying;

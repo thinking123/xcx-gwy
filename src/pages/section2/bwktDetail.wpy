@@ -22,6 +22,7 @@
                        collapse-item="collapse-item"
                        :title="item.text" :name="item.id">
           <MediaItem v-for="m in item.items" :key="m.id" :media="m"
+                     typeItem="text"
                      external-cls="mediaItem"/>
         </CCollapseItem>
       </CCollapse>
