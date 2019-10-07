@@ -1,6 +1,14 @@
 <template>
     <div class="FixedBottomComment external-cls">
 
+      <div class="FixedBottomComment__body">
+        <CInput placeholder="留言评价"  :val.sync="val"
+                external-cls="cInput"
+                @update:val="handlev"/>
+        <CTagIcon  external-cls="cTagIcon1" :icon="icon1" :text="commentNum"/>
+        <CTagIcon  external-cls="cTagIcon2" :icon="icon2" :text="likeNum"/>
+      </div>
+
     </div>
 </template>
 <script>
@@ -8,22 +16,30 @@
 
   wepy.component({
     data: {
-
+      icon1:'',
+      icon2:'',
     },
     externalClasses:[
       'external-cls'
     ],
     props:{
-      
+      val:{
+        type:String
+      },
+      commentNum:Number,
+      likeNum:Number,
     },
     events: {
 
     },
     computed:{
-      
+
     },
     methods: {
-
+      handleInput(e){
+        const v = e.$wx.detail.value
+        this.$emit('update:val' , v)
+      },
     },
     created () {
 
@@ -32,6 +48,28 @@
 </script>
 <style lang="scss">
   .FixedBottomComment{
-    
+    width:750rpx;
+    height:120rpx;
+
+    &__body{
+      position: fixed;
+      width:750rpx;
+      height:120rpx;
+    }
+    .cInput{
+      width:462px;
+      height:80px;
+    }
+
+
   }
 </style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CInput:'~UI/CInput',
+  CTagIcon:'~UI/CTagIcon',
+  }
+  }
+</config>

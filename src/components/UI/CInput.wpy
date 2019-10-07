@@ -1,5 +1,6 @@
 <template>
-    <input class="CInput external-cls"@input="handleInput" :value="val"
+    <input class="CInput external-cls" @input="handleInput" :value="val"
+           :class="{'CInput__radius':theme == 'radius'}"
            :type="type"
            :placeholder="placeholder">
 
@@ -30,6 +31,11 @@
       type:{
         type:String,
         default:'text'
+      },
+      theme:{
+        type:String,
+        //normal , radius
+        defualt:'normal'
       }
     },
     events: {
@@ -70,6 +76,11 @@
     color:#000000;
     caret-color: $primaryColor;
 
+
+    &.CInput__radius{
+      background:rgba(242,242,242,1);
+      border-radius:999px;
+    }
     &::after{
       position: absolute;
       width: 100%;

@@ -1,6 +1,7 @@
 <template>
     <div class="CTagIcon external-cls">
-
+      <image :src="icon"  class="icon" mode="aspectFit"/>
+      <span>{{text}}</span>
     </div>
 </template>
 <script>
@@ -14,7 +15,8 @@
       'external-cls'
     ],
     props:{
-      
+      icon:String,
+      text:String,
     },
     events: {
 
@@ -32,6 +34,31 @@
 </script>
 <style lang="scss">
   .CTagIcon{
-    
+    width:48rpx;
+    height:46rpx;
+    position: relative;
+
+    font-size:20rpx;
+    font-family:PingFangSC-Regular,PingFangSC;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:20rpx;
+
+    >icon{
+      width: 100%;
+      height: 100%;
+    }
+
+    >label{
+      position: absolute;
+      bottom: 100%;
+      right: 100%;
+      transform: translate(-20% , -30%);
+      padding: 2rpx 6rpx;
+      background:rgba(255,85,0,1);
+      border-radius:12rpx;
+      border:2rpx solid rgba(255,255,255,1);
+    }
+
   }
 </style>
