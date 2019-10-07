@@ -1,0 +1,84 @@
+<template>
+  <div class="page bwktDetail">
+    <video :src="src"  controls autoplay/>
+    <CTab :tabs="tabs" :bottomLine="bottomLine"
+          external-cls="cTab"
+          bottom-cls="bottomLine"
+          @changeTab="handleTab"/>
+    <block v-if="selectedTab == 0">
+      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
+    </block>
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      src:'https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm',
+      tabs:[
+        {text:'课程介绍'},
+        {text:'课时列表'},
+        {text:'学友评论'},
+      ],
+      bottomLine:1,
+      selectedTab:0,
+      price:200,
+      buyed:false,
+      icon1:'btn_video_edit@3x',
+      icon2:'btn_like@3x',
+    },
+    methods: {
+
+      handleTab({tab ,index}){
+        console.log('tab' , tab , index)
+        this.selectedTab = index
+      },
+      onBuy(){
+        this.buyed = !this.buyed;
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .bwktDetail{
+
+    video{
+      width:750rpx;
+      height:400rpx;
+    }
+
+  .cTab {
+    height: 112rpx;
+  }
+    .bottomLine{
+      height:6rpx !important;
+      border-radius: 0 !important;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CTab:'~UI/CTab',
+  FixedBottomBuyBtn:'~Custom/FixedBottomBuyBtn',
+    }
+}
+</config>
