@@ -8,7 +8,7 @@
              external-cls="col3"/>
 
     <CDialog :show="show">
-      <MediaCommentSuc :count="count"/>
+      <MediaCommentSuc :count="count" :sec="sec"/>
     </CDialog>
   </div>
 </template>
@@ -16,6 +16,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {navToPage} from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -28,8 +29,9 @@
     data: {
       rate:0,
       val:'',
-      show:true,
-      count:5
+      show:false,
+      count:5,
+      sec:3
     },
     methods: {
       onRate(v){
@@ -40,10 +42,26 @@
       },
       handleSubmit(){
         this.show = true;
+        clearInterval(this.time);
+        this.time = setInterval(()=>{
+          if(this.sec > 0){
+            this.sec -= 1;
+          }else{
+            this.show = false;
+            clearInterval(this.time);
+            this.sec = 3;
+            navToPage('/pages/section2/mediaPlayDetail');
+          }
+
+        } , 1000);
+
       }
     },
     onShow(){
       
+    },
+    onHide(){
+      clearInterval(this.time);
     },
     created () {
 

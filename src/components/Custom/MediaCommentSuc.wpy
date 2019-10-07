@@ -1,18 +1,18 @@
 <template>
     <div class="MediaCommentSuc external-cls">
       <image :src="icon1"  class="icon1" mode="aspectFit"/>
-      <div content="row1">
+      <div class="row1">
         评价成功
       </div>
-      <div content="row2">
+      <div class="row2">
         本次评价获得积分
       </div>
-      <div content="row3">
+      <div class="row3">
         <image :src="icon2"  class="icon2" mode="aspectFit"/>
         <span>+{{count}}</span>
       </div>
 
-      <div content="row4">
+      <div class="row4">
         {{sec}}S后自动跳转播放页
       </div>
     </div>
@@ -25,13 +25,13 @@
     data: {
       icon1:'icon_success@3x',
       icon2:'icon_jifen@3x',
-      sec:3
     },
     externalClasses:[
       'external-cls'
     ],
     props:{
-      count:Number
+      count:Number,
+      sec:Number,
     },
     events: {
 
@@ -56,7 +56,7 @@
     border-radius:8rpx;
     display: flex;
     flex-direction: column;
-
+    align-items: center;
     .icon1{
       width:120rpx;
       height:120rpx;
@@ -69,14 +69,15 @@
       font-weight:normal;
       color:rgba(79,172,27,1);
       line-height:44rpx;
+      margin-bottom: 32rpx;
     }
     .row2{
       font-size:28rpx;
       font-family:PingFang-SC-Regular,PingFang-SC;
       font-weight:400;
       color:rgba(102,102,102,1);
-      line-height:36rpx;
-      margin-bottom: 32rpx;
+
+      margin-bottom: 20rpx;
     }
     .row3{
       font-size:32rpx;
@@ -84,10 +85,13 @@
       font-weight:400;
       color:rgba(251,177,27,1);
       line-height:44rpx;
-      margin-bottom: 20rpx;
+      display: flex;
+      align-items: center;
+      margin-bottom: 32rpx;
       .icon2{
         width:48rpx;
         height:48rpx;
+        margin-right: 30rpx;
       }
     }
 
