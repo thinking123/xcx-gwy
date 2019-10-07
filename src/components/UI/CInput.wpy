@@ -2,9 +2,7 @@
     <input class="CInput external-cls" @input="handleInput" :value="val"
            :class="{'CInput__radius':theme == 'radius'}"
            :type="type"
-           :placeholder="placeholder">
-
-    </input>
+           :placeholder="placeholder"/>
 </template>
 <script>
   import wepy from '@wepy/core'

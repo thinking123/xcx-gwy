@@ -1,0 +1,37 @@
+<template>
+    <div class="mediaCommentPage external-cls">
+
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .mediaCommentPage{
+    
+  }
+</style>

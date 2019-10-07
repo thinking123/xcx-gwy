@@ -32,6 +32,22 @@
       @comment="onComment"
       @like="onLike"
     />
+
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="getup">
+        <HeaderClose text="播放列表"  external-cls="header" @click="show=false" :icon="icon1"/>
+        <MediaPlayItem  v-for="item in items2"
+                        :key="item.id"
+                        :title="item.title"
+                        :time="item.time"
+                        :desc="item.desc"
+        />
+      </div>
+    </CPopup>
   </div>
 </template>
 
@@ -64,6 +80,8 @@
       icon1:'btn_list@3x',
       icon2:'btn_bottom_share@3x',
       items1:[],
+      items2:[],
+      show:true
     },
     methods: {
       ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
@@ -76,6 +94,14 @@
       onLike(v){
         this.detail.liked = v;
       },
+      handleIconText(e){
+        const type = e.$wx.target.dataset.set;
+        if(type == 'list'){
+          this.show = true;
+        }else{
+
+        }
+      }
     },
     onShow(){
       
@@ -93,6 +119,18 @@
       }
 
       this.items1 = arr;
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          title:'第一期 | 课程名称，如方法综述',
+          time:'12 : 00',
+          desc:'2020年公考',
+          id:i
+        });
+      }
+
+      this.items2 = arr;
     }
   });
 </script>
@@ -144,6 +182,11 @@
       background:rgba(242,242,242,1);
       margin-bottom: 24rpx;
     }
+
+    .getup{
+      height: 920rpx;
+    }
+
   }
 </style>
 <config>
@@ -154,7 +197,10 @@
   PlayController:'~Custom/PlayController',
   IconText:'~Custom/IconText',
   ClassCard:'~Custom/ClassCard',
+  MediaPlayItem:'~Custom/MediaPlayItem',
   FixedBottomComment:'~Custom/FixedBottomComment',
+  HeaderClose:'~Custom/HeaderClose',
+  CPopup:'~UI/CPopup',
   }
   }
 </config>

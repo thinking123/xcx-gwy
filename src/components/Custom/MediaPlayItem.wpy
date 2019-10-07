@@ -1,0 +1,97 @@
+<template>
+    <div class="MediaPlayItem external-cls">
+      <image :src="icon"  class="icon" mode="aspectFit"/>
+      <div class="content">
+        <div class="row1">
+          {{title}}
+        </div>
+        <div class="row2">
+          <span class="col1">
+            时长{{time}}
+          </span>
+           {{' '}}-{{' '}}
+          <span class="col2">
+            {{desc}}
+          </span>
+        </div>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import { getImgUrlEx } from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'btn_close_small@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      title:String,
+      time:String,
+      desc:String,
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon);
+    }
+  });
+</script>
+<style lang="scss">
+  .MediaPlayItem{
+    padding: 56rpx 40rpx 40rpx;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    &::after{
+      position: absolute;
+      width: 690rpx;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 50%;
+      transform: translateX(-50%) scaleY(0.5);
+      background:rgba(230,230,230,1);
+    }
+
+    .icon{
+      width:32rpx;
+      height:32rpx;
+      margin-right: 40rpx;
+    }
+    .content{
+
+      font-size:24rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(147,150,153,1);
+      line-height:32rpx;
+
+      .row1{
+        font-size:36rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        line-height:36rpx;
+        margin-bottom: 18rpx;
+      }
+
+      .row2{
+        display: flex;
+      }
+    }
+
+
+  }
+</style>
