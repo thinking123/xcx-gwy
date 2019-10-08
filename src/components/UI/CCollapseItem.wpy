@@ -2,14 +2,14 @@
     <div class="CCollapseItem external-cls">
       <div
         class="c-collapse-item collapse-item"
-        :class="{'collapse-item--expanded':expanded}"
+        :class="{'c-collapse--expanded':expanded}"
         bind:click="onClick"
       >
         <span class="c-collapse-title">{{title}}</span>
         <image :src="icon" class="icon"/>
       </div>
       <view
-        :class="{'collapse-item--transition':transition}"
+        :class="{'c-collapse__wrapper--transition':transition}"
         style="height: {{ contentHeight }};"
         class="c-collapse__wrapper"
         bind:transitionend="onTransitionEnd"
@@ -83,6 +83,7 @@
 
           // this.setData(data);
           this.transition = true;
+          console.log(' this.transition ' , this.transition )
         });
 
     },
@@ -186,7 +187,7 @@
 
     &--expanded{
       .icon{
-        transform: rotate(90);
+        transform: rotate(180deg);
       }
     }
 
