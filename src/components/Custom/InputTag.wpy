@@ -1,0 +1,45 @@
+<template>
+    <div class="InputTag external-cls">
+      {{placeholder}}
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      placeholder:String
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .InputTag{
+    background:rgba(242,242,242,1);
+    border-radius:40rpx;
+
+    font-size:28rpx;
+    font-weight:400;
+    color:rgba(147,150,153,1);
+    line-height:28rpx;
+
+    padding: 26rpx 30rpx;
+  }
+</style>

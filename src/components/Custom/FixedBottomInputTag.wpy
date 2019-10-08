@@ -1,0 +1,67 @@
+<template>
+    <div class="FixedBottomInputTag external-cls">
+      <div class="FixedBottomInputTag-content">
+        <InputTag external-cls="InputTag external-cls-InputTag" :placeholder="placeholder"/>
+      </div>
+
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls',
+      'external-cls-InputTag',
+    ],
+    props:{
+      placeholder:{
+        type:String,
+        default:'请输入'
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .FixedBottomInputTag{
+    width:750rpx;
+    height:120rpx;
+
+    &-content{
+      width:750rpx;
+      height:120rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx -4rpx 12rpx 0rpx rgba(0,0,0,0.06);
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  InputTag:'~Custom/InputTag'
+  }
+  }
+</config>

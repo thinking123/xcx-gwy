@@ -33,6 +33,13 @@
       <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
     </block>
 
+
+    <block v-if="selectedTab == 2">
+      <FixedBottomInputTag placeholder="留言评价"  external-cls="FixedBottomInputTag" external-cls-InputTag="InputTag"/>
+    </block>
+
+
+
   </div>
 </template>
 
@@ -57,7 +64,7 @@
         {text:'学友评论'},
       ],
       bottomLine:1,
-      selectedTab:1,
+      selectedTab:2,
       price:200,
       buyed:false,
       icon1:'btn_video_edit@3x',
@@ -87,7 +94,7 @@
       }
     },
     onShow(){
-      
+
     },
     created () {
       this.icon1 = getImgUrlEx(this.icon1);
@@ -169,6 +176,11 @@
     .mediaItem{
       margin: 0 auto;
     }
+
+    .FixedBottomInputTag{
+    width:718rpx;
+    height:80rpx;
+    }
   }
 </style>
 <config>
@@ -178,6 +190,7 @@
   CTab:'~UI/CTab',
   FixedBottomBuyBtn:'~Custom/FixedBottomBuyBtn',
   CircleIconButton:'~Custom/CircleIconButton',
+  FixedBottomInputTag:'~Custom/FixedBottomInputTag',
   MediaItem:'~Custom/MediaItem',
   CCollapse:'~UI/CCollapse',
   CCollapseItem:'~UI/CCollapseItem',
