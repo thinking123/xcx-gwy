@@ -77,7 +77,20 @@
   });
 </script>
 <style lang="scss">
-  @import "~baseUI";
+  $white:#FFFFFF;
+  $lineColor:#CCCCCC;
+  $textBlack:#000000;
+  $textBlack1:#333333;
+  $disabledColor:#CCCCCC;
+  $zIndexTop:900;
+  $zIndexMiddle:50;
+
+  $primaryColor:#4FAC1B;
+  $redColor:#EE4138;
+  $infoColor:#FFFFFF;
+  $textColor:#333333;
+  $textColorGray:#999999;
+  $textColorGray1:#666666;
 
   .CButton{
     width:630rpx;

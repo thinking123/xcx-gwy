@@ -113,7 +113,7 @@ wepy.app({
 {
     pages: [
   'pages/section2/bwktDetail',
-
+  'pages/section2/mediaSubmitCommentPage'
     ],
     window: {
       backgroundTextStyle: 'light',
