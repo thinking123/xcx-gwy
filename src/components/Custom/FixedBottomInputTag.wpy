@@ -1,7 +1,7 @@
 <template>
     <div class="FixedBottomInputTag external-cls">
       <div class="FixedBottomInputTag-content">
-        <InputTag external-cls="InputTag external-cls-InputTag" :placeholder="placeholder"/>
+        <InputTag external-cls="InputTag" :placeholder="placeholder"/>
       </div>
 
     </div>
@@ -53,6 +53,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .InputTag{
+      width:718rpx;
+      height:80rpx;
     }
   }
 </style>

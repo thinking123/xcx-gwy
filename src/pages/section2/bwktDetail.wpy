@@ -35,6 +35,10 @@
 
 
     <block v-if="selectedTab == 2">
+      <MediaCommentItem v-for="item in items2"
+                        :key="item.id"
+                        :user="item"
+      />
       <FixedBottomInputTag placeholder="留言评价"  external-cls="FixedBottomInputTag" external-cls-InputTag="InputTag"/>
     </block>
 
@@ -70,7 +74,8 @@
       icon1:'btn_video_edit@3x',
       icon2:'btn_like@3x',
       items1:[],
-      expandItems:[]
+      expandItems:[],
+      items2:[]
     },
     methods: {
 
@@ -126,6 +131,20 @@
       }
 
       this.items1 = arr;
+
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          header:'',
+          name:'李小萌smile',
+          rate:'3',
+          comment:'哈哈，确实不错，讲的很有逻辑呀！',
+          publishDate:'09-07 12:00',
+          id:i
+        })
+      }
+      this.items2 = arr;
     }
   });
 </script>
@@ -181,6 +200,8 @@
     width:718rpx;
     height:80rpx;
     }
+
+
   }
 </style>
 <config>
@@ -191,6 +212,7 @@
   FixedBottomBuyBtn:'~Custom/FixedBottomBuyBtn',
   CircleIconButton:'~Custom/CircleIconButton',
   FixedBottomInputTag:'~Custom/FixedBottomInputTag',
+  MediaCommentItem:'~Custom/MediaCommentItem',
   MediaItem:'~Custom/MediaItem',
   CCollapse:'~UI/CCollapse',
   CCollapseItem:'~UI/CCollapseItem',
