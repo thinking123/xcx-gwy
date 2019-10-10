@@ -112,8 +112,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section2/bwktDetail',
-  'pages/section2/mediaSubmitCommentPage'
+  'pages/homeSection2',
     ],
     window: {
       backgroundTextStyle: 'light',

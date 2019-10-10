@@ -43,7 +43,9 @@
                       external-cls="titleIcon"
                       :text="item.text" :src="item.src"/>
           </div>
-      <CLabelRightButton type="primary" text="公务员行测" rightText="切换题库" showLine="{{false}}"  external-cls="cLabelRightButton"/>
+      <CLabelRightButton type="primary" text="公务员行测" rightText="切换题库" showLine="{{false}}"
+                         @click.native="onClickCLabelRightButton"
+                         external-cls="cLabelRightButton"/>
 
       <JinLianItem
         v-for="item in items3"
@@ -58,6 +60,29 @@
       />
       <FixedContinueBtn @click.native="handleCBtn"/>
       </block>
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="learn">
+        <HeaderClose text="填写核心知识点"  external-cls="header" @click="show=false"/>
+        <div class="body">
+          <CCollapse :value="expandItems" @change="onExpand">
+            <CCollapseItem v-for="item in items4" :key="item.id"
+                           collapse-item="collapse-item"
+                           :title="item.text" :name="item.id">
+              <div v-for="m in item.items" :key="m.id"
+                        :class="{'selected':curSelItem == m.id}"
+                         external-cls="collapseItem">
+                {{m.text}}
+              </div>
+            </CCollapseItem>
+          </CCollapse>
+        </div>
+      </div>
+    </CPopup>
+
     <CTabbar/>
 
   </div>
@@ -101,6 +126,11 @@
           src:'icon_course03@3x'
         }
       ],
+
+      expandItems:[],
+      items4:[],
+      curSelItem:'',
+      show:false,
     },
     methods: {
       inputChange(v){
@@ -117,10 +147,16 @@
       },
       handleCBtn(){
 
-      }
+      },
+      onClickCLabelRightButton(){
+
+      },
+      onExpand(exp){
+        this.expandItems = exp;
+      },
     },
     onShow(){
-      
+
     },
     created () {
       let arr = [];
@@ -161,6 +197,30 @@
       }
 
       this.items3 = arr;
+
+
+      arr = [];
+      for (let i = 0; i < 10; i++) {
+        let obj = [];
+        for (let j = 0; j < 5; j++) {
+          const v = {
+            text:'公务员行测',
+            id: `${i}-${j}`
+          };
+
+          obj.push(v);
+        }
+
+        arr.push({
+          items:obj,
+          text:'公务员考试',
+          id:i
+        })
+
+      }
+
+      this.items4 = arr;
+
 
       this.titleIcons = this.titleIcons.map(m=>{
         m.src = getImgUrlEx(m.src)
@@ -243,6 +303,47 @@
       margin-bottom: 32rpx;
     }
 
+
+    .learn{
+      height: 712rpx;
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row{
+          margin-top: 46rpx;
+        }
+      }
+    }
+
+    .collapseItem{
+      font-size:32rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+
+      line-height:40rpx;
+      display: flex;
+      align-items: center;
+      height: 120rpx;
+
+      position: relative;
+
+      &.selected{
+        color:rgba(79,172,27,1);
+      }
+      &::after{
+        content:'';
+        position: absolute;
+        background:rgba(230,230,230,1);
+        height: 1px;
+        width: 100%;
+        top:100%;
+        left: 50%;
+        width:650rpx;
+        transform: translateX(-50%);
+      }
+    }
+
   }
 </style>
 <config>
@@ -258,6 +359,11 @@
   IconText:'~Custom/IconText',
   JinLianItem:'~Custom/JinLianItem',
   FixedContinueBtn:'~Custom/FixedContinueBtn',
+  HeaderClose:'~Custom/HeaderClose',
+  CCollapse:'~UI/CCollapse',
+  CPopup:'~UI/CPopup',
+  CCollapseItem:'~UI/CCollapseItem',
+
     }
 }
 </config>
