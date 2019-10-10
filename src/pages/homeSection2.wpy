@@ -68,9 +68,9 @@
       <div class="learn">
         <HeaderClose text="填写核心知识点"  @click="show=false"/>
         <div class="body">
-          <CCollapse :value="expandItems" @change="onExpand">
+          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
             <CCollapseItem v-for="item in items4" :key="item.id"
-                           collapse-item="collapse-item"
+                           external-cls="collapse-item"
                            :title="item.text" :name="item.id">
               <div v-for="m in item.items" :key="m.id"
                         :class="{'selected':curSelItem == m.id}"
@@ -130,7 +130,7 @@
       expandItems:[],
       items4:[],
       curSelItem:'',
-      show:false,
+      show:true,
     },
     methods: {
       inputChange(v){
@@ -344,6 +344,17 @@
       }
     }
 
+    .CCollapse{
+      padding: 30rpx 32rpx 0;
+      background:rgba(242,242,242,1);
+      box-sizing: border-box;
+    }
+    .collapse-item{
+      background: #FFF;
+    width:690rpx;
+    height:120rpx;
+      box-sizing: border-box;
+  }
   }
 </style>
 <config>
