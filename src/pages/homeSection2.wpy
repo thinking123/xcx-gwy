@@ -66,7 +66,7 @@
              zIndex="999"
              overlay="{{ true }}">
       <div class="learn">
-        <HeaderClose text="填写核心知识点"  external-cls="header" @click="show=false"/>
+        <HeaderClose text="填写核心知识点"  @click="show=false"/>
         <div class="body">
           <CCollapse :value="expandItems" @change="onExpand">
             <CCollapseItem v-for="item in items4" :key="item.id"
@@ -149,7 +149,7 @@
 
       },
       onClickCLabelRightButton(){
-
+        this.show = true;
       },
       onExpand(exp){
         this.expandItems = exp;

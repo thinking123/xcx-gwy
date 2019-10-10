@@ -33,7 +33,7 @@
 
     },
     computed:{
-      
+
     },
     methods: {
 
@@ -48,7 +48,25 @@
   });
 </script>
 <style lang="scss">
-  @import "~newBase";
+  $white:#FFFFFF;
+  $lineColor:#CCCCCC;
+  $textBlack:#000000;
+  $textBlack1:#333333;
+  $disabledColor:lightgray;
+  $zIndexTop:900;
+  $zIndexMiddle:50;
+
+  $pageBg:#F2F2F2;
+  $pageBgGray:#F5F5F5;
+
+
+  $primaryColor:#4FAC1B;
+  $redColor:#EE4138;
+  $infoColor:#FFFFFF;
+  $textColor:#333333;
+  $textColorGray:#999999;
+  $textColorGray1:#666666;
+
   .ClassCard{
     width:690rpx;
     height:204rpx;
