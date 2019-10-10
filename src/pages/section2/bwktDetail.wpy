@@ -39,10 +39,22 @@
                         :key="item.id"
                         :user="item"
       />
-      <FixedBottomInputTag placeholder="留言评价"  external-cls="FixedBottomInputTag" external-cls-InputTag="InputTag"/>
+      <FixedBottomInputTag placeholder="留言评价"  external-cls="FixedBottomInputTag" external-cls-InputTag="InputTag" @click.native="onShowPoper"/>
     </block>
 
-
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="learn">
+        <HeaderClose text="填写核心知识点"  external-cls="header" @click="show=false"/>
+        <div class="body">
+          <CTextarea :val="commentVal" @change="onChange" placeholder="请填写" total="{{200}}" showLine="{{false}}"/>
+          <CButton text="确认"  @tap.native="onSubmit" external-cls="row"/>
+        </div>
+      </div>
+    </CPopup>
 
   </div>
 </template>
@@ -51,6 +63,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -75,13 +88,18 @@
       icon2:'btn_like@3x',
       items1:[],
       expandItems:[],
-      items2:[]
+      items2:[],
+      show:false,
+      commentVal:''
     },
     methods: {
 
       handleTab({tab ,index}){
         console.log('tab' , tab , index)
         this.selectedTab = index
+        if(index != 2){
+          this.show = false;
+        }
       },
       onBuy(){
         this.buyed = !this.buyed;
@@ -89,13 +107,22 @@
       handleIconBtn(e){
         const type = e.$wx.target.dataset.set;
         if(type == 'edit'){
-
+          navToPage('/pages/section2/mediaSubmitCommentPage')
         }else{
 
         }
       },
       onExpand(exp){
         this.expandItems = exp;
+      },
+      onChange(v){
+        this.commentVal = v;
+      },
+      onShowPoper(){
+        this.show = true;
+      },
+      onSubmit(){
+        this.show = false;
       }
     },
     onShow(){
@@ -201,7 +228,17 @@
     height:80rpx;
     }
 
-
+    .learn{
+      height: 712rpx;
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row{
+          margin-top: 46rpx;
+        }
+      }
+    }
   }
 </style>
 <config>
@@ -213,8 +250,12 @@
   CircleIconButton:'~Custom/CircleIconButton',
   FixedBottomInputTag:'~Custom/FixedBottomInputTag',
   MediaCommentItem:'~Custom/MediaCommentItem',
+  HeaderClose:'~Custom/HeaderClose',
   MediaItem:'~Custom/MediaItem',
   CCollapse:'~UI/CCollapse',
+  CTextarea:'~UI/CTextarea',
+  CButton:'~UI/CButton',
+  CPopup:'~UI/CPopup',
   CCollapseItem:'~UI/CCollapseItem',
     }
 }
