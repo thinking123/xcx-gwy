@@ -1,0 +1,71 @@
+<template>
+    <div class="timuHeader external-cls">
+      <div class="row1">
+        {{day}}
+      </div>
+      <div class="row2" @click="onClick">
+        <image  mode="aspectFit" class="icon" :src="icon"/>
+        <span>
+          笔记
+        </span>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:''
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      day:Number,
+
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      onClick(){
+        this.$emit('edit')
+      }
+    },
+    onLoad () {
+      this.icon = getImgUrlEx(this.icon);
+    }
+  });
+</script>
+<style lang="scss">
+  .timuHeader{
+    width:750rpx;
+    height:100rpx;
+    background:rgba(255,255,255,1);
+    box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
+    padding: 0 30rpx;
+    display: flex;
+    justify-content: space-between;
+
+    font-family:PingFangSC-Semibold,PingFangSC;
+    font-weight:600;
+    color:rgba(79,172,27,1);
+    .row1{
+
+      font-size:28rpx;
+    }
+    .row2{
+      font-size:32rpx;
+      display: flex;
+      align-items: center;
+      >image{
+        margin-right: 20rpx;
+      }
+    }
+  }
+</style>

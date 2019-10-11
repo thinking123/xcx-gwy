@@ -1,0 +1,49 @@
+<template>
+  <div class="page timu">
+    <timuHeader/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+    onShow(){
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .timu{
+      height:auto;
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  timuHeader:'~Custom/timuHeader',
+  }
+  }
+</config>
+

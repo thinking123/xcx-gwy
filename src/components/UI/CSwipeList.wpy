@@ -1,0 +1,40 @@
+<template>
+    <div class="CSwipeList external-cls">
+
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {touch} from '@/mixins/touch';
+
+  wepy.component({
+    data: {
+
+    },
+    mixins:[touch],
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      items:Array,
+      curIndex:Number
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CSwipeList{
+
+  }
+</style>
