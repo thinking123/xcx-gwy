@@ -66,15 +66,17 @@
              zIndex="999"
              overlay="{{ true }}">
       <div class="learn">
-        <HeaderClose text="填写核心知识点"  @click="show=false"/>
+        <HeaderClose text="切换题库"  @click="show=false"/>
         <div class="body">
           <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
             <CCollapseItem v-for="item in items4" :key="item.id"
                            external-cls="collapse-item"
+                           collapse-item="collapse-item-header"
                            :title="item.text" :name="item.id">
               <div v-for="m in item.items" :key="m.id"
                         :class="{'selected':curSelItem == m.id}"
-                         external-cls="collapseItem">
+                        @click="onClickCCollapseItem(m)"
+                         class="collapseItem">
                 {{m.text}}
               </div>
             </CCollapseItem>
@@ -130,7 +132,7 @@
       expandItems:[],
       items4:[],
       curSelItem:'',
-      show:true,
+      show:false,
     },
     methods: {
       inputChange(v){
@@ -154,6 +156,10 @@
       onExpand(exp){
         this.expandItems = exp;
       },
+      onClickCCollapseItem({id}){
+        this.curSelItem = id;
+        this.show = false;
+      }
     },
     onShow(){
 
@@ -325,8 +331,9 @@
       display: flex;
       align-items: center;
       height: 120rpx;
-
+      margin-left: 40rpx;
       position: relative;
+      padding: 0 40rpx;
 
       &.selected{
         color:rgba(79,172,27,1);
@@ -351,10 +358,14 @@
     }
     .collapse-item{
       background: #FFF;
-    width:690rpx;
-    height:120rpx;
+      width:690rpx;
       box-sizing: border-box;
+      margin-bottom: 20rpx;
+      border-radius:8rpx;
   }
+    .collapse-item-header{
+      width: 100% !important;
+    }
   }
 </style>
 <config>
