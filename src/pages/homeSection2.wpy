@@ -84,7 +84,9 @@
         </div>
       </div>
     </CPopup>
-
+    <CDialog :show="showCDialog">
+      <LogicDialog rightRate="{{0.99}}" completedNum="{{100}}" total="{{200}}" @btn="onClickLogicDialog"/>
+    </CDialog>
     <CTabbar/>
 
   </div>
@@ -133,6 +135,7 @@
       items4:[],
       curSelItem:'',
       show:false,
+      showCDialog:true,
     },
     methods: {
       inputChange(v){
@@ -159,6 +162,9 @@
       onClickCCollapseItem({id}){
         this.curSelItem = id;
         this.show = false;
+      },
+      onClickLogicDialog(){
+
       }
     },
     onShow(){
@@ -380,10 +386,12 @@
   ClassCard1:'~Custom/ClassCard1',
   IconText:'~Custom/IconText',
   JinLianItem:'~Custom/JinLianItem',
+  LogicDialog:'~Custom/LogicDialog',
   FixedContinueBtn:'~Custom/FixedContinueBtn',
   HeaderClose:'~Custom/HeaderClose',
   CCollapse:'~UI/CCollapse',
   CPopup:'~UI/CPopup',
+  CDialog:'~UI/CDialog',
   CCollapseItem:'~UI/CCollapseItem',
 
     }

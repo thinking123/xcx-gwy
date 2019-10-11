@@ -1,0 +1,148 @@
+<template>
+    <div class="LogicDialog external-cls">
+      <div class="row1">
+        逻辑填空
+      </div>
+      <div class="row2">
+        共{{total}}题
+      </div>
+      <div class="row3">
+        <div class="col1 circle">
+          <span>
+            {{completedNum}}
+          </span>
+          <span>
+            已答题
+          </span>
+        </div>
+        <div class="col2 circle">
+          <span>
+            {{_rightRate}}
+          </span>
+          <span>
+            正确率
+          </span>
+        </div>
+      </div>
+
+      <CButton text="开始刷题"
+               @tap.native="handleSubmit"
+               external-cls="btn"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      rightRate:Number,
+      completedNum:Number,
+      total:Number,
+    },
+    events: {
+
+    },
+    computed:{
+      _rightRate(){
+        return `${(this.rightRate * 100).toFixed(2)}%`
+      }
+    },
+    methods: {
+      handleSubmit(){
+        thgis.$emit('btn')
+      }
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .LogicDialog{
+    width:630rpx;
+    height:660rpx;
+    background:rgba(255,255,255,1);
+    border-radius:8rpx;
+    padding: 48rpx 40rpx 64rpx;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    .row1{
+      font-size:36rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(51,51,51,1);
+      line-height:44rpx;
+      margin-bottom: 8rpx;
+    }
+    .row2{
+      font-size:24rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+      line-height:32rpx;
+      margin-bottom: 64rpx;
+    }
+    .row3{
+      font-size:48rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      margin-bottom: 64rpx;
+      display: flex;
+      align-items: center;
+      .circle{
+        width:240rpx;
+        height:240rpx;
+        border-radius:120rpx;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .col1{
+        background:linear-gradient(229deg,rgba(55,216,254,0.1) 0%,rgba(29,146,251,0.1) 100%);
+        margin-right: 70rpx;
+        color:rgba(29,146,251,1);
+        >label:last-child{
+          font-size:24rpx;
+          margin-top: 24rpx;
+        }
+      }
+      .col2{
+        background:linear-gradient(225deg,rgba(219,249,99,0.1) 0%,rgba(68,203,69,0.1) 100%);
+        color:rgba(68,203,69,1);
+        >label:last-child{
+          font-size:24rpx;
+          margin-top: 24rpx;
+        }
+      }
+    }
+
+    .btn{
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      color:rgba(255,255,255,1);
+      line-height:36rpx;
+      width:550rpx;
+      height:96rpx;
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CButton:'~UI/CButton',
+  }
+  }
+</config>
+
