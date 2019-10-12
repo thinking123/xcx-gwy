@@ -7,13 +7,19 @@
                 external-cls="CSwipeList"
                 @swipe="onSwipe">
       <div slot="pre" class="item1">
-
+        <TimuItem :timuItem="preItem"
+                  :total="items.length"
+                  :curIndex="curIndex"/>
       </div>
       <div slot="cur" class="item2">
-
+        <TimuItem :timuItem="curItem"
+                  :total="items.length"
+                  :curIndex="curIndex"/>
       </div>
       <div slot="next" class="item3">
-
+        <TimuItem :timuItem="nextItem"
+                  :total="items.length"
+                  :curIndex="curIndex"/>
       </div>
     </CSwipeList>
     <CPopup  :show="show"
@@ -45,7 +51,27 @@
       navigationBarTitleText: ''
     },
     computed: {
+      preItem(){
+        if(this.curIndex > 0){
+          return this.items[this.curIndex];
+        }
 
+        return null;
+      },
+      curItem(){
+        if(this.curIndex >=0 && this.curIndex < this.items.length){
+          return this.items[this.curIndex];
+        }
+
+        return null;
+      },
+      nextItem(){
+        if(this.curIndex < this.items.length - 1){
+          return this.items[this.curIndex];
+        }
+
+        return null;
+      },
     },
     data: {
       isNight:false,
@@ -53,6 +79,7 @@
       show:false,
       showNav:false,
       editText:'',
+      items:[]
     },
     methods: {
       ontimuHeader(v){
@@ -73,12 +100,60 @@
       onSubmit(){
         this.show = false;
       },
+      getTag(index){
+        const arr = ['A' , 'B' , 'C' , 'D']
+        return arr[index];
+      }
     },
     onShow(){
 
     },
     created () {
+      let arr = [];
+      for(let i = 0 ; i < 200 ; i++){
+        const obj = {};
 
+        const comments = [];
+        for(let j = 0 ; j < 10 ; j++){
+          comments.push({
+            header:'',
+            name:'李小萌smile',
+            rate:'3',
+            comment:'哈哈，确实不错，讲的很有逻辑呀！',
+            publishDate:'09-07 12:00',
+            id:j
+          });
+        }
+
+        const items = [];
+        for(let j = 0 ; j < 4 ; j++){
+          items.push({
+            text:'选项内容XXX',
+            status:0,
+            tag:this.getTag(j),
+            error:false,
+          });
+        }
+        const timu = {
+          title:`${i+1}、人际题，领导安排任务，你与小王有矛盾`,
+          items,
+          hadSelected:false
+        }
+
+        const answer = {
+          wrongRate:0.99,
+          wrongreason:'原因内容，后台控制内容',
+          rightRag:'C'
+        }
+
+        arr.push({
+          comments,
+          timu,
+          answer
+        })
+      }
+
+      this.items = arr;
     }
   });
 </script>
@@ -118,6 +193,7 @@
   timuHeader:'~Custom/timuHeader',
   CSwipeList:'~UI/CSwipeList',
   HeaderClose:'~Custom/HeaderClose',
+  TimuItem:'~Custom/TimuItem',
   TimuTip:'~Custom/TimuTip',
   TimuNav:'~Custom/TimuNav',
   CTextarea:'~UI/CTextarea',
