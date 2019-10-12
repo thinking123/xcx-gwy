@@ -10,13 +10,17 @@
         </div>
       </HeaderClose>
       <TimuContent :timu="timuItem.timu" @select="onSelect"
+                   external-cls="TimuContent"
                    :answer="timuItem.answer"
                    :hadSelected="hadSelected"/>
       <block v-if="hadSelected">
-        <TimuAnswer :answer="timuItem.answer" :myTag="myTag"/>
-        <CommentHeader @comment="onComment"/>
+        <TimuAnswer :answer="timuItem.answer" :myTag="myTag"
+                    external-cls="TimuAnswer"
+                    :hadSelected="hadSelected"/>
+        <CommentHeader @comment="onComment" external-cls="CommentHeader"/>
         <MediaCommentItem v-for="item in timuItem.comments"
                           :key="item.id"
+                          external-cls="MediaCommentItem"
                           :user="item"
         />
       </block>
@@ -86,15 +90,32 @@
 
   .TimuItem{
     width:690rpx;
-    background:rgba(255,255,255,1);
     .header{
       width:690rpx;
       height:120rpx;
       box-sizing: border-box;
+      background-color: #FFF;
     }
 
+    .TimuContent{
+      margin-bottom: 32rpx;
+    }
+    .TimuAnswer{
+      margin-bottom: 32rpx;
+    }
+
+    .CommentHeader{
+      left:50%;
+      transform: translateX(-50%);
+      width: 750rpx;
+    }
+    .MediaCommentItem{
+      left:50%;
+      transform: translateX(-50%);
+      width: 750rpx;
+      background-color: #FFF;
+    }
     &--night{
-      background-color: rgba(49,50,51,1);;
       .header{
         color: #FFF;
         background-color: rgba(49,50,51,1);;

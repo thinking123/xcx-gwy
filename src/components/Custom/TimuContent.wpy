@@ -88,6 +88,8 @@
 <style lang="scss">
   .TimuContent--night{
     color: #FFF;
+
+    background-color: rgba(49,50,51,1);;
   }
   .TimuContent{
     width:100%;
@@ -98,7 +100,7 @@
     font-weight:600;
     color:rgba(0,0,0,1);
     line-height:50rpx;
-
+    background:rgba(255,255,255,1);
     &-title{
       margin-bottom:80rpx;
     }
