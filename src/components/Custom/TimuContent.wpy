@@ -3,7 +3,7 @@
       <div class="TimuContent-title">
         {{timu.title}}
       </div>
-      <TimuSelector v-for="(item,index) in timu.items"
+      <TimuSelector v-for="(item,index) in items"
                     :key="index"
                     :item="item"
                     :hadSelected="hadSelected"
@@ -45,6 +45,13 @@
     },
     computed:{
       ...mapGetters(['night']),
+      items(){
+        if(this.timu && this.timu.items){
+          return this.timu.items;
+        }
+
+        return  [];
+      }
     },
     methods: {
       onClickTimuSelector(index){

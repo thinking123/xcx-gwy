@@ -8,8 +8,8 @@
       </div>
 
       <VerticalTextBar :text="text" class="text1" v-else/>
-      <CloseIconBtn @click="handleClose" external-cls="closeText" v-if="showClose"/>
-      <block v-else>
+      <CloseIconBtn @click="handleClose" external-cls="closeText" wx:if="{{close}}"/>
+      <block wx:else>
         <slot/>
       </block>
     </div>
@@ -19,7 +19,7 @@
 
   wepy.component({
     data: {
-
+      close:false
     },
     externalClasses:[
       'external-cls'
@@ -36,7 +36,9 @@
 
     },
     computed:{
-
+      close(){
+        return this.showClose;
+      }
     },
     methods: {
       handleClose(){
