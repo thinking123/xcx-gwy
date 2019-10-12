@@ -81,6 +81,7 @@ wepy.app({
 
 /*
 *
+*
   'pages/section2/mediaSubmitCommentPage',
   'pages/section2/mediaCommentPage',
   'pages/section2/mediaPlayDetail',
@@ -112,7 +113,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/homeSection2',
+  'pages/section2/timu',
     ],
     window: {
       backgroundTextStyle: 'light',

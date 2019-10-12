@@ -1,7 +1,11 @@
 <template>
-    <div class="timuHeader external-cls">
-      <div class="row1">
-        {{day}}
+    <div class="timuHeader external-cls" :class="{'timuHeader--night':isOpen}">
+      <div class="row3" v-if="showSwitch">
+        <span>{{switchText}}</span>
+        <switch checked="{{isOpen}}" @change="onChange" color="#4FAC1B"/>
+      </div>
+      <div class="row1" v-else>
+        {{day}}天
       </div>
       <div class="row2" @click="onClick">
         <image  mode="aspectFit" class="icon" :src="icon"/>
@@ -17,27 +21,33 @@
 
   wepy.component({
     data: {
-      icon:''
+      icon:'btn_edit@3x'
     },
     externalClasses:[
       'external-cls'
     ],
     props:{
       day:Number,
-
+      showSwitch:Boolean,
+      isOpen:Boolean
     },
     events: {
 
     },
     computed:{
-
+      switchText(){
+        return this.isOpen ? "夜间模式" : "白天模式";
+      }
     },
     methods: {
       onClick(){
         this.$emit('edit')
+      },
+      onChange(){
+        this.$emit('change' , !this.isOpen);
       }
     },
-    onLoad () {
+    created () {
       this.icon = getImgUrlEx(this.icon);
     }
   });
@@ -51,12 +61,15 @@
     padding: 0 30rpx;
     display: flex;
     justify-content: space-between;
-
+    box-sizing: border-box;
     font-family:PingFangSC-Semibold,PingFangSC;
     font-weight:600;
     color:rgba(79,172,27,1);
+    transition: all 0.3s;
     .row1{
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size:28rpx;
     }
     .row2{
@@ -64,8 +77,32 @@
       display: flex;
       align-items: center;
       >image{
+        width:48rpx;
+        height:48rpx;
         margin-right: 20rpx;
       }
+    }
+
+    .row3{
+      display: flex;
+      font-size:32rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      color:rgba(79,172,27,1);
+      align-items: center;
+
+      >label{
+        margin-right: 16rpx;
+      }
+
+      switch{
+        width:120rpx;
+        height:64rpx;
+      }
+    }
+
+    &--night{
+      background-color: #313233;
     }
   }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div class="page timu">
-    <timuHeader/>
+    <timuHeader showSwitch="{{false}}"
+                @edit="onEdit"
+                @change="ontimuHeader" :isOpen="isNight" day="{{50}}"/>
   </div>
 </template>
 
@@ -17,10 +19,15 @@
 
     },
     data: {
-
+      isNight:false
     },
     methods: {
+      ontimuHeader(v){
+        this.isNight = v;
+      },
+      onEdit(){
 
+      }
     },
     onShow(){
 
