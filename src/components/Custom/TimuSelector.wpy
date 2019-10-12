@@ -56,7 +56,7 @@
 
     },
     created () {
-      this.icon1 = getImgUrl(this.icon1);
+      this.icon1 = getImgUrlEx(this.icon1);
     }
   });
 </script>

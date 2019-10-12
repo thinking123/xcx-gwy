@@ -6,17 +6,17 @@
     <CSwipeList total="{{10}}" :curIndex="curIndex"
                 external-cls="CSwipeList"
                 @swipe="onSwipe">
-      <div slot="pre" class="item1">
+      <div slot="pre" class="item1" v-if="preItem">
         <TimuItem :timuItem="preItem"
                   :total="items.length"
                   :curIndex="curIndex"/>
       </div>
-      <div slot="cur" class="item2">
+      <div slot="cur" class="item2" v-if="curItem">
         <TimuItem :timuItem="curItem"
                   :total="items.length"
                   :curIndex="curIndex"/>
       </div>
-      <div slot="next" class="item3">
+      <div slot="next" class="item3" v-if="nextItem">
         <TimuItem :timuItem="nextItem"
                   :total="items.length"
                   :curIndex="curIndex"/>
