@@ -9,13 +9,13 @@
       <div class="CSwipeList-wrap"
            style="width:{{wrapWidth}};transform:translateX({{tsx}}px);transition:{{tst}};"
       >
-        <div class="pre CSwipeList-wrap-item">
+        <div class="pre CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
           <slot name="pre"/>
         </div>
-        <div class="cur CSwipeList-wrap-item">
+        <div class="cur CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
           <slot name="cur"/>
         </div>
-        <div class="next CSwipeList-wrap-item">
+        <div class="next CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
           <slot name="next"/>
         </div>
       </div>
@@ -99,12 +99,17 @@
 
         this.swipeLen = -this.windowWidth + this.deltaX;
         this.tsx = this.swipeLen;
+
+        console.log('swipe' , this.swipeLen)
       },
       touchEnd(event){
+        console.log('touchEnd')
+
         if(this.animationing){
           event.preventDefault();
           return;
         }
+        console.log('touchEnd sdf')
         const speed = 300;
         const minSwipe = 0.5;
         const swipeRate = Math.abs(this.deltaX/this.windowWidth);

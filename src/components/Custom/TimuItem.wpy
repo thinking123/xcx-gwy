@@ -9,7 +9,9 @@
           <span>/{{total}}</span>
         </div>
       </HeaderClose>
-      <TimuContent :timu="timuItem.timu" @select="onSelect" :hadSelected="hadSelected"/>
+      <TimuContent :timu="timuItem.timu" @select="onSelect"
+                   :answer="timuItem.answer"
+                   :hadSelected="hadSelected"/>
       <block v-if="hadSelected">
         <TimuAnswer :answer="timuItem.answer" :myTag="myTag"/>
         <CommentHeader @comment="onComment"/>
@@ -80,11 +82,15 @@
   });
 </script>
 <style lang="scss">
-  .TimuItem{
 
+
+  .TimuItem{
+    width:690rpx;
+    background:rgba(255,255,255,1);
     .header{
       width:690rpx;
       height:120rpx;
+      box-sizing: border-box;
     }
 
     &--night{
@@ -110,6 +116,14 @@
         color:rgba(153,153,153,1);
         line-height:44rpx;
       }
+    }
+  }
+
+  .TimuItem--night{
+    background-color: rgba(49,50,51,1);;
+    .header{
+      color: #FFF;
+      background-color: rgba(49,50,51,1);;
     }
   }
 </style>

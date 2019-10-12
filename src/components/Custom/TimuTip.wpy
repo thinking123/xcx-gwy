@@ -38,10 +38,10 @@
     methods: {
       onClick(){
         this.show = false;
-        // wx.setStorage({
-        //   key,
-        //   data:"show"
-        // });
+        wx.setStorage({
+          key,
+          data:"show"
+        });
       }
     },
     created () {

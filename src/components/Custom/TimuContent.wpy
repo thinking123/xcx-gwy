@@ -38,7 +38,15 @@
           rightIndex:-1
         }
       },
-      hadSelected:Boolean
+      hadSelected:Boolean,
+      answer:{
+        type:Object,
+        default:{
+          wrongRate:0,
+          wrongreason:'',
+          rightRag:'',
+        }
+      }
     },
     events: {
 
@@ -57,7 +65,10 @@
       onClickTimuSelector(index){
         if(!this.hadSelected){
           const item = this.timu.items[index];
-          const rightItem = this.timu.items[this.timu.rightIndex];
+          const rightIndex = this.timu.items.findIndex(f=>{
+            return f.tag == this.answer.rightRag;
+          });
+          const rightItem = this.timu.items[rightIndex];
           if(index == this.timu.rightIndex){
             item.status = 1;
           }else{
@@ -79,16 +90,18 @@
     color: #FFF;
   }
   .TimuContent{
-    width:860rpx;
-    height:0px;
+    width:100%;
     padding: 40rpx 30rpx;
-
+    box-sizing: border-box;
     font-size:36rpx;
     font-family:PingFangSC-Semibold,PingFangSC;
     font-weight:600;
     color:rgba(0,0,0,1);
     line-height:50rpx;
 
+    &-title{
+      margin-bottom:80rpx;
+    }
     &--night{
       color: #FFF;
     }
