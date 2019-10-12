@@ -1,40 +1,166 @@
 <template>
-    <div class="CSwipeList external-cls">
-
+    <div class="CSwipeList external-cls"
+         style="width: {{windowWidth}}px;"
+         @touchstart="touchStart"
+         @touchmove="touchMove"
+         @touchcancle="touchEnd"
+         @touchend="touchEnd"
+    >
+      <div class="CSwipeList-wrap"
+           style="width:{{wrapWidth}};transform:translateX({{tsx}}px);transition:{{tst}};"
+      >
+        <div class="pre CSwipeList-wrap-item">
+          <slot name="pre"/>
+        </div>
+        <div class="cur CSwipeList-wrap-item">
+          <slot name="cur"/>
+        </div>
+        <div class="next CSwipeList-wrap-item">
+          <slot name="next"/>
+        </div>
+      </div>
     </div>
 </template>
 <script>
   import wepy from '@wepy/core'
   import {touch} from '@/mixins/touch';
+  import { wx_getSystemInfo } from '@/common/wx';
 
   wepy.component({
     data: {
-
+      windowWidth:'auto',
+      windowHeight:'auto',
+      tsx:0,
+      //transform 0.3s;
+      tst:'',
+      isSwiping:false,
+      animationing:false
     },
-    mixins:[touch],
+    // mixins:[touch],
     externalClasses:[
       'external-cls'
     ],
+    options: {
+      multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
     props:{
       items:Array,
-      curIndex:Number
+      total:Number,
+      curIndex:{
+        type:Number,
+        default:0
+      }
     },
     events: {
 
     },
     computed:{
-
+      wrapWidth(){
+        if(this.curIndex == 0 || this.curIndex == this.total - 1){
+          return this.windowWidth * 3 + 'px';
+        }else{
+          return this.windowWidth * 3 + 'px';
+        }
+      }
     },
     methods: {
+      touchStart(event) {
+        if(this.animationing){
+          event.preventDefault();
+          return;
+        }
+        const touch = event.touches[0];
+        this.direction = '';
+        this.deltaX = 0;
+        this.deltaY = 0;
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.startX = touch.clientX;
+        this.startY = touch.clientY;
+      },
 
+      touchMove(event) {
+        if(this.animationing){
+          event.preventDefault();
+          return;
+        }
+        const touch = event.touches[0];
+        this.deltaX = touch.clientX - this.startX;
+        this.deltaY = touch.clientY - this.startY;
+        this.offsetX = Math.abs(this.deltaX);
+        this.offsetY = Math.abs(this.deltaY);
+        this.direction =
+          this.offsetX > this.offsetY
+            ? 'horizontal'
+            : this.offsetX < this.offsetY
+            ? 'vertical'
+            : '';
+
+
+        this.swipeLen = -this.windowWidth + this.deltaX;
+        this.tsx = this.swipeLen;
+      },
+      touchEnd(event){
+        if(this.animationing){
+          event.preventDefault();
+          return;
+        }
+        const speed = 300;
+        const minSwipe = 0.5;
+        const swipeRate = this.deltaX/this.windowWidth;
+        let swipeDir = 0;
+        if(swipeRate > minSwipe){
+          if(Math.abs(this.swipeLen) > this.windowWidth){
+            if(this.curIndex < this.total - 1){
+              //swipe left
+              this.tsx = -this.windowWidth * 2;
+              swipeDir = 1;
+            }else{
+              this.tsx = -this.windowWidth;
+            }
+
+          }else{
+            if(this.curIndex > 0){
+              this.tsx = 0;
+              swipeDir = -1;
+            }else{
+              this.tsx = -this.windowWidth;
+            }
+          }
+        }else{
+          this.tsx = -this.windowWidth;
+        }
+        this.tst = `transform ${speed}ms`;
+        this.animationing = true;
+        this.animationTimer = setTimeout(()=>{
+          this.tst = '';
+          this.tsx = -this.windowWidth;
+          if(swipeDir != 0){
+            this.$emit("swipe" , this.curIndex + swipeDir);
+          }
+
+          setTimeout(()=>{
+            this.animationing = false;
+          } , 10);
+        } , speed);
+      }
     },
-    onLoad () {
-
+    created () {
+      const {windowWidth , windowHeight} = wx.getSystemInfoSync();
+      this.windowWidth = windowWidth;
+      this.windowHeight = windowHeight;
+      this.tsx = -windowWidth;
     }
   });
 </script>
 <style lang="scss">
   .CSwipeList{
-
+    overflow: hidden;
+    &-wrap{
+      display: flex;
+      &-item{
+        flex:1;
+      }
+    }
   }
 </style>

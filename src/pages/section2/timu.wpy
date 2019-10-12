@@ -3,6 +3,19 @@
     <timuHeader showSwitch="{{false}}"
                 @edit="onEdit"
                 @change="ontimuHeader" :isOpen="isNight" day="{{50}}"/>
+    <CSwipeList total="{{10}}" :curIndex="curIndex"
+                external-cls="CSwipeList"
+                @swipe="onSwipe">
+      <div slot="pre" class="item1">
+
+      </div>
+      <div slot="cur" class="item2">
+
+      </div>
+      <div slot="next" class="item3">
+
+      </div>
+    </CSwipeList>
   </div>
 </template>
 
@@ -19,7 +32,8 @@
 
     },
     data: {
-      isNight:false
+      isNight:false,
+      curIndex:0
     },
     methods: {
       ontimuHeader(v){
@@ -27,6 +41,9 @@
       },
       onEdit(){
 
+      },
+      onSwipe(index){
+        this.curIndex = index;
       }
     },
     onShow(){
@@ -44,12 +61,29 @@
   .timu{
       height:auto;
   }
+  .CSwipeList{
+    height: 300rpx;
+  }
+
+  .item1{
+    background-color: #07c160;
+    height: 500rpx;
+  }
+  .item2{
+    background-color: #1d92fb;
+    height: 500rpx;
+  }
+  .item3{
+    background-color: #8F2A90;
+    height: 500rpx;
+  }
 </style>
 <config>
   {
   navigationBarTitleText: '',
   usingComponents: {
   timuHeader:'~Custom/timuHeader',
+  CSwipeList:'~UI/CSwipeList',
   }
   }
 </config>
