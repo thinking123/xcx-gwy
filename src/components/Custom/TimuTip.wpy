@@ -1,0 +1,87 @@
+<template>
+    <COverlay :show="show" @click="onClick">
+      <div class="TimuTip">
+        <div class="row1">
+          <image :src="icon1" class="icon1" mode="aspectFill"/>
+        </div>
+        <div class="row2">
+          <image :src="icon2" class="icon2" mode="aspectFill"/>
+        </div>
+      </div>
+    </COverlay>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+  const key = "ti-mu-tip";
+  wepy.component({
+    data: {
+      show:true,
+      icon1:'icon_bl_last@3x',
+      icon2:'icon_bl_next@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+
+
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClick(){
+        this.show = false;
+        wx.setStorage({
+          key,
+          data:"show"
+        });
+      }
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon2 = getImgUrlEx(this.icon2);
+      const show = wx.getStorageSync(key);
+      if(show){
+        this.show = false;
+      }
+    }
+  });
+</script>
+<style lang="scss">
+  .TimuTip{
+    font-size:36rpx;
+    font-family:PingFangSCSemibold-,PingFangSCSemibold;
+    font-weight:normal;
+    color:rgba(255,255,255,1);
+    line-height:44rpx;
+    margin: 0 40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 94rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    .row1{
+      >image{
+        width:200rpx;
+        height:72rpx;
+        margin-bottom: 16rrpx;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  COverlay:'~UI/COverlay',
+  }
+  }
+</config>

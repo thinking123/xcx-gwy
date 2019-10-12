@@ -1,0 +1,133 @@
+<template>
+    <div class="TimuItem external-cls" :class="{'TimuItem--night':night}">
+      <HeaderClose :text="title"  external-cls="header"
+                   showClose="{{false}}">
+        <div class="title-text" v-if="showHeaderText">
+          <span>
+            {{curIndex + 1}}
+          </span>
+          <span>/{{total}}</span>
+        </div>
+      </HeaderClose>
+      <TimuContent :timu="timuItem.timu" @select="onSelect" :hadSelected="hadSelected"/>
+      <block v-if="hadSelected">
+        <TimuAnswer :answer="timuItem.answer" :myTag="myTag"/>
+        <CommentHeader @comment="onComment"/>
+        <MediaCommentItem v-for="item in timuItem.comments"
+                          :key="item.id"
+                          :user="item"
+        />
+      </block>
+
+
+
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
+
+  wepy.component({
+    store,
+    data: {
+      hadSelected:false,
+      myTag:''
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      title:{
+        type:String,
+        default:'选择题'
+      },
+      curIndex:Number,
+      total:Number,
+      showHeaderText:{
+        type:Boolean,
+        default: true
+      },
+      timuItem:{
+        type:Object,
+        default:{
+          comments:[],
+          timu:{},
+          answer:{}
+        }
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['night']),
+    },
+    methods: {
+      onComment(){
+
+      },
+
+      onSelect(index){
+        this.hadSelected = true;
+        const item = this.timuItem.timu.items[index];
+        this.myTag = item.tag;
+        const isRight = item.tag == this.timuItem.answer.rightRag;
+        this.$emit('select' , [this.curIndex , index , isRight]);
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .TimuItem{
+
+    .header{
+      width:690rpx;
+      height:120rpx;
+    }
+
+    &--night{
+      background-color: rgba(49,50,51,1);;
+      .header{
+        color: #FFF;
+        background-color: rgba(49,50,51,1);;
+      }
+    }
+    .title-text{
+      font-size:48rpx;
+      font-family:PingFangSC-Semibold,PingFangSC;
+      font-weight:600;
+      color:rgba(79,172,27,1);
+      line-height:66rpx;
+
+      display: flex;
+      align-items: center;
+      >label:last-child{
+        font-size:32rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(153,153,153,1);
+        line-height:44rpx;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  HeaderClose:'~Custom/HeaderClose',
+  TimuContent:'~Custom/TimuContent',
+  TimuAnswer:'~Custom/TimuAnswer',
+  CommentHeader:'~Custom/CommentHeader',
+  MediaCommentItem:'~Custom/MediaCommentItem',
+  CTextarea:'~UI/CTextarea',
+  CButton:'~UI/CButton',
+  CPopup:'~UI/CPopup',
+  }
+  }
+</config>

@@ -1,0 +1,88 @@
+<template>
+    <div class="CommentHeader external-cls"
+         :class="{'CommentHeader--night':night,}"
+    >
+      <div class="row1">
+        答友评论
+      </div>
+      <div class="row2" @click="onClick">
+        <image :src="icon"  class="icon" mode="aspectFit"/>
+        <span>我要评论</span>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
+
+  wepy.component({
+    store,
+    data: {
+      icon:'btn_comment@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['night']),
+    },
+    methods: {
+      onClick(){
+        this.$emit('comment');
+      }
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon)
+    }
+  });
+</script>
+<style lang="scss">
+  .CommentHeader{
+    width:750rpx;
+    height:120rpx;
+    background:rgba(255,255,255,1);
+    padding: 30rpx 40rpx;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+    &::after{
+      position: absolute;
+      width: 100%;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 0;
+      transform: scaleY(0.5);
+      background:rgba(204,204,204,1);
+    }
+    &--night{
+      background:rgba(98,100,102,1);
+      color:#FFFFFF;
+    }
+    .row2{
+
+      font-size:36rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(79,172,27,1);
+      line-height:44rpx;
+
+      >image{
+        width:46rpx;
+        height:46rpx;
+        margin-right: 20rpx;
+      }
+    }
+  }
+</style>

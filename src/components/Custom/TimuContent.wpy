@@ -1,0 +1,98 @@
+<template>
+    <div class="TimuContent external-cls"  :class="{'TimuContent--night':night}">
+      <div class="TimuContent-title">
+        {{timu.title}}
+      </div>
+      <TimuSelector v-for="(item,index) in timu.items"
+                    :key="index"
+                    :item="item"
+                    :hadSelected="hadSelected"
+                    external-cls="TimuSelector"
+                    @click.native="onClickTimuSelector(index)"
+      />
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
+  wepy.component({
+    store,
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      timu:{
+        type:Object,
+        default:{
+          title:'',
+          items:[
+            {
+
+            }
+          ],
+          rightIndex:-1
+        }
+      },
+      hadSelected:Boolean
+    },
+    events: {
+
+    },
+    computed:{
+      ...mapGetters(['night']),
+    },
+    methods: {
+      onClickTimuSelector(index){
+        if(!this.hadSelected){
+          const item = this.timu.items[index];
+          const rightItem = this.timu.items[this.timu.rightIndex];
+          if(index == this.timu.rightIndex){
+            item.status = 1;
+          }else{
+            rightItem.status = 1;
+            rightItem.error = true;
+            item.status = 2;
+          }
+          this.$emit('select' , index);
+        }
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .TimuContent{
+    width:860rpx;
+    height:0px;
+    padding: 40rpx 30rpx;
+
+    font-size:36rpx;
+    font-family:PingFangSC-Semibold,PingFangSC;
+    font-weight:600;
+    color:rgba(0,0,0,1);
+    line-height:50rpx;
+
+    &.&--night{
+      color: #FFF;
+    }
+    .TimuSelector{
+      margin-top: 80rpx;
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  TimuSelector:'~Custom/TimuSelector'
+  }
+  }
+</config>

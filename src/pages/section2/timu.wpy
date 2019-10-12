@@ -16,6 +16,22 @@
 
       </div>
     </CSwipeList>
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="learn">
+        <HeaderClose text="记笔记"  external-cls="header" @click="show=false"/>
+        <div class="body">
+          <CTextarea :val="editText" @change="onChange" placeholder="请填写您想记录的内容" total="{{200}}" showLine="{{false}}"/>
+          <CButton text="确认"  @tap.native="onSubmit" external-cls="row"/>
+        </div>
+      </div>
+    </CPopup>
+
+    <TimuTip/>
+
   </div>
 </template>
 
@@ -33,18 +49,26 @@
     },
     data: {
       isNight:false,
-      curIndex:0
+      curIndex:0,
+      show:false,
+      editText:'',
     },
     methods: {
       ontimuHeader(v){
         this.isNight = v;
       },
       onEdit(){
-
+        this.show = true;
       },
       onSwipe(index){
         this.curIndex = index;
-      }
+      },
+      onChange(v){
+        this.editText = v;
+      },
+      onSubmit(){
+        this.show = false;
+      },
     },
     onShow(){
 
@@ -62,20 +86,25 @@
       height:auto;
   }
   .CSwipeList{
-    height: 300rpx;
+
   }
 
   .item1{
     background-color: #07c160;
     height: 500rpx;
+    padding: 0 20rpx;
   }
   .item2{
     background-color: #1d92fb;
     height: 500rpx;
+    padding: 0 20rpx;
+    width: 200rpx;
+    margin: 0 auto;
   }
   .item3{
     background-color: #8F2A90;
     height: 500rpx;
+    padding: 0 20rpx;
   }
 </style>
 <config>
@@ -84,6 +113,11 @@
   usingComponents: {
   timuHeader:'~Custom/timuHeader',
   CSwipeList:'~UI/CSwipeList',
+  HeaderClose:'~Custom/HeaderClose',
+  TimuTip:'~Custom/TimuTip',
+  CTextarea:'~UI/CTextarea',
+  CButton:'~UI/CButton',
+  CPopup:'~UI/CPopup',
   }
   }
 </config>

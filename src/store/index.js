@@ -40,7 +40,8 @@ export default new Vuex.Store({
     systemInfo:{},
     showMediaPlay:false,
     isMediaPlaying:false,
-    playMedia:{}
+    playMedia:{},
+    night:false
   },
   mutations: {
     setSystemInfo(state , systemInfo){
@@ -62,6 +63,9 @@ export default new Vuex.Store({
     setToken(state , token){
       console.log('token' , token)
       state.token = token
+    },
+    setNight(state , night){
+      state.night = night
     },
     pushQueue(state , url){
       state.queue.push(url);
@@ -94,6 +98,9 @@ export default new Vuex.Store({
     },
     playMedia(state){
       return state.playMedia;
+    },
+    night(state){
+      return state.night;
     }
   },
   actions: {

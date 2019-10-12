@@ -8,7 +8,10 @@
       </div>
 
       <VerticalTextBar :text="text" class="text1" v-else/>
-      <CloseIconBtn @click="handleClose" external-cls="closeText"/>
+      <CloseIconBtn @click="handleClose" external-cls="closeText" v-if="showClose"/>
+      <block v-else>
+        <slot/>
+      </block>
     </div>
 </template>
 <script>
@@ -23,7 +26,11 @@
     ],
     props:{
       text:String,
-      icon:String
+      icon:String,
+      showClose:{
+        type:Boolean,
+        default:true
+      }
     },
     events: {
 

@@ -107,8 +107,9 @@
         }
         const speed = 300;
         const minSwipe = 0.5;
-        const swipeRate = this.deltaX/this.windowWidth;
+        const swipeRate = Math.abs(this.deltaX/this.windowWidth);
         let swipeDir = 0;
+        console.log('swipeRate' , swipeRate)
         if(swipeRate > minSwipe){
           if(Math.abs(this.swipeLen) > this.windowWidth){
             if(this.curIndex < this.total - 1){
@@ -155,7 +156,7 @@
 </script>
 <style lang="scss">
   .CSwipeList{
-    overflow: hidden;
+    overflow-x: hidden;
     &-wrap{
       display: flex;
       &-item{
