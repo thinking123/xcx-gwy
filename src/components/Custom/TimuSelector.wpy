@@ -61,6 +61,8 @@
   });
 </script>
 <style lang="scss">
+
+
   .TimuSelector{
     font-size:36rpx;
     font-family:PingFang-SC-Regular,PingFang-SC;
@@ -70,8 +72,17 @@
     display: flex;
     justify-content: space-between;
     height: 80rpx;
-    &.&--night{
 
+
+    &-wrap--night{
+      background:rgba(98,100,102,1);
+      color:rgba(238,65,56,1);
+    }
+    &-wrap--wrong{
+      background:rgba(238,65,56,1);
+    }
+    &-wrap--right{
+      ackground:#4FAC1B;
     }
     &-wrap{
       position: relative;
@@ -85,16 +96,6 @@
       color:rgba(255,255,255,1);
       line-height:56rpx;
       background:rgba(222,222,222,1);
-      &.&--night{
-        background:rgba(98,100,102,1);
-        color:rgba(238,65,56,1);
-      }
-      &.&--wrong{
-        background:rgba(238,65,56,1);
-      }
-      &.&--right{
-        background:#4FAC1B;
-      }
 
 
       .icon{

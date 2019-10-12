@@ -170,15 +170,11 @@
 
   .item1{
     background-color: #07c160;
-    height: 500rpx;
     padding: 0 20rpx;
   }
   .item2{
     background-color: #1d92fb;
-    height: 500rpx;
-    padding: 0 20rpx;
     width: 200rpx;
-    margin: 0 auto;
   }
   .item3{
     background-color: #8F2A90;

@@ -83,11 +83,12 @@
   });
 </script>
 <style lang="scss">
+  .TimuAnswer--wrong{
+    background:rgba(247,211,211,1);
+  }
   .TimuAnswer{
 
-    &.&--wrong{
-      background:rgba(247,211,211,1);
-    }
+
     .row1{
       width:690rpx;
       height:140rpx;

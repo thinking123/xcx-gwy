@@ -68,6 +68,9 @@
   });
 </script>
 <style lang="scss">
+  .TimuContent--night{
+    color: #FFF;
+  }
   .TimuContent{
     width:860rpx;
     height:0px;
@@ -79,7 +82,7 @@
     color:rgba(0,0,0,1);
     line-height:50rpx;
 
-    &.&--night{
+    &--night{
       color: #FFF;
     }
     .TimuSelector{
