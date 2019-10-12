@@ -1,11 +1,13 @@
 <template>
-    <COverlay :show="show" @click="onClick">
+    <COverlay :show="show" @click="onClick" duration="{{300}}">
       <div class="TimuTip">
         <div class="row1">
           <image :src="icon1" class="icon1" mode="aspectFill"/>
+<!--          <span>上一题</span>-->
         </div>
         <div class="row2">
           <image :src="icon2" class="icon2" mode="aspectFill"/>
+<!--          <span>下一题</span>-->
         </div>
       </div>
     </COverlay>
@@ -36,10 +38,10 @@
     methods: {
       onClick(){
         this.show = false;
-        wx.setStorage({
-          key,
-          data:"show"
-        });
+        // wx.setStorage({
+        //   key,
+        //   data:"show"
+        // });
       }
     },
     created () {
@@ -54,24 +56,18 @@
 </script>
 <style lang="scss">
   .TimuTip{
-    font-size:36rpx;
-    font-family:PingFangSCSemibold-,PingFangSCSemibold;
-    font-weight:normal;
-    color:rgba(255,255,255,1);
-    line-height:44rpx;
-    margin: 0 40rpx;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     position: absolute;
     bottom: 94rpx;
     left: 50%;
     transform: translateX(-50%);
-    .row1{
+    .row1, .row2{
       >image{
         width:200rpx;
-        height:72rpx;
-        margin-bottom: 16rrpx;
+        height:132rpx;
       }
     }
   }
