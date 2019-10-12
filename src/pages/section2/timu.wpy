@@ -10,18 +10,24 @@
                 v-if="preItem"
                 :total="items.length"
                 slot="pre"
+                @select="onSelect"
+                :hadSelected="preItem.hadSelected"
                 external-cls="TimuItem"
                 :curIndex="curIndex"/>
       <TimuItem :timuItem="curItem"
                 :total="items.length"
                 slot="cur"
                 v-if="curItem"
+                @select="onSelect"
+                :hadSelected="curItem.hadSelected"
                 external-cls="TimuItem"
                 :curIndex="curIndex"/>
       <TimuItem :timuItem="nextItem"
                 :total="items.length"
                 slot="next"
                 v-if="nextItem"
+                @select="onSelect"
+                :hadSelected="nextItem.hadSelected"
                 external-cls="TimuItem"
                 :curIndex="curIndex"/>
     </CSwipeList>
@@ -75,7 +81,7 @@
         }
 
         return null;
-      },
+      }
     },
     data: {
       isNight:false,
@@ -107,6 +113,12 @@
       getTag(index){
         const arr = ['A' , 'B' , 'C' , 'D']
         return arr[index];
+      },
+      onSelect(curIndex){
+        const item = this.items[curIndex];
+        item.hadSelected = true;
+        this.items[curIndex] = item;
+        this.items = [...this.items];
       }
     },
     onShow(){

@@ -1,6 +1,6 @@
 <template>
-    <div class="TimuAnswer external-cls" :class="{'TimuAnswer--wrong':isWrong}">
-        <div class="row1">
+    <div class="TimuAnswer external-cls" >
+        <div class="row1" :class="{'TimuAnswer--wrong':isWrong}">
           <div class="col1">
             <span >
               正确答案
@@ -65,7 +65,7 @@
     computed:{
       isWrong(){
         if(this.myTag){
-          return this.myTag != tis.answer.rightRag;
+          return this.myTag != this.answer.rightRag;
         }
 
         return false;
@@ -84,7 +84,7 @@
 </script>
 <style lang="scss">
   .TimuAnswer--wrong{
-    background:rgba(247,211,211,1);
+    background:rgba(247,211,211,1) !important;
   }
   .TimuAnswer{
 
@@ -166,7 +166,7 @@
       font-weight:500;
       color:rgba(102,102,102,1);
       line-height:40rpx;
-
+      background-color: #FFF;
       padding: 32rpx 40rpx;
       box-sizing: border-box;
       .col2{

@@ -66,7 +66,7 @@
     methods: {
       touchStart(event) {
         if(this.animationing){
-          event.preventDefault();
+          // event.preventDefault();
           return;
         }
         const touch = event.touches[0];
@@ -81,7 +81,7 @@
 
       touchMove(event) {
         if(this.animationing){
-          event.preventDefault();
+          // event.preventDefault();
           return;
         }
         const touch = event.touches[0];
@@ -106,7 +106,7 @@
         console.log('touchEnd')
 
         if(this.animationing){
-          event.preventDefault();
+          // event.preventDefault();
           return;
         }
         console.log('touchEnd sdf')

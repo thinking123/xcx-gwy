@@ -35,7 +35,7 @@
   wepy.component({
     store,
     data: {
-      hadSelected:false,
+
       myTag:''
     },
     externalClasses:[
@@ -57,8 +57,18 @@
         default:{
           comments:[],
           timu:{},
-          answer:{}
+          answer:{},
+          hadSelected:false
         }
+      },
+      hadSelected:false,
+    },
+    watch:{
+      curIndex(v){
+        // this.hadSelected = false;
+      },
+      hadSelected(v){
+        console.log('hadSelected : ' , v)
       }
     },
     events: {
@@ -73,11 +83,10 @@
       },
 
       onSelect(index){
-        this.hadSelected = true;
         const item = this.timuItem.timu.items[index];
         this.myTag = item.tag;
         const isRight = item.tag == this.timuItem.answer.rightRag;
-        this.$emit('select' , [this.curIndex , index , isRight]);
+        this.$emit('select' , this.curIndex);
       }
     },
     created () {

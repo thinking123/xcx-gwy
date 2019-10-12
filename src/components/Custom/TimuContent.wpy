@@ -69,7 +69,7 @@
             return f.tag == this.answer.rightRag;
           });
           const rightItem = this.timu.items[rightIndex];
-          if(index == this.timu.rightIndex){
+          if(index == rightIndex){
             item.status = 1;
           }else{
             rightItem.status = 1;

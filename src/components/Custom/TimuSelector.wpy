@@ -74,14 +74,14 @@
 
 
     &-wrap--night{
-      background:rgba(98,100,102,1);
-      color:rgba(238,65,56,1);
+      background:rgba(98,100,102,1) !important;
+      color:rgba(238,65,56,1) !important;
     }
     &-wrap--wrong{
-      background:rgba(238,65,56,1);
+      background:rgba(238,65,56,1) !important;
     }
     &-wrap--right{
-      ackground:#4FAC1B;
+      background:#4FAC1B !important;
     }
     &-wrap{
       position: relative;
