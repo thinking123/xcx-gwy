@@ -89,12 +89,17 @@
         this.deltaY = touch.clientY - this.startY;
         this.offsetX = Math.abs(this.deltaX);
         this.offsetY = Math.abs(this.deltaY);
+        if(this.direction == 'vertical'){
+          return;
+        }
         this.direction =
           this.offsetX > this.offsetY
             ? 'horizontal'
             : this.offsetX < this.offsetY
             ? 'vertical'
             : '';
+
+
 
 
         this.swipeLen = -this.windowWidth + this.deltaX;
@@ -107,6 +112,10 @@
 
         if(this.animationing){
           // event.preventDefault();
+          return;
+        }
+
+        if(this.direction == 'vertical'){
           return;
         }
         console.log('touchEnd sdf')
