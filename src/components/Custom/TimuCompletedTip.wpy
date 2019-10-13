@@ -55,9 +55,6 @@
       drawBg(){
         const c = this.ctx;
         const {x,y , r, startP,endP} = this.getCenter();
-        // const {...obj} = this.getCenter();
-        console.log('center' , x,y , r, startP,endP)
-        // c.moveTo(x , y);
         c.setGlobalAlpha(0.2);
         c.beginPath();
         this.ctx.setLineCap('round')
@@ -67,10 +64,7 @@
         c.stroke();
       },
       drawPg(){
-        if(this.drawed >= this.rightRate){
-          return;
-        }
-        this.drawBg();
+
         const c = this.ctx;
         const {x,y , r, startP,endP,step} = this.getCenter();
         const totalP = (endP - startP);
@@ -84,10 +78,26 @@
         c.arc(x, y, r, startP, end);
         c.stroke();
 
-        c.draw();
+
         this.drawed = drawed;
-        console.log('draw:' , drawed , ', p :' , end , 'rated : ')
+        this.drawBg();
+        this.drawText(drawed);
+        c.draw();
+        if(this.drawed > this.rightRate){
+          return;
+        }
         this.requestAnimationFrame(this.drawPg.bind(this));
+      },
+      drawText(drawed){
+        const {x,y} = this.getCenter();
+        this.ctx.setGlobalAlpha(1);
+        this.ctx.textAlign = 'center';
+        // this.ctx.font = `${this.fontSize}px`;
+        this.ctx.setFillStyle('#FFF');
+        this.ctx.setFontSize(this.rpxTopx(48));
+        this.ctx.textBaseline = 'middle';
+        const text = (drawed * 100).toFixed(0);
+        this.ctx.fillText(`${text}%`, x, y);
       },
       draw(){
         // const ctx = this.ctx;
