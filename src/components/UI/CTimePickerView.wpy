@@ -44,9 +44,8 @@
 
       bindChange(e){
         console.log(e)
-        const time = e.$wx.detail.value;
-        const v = [this.hours[time[0]] , this.mins[time[1]]]
-        this.$emit("change" , v)
+        this.val = e.$wx.detail.value;
+
       }
     },
     onLoad () {

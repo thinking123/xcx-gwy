@@ -1,0 +1,209 @@
+<template>
+    <div class="bijiben external-cls">
+      <div class="row1">
+        <div class="col1">
+          {{text}}
+        </div>
+        <div class="col2" @click="onFilter">
+          筛选
+        </div>
+      </div>
+
+      <div class="row2">
+        <BijiItem  v-for="item in items" :biji="item"
+                   :key="item.id"
+                   external-cls="BijiItem"/>
+      </div>
+
+      <CPopup  :show="show"
+               position="bottom"
+               @close="show=false"
+               zIndex="999"
+               overlay="{{ true }}">
+        <div class="filter">
+          <HeaderClose text="筛选"  @click="show=false"/>
+
+          <div class="body">
+            <picker-view indicator-class="indicatorCls"
+                         style="width: 630rpx; height:602rpx;"
+                         value="{{val}}" bindchange="bindChange">
+              <picker-view-column>
+                <view wx:for="{{items1}}"
+                      class="item">{{item.text}}</view>
+              </picker-view-column>
+            </picker-view>
+
+            <CButton text="确认"  @tap.native="onSubmit"
+                     external-cls="btn"/>
+          </div>
+
+        </div>
+      </CPopup>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    data: {
+      total:2,
+      items:[],
+      show:false,
+      items1:[],
+      sel:-1,
+      val:[0]
+    },
+    computed:{
+      text(){
+        return `共${this.total}题，${this.total}条笔记`;
+      }
+    },
+    methods: {
+      onFilter(){
+        this.show = true;
+      },
+      onSubmit(){
+        this.show = false;
+
+      },
+      onPickerChange(){
+
+      },
+      bindChange(e){
+
+        const time = e.$wx.detail.value;
+
+        console.log( ' t' , time)
+        // const v = time[0];
+        // this.$emit("change" , v)
+      }
+    },
+    created () {
+      let arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          index:i + 1,
+          id:i,
+          title:'数量关系 > 数学关系 > 数列问题',
+          text:'题不难，就是太费时间算了，想节约时间少算',
+          publishDate:'1小时前',
+        })
+      }
+      this.items = arr;
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          id:i,
+          text:`数量关系${i}`,
+
+        })
+      }
+      this.items1 = arr;
+    }
+  });
+</script>
+<style lang="scss">
+
+
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .bijiben{
+
+
+    .row1{
+
+      width:750rpx;
+      height:100rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
+      padding: 30rpx 0 30rpx 40rpx;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .col1{
+        font-size:28rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(51,51,51,1);
+        line-height:40rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .col2{
+        font-size:32rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(79,172,27,1);
+        line-height:32rpx;
+        padding: 0 40rpx;
+        margin-right: 40rpx;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .row2{
+    padding-top: 30rpx;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .BijiItem{
+      margin-bottom: 20rpx;
+    }
+  }
+
+  .filter{
+    height: 880rpx;
+    .body{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .indicatorCls{
+        font-weight:400;
+        height: 124rpx !important;
+        color: #4FAC1B;
+        border-color: #4FAC1B;
+      }
+    }
+
+    .item{
+      font-size:36rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+
+    .btn{
+      width:690rpx;
+      height:96rpx;
+    }
+
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '笔记本',
+  usingComponents: {
+  BijiItem:'~Custom/BijiItem',
+
+  CButton:'~UI/CButton',
+  HeaderClose:'~Custom/HeaderClose',
+  CPopup:'~UI/CPopup',
+  }
+  }
+</config>
+

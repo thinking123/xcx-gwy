@@ -115,7 +115,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section2/timu',
+  'pages/section2/bijiben',
 
     ],
     window: {

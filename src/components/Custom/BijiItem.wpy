@@ -1,0 +1,99 @@
+<template>
+    <div class="BijiItem external-cls">
+      <CircleText external-cls="row1" :text="biji.index"/>
+      <div class="row2">
+        <div class="col1">
+          <span>{{biji.title}}</span>
+        </div>
+        <div class="col2">
+          {{biji.text}}
+        </div>
+        <div class="col3">
+          {{biji.publishDate}}
+        </div>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      biji:{
+        type:Object,
+        default:{}
+      },
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .BijiItem{
+    padding: 40rpx 30rpx;
+    width:690rpx;
+    background:rgba(255,255,255,1);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    .row1{
+      width:64rpx;
+      height:64rpx;
+      font-size:28rpx;
+      margin-right: 30rpx;
+    }
+
+    .row2{
+      display: flex;
+      flex-direction: column;
+      flex:1;
+      font-size:28rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+      line-height:36rpx;
+
+      .col1{
+        margin-bottom: 24rpx;
+      }
+
+      .col2{
+        font-size:36rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(0,0,0,1);
+        line-height:50rpx;
+        margin-bottom: 24rpx;
+      }
+
+      .col3{
+        text-align: right;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CircleText:'~Custom/CircleText',
+  }
+  }
+</config>
