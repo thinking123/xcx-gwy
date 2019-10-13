@@ -8,7 +8,8 @@
                     :item="item"
                     :hadSelected="hadSelected"
                     external-cls="TimuSelector"
-                    @click.native="onClickTimuSelector(index)"
+                    data-index="{{index}}"
+                    catchtouchstart="onClickTimuSelector"
       />
     </div>
 </template>
@@ -62,7 +63,8 @@
       }
     },
     methods: {
-      onClickTimuSelector(index){
+      onClickTimuSelector(e){
+        const index = e.$wx.target.dataset.index;
         if(!this.hadSelected){
           const item = this.timu.items[index];
           const rightIndex = this.timu.items.findIndex(f=>{

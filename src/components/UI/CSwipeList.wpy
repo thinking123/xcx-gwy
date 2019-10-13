@@ -2,6 +2,8 @@
     <div class="CSwipeList external-cls"
          style="width: {{windowWidth}}px;"
          @touchstart="touchStart"
+         catchtouchmove="{{ catchMove ? 'noop' : '' }}"
+         capture-bind:touchmove="touchMove"
          @touchmove="touchMove"
          @touchcancle="touchEnd"
          @touchend="touchEnd"
@@ -34,7 +36,8 @@
       //transform 0.3s;
       tst:'',
       isSwiping:false,
-      animationing:false
+      animationing:false,
+      catchMove:false
     },
     // mixins:[touch],
     externalClasses:[
@@ -64,6 +67,9 @@
       }
     },
     methods: {
+      noop() {
+        console.log('noop' )
+      },
       touchStart(event) {
         if(this.animationing){
           // event.preventDefault();
@@ -77,6 +83,7 @@
         this.offsetY = 0;
         this.startX = touch.clientX;
         this.startY = touch.clientY;
+        this.firstDirection = '';
       },
 
       touchMove(event) {
@@ -89,9 +96,6 @@
         this.deltaY = touch.clientY - this.startY;
         this.offsetX = Math.abs(this.deltaX);
         this.offsetY = Math.abs(this.deltaY);
-        if(this.direction == 'vertical'){
-          return;
-        }
         this.direction =
           this.offsetX > this.offsetY
             ? 'horizontal'
@@ -99,26 +103,28 @@
             ? 'vertical'
             : '';
 
-
-
+        if(! this.firstDirection){
+          this.firstDirection = this.direction;
+          this.catchMove = this.direction == 'horizontal';
+          console.log('catchMove' ,this.catchMove )
+        }
+        if(this.firstDirection == 'vertical'){
+          return;
+        }
 
         this.swipeLen = -this.windowWidth + this.deltaX;
         this.tsx = this.swipeLen;
 
-        console.log('swipe' , this.swipeLen)
+        // console.log('swipe' , this.swipeLen)
       },
       touchEnd(event){
-        console.log('touchEnd')
 
         if(this.animationing){
           // event.preventDefault();
           return;
         }
 
-        if(this.direction == 'vertical'){
-          return;
-        }
-        console.log('touchEnd sdf')
+        console.log('touchEnd')
         const speed = 300;
         const minSwipe = 0.5;
         const swipeRate = Math.abs(this.deltaX/this.windowWidth);
@@ -145,7 +151,8 @@
         }else{
           this.tsx = -this.windowWidth;
         }
-        this.tst = `transform ${speed}ms`;
+        this.tst = `transform ${speed}ms cubic-bezier(0.18, 0.89, 0.32, 1)`;
+        console.log('tsx , end' , this.tsx)
         this.animationing = true;
         this.animationTimer = setTimeout(()=>{
           this.tst = '';
@@ -156,6 +163,7 @@
 
           setTimeout(()=>{
             this.animationing = false;
+            this.catchMove = false;
           } , 10);
         } , speed);
       }
