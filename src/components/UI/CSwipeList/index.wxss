@@ -1,0 +1,11 @@
+.CSwipeList {
+  overflow-x: hidden;
+}
+
+.CSwipeList-wrap {
+  display: flex;
+}
+
+.CSwipeList-wrap-item {
+  flex: 1;
+}

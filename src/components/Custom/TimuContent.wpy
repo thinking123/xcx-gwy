@@ -9,7 +9,10 @@
                     :hadSelected="hadSelected"
                     external-cls="TimuSelector"
                     data-index="{{index}}"
-                    catchtouchstart="onClickTimuSelector"
+                    catchtouchstart="{{catchMove ? noop : ''}}"
+                    catchtouchmove="{{catchMove ? noop : ''}}"
+                    catchtouchend="{{catchMove ? noop : ''}}"
+                    capture-bind:touchstart="onClickTimuSelector"
       />
     </div>
 </template>
@@ -21,10 +24,10 @@
   wepy.component({
     store,
     data: {
-
+      catchMove:false
     },
     externalClasses:[
-      'external-cls'
+      'external-cls',
     ],
     props:{
       timu:{
@@ -63,9 +66,15 @@
       }
     },
     methods: {
+      noop(){
+        console.log('noop iin timucomtnet')
+      },
       onClickTimuSelector(e){
+
         const index = e.$wx.target.dataset.index;
+        console.log('click')
         if(!this.hadSelected){
+          this.catchMove = true;
           const item = this.timu.items[index];
           const rightIndex = this.timu.items.findIndex(f=>{
             return f.tag == this.answer.rightRag;
@@ -78,7 +87,8 @@
             rightItem.error = true;
             item.status = 2;
           }
-          this.$emit('select' , index);
+          this.$emit('select' , {index , item});
+          this.catchMove = false;
         }
       }
     },

@@ -114,6 +114,7 @@ wepy.app({
 {
     pages: [
   'pages/section2/timu',
+  'pages/section2/mediaSubmitCommentPage',
     ],
     window: {
       backgroundTextStyle: 'light',

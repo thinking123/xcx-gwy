@@ -1,0 +1,22 @@
+<view class="CSwipeList external-cls"
+      style="width: {{windowWidth}}px;"
+      bindtouchstart="touchStart"
+      catchtouchmove="{{ catchMove ? 'noop' : '' }}"
+      capture-bind:touchmove="touchMove"
+      bindtouchcancle="touchEnd"
+      bindtouchend="touchEnd"
+>
+  <view class="CSwipeList-wrap"
+        style="width:{{wrapWidth}};transform:translateX({{tsx}}px);transition:{{tst}};"
+  >
+    <view class="pre CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
+      <slot name="pre"/>
+    </view>
+    <view class="cur CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
+      <slot name="cur"/>
+    </view>
+    <view class="next CSwipeList-wrap-item" style="width: {{windowWidth}}px;">
+      <slot name="next"/>
+    </view>
+  </view>
+</view>

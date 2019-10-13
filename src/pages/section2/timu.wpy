@@ -3,7 +3,7 @@
     <timuHeader showSwitch="{{false}}"
                 @edit="onEdit"
                 @change="ontimuHeader" :isOpen="isNight" day="{{50}}"/>
-    <CSwipeList total="{{10}}" :curIndex="curIndex"
+    <CSwipeList total="{{items.length}}" :curIndex="curIndex"
                 external-cls="CSwipeList"
                 @swipe="onSwipe">
       <TimuItem :timuItem="preItem"
@@ -13,6 +13,7 @@
                 @select="onSelect"
                 :hadSelected="preItem.hadSelected"
                 external-cls="TimuItem"
+                :index="preIndex"
                 :curIndex="curIndex"/>
       <TimuItem :timuItem="curItem"
                 :total="items.length"
@@ -21,6 +22,7 @@
                 @select="onSelect"
                 :hadSelected="curItem.hadSelected"
                 external-cls="TimuItem"
+                :index="curIndex"
                 :curIndex="curIndex"/>
       <TimuItem :timuItem="nextItem"
                 :total="items.length"
@@ -29,6 +31,7 @@
                 @select="onSelect"
                 :hadSelected="nextItem.hadSelected"
                 external-cls="TimuItem"
+                :index="nextIndex"
                 :curIndex="curIndex"/>
     </CSwipeList>
     <CPopup  :show="show"
@@ -46,7 +49,7 @@
     </CPopup>
 
     <TimuTip/>
-    <TimuNav v-if="showNav" @change="onNav"/>
+    <TimuNav v-if="showNav" @change="onNav" :total="items.length" :curIndex="curIndex"/>
   </div>
 </template>
 
@@ -81,13 +84,19 @@
         }
 
         return null;
+      },
+      preIndex(){
+        return this.curIndex - 1;
+      },
+      nextIndex(){
+        return this.curIndex + 1;
       }
     },
     data: {
       isNight:false,
       curIndex:0,
       show:false,
-      showNav:false,
+      showNav:true,
       editText:'',
       items:[]
     },
@@ -99,7 +108,7 @@
         this.show = true;
       },
       onSwipe(index){
-        this.curIndex = index;
+        this.curIndex = index.$wx.detail;
       },
       onNav(index){
         this.curIndex = index;
@@ -114,9 +123,10 @@
         const arr = ['A' , 'B' , 'C' , 'D']
         return arr[index];
       },
-      onSelect(curIndex){
+      onSelect({curIndex,index:contentIndex,item:contentItem}){
         const item = this.items[curIndex];
         item.hadSelected = true;
+        item.timu.items[contentIndex] = contentItem;
         this.items[curIndex] = item;
         this.items = [...this.items];
       }
@@ -187,13 +197,25 @@
   .TimuItem{
     margin: 32rpx 30rpx;
   }
+
+  .learn{
+    height: 712rpx;
+    .body{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row{
+        margin-top: 46rpx;
+      }
+    }
+  }
 </style>
 <config>
   {
   navigationBarTitleText: '',
   usingComponents: {
   timuHeader:'~Custom/timuHeader',
-  CSwipeList:'~UI/CSwipeList',
+  CSwipeList:'~UI/CSwipeList/index',
   HeaderClose:'~Custom/HeaderClose',
   TimuItem:'~Custom/TimuItem',
   TimuTip:'~Custom/TimuTip',

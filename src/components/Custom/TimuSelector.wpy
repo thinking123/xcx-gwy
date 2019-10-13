@@ -1,5 +1,7 @@
 <template>
     <div class="TimuSelector external-cls"
+
+         @click="onClick"
          :class="{'TimuSelector--right':status == 1,'TimuSelector--wrong':status == 2,'TimuSelector--night':night,}">
       <div class="TimuSelector-wrap"
            :class="{'TimuSelector-wrap--right':status == 1 && !item.error,'TimuSelector-wrap--wrong':status == 2,'TimuSelector-wrap--night':night}"
@@ -53,7 +55,10 @@
       }
     },
     methods: {
-
+      onClick(){
+        this.$emit('select')
+        console.log('click')
+      }
     },
     created () {
       this.icon1 = getImgUrlEx(this.icon1);
