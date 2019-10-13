@@ -1,0 +1,64 @@
+<template>
+    <div class="RightWrongTip external-cls">
+      <div class="row1">
+        {{num}}
+      </div>
+      <div class="row2 text-size">
+        {{text}}
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls',
+      'text-size'
+    ],
+    props:{
+      text:String,
+      num:String,
+
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .RightWrongTip{
+    width:240rpx;
+    height:240rpx;
+    background:linear-gradient(225deg,rgba(219,249,99,0.1) 0%,rgba(68,203,69,0.1) 100%);
+    border-radius:50%;
+
+    font-size:48rpx;
+    font-family:PingFangSCSemibold-,PingFangSCSemibold;
+    font-weight:normal;
+    color:rgba(68,203,69,1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .row1{
+      margin-bottom: 24rpx;
+    }
+    .row2{
+      font-size:24rpx;
+    }
+
+  }
+</style>

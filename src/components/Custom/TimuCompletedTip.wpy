@@ -8,6 +8,24 @@
 
         </canvas>
       </div>
+      <div class="row2">
+        <div class="col1">
+          本知识点统计
+        </div>
+        <div class="col2">
+          <RightWrongTip text="总正确" :num="rightNum" external-cls="RightWrongTip1"/>
+          <RightWrongTip text="总错误" :num="wrongNum" external-cls="RightWrongTip2"/>
+        </div>
+        <div class="col3">
+          <CButton text="下一节"
+                   @tap.native="onNext"
+                   external-cls="btn1"/>
+          <CButton text="结束刷题"
+                   type="info"
+                   @tap.native="onCompleted"
+                   external-cls="btn2"/>
+        </div>
+      </div>
     </div>
 </template>
 <script>
@@ -36,6 +54,14 @@
       
     },
     methods: {
+      onNext(){
+
+      },
+
+      onCompleted(){
+
+      },
+
       rpxTopx(rpx){
         return this.windowWidth/750 * rpx;
       },
@@ -98,6 +124,16 @@
         this.ctx.textBaseline = 'middle';
         const text = (drawed * 100).toFixed(0);
         this.ctx.fillText(`${text}%`, x, y);
+
+
+        this.ctx.setGlobalAlpha(0.2);
+        this.ctx.textAlign = 'center';
+        // this.ctx.font = `${this.fontSize}px`;
+        this.ctx.setFillStyle('#FFF');
+        this.ctx.setFontSize(this.rpxTopx(32));
+        this.ctx.textBaseline = 'middle';
+
+        this.ctx.fillText('正确率', x, y + this.rpxTopx(56));
       },
       draw(){
         // const ctx = this.ctx;
@@ -143,15 +179,91 @@
 <style lang="scss">
   .TimuCompletedTip{
     .row1{
+      height: 480rpx;
       background:rgba(29,146,251,1);
+      padding-top: 40rpx;
       .col1{
         font-size:32rpx;
         font-family:PingFang-SC-Regular,PingFang-SC;
         font-weight:400;
         color:rgba(255,255,255,1);
         line-height:40rpx;
-        margin: 48rpx 0 96rpx;
+        margin: 0 0 96rpx;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .row2{
+      height: 720rpx;
+      background:#FFF;
+      .col1{
+        font-size:32rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(102,102,102,1);
+
+        margin: 0 40rpx 48rpx;
+        height: 112rpx;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &::after{
+          position: absolute;
+          width: 670rpx;
+          content: '';
+          bottom:0;
+          height: 1px;
+          left: 50%;
+          transform: scaleY(0.5) translateX(-50%);
+          background:rgba(216,216,216,1);
+        }
+      }
+
+      .col2{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 64rpx;
+        .RightWrongTip1{
+          background:linear-gradient(225deg,rgba(219,249,99,0.1) 0%,rgba(68,203,69,0.1) 100%);
+          margin-right: 110rpx;
+        }
+        .RightWrongTip2{
+          color:rgba(254,72,50,1);
+          background:linear-gradient(230deg,rgba(249,187,112,0.1) 0%,rgba(254,72,50,0.1) 100%);
+        }
+      }
+
+      .col3{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom:40rpx;
+        .btn1{
+          width:690rpx;
+          height:96rpx;
+          margin-bottom: 24rpx;
+          font-size:36rpx;
+        }
+        .btn2{
+          width:690rpx;
+          height:96rpx;
+          margin-bottom: 24rpx;
+          font-size:36rpx;
+        }
       }
     }
   }
 </style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  RightWrongTip:'~Custom/RightWrongTip',
+  CButton:'~UI/CButton',
+  }
+  }
+</config>
