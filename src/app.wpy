@@ -115,8 +115,8 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section2/timuCuoti',
   'pages/section2/timu',
+
     ],
     window: {
       backgroundTextStyle: 'light',

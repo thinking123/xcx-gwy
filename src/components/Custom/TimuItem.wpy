@@ -1,6 +1,7 @@
 <template>
     <div class="TimuItem external-cls" :class="{'TimuItem--night':night}">
       <HeaderClose :text="title"  external-cls="header"
+                   external-cls-VerticalTextBar="header-VerticalTextBar"
                    showClose="{{false}}">
         <div class="title-text" v-if="showHeaderText">
           <span>
@@ -97,7 +98,16 @@
   });
 </script>
 <style lang="scss">
+  .TimuItem--night{
+    .header{
+      color: #FFF !important;
+      background-color: rgba(49,50,51,1) !important;
+    }
 
+    .header-VerticalTextBar{
+      color: #FFF !important;
+    }
+  }
 
   .TimuItem{
     width:690rpx;
@@ -126,12 +136,7 @@
       width: 750rpx;
       background-color: #FFF;
     }
-    &--night{
-      .header{
-        color: #FFF;
-        background-color: rgba(49,50,51,1);;
-      }
-    }
+
     .title-text{
       font-size:48rpx;
       font-family:PingFangSC-Semibold,PingFangSC;

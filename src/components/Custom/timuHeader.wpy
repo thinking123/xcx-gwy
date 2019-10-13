@@ -1,8 +1,8 @@
 <template>
-    <div class="timuHeader external-cls" :class="{'timuHeader--night':isOpen}">
+    <div class="timuHeader external-cls" :class="{'timuHeader--night':night}">
       <div class="row3" v-if="showSwitch">
         <span>{{switchText}}</span>
-        <switch checked="{{isOpen}}" @change="onChange" color="#4FAC1B"/>
+        <switch checked="{{night}}" @change="onChange" color="#4FAC1B"/>
       </div>
       <div class="row1" v-else>
         {{day}}天
@@ -17,9 +17,12 @@
 </template>
 <script>
   import wepy from '@wepy/core'
+  import store from 'store';
   import {getImgUrlEx} from '@/common/utils';
+  import { mapGetters, mapMutations} from '@wepy/x';
 
   wepy.component({
+    store,
     data: {
       icon:'btn_edit@3x'
     },
@@ -35,16 +38,19 @@
 
     },
     computed:{
+      ...mapGetters(['night']),
       switchText(){
-        return this.isOpen ? "夜间模式" : "白天模式";
+        return this.night ? "夜间模式" : "白天模式";
       }
     },
     methods: {
+      ...mapMutations(['setNight']),
       onClick(){
         this.$emit('edit')
       },
       onChange(){
-        this.$emit('change' , !this.isOpen);
+        // this.$emit('change' , !this.isOpen);
+        this.setNight(!this.night);
       }
     },
     created () {

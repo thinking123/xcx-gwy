@@ -1,5 +1,5 @@
 <template>
-  <div class="page timu">
+  <div class="page timu" :class="{'timu--night':night}">
     <timuHeader showSwitch="{{cuoti}}"
                 @edit="onEdit"
                 @change="ontimuHeader" :isOpen="isNight" day="{{50}}"/>
@@ -65,6 +65,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { mapGetters} from '@wepy/x';
 
   wepy.page({
     store,
@@ -72,6 +73,7 @@
       navigationBarTitleText: ''
     },
     computed: {
+      ...mapGetters(['night']),
       preItem(){
         if(this.curIndex > 0){
           return this.items[this.curIndex];
@@ -101,8 +103,23 @@
         return this.curIndex + 1;
       }
     },
+    watch:{
+      night(v){
+        if(v){
+          wx.setNavigationBarTitle({
+            navigationBarBackgroundColor: '#222324',
+            navigationBarTextStyle:'white'
+          });
+        }else{
+          wx.setNavigationBarTitle({
+            navigationBarBackgroundColor: '#F2F2F2',
+            navigationBarTextStyle:'black'
+          });
+        }
+      }
+    },
     data: {
-      cuoti:false,
+      cuoti:true,
       isNight:false,
       curIndex:0,
       show:false,
@@ -206,8 +223,14 @@
   page{
     background:rgba(242,242,242,1);
   }
+
+
   .timu{
       height:auto;
+  }
+
+  .timu--night{
+    background:rgba(34,35,36,1) !important;
   }
   .CSwipeList{
 

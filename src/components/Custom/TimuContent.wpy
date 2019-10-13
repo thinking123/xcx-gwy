@@ -99,9 +99,9 @@
 </script>
 <style lang="scss">
   .TimuContent--night{
-    color: #FFF;
+    color: #FFF !important;
 
-    background-color: rgba(49,50,51,1);;
+    background-color: rgba(49,50,51,1) !important;
   }
   .TimuContent{
     width:100%;
