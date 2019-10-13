@@ -7,7 +7,8 @@
       </span>
       </div>
 
-      <VerticalTextBar :text="text" class="text1" v-else/>
+      <VerticalTextBar :text="text" class="text1"
+                       external-cls="VerticalTextBar" v-else />
       <CloseIconBtn @click="handleClose" external-cls="closeText" wx:if="{{close}}"/>
       <block wx:else>
         <slot/>
@@ -23,7 +24,6 @@
     },
     externalClasses:[
       'external-cls',
-      'external-cls-VerticalTextBar',
     ],
     props:{
       text:String,
@@ -79,6 +79,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .VerticalTextBar{
+      color:currentColor !important;
+    }
     .closeText{
       font-size:36rpx;
       font-weight:400;

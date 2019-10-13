@@ -105,17 +105,8 @@
     },
     watch:{
       night(v){
-        if(v){
-          wx.setNavigationBarTitle({
-            navigationBarBackgroundColor: '#222324',
-            navigationBarTextStyle:'white'
-          });
-        }else{
-          wx.setNavigationBarTitle({
-            navigationBarBackgroundColor: '#F2F2F2',
-            navigationBarTextStyle:'black'
-          });
-        }
+        console.log(' night(v) ' , v)
+
       }
     },
     data: {
@@ -130,7 +121,17 @@
     },
     methods: {
       ontimuHeader(v){
-        this.isNight = v;
+        if(v){
+          wx.setNavigationBarColor({
+            backgroundColor: '#222324',
+            frontColor:'#ffffff'
+          });
+        }else{
+          wx.setNavigationBarTitle({
+            backgroundColor: '#F2F2F2',
+            frontColor:'#000000'
+          });
+        }
       },
       onEdit(){
         this.show = true;
@@ -257,7 +258,7 @@
 </style>
 <config>
   {
-  navigationBarTitleText: '',
+  navigationBarTitleText: '逻辑填空',
   usingComponents: {
   timuHeader:'~Custom/timuHeader',
   CSwipeList:'~UI/CSwipeList/index',

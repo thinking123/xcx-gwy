@@ -49,7 +49,7 @@
         this.$emit('edit')
       },
       onChange(){
-        // this.$emit('change' , !this.isOpen);
+        this.$emit('change' ,!this.night);
         this.setNight(!this.night);
       }
     },

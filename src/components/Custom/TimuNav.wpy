@@ -1,6 +1,6 @@
 <template>
     <div class="TimuNav external-cls">
-      <div class="wrap">
+      <div class="wrap" :class="{'night':night}">
 
         <div class="row1" :class="{'disabled':preDisable,'night':night}" @click="onPre">
           <block v-if="preDisable">
@@ -50,11 +50,11 @@
     data: {
       icon1:'btn_last_enable@3x',
       icon2:'btn_last_disable@3x',
-      icon3:'btn_next_white@3x',
+      icon3:'btn_last_white@3x',
 
       icon4:'btn_next_enable@3x',
       icon5:'btn_next_disable@3x',
-      icon6:'btn_last_white@3x',
+      icon6:'btn_next_white@3x',
     },
     externalClasses:[
       'external-cls'
@@ -102,7 +102,13 @@
     width:750rpx;
     height:120rpx;
   }
+
+
   .wrap{
+    &.night{
+      background:rgba(98,100,102,1);
+    }
+
     width:750rpx;
     height:120rpx;
     background:rgba(255,255,255,1);
