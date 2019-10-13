@@ -1,0 +1,158 @@
+<template>
+  <div class="page timuCuoti">
+    <div class="row1">
+      <CircleText :text="selText" external-cls="col1"/>
+      <span class="col2">{{text}}</span>
+      <CircleText :text="item.firstText"
+                  v-for="(item, index) in items1"
+                  :key="index"
+                  @click.native="onCircleText(index)"
+                  type="info"
+                  external-cls="col3"/>
+    </div>
+
+    <div class="row2">
+      <TimuCuotiItem   v-for="(item, index) in items2"
+                       external-cls="TimuCuotiItem"
+                       :cuoti="item"
+                       :key="index"/>
+    </div>
+
+    <FixedBottomCuoti wrongNum="{{5}}" @btn="onBtn"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { navToPage } from '@/common/navUtils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+      selText(){
+        if(this.items1.length > 0){
+          let text = this.items1[this.sel].firstText;
+          return text;
+        }
+
+        return '';
+      },
+      text(){
+        if(this.items1.length > 0){
+          let text = this.items1[this.sel].text;
+          return text;
+        }
+
+        return '';
+      }
+    },
+    data: {
+      items1:[],
+      items2:[],
+      sel:0,
+    },
+    methods: {
+      onCircleText(index){
+        this.sel = index;
+      },
+      onBtn(){
+        const pages = getCurrentPages();
+        console.log('pages' , pages)
+        navToPage('/pages/section2/timu');
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+      let arr = [];
+      for(let i = 0 ; i < 14 ; i++){
+        const text = `${i}省部`;
+
+        const firstText = text ? text.charAt(0) : '';
+        arr.push({
+          text,
+          firstText,
+          id:i
+        });
+      }
+
+      this.items1 = arr;
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        let text = `人际题，领导安排任务，你与小王有矛盾`;
+        text = i % 2 ? text :  `人际题，领导安排任务，你与小王有矛盾,人际题，领导安排任务，你与小王有矛盾，不`;
+
+        const firstText = text ? text.charAt(0) : '';
+        arr.push({
+          firstText:i+1,
+          publishDate:'2小时前',
+          text:text,
+          wrongNum:i+1,
+          id:i
+        });
+      }
+
+      this.items2 = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .timuCuoti{
+    .row1{
+      min-width:750rpx;
+      overflow-x: auto;
+      height:120rpx;
+      padding: 20rpx 38rpx;
+      box-sizing: border-box;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+
+      .col1{
+
+      }
+      .col2{
+        margin: 0 42rpx 0 16rpx;
+        white-space: nowrap;
+
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(79,172,27,1);
+        font-size:32rpx;
+      }
+      .col3{
+        margin-right: 40rpx;
+      }
+    }
+
+    .row2{
+      display: flex;
+      flex-direction: column;
+      padding-top: 30rpx;
+      align-items: center;
+      .TimuCuotiItem{
+        margin-bottom: 20rpx;
+      }
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '高频错题',
+    usingComponents: {
+  CircleText:'~Custom/CircleText',
+  TimuCuotiItem:'~Custom/TimuCuotiItem',
+  FixedBottomCuoti:'~Custom/FixedBottomCuoti',
+    }
+}
+</config>

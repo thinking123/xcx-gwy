@@ -1,0 +1,57 @@
+<template>
+    <div class="CircleText external-cls" :class="{'info':type == 'info','fill':type == 'fill',}">
+      {{text}}
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      text:String,
+      type:{
+        type:String,
+        default:'fill'
+      }
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CircleText{
+    width:80rpx;
+    height:80rpx;
+    border-radius: 50%;
+    font-size:36rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.fill{
+      background:rgba(79,172,27,1);
+      color:rgba(255,255,255,1);
+    }
+    &.info{
+      border:2rpx solid rgba(79,172,27,1);
+      background-color: #FFF;
+      color:rgba(79,172,27,1);
+    }
+
+  }
+</style>

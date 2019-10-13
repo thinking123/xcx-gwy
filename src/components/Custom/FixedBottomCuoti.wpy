@@ -1,0 +1,113 @@
+<template>
+    <div class="FixedBottomCuoti external-cls">
+      <div class="wrap">
+        <div class="row1">
+          <div class="col1">
+            {{wrongNum}}
+          </div>
+          <div class="col2">
+            错题量
+          </div>
+        </div>
+        <CButton text="练习错题"
+                 @tap.native="onClick"
+                 external-cls="row2"/>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      wrongNum:Number
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClick(){
+        this.$emit('btn')
+      }
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .FixedBottomCuoti{
+    width:750rpx;
+    height:160rpx;
+    .wrap{
+      width:750rpx;
+      height:160rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx -4rpx 12rpx 0rpx rgba(0,0,0,0.06);
+      border-radius:16rpx 16rpx 0rpx 0rpx;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      padding: 0 30rpx 0 86rpx;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      .row1{
+        display: flex;
+        flex-direction: column;
+        .col1{
+          width:120rpx;
+          height:80rpx;
+          background:rgba(238,65,56,1);
+          border-radius:0rpx 0rpx 16rpx 16rpx;
+          margin-bottom: 18rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          font-size:40rpx;
+          font-family:PingFang-SC-Regular,PingFang-SC;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+        }
+        .col2{
+          font-size:28rpx;
+          font-family:PingFang-SC-Regular,PingFang-SC;
+          font-weight:400;
+          color:rgba(153,153,153,1);
+          line-height:36rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .row2{
+        width:430rpx;
+        height:96rpx;
+        background:rgba(79,172,27,1);
+        box-shadow:0rpx 8rpx 16rpx -4rpx rgba(79,172,27,0.3);
+        border-radius:48rpx;
+        font-size:36rpx;
+      }
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '高频错题',
+  usingComponents: {
+  CButton:'~UI/CButton',
+  }
+  }
+</config>
