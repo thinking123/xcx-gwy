@@ -47,6 +47,15 @@
         </div>
       </div>
     </CPopup>
+    <CPopup  :show="showCompleted"
+             position="bottom"
+             @close="showCompleted=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="TimuCompletedTip">
+        <TimuCompletedTip rightRate="{{0.5}}" rightNum="{{80}}" wrongNum="{{20}}"/>
+      </div>
+    </CPopup>
 
     <TimuTip/>
     <TimuNav v-if="showNav" @change="onNav" :total="items.length" :curIndex="curIndex"/>
@@ -96,6 +105,7 @@
       isNight:false,
       curIndex:0,
       show:false,
+      showCompleted:true,
       showNav:true,
       editText:'',
       items:[]
@@ -209,6 +219,9 @@
       }
     }
   }
+  .TimuCompletedTip{
+    height:1200rpx;
+  }
 </style>
 <config>
   {
@@ -219,6 +232,7 @@
   HeaderClose:'~Custom/HeaderClose',
   TimuItem:'~Custom/TimuItem',
   TimuTip:'~Custom/TimuTip',
+  TimuCompletedTip:'~Custom/TimuCompletedTip',
   TimuNav:'~Custom/TimuNav',
   CTextarea:'~UI/CTextarea',
   CButton:'~UI/CButton',

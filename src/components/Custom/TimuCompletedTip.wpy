@@ -1,0 +1,147 @@
+<template>
+    <div class="TimuCompletedTip external-cls">
+      <div class="row1">
+        <div class="col1">
+          已刷完当前知识点
+        </div>
+        <canvas style="width: 750rpx; height: 296rpx;" canvas-id="canvas">
+
+        </canvas>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+
+  wepy.component({
+    data: {
+      width:0,
+      height:0,
+      windowWidth:0,
+      drawed:0
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      rightRate:Number,
+      rightNum:Number,
+      wrongNum:Number,
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      rpxTopx(rpx){
+        return this.windowWidth/750 * rpx;
+      },
+      degreeToRadian(deg) {
+        return (Math.PI / 180) * deg;
+      },
+      getCenter(){
+        const x = this.rpxTopx(750)/2;
+        const y = this.rpxTopx(296)/2
+        // const y = 0;
+        const startP = -Math.asin(62/138)-Math.PI;
+        const endP = Math.asin(62/138);
+        const r = this.rpxTopx(138);
+        const step = 0.01;
+        return {x,y ,r, startP , endP ,step};
+      },
+      drawBg(){
+        const c = this.ctx;
+        const {x,y , r, startP,endP} = this.getCenter();
+        // const {...obj} = this.getCenter();
+        console.log('center' , x,y , r, startP,endP)
+        // c.moveTo(x , y);
+        c.setGlobalAlpha(0.2);
+        c.beginPath();
+        this.ctx.setLineCap('round')
+        c.setLineWidth(4);
+        c.setStrokeStyle('#FFF');
+        c.arc(x, y, r, startP, endP);
+        c.stroke();
+      },
+      drawPg(){
+        if(this.drawed >= this.rightRate){
+          return;
+        }
+        this.drawBg();
+        const c = this.ctx;
+        const {x,y , r, startP,endP,step} = this.getCenter();
+        const totalP = (endP - startP);
+        let drawed = this.drawed + step;
+        const end = startP + totalP * drawed;
+        c.setGlobalAlpha(1);
+        c.beginPath();
+        this.ctx.setLineCap('round')
+        c.setLineWidth(4);
+        c.setStrokeStyle('#FFF');
+        c.arc(x, y, r, startP, end);
+        c.stroke();
+
+        c.draw();
+        this.drawed = drawed;
+        console.log('draw:' , drawed , ', p :' , end , 'rated : ')
+        this.requestAnimationFrame(this.drawPg.bind(this));
+      },
+      draw(){
+        // const ctx = this.ctx;
+        const ctx = wx.createCanvasContext('canvas' , this.$wx);
+        this.ctx = ctx;
+        this.ctx.lineCap = 'round';
+        this.ctx.setLineCap('round')
+        //   ctx.moveTo(10, 10)
+        // ctx.lineTo(100, 10)
+        // ctx.lineTo(100, 100)
+        // ctx.fill()
+        // ctx.draw()
+        // ctx.moveTo(10, 10)
+        // ctx.lineTo(100, 10)
+        // ctx.lineTo(100, 100)
+        // ctx.fill()
+        // ctx.draw()
+        this.drawBg();
+        this.drawPg();
+      },
+      requestAnimationFrame(cb){
+        var start,
+          finish;
+        setTimeout(function(){
+          start = +new Date();
+          cb(start);
+          finish = +new Date();
+        },16);
+      }
+    },
+    attached(){
+      this.draw();
+    },
+    created () {
+      const {windowWidth} = wx.getSystemInfoSync();
+      this.windowWidth = windowWidth;
+
+      // this.ctx = wx.createCanvasContext('canvas' , this.$wx);
+      // console.log('this.ctx',this,this.$wx ,this.ctx,)
+    }
+  });
+</script>
+<style lang="scss">
+  .TimuCompletedTip{
+    .row1{
+      background:rgba(29,146,251,1);
+      .col1{
+        font-size:32rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:40rpx;
+        margin: 48rpx 0 96rpx;
+      }
+    }
+  }
+</style>
