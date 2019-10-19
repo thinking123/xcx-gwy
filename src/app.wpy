@@ -82,6 +82,7 @@ wepy.app({
 /*
 *
 *
+  'pages/section3/takeMoney',
 *
   'pages/section3/moneyDetail',
   'pages/section3/selfPage',
@@ -120,7 +121,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section3/takeMoney',
+  'pages/section3/sharePage',
 
     ],
     window: {
