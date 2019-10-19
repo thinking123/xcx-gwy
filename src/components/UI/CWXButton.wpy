@@ -5,7 +5,7 @@
             :class="{'info':type == 'info' , 'primary':type == 'primary' , 'disabled':isLoading}"
             open-type="getUserInfo">
       <div class="btnWrap">
-        <image :src="icon" v-if="!!icon" class="icon"c/>
+        <image :src="icon" v-if="!!icon" class="icon"/>
         <span class="CButtonText">{{text}}</span>
       </div>
     </button>

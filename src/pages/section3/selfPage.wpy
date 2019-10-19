@@ -13,7 +13,7 @@
                          external-cls="CLabelRightButton"/>
       <CLabelRightButton type="normal"
                          text="性别"
-                         rightText="{{user.sex ? '女' : '男'}}"
+                         :rightText="selSex"
                          @click.native="onClickCLabelRightButton(2)"
                          external-cls="CLabelRightButton"/>
       <CLabelRightButton type="normal"
@@ -73,6 +73,27 @@
       </div>
     </CPopup>
 
+    <CPopup  :show="showSex"
+             position="bottom"
+             @close="showSex=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="sex">
+        <HeaderClose text="选择性别"  external-cls="header" @click="showSex=false"/>
+        <div class="body">
+          <div class="CLabelInput">
+            <CListSelect key="id"
+                         labelKey="text"
+                         :sel="user.sex"
+                         :items="sexItems"
+                         external-cls="row"
+                         @change="onSexChange"
+            />
+          </div>
+        </div>
+      </div>
+    </CPopup>
+
     <CPopup  :show="showDest"
              position="bottom"
              @close="showDest=false"
@@ -100,7 +121,15 @@
       navigationBarTitleText: ''
     },
     computed: {
+      selSex(){
+        if(this.user.sex){
+          const item = this.sexItems.find(f=>f.id == this.user.sex);
 
+          return item.text;
+        }
+
+        return '';
+      }
     },
     data: {
       icon1:'img_my_head@3x',
@@ -120,6 +149,13 @@
       nick:'',
       showDest:false,
       showNick:false,
+      showSex:false,
+      sexItems:[
+        {text:"不限" , id:"0"},
+        {text:"男" , id:"1"},
+        {text:"女" , id:"2"},
+        {text:"保密" , id:"3"},
+      ],
     },
     methods: {
       onClickCLabelRightButton(index){
@@ -130,6 +166,9 @@
             break;
           case 1:
             this.showNick=true;
+            break;
+          case 2:
+            this.showSex=true;
             break;
           case 6:
             this.showDest=true;
@@ -156,6 +195,9 @@
       onSubmitNick(){
         this.showNick = false;
         this.user.nickName = this.nick;
+      },
+      onSexChange(key){
+        this.user.sex = key;
       }
     },
     onShow(){
@@ -215,6 +257,17 @@
         }
       }
     }
+    .sex{
+      background:rgba(242,242,242,1);
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row{
+          margin: 32rpx 0;
+        }
+      }
+    }
     .nick{
       height:492rpx;
       background:rgba(242,242,242,1);
@@ -253,6 +306,7 @@
     usingComponents: {
 
   CLabelRightButton:'~UI/CLabelRightButton',
+  CListSelect:'~UI/CListSelect',
   CTextarea:'~UI/CTextarea',
   CButton:'~UI/CButton',
   CPopup:'~UI/CPopup',

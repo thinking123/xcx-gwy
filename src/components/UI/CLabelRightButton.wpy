@@ -1,21 +1,23 @@
 <template>
-    <div class="CLabelRightButton external-cls" :class="{'showLine':showLine}">
-      <div class="left">
-        <image :src="labelIcon" mode="scaleToFill" v-if="labelIcon"/>
-        <span :class="{'secondLine':showSecondLine}">{{text}}</span>
-      </div>
-      <block v-if="!hideRightIcon">
-        <image :src="rightIcon" class="rightIcon external-cls-rightIcon" mode="scaleToFill" v-if="rightIcon"/>
-        <div class="right" :class="{'rightText' : type != 'normal'}" v-else>
+  <div class="CLabelRightButton external-cls" :class="{'showLine':showLine}">
+    <div class="left">
+      <image :src="labelIcon" mode="scaleToFill" v-if="labelIcon"/>
+      <span :class="{'secondLine':showSecondLine}">{{text}}</span>
+    </div>
+
+    <image :src="rightIcon" class="rightIcon external-cls-rightIcon" mode="scaleToFill" v-if="rightIcon"/>
+    <div class="right" :class="{'rightText' : type != 'normal'}" v-else>
         <span v-if="rightText">
           {{rightText}}
         </span>
-          <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
-          <image :src="iconPrimary" mode="scaleToFill" v-else/>
-        </div>
+      <block v-if="!hideRightIcon">
+        <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
+        <image :src="iconPrimary" mode="scaleToFill" v-else/>
       </block>
-
     </div>
+
+
+  </div>
 </template>
 <script>
   import wepy from '@wepy/core'

@@ -1,0 +1,85 @@
+<template>
+  <div class="CListSelect external-cls">
+    <div class="CListSelect-item" v-for="(item,index) in items"
+         @click="onClick(index)"
+         key="{{key?item[key]:index}}">
+      <span>{{labelKey ? item[labelKey] : item}}</span>
+      <image :src="icon"  class="icon" mode="aspectFit" wx:if="{{key ? item[key] == sel : index == sel}}"/>
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core';
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'icon_selected@3x'
+    },
+    externalClasses: [
+      'external-cls'
+    ],
+    props: {
+      items: {
+        type: Array,
+        default: []
+      },
+      sel: String,
+      key: {
+        type: String,
+        default: 'id'
+      },
+      labelKey: {
+        type: String,
+        default: ''
+      }
+    },
+    events: {},
+    computed: {},
+    methods: {
+      onClick(index) {
+        const item = this.items[index];
+        const sel = this.key ? item[this.key] : index;
+        this.$emit('change', sel == this.sel ? '' : sel);
+      }
+    },
+    created() {
+      this.icon = getImgUrlEx(this.icon)
+    }
+  });
+</script>
+<style lang="scss">
+  .CListSelect {
+    width: 750rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-item{
+      width:690rpx;
+      height:120rpx;
+      padding-left: 40rpx;
+      box-sizing: border-box;
+      background:rgba(255,255,255,1);
+      border-radius:8rpx;
+      margin-bottom: 20rpx;
+      position: relative;
+      font-size:32rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(0,0,0,1);
+      display: flex;
+      align-items: center;
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }
+    .icon{
+      position: absolute;
+      width:64rpx;
+      height:64rpx;
+      right: 40rpx;
+      top:50%;
+      transform: translateY(-50%);
+    }
+  }
+</style>
