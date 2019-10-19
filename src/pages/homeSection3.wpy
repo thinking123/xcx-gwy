@@ -247,20 +247,8 @@
   CColumnTextItem:'~UI/CColumnTextItem',
 
   CTabbar:'~UI/CTabbar',
-  CSearch:'~UI/CSearch',
   CLabelRightButton:'~UI/CLabelRightButton',
-  CTab:'~UI/CTab',
-  ClassCard:'~Custom/ClassCard',
-  ClassCard1:'~Custom/ClassCard1',
-  IconText:'~Custom/IconText',
-  JinLianItem:'~Custom/JinLianItem',
-  LogicDialog:'~Custom/LogicDialog',
-  FixedContinueBtn:'~Custom/FixedContinueBtn',
-  HeaderClose:'~Custom/HeaderClose',
-  CCollapse:'~UI/CCollapse',
-  CPopup:'~UI/CPopup',
-  CDialog:'~UI/CDialog',
-  CCollapseItem:'~UI/CCollapseItem',
+
 
   }
   }

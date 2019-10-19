@@ -4,13 +4,17 @@
         <image :src="labelIcon" mode="scaleToFill" v-if="labelIcon"/>
         <span :class="{'secondLine':showSecondLine}">{{text}}</span>
       </div>
-      <div class="right" :class="{'rightText' : type != 'normal'}">
+      <block v-if="!hideRightIcon">
+        <image :src="rightIcon" class="rightIcon external-cls-rightIcon" mode="scaleToFill" v-if="rightIcon"/>
+        <div class="right" :class="{'rightText' : type != 'normal'}" v-else>
         <span v-if="rightText">
           {{rightText}}
         </span>
-        <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
-        <image :src="iconPrimary" mode="scaleToFill" v-else/>
-      </div>
+          <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
+          <image :src="iconPrimary" mode="scaleToFill" v-else/>
+        </div>
+      </block>
+
     </div>
 </template>
 <script>
@@ -23,16 +27,22 @@
       iconPrimary:'btn_arrowr_green@3x'
     },
     externalClasses:[
-      'external-cls'
+      'external-cls',
+      'external-cls-rightIcon',
     ],
     props:{
       text:String,
       rightText:String,
+      rightIcon:String,
       showLine:{
         type:Boolean,
         default:true
       },
       showSecondLine:{
+        type:Boolean,
+        default:false
+      },
+      hideRightIcon:{
         type:Boolean,
         default:false
       },
@@ -113,6 +123,11 @@
         }
       }
 
+    }
+
+    .rightIcon{
+      width: 80rpx;
+      height: 80rpx;
     }
     .right{
       display: flex;

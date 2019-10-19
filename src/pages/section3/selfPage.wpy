@@ -1,0 +1,142 @@
+<template>
+  <div class="page selfPage">
+    <div class="row1">
+      <CLabelRightButton type="normal"
+                         text="头像"
+                         rightIcon="{{user.header || icon1}}"
+                         @click.native="onClickCLabelRightButton(0)"
+                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton type="normal"
+                         text="昵称"
+                         :rightText="user.nickName"
+                         @click.native="onClickCLabelRightButton(1)"
+                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton type="normal"
+                         text="性别"
+                         rightText="{{user.sex ? '女' : '男'}}"
+                         @click.native="onClickCLabelRightButton(2)"
+                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton type="normal"
+                         text="手机号"
+                         hideRightIcon="{{true}}"
+                         rightText="{{user.phone}}"
+                         @click.native="onClickCLabelRightButton(3)"
+                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton type="normal"
+                         text="微信绑定"
+                         showLine="{{false}}"
+                         :hideRightIcon="user.bindWx"
+                         rightText="{{user.bindWx ? '已经绑定' : '去绑定'}}"
+                         @click.native="onClickCLabelRightButton(4)"
+                         external-cls="CLabelRightButton"/>
+
+
+    </div>
+    <div class="row2">
+      <CLabelRightButton type="normal"
+                         text="院校"
+                         rightIcon="{{user.school}}"
+                         @click.native="onClickCLabelRightButton(5)"
+                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton type="normal"
+                         text="学习目标"
+                         :rightText="user.dest"
+                         showLine="{{false}}"
+                         @click.native="onClickCLabelRightButton(6)"
+                         external-cls="CLabelRightButton"/>
+    </div>
+      <div class="row3"  @click.native="onClickCLabelRightButton(7)">
+        退出当前帐号
+      </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      icon1:'img_my_head@3x',
+      user:{
+        header:'',
+        nickName:'',
+        sex:0,
+        phone:'1596886096',
+        bindWx:false,
+        school:'东华大学',
+        schoolId:0,
+        dest:'学习申论'
+      }
+    },
+    methods: {
+      onClickCLabelRightButton(index){
+        switch (index) {
+
+        }
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+
+      this.icon1 = getImgUrlEx(this.icon1);
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .selfPage{
+
+    .CLabelRightButton{
+      width: 690rpx;
+      height: 120rpx;
+      padding: 30rpx 0;
+      box-sizing: border-box;
+      margin: 0 30rpx;
+    }
+
+    .row1{
+      background-color: #FFF;
+      width: 100%;
+      margin: 24rpx 0;
+    }
+    .row2{
+      background-color: #FFF;
+      width: 100%;
+      margin-bottom: 24rpx;
+    }
+    .row3{
+      width:750rpx;
+      height:120rpx;
+      background:rgba(255,255,255,1);
+      font-size:32rpx;
+      font-family:PingFangSC-Medium,PingFangSC;
+      font-weight:500;
+      color:rgba(102,102,102,1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '个人资料',
+    usingComponents: {
+
+  CLabelRightButton:'~UI/CLabelRightButton',
+    }
+}
+</config>
