@@ -150,7 +150,7 @@
     usingComponents: {
     CTab:'~UI/CTab',
     CLabelInput:'~UI/CLabelInput',
-   ` CButton:'~UI/CButton',`
+    CButton:'~UI/CButton',
     CCountDownInput:'~UI/CCountDownInput',
     }
 }

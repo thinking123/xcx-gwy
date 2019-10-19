@@ -1,0 +1,159 @@
+<template>
+  <CPopup  :show="show"
+           position="bottom"
+           @close="onClose"
+           zIndex="999"
+           custom-class="CPopup"
+           overlay="{{ true }}">
+    <div class="CListPoper external-cls">
+
+      <div class="CListPoper-wrap">
+        <div class="CListPoper-wrap-item" v-for="(item, index) in items"
+             @click="onItemClick(index)"
+             :key="index">
+          {{item}}
+        </div>
+      </div>
+
+      <div class="CListPoper-close" v-if="showClose" @click="onClose">
+        取消
+      </div>
+      <div class="CListPoper-confirm" v-if="showConfirm" @click="onConfirm">
+        确定
+      </div>
+    </div>
+  </CPopup>
+  
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      show:{
+        type:Boolean,
+        default:false
+      },
+      showClose:{
+        type:Boolean,
+        default:false
+      },
+      showConfirm:{
+        type:Boolean,
+        default:false
+      },
+
+      items:{
+        type:Array,
+        default:[]
+      },
+
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClose(){
+        this.$emit('close');
+      },
+      onConfirm(){
+        this.$emit('confirm');
+      },
+      onItemClick(index){
+        this.$emit('item' , index);
+      },
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CPopup{
+    background-color: transparent !important;
+  }
+  .CListPoper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:690rpx;
+    margin: 0 auto 40rpx;
+
+    &-wrap{
+      background:rgba(255,255,255,1);
+      border-radius:16rpx;
+      font-size:32rpx;
+      font-family:PingFangSC-Medium,PingFangSC;
+      font-weight:500;
+      color:rgba(51,51,51,1);
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+      &-item{
+        width:690rpx;
+        height:100rpx;
+        background:rgba(255,255,255,1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        &:not(:last-child){
+          &:after{
+            width:630rpx;
+            position: absolute;
+            bottom: 0;
+            left:50%;
+            transform: translateX(-50%) scaleY(0.5);
+            width: 630rpx;
+            height: 1px;
+            background-color: rgba(230,230,230,1);
+            content: '';
+          }
+        }
+      }
+    }
+
+    &-close{
+      margin-top: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width:690rpx;
+      height:100rpx;
+      background:rgba(255,255,255,1);
+      border-radius:16rpx;
+    }
+
+    &-confirm{
+      margin-top: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width:690rpx;
+      height:100rpx;
+      background:rgba(255,255,255,1);
+      border-radius:16rpx;
+    }
+
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '开明真题',
+  usingComponents: {
+  CPopup:'~UI/CPopup',
+  }
+  }
+</config>

@@ -45,9 +45,47 @@
                          @click.native="onClickCLabelRightButton(6)"
                          external-cls="CLabelRightButton"/>
     </div>
-      <div class="row3"  @click.native="onClickCLabelRightButton(7)">
-        退出当前帐号
+    <div class="row3" @click.native="onClickCLabelRightButton(7)">
+      退出当前帐号
+    </div>
+    <CListPoper :show="showHeader" showClose="{{true}}"
+                @close="showHeader=false"
+                @item="onHeaderItem"
+                :items="headers"/>
+
+    <CPopup  :show="showNick"
+             position="bottom"
+             @close="showNick=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="nick">
+        <HeaderClose text="修改昵称"  external-cls="header" @click="showNick=false"/>
+        <div class="body">
+          <div class="CLabelInput">
+            <CLabelInput placeholder="请输入姓名" label="昵称"
+                         :val.sync="user.nickName"
+                         :showLine="false"
+                         @update:val="onNickVal"/>
+          </div>
+
+          <CButton text="保存"  @tap.native="onSubmitNick" external-cls="row"/>
+        </div>
       </div>
+    </CPopup>
+
+    <CPopup  :show="showDest"
+             position="bottom"
+             @close="showDest=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="learn">
+        <HeaderClose text="填写学习目标"  external-cls="header" @click="showDest=false"/>
+        <div class="body">
+          <CTextarea :val="user.dest" @change="onChangeDest" placeholder="请填写" total="{{200}}" showLine="{{false}}"/>
+          <CButton text="确认"  @tap.native="onSubmitDest" external-cls="row"/>
+        </div>
+      </div>
+    </CPopup>
   </div>
 </template>
 
@@ -68,20 +106,56 @@
       icon1:'img_my_head@3x',
       user:{
         header:'',
-        nickName:'',
+        nickName:'nickname',
         sex:0,
         phone:'1596886096',
         bindWx:false,
         school:'东华大学',
         schoolId:0,
-        dest:'学习申论'
-      }
+        dest:'学习申论',
+      },
+      showHeader:false,
+      headers:['拍照','手机相册'],
+      dest:'',
+      nick:'',
+      showDest:false,
+      showNick:false,
     },
     methods: {
       onClickCLabelRightButton(index){
+        console.log('btn' , index);
         switch (index) {
-
+          case 0:
+            this.showHeader=true;
+            break;
+          case 1:
+            this.showNick=true;
+            break;
+          case 6:
+            this.showDest=true;
+            break;
         }
+      },
+      onHeaderItem(index){
+        console.log(index);
+        this.showHeader=false;
+      },
+      onChangeDest(v){
+        this.dest = v;
+      },
+
+      onNickVal(v){
+        this.nick = v;
+      },
+
+      onSubmitDest(){
+        this.user.dest = this.dest;
+        this.showDest=false;
+      },
+
+      onSubmitNick(){
+        this.showNick = false;
+        this.user.nickName = this.nick;
       }
     },
     onShow(){
@@ -129,6 +203,48 @@
       align-items: center;
       justify-content: center;
     }
+
+    .learn{
+      height: 712rpx;
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row{
+          margin-top: 46rpx;
+        }
+      }
+    }
+    .nick{
+      height:492rpx;
+      background:rgba(242,242,242,1);
+      .header{
+        background-color: #FFF;
+      }
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .CLabelInput{
+          width:690rpx;
+          height:100rpx;
+          margin-top: 66rpx;
+          background:rgba(255,255,255,1);
+          box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
+          border-radius:16rpx;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .row{
+          margin-top: 46rpx;
+
+          width:690rpx;
+          height:96rpx;
+        }
+      }
+    }
   }
 </style>
 <config>
@@ -137,6 +253,12 @@
     usingComponents: {
 
   CLabelRightButton:'~UI/CLabelRightButton',
+  CTextarea:'~UI/CTextarea',
+  CButton:'~UI/CButton',
+  CPopup:'~UI/CPopup',
+  CListPoper:'~UI/CListPoper',
+  HeaderClose:'~Custom/HeaderClose',
+  CLabelInput:'~UI/CLabelInput',
     }
 }
 </config>
