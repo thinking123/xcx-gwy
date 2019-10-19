@@ -1,0 +1,82 @@
+<template>
+  <div class="page moneyDetail">
+    <CTab :tabs="tabs" bottomLine="128" bottomLineOffset="20" @changeTab="handleTab" external-cls="CTab"/>
+    <div class="line"/>
+    <MoneyDetailItem v-for="item in items" :key="item.id" :detail="item"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      tabs:[
+        {text:'收益记录'},
+        {text:'提现记录'},
+      ],
+      selectedTab:0,
+      items:[
+
+      ]
+    },
+    methods: {
+      handleTab({tab ,index}){
+        this.selectedTab = index;
+      },
+    },
+    onShow(){
+      
+    },
+    created () {
+      const res = [];
+      for(let i = 0 ; i < 10 ; i++){
+        const obj = {
+          text:`学习申论-第四章`,
+          time:`明天 10:30`,
+          money:i*10%2,
+          info:i%2 && '被邀请人：张华',
+          id:i
+        }
+        res.push(obj);
+      }
+
+      this.items = res;
+    }
+  });
+</script>
+<style lang="scss">
+  .moneyDetail{
+    ctab{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  .CTab{
+    width: 342rpx;
+  }
+
+    .line{
+      width:750rpx;
+      height:1px;
+      background:rgba(230,230,230,1);
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CTab:'~UI/CTab',
+  MoneyDetailItem:'~Custom/MoneyDetailItem',
+    }
+}
+</config>

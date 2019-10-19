@@ -1,0 +1,98 @@
+<template>
+  <div class="MoneyDetailItem external-cls">
+    <div class="row1">
+      {{detail.text}}
+    </div>
+    <div class="row2">
+      <div class="col1">
+        {{detail.time}}
+      </div>
+      <div class="col2">
+        {{detail.money >= 0 ? '+' : '-'}}{{detail.money}}
+      </div>
+    </div>
+    <div class="row3" v-if="info">
+      {{detail.info}}
+    </div>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core';
+
+  wepy.component({
+    data: {},
+    externalClasses: [
+      'external-cls'
+    ],
+    props: {
+      detail: {
+        type: Object,
+        default: {
+          text: '',
+          time: '',
+          info: '',
+          money: 0
+        }
+      }
+    },
+    events: {},
+    computed: {},
+    methods: {},
+    created() {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .MoneyDetailItem {
+    width: 750rpx;
+    box-sizing: border-box;
+    padding: 30rpx;
+
+    position: relative;
+
+    &::after{
+      position: absolute;
+      content: '';
+      bottom:0;
+      height: 1px;
+      left: 50%;
+      transform: scaleY(0.5) translateX(-50%);
+
+      width:690rpx;
+      background:rgba(230,230,230,1);
+    }
+    .row1{
+      font-size:32rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(51,51,51,1);
+      margin-bottom: 16rpx;
+    }
+    .row2{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .col1{
+        font-size:24rpx;
+        font-family:PingFangSC-Regular,PingFangSC;
+        font-weight:400;
+        color:rgba(153,153,153,1);
+      }
+      .col2{
+        font-size:36rpx;
+        font-family:PingFangSC-Semibold,PingFangSC;
+        font-weight:600;
+        color:rgba(0,0,0,1);
+
+      }
+    }
+    .row3{
+      margin-top: 16rpx;
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+    }
+  }
+</style>

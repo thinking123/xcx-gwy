@@ -18,6 +18,7 @@
 </template>
 <script>
   import wepy from '@wepy/core'
+  import {basic} from '@/mixins/basic';
 
   wepy.component({
     data: {
@@ -27,6 +28,7 @@
       'external-cls',
       'bottom-cls'
     ],
+    mixins:[basic],
     props:{
       tabs:{
         type:Array,
@@ -40,6 +42,10 @@
         }
       },
       bottomLine:{
+        type:Number,
+        default:0
+      },
+      bottomLineOffset:{
         type:Number,
         default:0
       },
@@ -61,6 +67,10 @@
     },
     computed:{
       bLineW(){
+        if(this.bottomLine > 1){
+          const bl = this.rpxTopx(this.bottomLine);
+          return `${bl}px`;
+        }
         const l = this.tabs.length;
         const w = (1.0/l)*this.bottomLine;
         const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
@@ -72,6 +82,18 @@
       },
       bLineTr(){
         const l = this.tabs.length;
+        if(this.bottomLine > 1){
+          if(!this.width){
+            this.width = 0;
+          }
+          const w = l > 0 ? this.width/l : 0;
+          const sel = this.selectedIndex >=0 ? this.selectedIndex : 0;
+          const init = this.rpxTopx(this.bottomLineOffset);
+          const t= `translateX(${init + w*this.selectedIndex}px)`;
+          console.log('t' , t);
+          return t;
+        }
+
         const w = (1.0/l)*this.bottomLine;
         const tf = ((1.0/l/2)-w/2)/w + (1.0/l)*this.selectedIndex/w;
         const trfs = `translateX(${tf*100}%)`;
@@ -85,10 +107,22 @@
         console.log('tab' , tab ,index)
         this.selectedIndex = index;
         this.$emit("changeTab" , {tab,index})
-      }
+      },
+      rpxTopx(rpx){
+        return this.windowWidth/750 * rpx;
+      },
     },
     attached(){
       this.selectedIndex = this.initSelected;
+      this.getRect('.CTab').then(rect=>{
+        this.width = rect.width;
+        console.log('this.width' , this.width)
+      })
+      // this.width = ;
+    },
+    created(){
+      const {windowWidth} = wx.getSystemInfoSync();
+      this.windowWidth = windowWidth;
     },
     onLoad () {
 

@@ -1,0 +1,327 @@
+<template>
+  <div class="page takeMoney">
+    <div class="row1">
+      提现账户
+    </div>
+    <div class="row2" @click="onShow">
+
+      <image :src="icon"  class="icon" mode="aspectFit" v-if="!card.name"/>
+      <block v-else>
+        <div class="col1">
+          <span class="c1">{{card.openBank}}</span>
+          <span class="c2"  @click="show=true">更换账户</span>
+        </div>
+        <div class="col2">
+          {{_cardNum}}
+        </div>
+      </block>
+
+    </div>
+    <div class="row3">
+      提现金额
+    </div>
+    <CLabelInput placeholder="请输入提现金额" label="¥"
+                 external-cls="row4"
+                 :val.sync="money"
+                 :showLine="false"
+                 external-cls-label="CLabelInput-label"
+                 external-cls-close="CLabelInput-close"
+                 @update:val="onCLabelInput"/>
+
+    <CButton text="提现"
+             @tap.native="onTakeMoney"
+             external-cls="row5"/>
+
+    <div class="row6">
+      <span class="col1">可提现金额：{{canTakeMoney}}元</span>
+      <span class="col2">全部提现 >></span>
+    </div>
+
+    <CPopup  :show="show"
+             position="bottom"
+             @close="show=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="nick">
+        <HeaderClose text="提现帐户"  external-cls="header" @click="show=false"/>
+        <div class="body">
+          <div class="form">
+            <CLabelInput placeholder="请输入持卡人真实姓名"
+                         data-set="name"
+                         label="持卡人" :val.sync="name" @update:val="onName" />
+            <CLabelInput placeholder="请输入银行卡号"
+                         data-set="card"
+                         label="银行卡" :val.sync="cardNum" @update:val="onCard" type="number"/>
+            <CLabelInput placeholder="如中国工商银行合肥蜀山支行"
+                         data-set="bank"
+                         label="开户行"
+                         :val.sync="openBank"
+                         @update:val="onBank"/>
+            <div class="tip">
+              注：银行名称需具体到支行
+            </div>
+          </div>
+
+          <CButton text="保存"  @tap.native="onSubmitBank" external-cls="row"/>
+        </div>
+      </div>
+    </CPopup>
+    <CDialog :show="showCDialog">
+      <GetMoneyDialog @close="showCDialog=false"/>
+    </CDialog>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+      _cardNum() {
+        return this.cardNum;
+      }
+    },
+    data: {
+      icon:'btn_add_accout@3x',
+      money:'',
+      canTakeMoney:100,
+      show:false,
+      showCDialog:true,
+      name:'',
+      cardNum:'',
+      openBank:'',
+      card:{
+        name:'',
+        cardNum:'',
+        openBank:'',
+      }
+    },
+    methods: {
+      onCLabelInput(v){
+        this.money = v;
+      },
+      onTakeMoney(){
+        this.showCDialog = true;
+      },
+      onName(v){
+        this.name = v;
+      },
+      onCard(v){
+        this.cardNum = v;
+      },
+      onBank(v){
+        this.openBank = v;
+      },
+      onSubmitBank(v){
+        this.show =false;
+        this.card.name = this.name;
+        this.card.cardNum = this.cardNum;
+        this.card.openBank = this.openBank;
+      },
+      onShow(){
+        this.show=true;
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon)
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .takeMoney{
+    padding: 0 30rpx;
+    width: 750rpx;
+    box-sizing: border-box;
+    .row1{
+      font-size:32rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+      line-height:32rpx;
+      margin-bottom: 32rpx;
+      margin-top: 48rpx;
+    }
+
+    .row2{
+      width:690rpx;
+      height:240rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx 4rpx 8rpx 0rpx rgba(0,0,0,0.05);
+      border-radius:16rpx;
+      margin-bottom: 48rpx;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 56rpx 40rpx;
+      box-sizing: border-box;
+      position: relative;
+      .icon{
+        width:80rpx;
+        height:80rpx;
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%, -50%);
+      }
+
+
+
+      .col1{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40rpx;
+        .c1{
+          font-size:48rpx;
+          font-family:PingFangSCSemibold-,PingFangSCSemibold;
+          font-weight:normal;
+          color:rgba(0,0,0,1);
+          line-height:48rpx;
+        }
+        .c2{
+          font-size:32rpx;
+          font-family:PingFang-SC-Regular,PingFang-SC;
+          font-weight:400;
+          color:rgba(79,172,27,1);
+          line-height:32rpx;
+        }
+      }
+      .col2{
+        font-size:40rpx;
+        font-family:DINAlternate-Bold,DINAlternate;
+        font-weight:bold;
+        color:rgba(102,102,102,1);
+        line-height:40rpx;
+      }
+    }
+    .row3{
+      font-size:32rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+      line-height:32rpx;
+      margin-bottom: 32rpx;
+    }
+    .row4{
+      font-size:64rpx;
+      width:690rpx;
+      height:120rpx;
+      background:rgba(255,255,255,1);
+      box-shadow:0rpx 4rpx 8rpx 0rpx rgba(0,0,0,0.05);
+      border-radius:16rpx;
+      margin-bottom: 48rpx;
+      padding: 0rpx 30rpx 0 30rpx;
+      box-sizing: border-box;
+      >input{
+        height: 100%;
+      }
+      .CLabelInput-label{
+        width: initial;
+        margin-right: 8rpx;
+
+        font-weight:bold;
+        color:rgba(0,0,0,1);
+      }
+      .CLabelInput-close{
+        right: 20rpx;
+      }
+    }
+    .row5{
+      width:690rpx;
+      height:96rpx;
+      margin-bottom: 64rpx;
+    }
+    .row6{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .col1{
+        font-size:32rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:32rpx;
+      }
+      .col2{
+        font-size:32rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(79,172,27,1);
+        line-height:32rpx;
+      }
+    }
+
+    .nick{
+      background:rgba(242,242,242,1);
+      .header{
+        background-color: #FFF;
+      }
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .form{
+          padding: 0 30rpx 32rpx;
+          margin: 64rpx 30rpx 48rpx;
+          background:#FFF;
+          box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
+          border-radius:16rpx;
+
+          .tip{
+            font-size:28rpx;
+            font-family:PingFangSC-Regular,PingFangSC;
+            font-weight:400;
+            color:rgba(255,108,12,1);
+            margin-top: 32rpx;
+          }
+        }
+
+
+        .CLabelInput{
+          width:690rpx;
+          height:100rpx;
+          margin-top: 66rpx;
+          background:rgba(255,255,255,1);
+          box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
+          border-radius:16rpx;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .row{
+          margin: 48rpx 0 64rpx;
+
+          width:690rpx;
+          height:96rpx;
+        }
+      }
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '提现',
+    usingComponents: {
+
+  CLabelInput:'~UI/CLabelInput',
+  CDialog:'~UI/CDialog',
+  CPopup:'~UI/CPopup',
+  CButton:'~UI/CButton',
+  HeaderClose:'~Custom/HeaderClose',
+  GetMoneyDialog:'~Custom/GetMoneyDialog',
+    }
+}
+</config>

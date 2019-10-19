@@ -1,0 +1,92 @@
+<template>
+    <div class="GetMoneyDialog external-cls">
+      <image :src="icon"  class="icon" mode="aspectFit"/>
+      <div class="row1">
+        提现申请成功
+      </div>
+      <div class="row2">
+        我们会在1-7个工作日内审核并完成转账
+      </div>
+      <div class="row3" @click="onClick">
+        知道了
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'icon_selected@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      
+    },
+    events: {
+
+    },
+    computed:{
+      
+    },
+    methods: {
+      onClick(){
+        this.$emit('close');
+      }
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon)
+    }
+  });
+</script>
+<style lang="scss">
+
+  .GetMoneyDialog{
+    width:630rpx;
+    background:rgba(255,255,255,1);
+    border-radius:8rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .icon{
+      width:120rpx;
+      height:120rpx;
+      margin-bottom: 32rpx;
+      margin-top: 64rpx;
+    }
+
+    .row1{
+      font-size:36rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(79,172,27,1);
+      line-height:44rpx;
+      margin-bottom: 32rpx;
+    }
+    .row2{
+      font-size:28rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+      line-height:64rpx;
+      margin-bottom: 64rpx;
+    }
+    .row3{
+      width:150%;
+      height:100rpx;
+      background:rgba(79,172,27,1);
+      border-radius:0rpx 0rpx 8rpx 8rpx;
+      font-size:36rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(255,255,255,1);
+      line-height:36rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+</style>

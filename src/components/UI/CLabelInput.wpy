@@ -1,13 +1,13 @@
 <template>
     <div class="CLabelInput external-cls" :class="{'bottomLine':showLine}">
-      <span v-if="!!label" class="label">{{label}}</span>
+      <span v-if="!!label" class="label external-cls-label">{{label}}</span>
       <input @input="handleInput" :value="val"
              :type="type"
              :placeholder="placeholder"/>
       <image src="/static/icon/btn_reset_gray.png"
              v-show="!!val"
              @click="handleClear"
-             class="close"/>
+             class="close external-cls-close"/>
     </div>
 </template>
 <script>
@@ -19,7 +19,9 @@
       close:'/static/icon/btn_reset_gray.png'
     },
     externalClasses:[
-      'external-cls'
+      'external-cls',
+      'external-cls-label',
+      'external-cls-close',
     ],
     props:{
       label:String,
@@ -70,7 +72,7 @@
     width: 630rpx;
     height: 120rpx;
     position: relative;
-
+    font-size:32rpx;
 
     &.bottomLine::after{
       position: absolute;
@@ -83,10 +85,9 @@
       content: '';
     }
     >input{
-      font-size:32rpx;
+
       font-weight:400;
       color:#000000;
-      line-height:32rpx;
       caret-color: $primaryColor;
       padding-right: 50rpx;
       flex:1;
@@ -98,9 +99,7 @@
       width: 166rpx;
       /*margin-right: 40rpx;*/
       color: #666666;
-      font-size:32rpx;
       font-weight:400;
-      line-height:32rpx;
     }
     .close{
       width: 44rpx;

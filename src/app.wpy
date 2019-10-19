@@ -83,6 +83,8 @@ wepy.app({
 *
 *
 *
+  'pages/section3/moneyDetail',
+  'pages/section3/selfPage',
 *  'pages/homeSection3',
   'pages/section2/bijiben',
 * 'pages/section2/timu',
@@ -118,7 +120,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section3/selfPage',
+  'pages/section3/takeMoney',
 
     ],
     window: {
