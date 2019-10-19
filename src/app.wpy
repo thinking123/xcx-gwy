@@ -82,6 +82,8 @@ wepy.app({
 /*
 *
 *
+*
+  'pages/section2/bijiben',
 * 'pages/section2/timu',
 * 'pages/section2/timuCuoti',
   'pages/section2/mediaSubmitCommentPage',
@@ -115,7 +117,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section2/bijiben',
+  'pages/homeSection3',
 
     ],
     window: {

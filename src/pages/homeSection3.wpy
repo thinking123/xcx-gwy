@@ -1,0 +1,267 @@
+<template>
+  <div class="page homeSection3">
+    <div class="row1" @click="onHeaderClick">
+      <CCircleImg external-cls="col1" :src="user.header"/>
+      <div class="col2" >
+        <div class="r1">
+          <span class="c1">
+            {{user.nickName}}
+          </span>
+          <CTag :text="user.tag" external-cls="c2"/>
+          <span class="c3">
+            {{user.school}}
+          </span>
+        </div>
+        <div class="r2">
+          <span>
+            目标：{{user.dest}}
+          </span>
+        </div>
+
+      </div>
+      <image  mode="aspectFit" class="col3" :src="icon1"/>
+    </div>
+    <CColumnTextItem external-cls="row2" :items="titles" @item="onItemClick"/>
+
+    <div class="row3">
+      <CLabelRightButton type="normal"
+                         showSecondLine="{{index != 0 && index != 2 && index != 5 && index != 6}}"
+                         :text="item.text"
+                         :labelIcon="item.icon"
+                         v-for="(item,index) in btns"
+                         :key="index"
+                         showLine="{{false}}"
+                         @click.native="onClickCLabelRightButton(index)"
+                         external-cls="CLabelRightButton"/>
+    </div>
+    <CTabbar/>
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { getImgUrlEx } from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      icon1:'btn_arrowr@3x',
+      user:{
+        header:'',
+        tag:'学霸',
+        nickName:'昵称',
+        school:'东华大学',
+        dest:'学习申论',
+      },
+      titles:[],
+      btns:[
+        {
+          text:'今日任务',
+          icon:'icon_my01@3x'
+        },
+        {
+          text:'人工智能',
+          icon:'icon_my02@3x'
+        },
+        {
+          text:'心灵测试',
+          icon:'icon_my03@3x'
+        },
+        {
+          text:'我的笔记',
+          icon:'icon_my04@3x'
+        },
+        {
+          text:'我的信息',
+          icon:'icon_my05@3x'
+        },
+        {
+          text:'我的报告',
+          icon:'icon_my06@3x'
+        },
+        {
+          text:'设置',
+          icon:'icon_my07@3x'
+        },
+      ]
+    },
+    methods: {
+      onHeaderClick(){
+
+      },
+      onItemClick(index){
+        console.log(this.titles[index]);
+      },
+      onClickCLabelRightButton(index){
+        console.log(this.btns[index]);
+      }
+    },
+    onShow(){
+      
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      const arr = [];
+      for(let i = 0 ; i < 4 ; i++){
+        arr.push({
+          top:'60',
+          bottom:'粉丝',
+        })
+      }
+
+      this.titles = arr;
+
+      this.btns.map(m=>{
+        m.icon = getImgUrlEx(m.icon);
+      });
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .homeSection3{
+    background:rgba(242,242,242,1);
+    .row1{
+      width:750rpx;
+      height:208rpx;
+      background-color: #FFFFFF;
+      padding: 40rpx 40rpx 40rpx 48rpx;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: relative;
+
+      &::after{
+        position: absolute;
+        width: 100%;
+        content: '';
+        bottom:0;
+        height: 1px;
+        left: 50%;
+        transform: scaleY(0.5) translateX(-50%);
+        background:rgba(230,230,230,1);
+      }
+      .col1{
+        width:128rpx;
+        height:128rpx;
+        margin-right: 32rpx;
+      }
+      .col2{
+        display: flex;
+        flex-direction: column;
+        flex:1;
+        .r1{
+          display: flex;
+          align-items: center;
+          margin-bottom: 24rpx;
+          .c1{
+            font-size:40rpx;
+            font-family:PingFangSC-,PingFangSC;
+            font-weight:normal;
+            color:rgba(0,0,0,1);
+            margin-right: 8rpx;
+          }
+          .c2{
+            padding: 4rpx 8rpx;
+            font-size:24rpx;
+            font-family:PingFangSC-Regular,PingFangSC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            background:rgba(79,172,27,1);
+            margin-right: 8rpx;
+          }
+          .c3{
+            font-size:24rpx;
+            font-family:PingFangSC-Regular,PingFangSC;
+            font-weight:400;
+            color:rgba(98,100,102,1);
+          }
+        }
+        .r2{
+          font-size:28rpx;
+          font-family:PingFangSC-Regular,PingFangSC;
+          font-weight:400;
+          color:rgba(153,153,153,1);
+        }
+      }
+
+      .col3{
+        width:28rpx;
+        height:28rpx;
+      }
+    }
+
+    .row2{
+      margin-bottom: 24rpx;
+    }
+
+    .row3{
+      display: flex;
+      flex-direction: column;
+      clabelrightbutton:nth-of-type(1){
+        margin-bottom: 24rpx;
+      }
+      clabelrightbutton:nth-of-type(3){
+        margin-bottom: 24rpx;
+      }
+      clabelrightbutton:nth-of-type(6){
+        margin-bottom: 24rpx;
+      }
+      clabelrightbutton:nth-of-type(7){
+        margin-bottom: 24rpx;
+      }
+      .CLabelRightButton{
+        font-size:36rpx;
+        font-family:PingFangSC-,PingFangSC;
+        font-weight:normal;
+        color:rgba(0,0,0,1);
+        width:750rpx;
+        height:120rpx;
+        background:rgba(255,255,255,1);
+        padding: 0 40rpx;
+        box-sizing: border-box;
+
+
+      }
+    }
+
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '开悟自我',
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg',
+  CTag:'~UI/CTag',
+  CColumnTextItem:'~UI/CColumnTextItem',
+
+  CTabbar:'~UI/CTabbar',
+  CSearch:'~UI/CSearch',
+  CLabelRightButton:'~UI/CLabelRightButton',
+  CTab:'~UI/CTab',
+  ClassCard:'~Custom/ClassCard',
+  ClassCard1:'~Custom/ClassCard1',
+  IconText:'~Custom/IconText',
+  JinLianItem:'~Custom/JinLianItem',
+  LogicDialog:'~Custom/LogicDialog',
+  FixedContinueBtn:'~Custom/FixedContinueBtn',
+  HeaderClose:'~Custom/HeaderClose',
+  CCollapse:'~UI/CCollapse',
+  CPopup:'~UI/CPopup',
+  CDialog:'~UI/CDialog',
+  CCollapseItem:'~UI/CCollapseItem',
+
+  }
+  }
+</config>

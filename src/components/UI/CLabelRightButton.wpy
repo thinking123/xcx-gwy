@@ -1,10 +1,11 @@
 <template>
     <div class="CLabelRightButton external-cls" :class="{'showLine':showLine}">
-      <span class="left">
-        {{text}}
-      </span>
+      <div class="left">
+        <image :src="labelIcon" mode="scaleToFill" v-if="labelIcon"/>
+        <span :class="{'secondLine':showSecondLine}">{{text}}</span>
+      </div>
       <div class="right" :class="{'rightText' : type != 'normal'}">
-        <span>
+        <span v-if="rightText">
           {{rightText}}
         </span>
         <image :src="icon" mode="scaleToFill" v-if="type == 'normal'"/>
@@ -31,10 +32,15 @@
         type:Boolean,
         default:true
       },
+      showSecondLine:{
+        type:Boolean,
+        default:false
+      },
       type:{
         type:String,
         default:'normal'
-      }
+      },
+      labelIcon:String
     },
     events: {
 
@@ -78,6 +84,36 @@
       transform: scaleY(0.5);
     }
 
+    .left{
+      display: flex;
+      align-items: center;
+      height: 100%;
+      >image{
+        margin-right: 36rpx;
+        width:48rpx;
+        height:48rpx;
+      }
+      >label{
+        display: flex;
+        align-items: center;
+
+        &.secondLine{
+            position: relative;
+          height: 100%;
+          &::after{
+            content: '';
+            background:rgba(204,204,204,1);
+            position: absolute;
+            bottom:0;
+            left: 0;
+            width: 750rpx;
+            height: 1px;
+            transform: scaleY(0.5);
+          }
+        }
+      }
+
+    }
     .right{
       display: flex;
       align-items: center;
