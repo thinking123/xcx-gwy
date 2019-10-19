@@ -107,6 +107,30 @@
         </div>
       </div>
     </CPopup>
+    <CPopup  :show="showSchool"
+             position="bottom"
+             @close="showSchool=false"
+             zIndex="999"
+             overlay="{{ true }}">
+      <div class="school">
+        <HeaderClose text="选择院校"  @click="showSchool=false"/>
+        <div class="body">
+          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
+            <CCollapseItem v-for="item in items2" :key="item.id"
+                           external-cls="collapse-item"
+                           collapse-item="collapse-item-header"
+                           :title="item.text" :name="item.id">
+              <div v-for="m in item.items" :key="m.id"
+                   :class="{'selected':curSelSchool == m.id}"
+                   @click="onClickCCollapseItem(m)"
+                   class="collapseItem">
+                {{m.text}}
+              </div>
+            </CCollapseItem>
+          </CCollapse>
+        </div>
+      </div>
+    </CPopup>
   </div>
 </template>
 
@@ -150,12 +174,16 @@
       showDest:false,
       showNick:false,
       showSex:false,
+      showSchool:false,
       sexItems:[
         {text:"不限" , id:"0"},
         {text:"男" , id:"1"},
         {text:"女" , id:"2"},
         {text:"保密" , id:"3"},
       ],
+      items2:[],
+      expandItems:[],
+      curSelSchool:'',
     },
     methods: {
       onClickCLabelRightButton(index){
@@ -169,6 +197,9 @@
             break;
           case 2:
             this.showSex=true;
+            break;
+          case 5:
+            this.showSchool=true;
             break;
           case 6:
             this.showDest=true;
@@ -198,14 +229,42 @@
       },
       onSexChange(key){
         this.user.sex = key;
-      }
+      },
+      onExpand(exp){
+        this.expandItems = exp;
+      },
+      onClickCCollapseItem({id}){
+        this.curSelSchool = id;
+        // this.showSchool = false;
+      },
     },
     onShow(){
       
     },
-    created () {
+    created() {
 
       this.icon1 = getImgUrlEx(this.icon1);
+      const arr = [];
+      for (let i = 0; i < 10; i++) {
+        let obj = [];
+        for (let j = 0; j < 5; j++) {
+          const v = {
+            text: '中国科学技术大学',
+            id: `${i}-${j}`
+          };
+
+          obj.push(v);
+        }
+
+        arr.push({
+          items: obj,
+          text: '北京',
+          id: i
+        });
+
+      }
+
+      this.items2 = arr;
     }
   });
 </script>
@@ -298,7 +357,66 @@
         }
       }
     }
+
+    .CCollapse{
+      padding: 30rpx 32rpx 0;
+      background:rgba(242,242,242,1);
+      box-sizing: border-box;
+    }
+
+    .school{
+      height: 100vh;
+      .body{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .row{
+          margin-top: 46rpx;
+        }
+      }
+    }
+
+
+    .collapseItem{
+      font-size:32rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+
+      line-height:40rpx;
+      display: flex;
+      align-items: center;
+      height: 120rpx;
+      margin-left: 40rpx;
+      position: relative;
+      padding: 0 40rpx;
+
+      &.selected{
+        color:rgba(79,172,27,1);
+      }
+      &::after{
+        content:'';
+        position: absolute;
+        background:rgba(230,230,230,1);
+        height: 1px;
+        width: 100%;
+        top:100%;
+        left: 50%;
+        width:650rpx;
+        transform: translateX(-50%);
+      }
+    }
+    .collapse-item{
+      background: #FFF;
+      width:690rpx;
+      box-sizing: border-box;
+      margin-bottom: 20rpx;
+      border-radius:8rpx;
+    }
+    .collapse-item-header{
+      width: 100% !important;
+    }
   }
+
 </style>
 <config>
 {
@@ -313,6 +431,8 @@
   CListPoper:'~UI/CListPoper',
   HeaderClose:'~Custom/HeaderClose',
   CLabelInput:'~UI/CLabelInput',
+  CCollapseItem:'~UI/CCollapseItem',
+  CCollapse:'~UI/CCollapse',
     }
 }
 </config>
