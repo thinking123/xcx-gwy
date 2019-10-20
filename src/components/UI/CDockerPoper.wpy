@@ -1,0 +1,196 @@
+<template>
+  <div class="CDockerPoper external-cls">
+    <div class="CDockerPoper-header">
+      <slot name="header"></slot>
+    </div>
+    <div class="CDockerPoper-poper-overlay {{classes}}"
+         @click="onClose"
+         style="height:{{overLayHeight}}px;top:{{top}}px;">
+
+    </div>
+    <div class="CDockerPoper-poper" style="max-height:{{poperHeight}}">
+      <!--      <COverlay-->
+      <!--        :show="show"-->
+      <!--        z-index="999"-->
+      <!--        bind:click="onClose"-->
+      <!--      />-->
+
+      <div class="CDockerPoper-poper-content {{classes}}">
+        <slot name="poper"></slot>
+      </div>
+    </div>
+
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core';
+  import { basic } from '@/mixins/basic';
+
+  const getClassNames = (name='top') => ({
+    enter: `c-${name}-enter c-${name}-enter-active enter-class enter-active-class`,
+    'enter-to': `c-${name}-enter-to c-${name}-enter-active enter-to-class enter-active-class`,
+    leave: `c-${name}-leave c-${name}-leave-active leave-class leave-active-class`,
+    'leave-to': `c-${name}-leave-to c-${name}-leave-active leave-to-class leave-active-class`
+  });
+
+  const nextTick = () => new Promise(resolve => setTimeout(resolve, 20));
+
+  wepy.component({
+    data: {
+      poperHeight: 0,
+      overLayHeight: 0,
+      top: 0,
+      transition: false,
+      classes:'',
+    },
+    mixins: [basic],
+    options: {
+      multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    externalClasses: [
+      'external-cls'
+    ],
+    props: {
+      show: false
+    },
+    watch: {
+      classes(c) {
+        console.log('classes', c);
+      },
+      show(v){
+        if(v){
+          this.showPoper();
+        }else{
+          this.hidePoper();
+        }
+      }
+    },
+    computed: {},
+    methods: {
+      onClose() {
+        this.$emit('close')
+      },
+      showPoper(){
+        const classNames = getClassNames();
+
+        Promise.resolve()
+          .then(nextTick)
+          .then(()=>{
+            this.poperHeight = 'auto';
+            this.classes = classNames.enter;
+          })
+          .then(nextTick)
+          .then(()=>{
+            this.classes = classNames['enter-to'];
+          })
+          .catch(() => {});
+
+      },
+      hidePoper(){
+        const classNames = getClassNames();
+
+        Promise.resolve()
+          .then(nextTick)
+          .then(()=>{
+            this.classes = classNames.leave;
+          })
+          .then(nextTick)
+          .then(()=>{
+            this.classes = classNames['leave-to'];
+
+          })
+          .catch(() => {});
+
+      }
+    },
+    attached() {
+      this.getRect('.CDockerPoper').then(rect => {
+        console.log('CDockerPoper', rect);
+        this.rect = rect;
+
+        if (this.show) {
+          // this.poperHeight = this.windowHeight - this.rect.bottom;
+
+        }
+        this.overLayHeight = this.windowHeight - this.rect.bottom;
+        this.top =  this.rect.bottom;
+        this.transition = true;
+
+      });
+    },
+    created(){
+      const {windowHeight} = wx.getSystemInfoSync();
+      this.windowHeight = windowHeight;
+    },
+  });
+</script>
+<style lang="scss">
+  .CDockerPoper {
+    position: relative;
+    z-index: 999;
+    &-header {
+
+    }
+
+    &-poper {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      overflow: hidden;
+      transform: translateY(100%);
+      .c-top-enter,
+      .c-top-leave-to {
+        transform: translate3d(-50%, -100%, 0);
+      }
+
+      .c-top-enter-active,
+      .c-top-leave-active {
+        transition-property: transform;
+      }
+      &-content {
+        position: absolute;
+        top: 0;
+        right: auto;
+        bottom: auto;
+        left: 50%;
+        width: 100%;
+        transform: translate3d(-50%, 0, 0);
+        transition-timing-function: ease;
+        background-color: #FFF;
+        box-sizing: border-box;
+        max-height: 100%;
+        transition-duration: 300ms;
+
+
+      }
+
+      &-overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        transition: all ease 300ms;
+        &.c-top-enter,
+        &.c-top-leave-to {
+          opacity:0;
+        }
+
+        &.c-top-enter-active,
+        &.c-top-leave-active {
+        }
+      }
+    }
+  }
+
+
+</style>
+
+<config>
+  {
+  usingComponents: {
+  COverlay:'~UI/COverlay',
+  }
+  }
+</config>
