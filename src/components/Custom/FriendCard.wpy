@@ -1,0 +1,157 @@
+<template>
+    <div class="FriendCard external-cls">
+      <image :src="icon" class="icon" v-if="friend.like"/>
+      <image :src="icon1" class="icon"/>
+      <div class="col1">
+        <image :src="friend.header" class="header"/>
+        <div class="tag">
+          {{friend.tag}}
+        </div>
+      </div>
+
+      <div class="row1">
+        {{friend.name}}
+      </div>
+      <div class="row2">
+        {{friend.school}}
+      </div>
+      <div class="row3">
+        目标:{{friend.dest}}
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'btn_collected@3x',
+      icon1:'btn_collected_yes@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      friend:{
+        type:Object,
+        default:{
+          like:false,
+          tag:'',
+          name:'',
+          school:'',
+          dest:'',
+          header:''
+        }
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    created () {
+      this.icon1 = getImgUrlEx(this.icon1);
+      this.icon = getImgUrlEx(this.icon);
+
+    }
+  });
+</script>
+<style lang="scss">
+  .FriendCard{
+    $white:#FFFFFF;
+    $lineColor:#CCCCCC;
+    $textBlack:#000000;
+    $textBlack1:#333333;
+    $disabledColor:lightgray;
+    $zIndexTop:900;
+    $zIndexMiddle:50;
+
+    $pageBg:#F2F2F2;
+    $pageBgGray:#F5F5F5;
+
+
+    $primaryColor:#4FAC1B;
+    $redColor:#EE4138;
+    $infoColor:#FFFFFF;
+    $textColor:#333333;
+    $textColorGray:#999999;
+    $textColorGray1:#666666;
+      width:330rpx;
+      background:rgba(255,255,255,1);
+      border-radius:8rpx;
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 20rpx;
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(153,153,153,1);
+
+      .icon {
+        width: 60rpx;
+        height: 60rpx;
+        position: absolute;
+        top: 20rpx;
+        right: 20rpx;
+      }
+
+      .col1{
+        margin-top: 60rpx;
+        position: relative;
+        font-size:24rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        .header{
+          width:150rpx;
+          height:150rpx;
+          border-radius: 150rpx;
+          background: #EEE;
+        }
+
+        .tag{
+          position: absolute;
+          padding: 4rpx 8rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          left: 50%;
+          bottom: 0;
+          transform: translate(-50%, 0%);
+          background:rgba(79,172,27,1);
+          border-radius: 999px;
+        }
+      }
+
+      .row1{
+        font-size:32rpx;
+        font-family:PingFangSCSemibold-,PingFangSCSemibold;
+        font-weight:normal;
+        color:rgba(0,0,0,1);
+        margin: 44rpx 0 24rpx;
+      }
+
+      .row2{
+        margin-bottom: 24rpx;
+      }
+
+      .row3{
+        margin-bottom: 50rpx;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+
+
+
+  }
+</style>
