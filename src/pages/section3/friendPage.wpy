@@ -10,6 +10,7 @@
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
     </div>
+    <COrderList :items="list" @change="onCOrderList" :sel="selOrder"/>
 
 
     <div class="gwyCard">
@@ -50,6 +51,12 @@
         text:'我的好友',
         src:'icon_myfriends@3x'
       },
+      list:[
+        {text:'性别'},
+        {text:'院校'},
+        {text:'等级'},
+      ],
+      selOrder:-1
     },
     methods: {
       handleTab({tab ,index}){
@@ -57,6 +64,9 @@
       },
       handleToQuestion(){
         navToPage('/pages/section1/question')
+      },
+      onCOrderList(index){
+        this.selOrder = index;
       }
     },
     onLoad(){
@@ -149,6 +159,7 @@
   usingComponents: {
   CExpand:'~UI/CExpand',
   CTab:'~UI/CTab',
+  COrderList:'~UI/COrderList',
   IconText:'~Custom/IconText',
   FriendCard:'~Custom/FriendCard'
   }
