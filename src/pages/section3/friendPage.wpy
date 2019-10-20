@@ -10,7 +10,13 @@
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
     </div>
-    <COrderList :items="list" @change="onCOrderList" :sel="selOrder"/>
+    <CDockerPoper :show="showDocker" @close="showDocker=false">
+      <COrderList :items="list" @change="onCOrderList" :sel="selOrder" slot="header"/>
+      <div class="poper" slot="poper">
+        this is poper
+      </div>
+    </CDockerPoper>
+
 
 
     <div class="gwyCard">
@@ -39,6 +45,7 @@
     },
     data: {
       expanded:false,
+      showDocker:false,
       items1:[],
       items2:[],
 
@@ -67,6 +74,13 @@
       },
       onCOrderList(index){
         this.selOrder = index;
+        if(index > -1){
+          console.log('this.showDocker')
+          this.showDocker = true;
+        }else{
+          this.showDocker = false;
+
+        }
       }
     },
     onLoad(){
@@ -151,6 +165,12 @@
 
       }
     }
+
+    .poper{
+      width: 750rpx;
+      height: 200rpx;
+      background-color: #07c160;
+    }
   }
 </style>
 <config>
@@ -158,6 +178,7 @@
   navigationBarTitleText: '好友',
   usingComponents: {
   CExpand:'~UI/CExpand',
+  CDockerPoper:'~UI/CDockerPoper',
   CTab:'~UI/CTab',
   COrderList:'~UI/COrderList',
   IconText:'~Custom/IconText',

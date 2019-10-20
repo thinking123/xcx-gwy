@@ -10,7 +10,7 @@ const getClassNames = (name) => ({
 
 const nextTick = () => new Promise(resolve => setTimeout(resolve, 1000 / 30));
 
-export const transition = function (showDefaultValue) {
+export const transition = function (showDefaultValue,name='fade') {
   return {
     props: {
       customStyle: String,
@@ -28,7 +28,7 @@ export const transition = function (showDefaultValue) {
       },
       name: {
         type: String,
-        default: 'fade'
+        default: name
       }
     },
 
