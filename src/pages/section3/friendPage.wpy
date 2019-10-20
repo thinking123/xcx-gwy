@@ -1,0 +1,156 @@
+<template>
+  <div class="page friendPage">
+    <div class="header">
+      <CTab type="radius" :tabs="tabs"
+            @changeTab="handleTab"
+            external-cls="ctab"/>
+
+      <IconText @click.native="handleToQuestion"
+                external-cls="titleIcon"
+                external-img="titleImg"
+                :text="iconText.text" :src="iconText.src"/>
+    </div>
+
+
+    <div class="gwyCard">
+      <FriendCard
+        v-for="item in items1"
+        :key="item.id"
+        :friend="item"
+        external-cls="gwyCard-item"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import {getImgUrlEx , showMsg} from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      expanded:false,
+      items1:[],
+      items2:[],
+
+      tabs:[
+        {text:'推荐匹配'},
+        {text:'条件查找'},
+      ],
+      selectedTab:0,
+      iconText:{
+        text:'我的好友',
+        src:'icon_myfriends@3x'
+      },
+    },
+    methods: {
+      handleTab({tab ,index}){
+        this.selectedTab = index;
+      },
+      handleToQuestion(){
+        navToPage('/pages/section1/question')
+      }
+    },
+    onLoad(){
+      showMsg('共12位好友');
+    },
+    created () {
+      let arr = []
+      for(let i = 0 ; i < 19 ; i++){
+        arr.push({
+          header:'',
+          name:'追风筝的人',
+          like: i%2,
+          tag:'学霸',
+          school:'南华大学',
+          dest:'答疑解惑，我们的职责,答疑解惑，我们的职责',
+          id:i
+        });
+      }
+
+      this.items1 = arr;
+
+      this.iconText.src = getImgUrlEx(this.iconText.src);
+   }
+  });
+</script>
+<style lang="scss">
+  .friendPage{
+    .header{
+      padding: 0 30rpx;
+      height: 144rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #FFFFFF;
+      .ctab{
+        width: 460rpx;
+      }
+      .titleIcon{
+        font-size:28rpx;
+        font-weight:400;
+        color:#4FAC1B;
+        line-height:28rpx;
+        >image{
+          width:48rpx;
+          height:48rpx;
+          margin-bottom: 16rpx;
+        }
+      }
+      .titleImg{
+
+      }
+    }
+
+    button{
+      margin: 20rpx;
+    }
+    .item{
+      height: 100rpx;
+      background-color: #07c160;
+
+      &:nth-child(odd){
+        background-color: #1989fa;
+      }
+
+    }
+
+
+
+    .gwyCard{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      background:rgba(242,242,242,1);
+      padding: 32rpx 30rpx;
+      justify-content: space-between;
+      .gwyCard-item{
+        margin-bottom: 32rpx;
+        &:nth-child(odd){
+
+        }
+
+
+      }
+    }
+  }
+</style>
+<config>
+{
+  navigationBarTitleText: '好友',
+  usingComponents: {
+  CExpand:'~UI/CExpand',
+  CTab:'~UI/CTab',
+  IconText:'~Custom/IconText',
+  FriendCard:'~Custom/FriendCard'
+  }
+}
+</config>
