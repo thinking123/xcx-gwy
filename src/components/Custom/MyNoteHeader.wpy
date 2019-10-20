@@ -1,0 +1,48 @@
+<template>
+    <div class="MyNoteHeader external-cls">
+      <div class="row1" :class="{'selected':show}">
+        <span></span>
+        <image :src="iconDown" mode="aspectFit" class="icon" v-if="show"></image>
+        <image :src="iconUp" mode="aspectFit" class="icon" v-else></image>
+      </div>
+    </div>
+</template>
+<script>
+    import wepy from '@wepy/core'
+    import {getImgUrlEx} from "@/common/utils";
+
+    wepy.component({
+        data: {
+          iconDown:'icon_arrowdown@3x',
+          iconUp:'icon_arrowup@3x',
+        },
+        externalClasses: [
+            'external-cls'
+        ],
+        props: {
+          show:false,
+          text:String,
+
+        },
+        events: {},
+        computed: {},
+        methods: {},
+        created() {
+          this.iconDown = getImgUrlEx(this.iconDown);
+          this.iconUp = getImgUrlEx(this.iconUp);
+        }
+    });
+</script>
+<style lang="scss">
+    .MyNoteHeader {
+      .row1{
+        width:144rpx;
+        height:64rpx;
+        background:rgba(242,242,242,1);
+        border-radius:32rpx;
+        &.selected{
+
+        }
+      }
+    }
+</style>

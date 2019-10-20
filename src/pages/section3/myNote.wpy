@@ -1,0 +1,71 @@
+<template>
+  <div class="page selfPage">
+    <CTab :tabs="tabs" bottomLine="128" bottomLineOffset="20" @changeTab="handleTab" external-cls="CTab"/>
+    <div class="line"/>
+    <block v-if="selectedTab == 0">
+
+    </block>
+    <block v-else>
+
+    </block>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      tabs:[
+        {text:'笔记感悟'},
+        {text:'我的错题'},
+      ],
+      selectedTab:0,
+    },
+    methods: {
+      handleTab({tab ,index}){
+        this.selectedTab = index;
+      },
+    },
+    onShow(){
+
+    },
+    created() {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .selfPage{
+    ctab{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .CTab{
+      width: 342rpx;
+    }
+
+    .line{
+      width:750rpx;
+      height:1px;
+      background:rgba(230,230,230,1);
+    }
+  }
+
+</style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  }
+  }
+</config>

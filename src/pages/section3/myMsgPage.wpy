@@ -1,0 +1,39 @@
+<template>
+    <div class="page myMsgPage">
+
+    </div>
+</template>
+
+<script>
+    import wepy from '@wepy/core';
+    import store from 'store';
+
+    wepy.page({
+        store,
+        config: {
+            navigationBarTitleText: ''
+        },
+        computed: {},
+        data: {},
+        methods: {},
+        onShow() {
+
+        },
+        created() {
+
+        }
+    });
+</script>
+<style lang="scss">
+    .myMsgPage {
+
+    }
+
+</style>
+<config>
+    {
+    navigationBarTitleText: '',
+    usingComponents: {
+    }
+    }
+</config>
