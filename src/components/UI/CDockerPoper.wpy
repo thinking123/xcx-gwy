@@ -4,18 +4,13 @@
       <slot name="header"></slot>
     </div>
     <div class="CDockerPoper-poper-overlay {{classes}}"
+         v-show="show"
          @click="onClose"
          style="height:{{overLayHeight}}px;top:{{top}}px;">
 
     </div>
-    <div class="CDockerPoper-poper" style="max-height:{{poperHeight}}">
-      <!--      <COverlay-->
-      <!--        :show="show"-->
-      <!--        z-index="999"-->
-      <!--        bind:click="onClose"-->
-      <!--      />-->
-
-      <div class="CDockerPoper-poper-content {{classes}}">
+    <div class="CDockerPoper-poper" style="height:{{wrapHeight}};" bind:transitionend="onTransitionEnd">
+      <div class="CDockerPoper-poper-content">
         <slot name="poper"></slot>
       </div>
     </div>
@@ -37,8 +32,9 @@
 
   wepy.component({
     data: {
-      poperHeight: 0,
+      poperHeight: '0px',
       overLayHeight: 0,
+      wrapHeight: 0,
       top: 0,
       transition: false,
       classes:'',
@@ -70,13 +66,20 @@
       onClose() {
         this.$emit('close')
       },
+      onTransitionEnd(){
+        if(this.show){
+          this.wrapHeight = 'auto';
+        }
+      },
       showPoper(){
         const classNames = getClassNames();
 
-        Promise.resolve()
-          .then(nextTick)
-          .then(()=>{
-            this.poperHeight = 'auto';
+        this.getRect('.CDockerPoper-poper-content')
+          // .then(nextTick)
+
+          .then((rect)=>{
+            // this.poperHeight = `${this.windowHeight - this.rect.bottom}px`;
+            this.wrapHeight = `${rect.height}px`;
             this.classes = classNames.enter;
           })
           .then(nextTick)
@@ -89,15 +92,15 @@
       hidePoper(){
         const classNames = getClassNames();
 
-        Promise.resolve()
-          .then(nextTick)
-          .then(()=>{
+        this.getRect('.CDockerPoper-poper-content')
+          .then((rect)=>{
             this.classes = classNames.leave;
+            this.wrapHeight = `${rect.height}px`;
           })
           .then(nextTick)
           .then(()=>{
             this.classes = classNames['leave-to'];
-
+            this.wrapHeight = `0px`;
           })
           .catch(() => {});
 
@@ -136,7 +139,11 @@
       position: absolute;
       bottom: 0;
       width: 100%;
+      left:0;
       overflow: hidden;
+      transition-duration: 300ms;
+      transition-property: height;
+      transition-timing-function: ease;
       transform: translateY(100%);
       .c-top-enter,
       .c-top-leave-to {
@@ -148,6 +155,7 @@
         transition-property: transform;
       }
       &-content {
+        /*
         position: absolute;
         top: 0;
         right: auto;
@@ -160,7 +168,7 @@
         box-sizing: border-box;
         max-height: 100%;
         transition-duration: 300ms;
-
+*/
 
       }
 
