@@ -13,7 +13,12 @@
     <CDockerPoper :show="showDocker" @close="showDocker=false">
       <COrderList :items="list" @change="onCOrderList" :sel="selOrder" slot="header"/>
       <div class="poper" slot="poper">
-        this is poper
+        <div class="c1">
+
+        </div>
+        <div class="c2">
+
+        </div>
       </div>
     </CDockerPoper>
 
@@ -168,8 +173,17 @@
 
     .poper{
       width: 750rpx;
-      height: 200rpx;
-      background-color: #07c160;
+      .c1{
+        width: 750rpx;
+        height: 800rpx;
+        background-color: #07c160;
+      }
+
+      .c2{
+        width: 750rpx;
+        height: 800rpx;
+        background-color: chartreuse;
+      }
     }
   }
 </style>
