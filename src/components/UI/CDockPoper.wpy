@@ -1,0 +1,38 @@
+<template>
+    <div class="CDockPoper external-cls">
+
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      docker:String,
+      show:Boolean
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CDockPoper{
+
+  }
+</style>

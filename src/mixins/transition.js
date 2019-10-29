@@ -72,7 +72,7 @@ export const transition = function (showDefaultValue,name='fade') {
         this.status = 'enter';
 
 
-
+      //enter -> enter-to
         Promise.resolve()
           .then(nextTick)
           .then(() => {
