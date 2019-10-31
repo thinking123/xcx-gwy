@@ -1,5 +1,5 @@
 <template>
-  <div class="page friendPage">
+  <div class="page friendPage" :class="{'fixed':showDocker}">
     <div class="header">
       <CTab type="radius" :tabs="tabs"
             @changeTab="handleTab"
@@ -13,12 +13,7 @@
     <CDockerPoper :show="showDocker" @close="showDocker=false">
       <COrderList :items="list" @change="onCOrderList" :sel="selOrder" slot="header"/>
       <div class="poper" slot="poper">
-        <div class="c1">
-
-        </div>
-        <div class="c2">
-
-        </div>
+        <CListSelect :items="list1" v-show="selOrder == 0" labelKey="text" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
       </div>
     </CDockerPoper>
 
@@ -68,7 +63,47 @@
         {text:'院校'},
         {text:'等级'},
       ],
-      selOrder:-1
+      selOrder:-1,
+      list1:[
+        {text:'不限'},
+        {text:'男'},
+        {text:'女'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+        {text:'保密'},
+      ],
+      list1Sel:-1,
+      list2:[
+        {text:'不限'},
+        {text:'男'},
+        {text:'女'},
+        {text:'保密'},
+      ],
+      list3:[
+        {text:'学生'},
+        {text:'学杂'},
+        {text:'学子'},
+        {text:'雪碧'},
+      ],
     },
     methods: {
       handleTab({tab ,index}){
@@ -86,6 +121,10 @@
           this.showDocker = false;
 
         }
+      },
+      onCListSelect1(index){
+        this.list1Sel = index;
+        console.log('this.list1Sel', this.list1Sel);
       }
     },
     onLoad(){
@@ -113,6 +152,11 @@
 </script>
 <style lang="scss">
   .friendPage{
+    &.fixed{
+      position: fixed;
+      overflow: hidden;
+      height: 100%;
+    }
     .header{
       padding: 0 30rpx;
       height: 144rpx;
@@ -175,7 +219,7 @@
       width: 750rpx;
       .c1{
         width: 750rpx;
-        height: 800rpx;
+        height: 200rpx;
         background-color: #07c160;
       }
 
@@ -183,6 +227,18 @@
         width: 750rpx;
         height: 800rpx;
         background-color: chartreuse;
+      }
+
+      .CListSelect1{
+        background:rgba(242,242,242,1);
+        padding: 32rpx 30rpx;
+        box-sizing: border-box;
+        .CListSelect-item{
+          margin-bottom: 20rpx;
+          &:last-child{
+            margin-bottom: 0;
+          }
+        }
       }
     }
   }
@@ -195,6 +251,7 @@
   CDockerPoper:'~UI/CDockerPoper',
   CTab:'~UI/CTab',
   COrderList:'~UI/COrderList',
+  CListSelect:'~UI/CListSelect',
   IconText:'~Custom/IconText',
   FriendCard:'~Custom/FriendCard'
   }

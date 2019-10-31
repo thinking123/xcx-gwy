@@ -26,8 +26,7 @@
       },
       sel: String,
       key: {
-        type: String,
-        default: 'id'
+        type: String
       },
       labelKey: {
         type: String,
@@ -40,7 +39,8 @@
       onClick(index) {
         const item = this.items[index];
         const sel = this.key ? item[this.key] : index;
-        this.$emit('change', sel == this.sel ? '' : sel);
+        console.log(sel)
+        this.$emit('change', sel == this.sel ? -1 : sel);
       }
     },
     created() {

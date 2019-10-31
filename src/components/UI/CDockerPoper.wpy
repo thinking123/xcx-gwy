@@ -1,16 +1,15 @@
 <template>
-  <div class="CDockerPoper external-cls">
+  <div class="CDockerPoper external-cls" :class="{'fixed':show}">
     <div class="CDockerPoper-header">
       <slot name="header"></slot>
     </div>
     <div class="CDockerPoper-poper-overlay {{classes}}"
-         v-show="show"
          @click="onClose"
          style="height:{{overLayHeight}}px;top:{{top}}px;">
 
     </div>
     <div class="CDockerPoper-poper" style="height:{{wrapHeight}};" bind:transitionend="onTransitionEnd">
-      <div class="CDockerPoper-poper-content">
+      <div class="CDockerPoper-poper-content" style="max-height:{{overLayHeight}}px">
         <slot name="poper"></slot>
       </div>
     </div>
@@ -95,6 +94,7 @@
         this.getRect('.CDockerPoper-poper-content')
           .then((rect)=>{
             this.classes = classNames.leave;
+            console.log('hjide height' , rect)
             this.wrapHeight = `${rect.height}px`;
           })
           .then(nextTick)
@@ -131,6 +131,9 @@
   .CDockerPoper {
     position: relative;
     z-index: 999;
+    &.fixed{
+      position: fixed;
+    }
     &-header {
 
     }
@@ -169,11 +172,12 @@
         max-height: 100%;
         transition-duration: 300ms;
 */
+        overflow: auto;
 
       }
 
       &-overlay{
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
@@ -184,6 +188,13 @@
         &.c-top-leave-to {
           opacity:0;
         }
+
+        &.c-top-leave,
+        &.c-top-enter-to {
+          opacity: 1;
+        }
+
+
 
         &.c-top-enter-active,
         &.c-top-leave-active {
