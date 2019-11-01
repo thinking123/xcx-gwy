@@ -4,11 +4,12 @@
       <slot name="header"></slot>
     </div>
     <div class="CDockerPoper-poper-overlay {{classes}}"
+         :class="{'CDockerPoper-poper-overlay--transition':transition}"
          @click="onClose"
          style="height:{{overLayHeight}}px;top:{{top}}px;">
 
     </div>
-    <div class="CDockerPoper-poper" style="height:{{wrapHeight}};" bind:transitionend="onTransitionEnd">
+    <div class="CDockerPoper-poper" style="height:{{wrapHeight}};" bind:transitionend="onTransitionEnd" :class="{'CDockerPoper-poper--transition':transition}">
       <div class="CDockerPoper-poper-content" style="max-height:{{overLayHeight}}px">
         <slot name="poper"></slot>
       </div>
@@ -108,6 +109,7 @@
       }
     },
     attached() {
+      console.log('attached')
       this.getRect('.CDockerPoper').then(rect => {
         console.log('CDockerPoper', rect);
         this.rect = rect;
@@ -118,7 +120,11 @@
         }
         this.overLayHeight = this.windowHeight - this.rect.bottom;
         this.top =  this.rect.bottom;
-        this.transition = true;
+
+        Promise.resolve().then(()=>{
+          this.transition = true;
+        })
+
 
       });
     },
@@ -145,10 +151,14 @@
       width: 100%;
       left:0;
       overflow: hidden;
-      transition-duration: 300ms;
-      transition-property: height;
-      transition-timing-function: ease;
+      /*transition-duration: 300ms;*/
+      /*transition-property: height;*/
+      /*transition-timing-function: ease;*/
       transform: translateY(100%);
+
+      &--transition {
+        transition: height 300ms ease-in-out;
+      }
       .c-top-enter,
       .c-top-leave-to {
         transform: translate3d(-50%, -100%, 0);
@@ -184,7 +194,11 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.7);
-        transition: all ease 300ms;
+        opacity: 0;
+        /*transition: all ease 300ms;*/
+        &--transition {
+          transition: all ease 300ms;
+        }
         &.c-top-enter,
         &.c-top-leave-to {
           opacity:0;

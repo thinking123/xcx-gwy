@@ -1,0 +1,81 @@
+<template>
+  <div class="page myFansPage">
+    <FansItem v-for="item in items1" :key="item.id" :fans="item"
+              external-cls="fansItem"
+              @follow="onFollow"/>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      items1:[]
+    },
+    methods: {
+      onFollow(fans){
+        console.log(fans);
+      }
+    },
+    onShow(){
+
+    },
+    created () {
+      let arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          header:'',
+          tag:'序跋',
+          name:'追风筝的人',
+          school:'北京电视',
+          dest:'考点：资料分析秒杀综述',
+          id:i
+        });
+      }
+
+      this.items1 = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+  .myFansPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .fansItem{
+      margin-bottom: 32rpx;
+
+    }
+
+    &:first-child{
+      margin-top: 32rpx;
+    }
+
+    &:last-child{
+      margin-bottom: 32rpx;
+    }
+
+
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '我的粉丝',
+    usingComponents: {
+  FansItem:'~Custom/FansItem',
+    }
+}
+</config>

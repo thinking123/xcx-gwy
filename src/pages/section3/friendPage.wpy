@@ -10,7 +10,7 @@
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
     </div>
-    <CDockerPoper :show="showDocker" @close="showDocker=false">
+    <CDockerPoper :show="showDocker" @close="onCloseDocker" v-if="selectedTab==1">
       <COrderList :items="list" @change="onCOrderList" :sel="selOrder" slot="header"/>
       <div class="poper" slot="poper">
         <div style="display:{{selOrder==0?'block':'none'}}">
@@ -57,6 +57,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {getImgUrlEx , showMsg} from '@/common/utils';
+  import {navToPage} from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -108,9 +109,10 @@
     methods: {
       handleTab({tab ,index}){
         this.selectedTab = index;
+        this.showDocker = false;
       },
       handleToQuestion(){
-        navToPage('/pages/section1/question')
+        navToPage('/pages/section3/myFriendPage')
       },
       onCOrderList(index){
         this.selOrder = index
@@ -135,6 +137,10 @@
       onClickCCollapseItem({id}){
         this.curSelItem = id;
       },
+      onCloseDocker(){
+        this.showDocker = false;
+        this.selOrder = -1;
+      }
     },
     onLoad(){
       showMsg('共12位好友');
