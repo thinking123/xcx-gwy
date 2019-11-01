@@ -13,7 +13,30 @@
     <CDockerPoper :show="showDocker" @close="showDocker=false">
       <COrderList :items="list" @change="onCOrderList" :sel="selOrder" slot="header"/>
       <div class="poper" slot="poper">
-        <CListSelect :items="list1" v-show="selOrder == 0" labelKey="text" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
+        <div style="display:{{selOrder==0?'block':'none'}}">
+          <CListSelect :items="list1"  labelKey="text" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
+        </div>
+        <div style="display:{{selOrder==1?'block':'none'}}">
+          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
+            <CCollapseItem v-for="item in list2" :key="item.id"
+                           external-cls="collapse-item"
+                           collapse-item="collapse-item-header"
+                           :title="item.prov" :name="item.id">
+              <div v-for="m in item.items" :key="m.id"
+                   :class="{'selected':curSelItem == m.id}"
+                   @click="onClickCCollapseItem(m)"
+                   class="collapseItem">
+                {{m.school}}
+              </div>
+            </CCollapseItem>
+          </CCollapse>
+        </div>
+
+        <div style="display:{{selOrder==2?'block':'none'}}">
+          <CListSelect :items="list3"  labelKey="text" external-cls="CListSelect1" :sel="list3Sel" @change="onCListSelect3"/>
+        </div>
+
+
       </div>
     </CDockerPoper>
 
@@ -47,8 +70,6 @@
       expanded:false,
       showDocker:false,
       items1:[],
-      items2:[],
-
       tabs:[
         {text:'推荐匹配'},
         {text:'条件查找'},
@@ -69,41 +90,20 @@
         {text:'男'},
         {text:'女'},
         {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
-        {text:'保密'},
       ],
       list1Sel:-1,
       list2:[
-        {text:'不限'},
-        {text:'男'},
-        {text:'女'},
-        {text:'保密'},
       ],
+      list2Sel:-1,
       list3:[
         {text:'学生'},
         {text:'学杂'},
         {text:'学子'},
         {text:'雪碧'},
       ],
+      list3Sel:-1,
+      expandItems:[],
+      curSelItem:''
     },
     methods: {
       handleTab({tab ,index}){
@@ -113,7 +113,8 @@
         navToPage('/pages/section1/question')
       },
       onCOrderList(index){
-        this.selOrder = index;
+        this.selOrder = index
+        console.log(' this.selOrder :',  this.selOrder );
         if(index > -1){
           console.log('this.showDocker')
           this.showDocker = true;
@@ -124,8 +125,16 @@
       },
       onCListSelect1(index){
         this.list1Sel = index;
-        console.log('this.list1Sel', this.list1Sel);
-      }
+      },
+      onCListSelect3(index){
+        this.list3Sel = index;
+      },
+      onExpand(exp){
+        this.expandItems = exp;
+      },
+      onClickCCollapseItem({id}){
+        this.curSelItem = id;
+      },
     },
     onLoad(){
       showMsg('共12位好友');
@@ -143,8 +152,32 @@
           id:i
         });
       }
-
       this.items1 = arr;
+      arr = []
+      for(let i = 0 ; i < 10 ; i++){
+        let temp = {
+          header:'',
+          prov:'北京',
+          items:[],
+          id:i
+        };
+
+        for(let j = 0 ; j < 5 ; j++){
+          let obj = {
+            id: `${i}-${j}`,
+            school:'南华大学',
+          }
+          temp.items.push(obj);
+
+        }
+        arr.push(temp);
+      }
+
+
+
+      this.list2 = arr;
+
+
 
       this.iconText.src = getImgUrlEx(this.iconText.src);
    }
@@ -240,6 +273,51 @@
           }
         }
       }
+
+    }
+
+    .CCollapse{
+      padding: 30rpx 32rpx 0;
+      background:rgba(242,242,242,1);
+      box-sizing: border-box;
+    }
+    .collapse-item{
+      background: #FFF;
+      width:690rpx;
+      box-sizing: border-box;
+      margin-bottom: 20rpx;
+      border-radius:8rpx;
+    }
+    .collapse-item-header{
+      width: 100% !important;
+    }
+    .collapseItem{
+      font-size:32rpx;
+      font-family:PingFang-SC-Regular,PingFang-SC;
+      font-weight:400;
+
+      line-height:40rpx;
+      display: flex;
+      align-items: center;
+      height: 120rpx;
+      margin-left: 40rpx;
+      position: relative;
+      padding: 0 40rpx;
+
+      &.selected{
+        color:rgba(79,172,27,1);
+      }
+      &::after{
+        content:'';
+        position: absolute;
+        background:rgba(230,230,230,1);
+        height: 1px;
+        width: 100%;
+        top:100%;
+        left: 50%;
+        width:650rpx;
+        transform: translateX(-50%);
+      }
     }
   }
 </style>
@@ -253,7 +331,9 @@
   COrderList:'~UI/COrderList',
   CListSelect:'~UI/CListSelect',
   IconText:'~Custom/IconText',
-  FriendCard:'~Custom/FriendCard'
+  FriendCard:'~Custom/FriendCard',
+  CCollapse:'~UI/CCollapse',
+  CCollapseItem:'~UI/CCollapseItem',
   }
 }
 </config>

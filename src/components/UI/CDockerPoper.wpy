@@ -34,6 +34,7 @@
       poperHeight: '0px',
       overLayHeight: 0,
       wrapHeight: 0,
+      contentHeight:0,
       top: 0,
       transition: false,
       classes:'',
