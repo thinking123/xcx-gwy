@@ -1,0 +1,147 @@
+<template>
+  <div class="MyCollectMedia external-cls">
+    <div class="row1">
+      <div class="col1">
+        <CCircleImg external-cls="_col1" :src="media.img"/>
+        <span>{{media.title}}</span>
+      </div>
+
+      <div class="col2">
+        <image :src="icon2" class="icon2"/>
+        <span>{{media.title}}</span>
+      </div>
+
+
+    </div>
+    <image :src="icon1" class="row2"/>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon1:'btn_liked@3x',
+      icon2:'icon_play_gray@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      media:{
+        type:Object,
+        default:{
+          title:'',
+          img:'',
+          info:'',
+          liked:''
+        }
+      }
+
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    created(){
+      this.icon1 = getImgUrlEx(this.icon1)
+      this.icon2 = getImgUrlEx(this.icon2)
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  $white:#FFFFFF;
+  $lineColor:#CCCCCC;
+  $textBlack:#000000;
+  $textBlack1:#333333;
+  $disabledColor:lightgray;
+  $zIndexTop:900;
+  $zIndexMiddle:50;
+
+  $pageBg:#F2F2F2;
+  $pageBgGray:#F5F5F5;
+
+
+  $primaryColor:#4FAC1B;
+  $redColor:#EE4138;
+  $infoColor:#FFFFFF;
+  $textColor:#333333;
+  $textColorGray:#999999;
+  $textColorGray1:#666666;
+
+  .MyCollectMedia{
+    width:690rpx;
+    height:204rpx;
+    background:rgba(255,255,255,1);
+    border-radius:8rpx;
+    box-sizing: border-box;
+    padding: 40rpx 40rpx 40rpx 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .row1{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+      .col1{
+
+        margin-bottom: 34rpx;
+        display: flex;
+        align-items: center;
+        ._col1{
+          width:60rpx;
+          height:60rpx;
+          margin-right: 16rpx;
+        }
+        >label{
+          font-size:32rpx;
+          font-weight:normal;
+          color:$textBlack;
+        }
+      }
+
+
+
+      .col2{
+        display: flex;
+        align-items: center;
+        font-size:28rpx;
+        font-weight:400;
+        color:rgba(98,100,102,1);
+
+        .icon2{
+          width:32rpx;
+          height:32rpx;
+          margin-right: 34rpx;
+        }
+      }
+    }
+
+    .row2{
+      width:100rpx;
+      height:100rpx;
+
+      /*margin-bottom: 42rpx;*/
+    }
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CCircleImg:'~UI/CCircleImg',
+  'CButton':'~UI/CButton'
+  }
+  }
+</config>
+
