@@ -63,18 +63,18 @@
     onShow(){
 
     },
-    created () {
+    created() {
       let
         arr = [];
-      for(let i = 0 ; i < 10 ; i++){
+      for (let i = 0; i < 10; i++) {
         arr.push({
-          id:i,
-          title:`数量关系${i}`,
-          img:'',
-          info:'数量关系数量关系数量关系',
-          liked:true,
+          id: i,
+          title: `数量关系${i}`,
+          img: '',
+          info: '数量关系数量关系数量关系',
+          liked: true
 
-        })
+        });
       }
       this.items1 = arr;
 
