@@ -1,0 +1,183 @@
+<template>
+  <div class="page myReportPage">
+    <CHeaderPanel title="帖子数据"
+                  external-cls__header="CHeaderPanel1"
+                  external-cls="CHeaderPanel"
+    >
+      <div class="c1">
+        <CRect max="30" cur="20" dir="1"
+               label="已浏览"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect1__wrap"
+               external-cls="crect1"/>
+        <CRect max="30" cur="4" dir="1"
+               label="已发帖"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect2__wrap"
+               external-cls="crect1"/>
+        <CRect max="30" cur="10" dir="1"
+               label="已回复"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect3__wrap"
+               external-cls="crect1"/>
+      </div>
+    </CHeaderPanel>
+
+    <CHeaderPanel title="视频数据"
+                  external-cls__header="CHeaderPanel2"
+                  external-cls="CHeaderPanel"
+    >
+      <div class="c2">
+        <CRect max="30" cur="20" dir="0"
+               label="已浏览"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect1__wrap"
+               external-cls="crect1"/>
+        <CRect max="30" cur="4" dir="0"
+               label="已发帖"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect2__wrap"
+               external-cls="crect1"/>
+        <CRect max="30" cur="10" dir="0"
+               label="已回复"
+               external-cls__inner="crect1__inner"
+               external-cls__wrap="crect3__wrap"
+               external-cls="crect1"/>
+      </div>
+    </CHeaderPanel>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      reportData:{
+          tiezi:{
+            viewNum:100,
+            publishNum:200,
+            backNum:100,
+          },
+
+          video:{
+            viewNum:100,
+            commentNum:200,
+            useNum:100,
+          },
+          media:{
+            listenNum:100,
+            totoal:200,// s
+            useNum:100,
+          },
+
+          dati:{
+            datiNum:100,
+            totoal:200,// s
+            commentNum:200,// s
+            rightNum:0.9,
+            rightCount:100,
+          },
+      }
+    },
+    methods: {
+
+    },
+    onShow(){
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+    display: flex;
+    flex-direction: column;
+  }
+  .myReportPage{
+
+    .CHeaderPanel1{
+      background:linear-gradient(270deg,rgba(157,214,94,1) 0%,rgba(79,172,27,1) 100%);
+
+    }
+    .CHeaderPanel2{
+      background:linear-gradient(270deg,rgba(100,153,217,1) 0%,rgba(52,96,177,1) 100%);
+
+    }
+    .CHeaderPanel{
+      margin-top: 32rpx;
+    }
+
+    .c1{
+      background: #fff;
+      padding: 50rpx;
+      box-sizing: border-box;
+      height: 380rpx;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      .crect1__wrap{
+        width:28rpx;
+        height:180rpx;
+      }
+      .crect2__wrap{
+        width:28rpx;
+        height:60rpx;
+      }
+      .crect3__wrap{
+        width:28rpx;
+        height:100rpx;
+      }
+      .crect1__inner{
+        background:linear-gradient(180deg,rgba(157,214,94,1) 0%,rgba(79,172,27,1) 100%);
+      }
+    }
+    .c2{
+      background: #fff;
+      padding: 50rpx;
+      box-sizing: border-box;
+      height: 426rpx;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      align-items: flex-start;
+      .crect1__wrap{
+        width:400rpx;
+        height:28rpx;
+      }
+      .crect2__wrap{
+        width:400rpx;
+        height:28rpx;
+      }
+      .crect3__wrap{
+        width:400rpx;
+        height:28rpx;
+      }
+      .crect1__inner{
+        background:linear-gradient(270deg,rgba(100,153,217,1) 0%,rgba(52,96,177,1) 100%);
+      }
+    }
+
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CCircle:'~UI/CCircle',
+  CHeaderPanel:'~UI/CHeaderPanel',
+  CRect:'~UI/CRect',
+    }
+}
+</config>

@@ -1,0 +1,56 @@
+<template>
+    <div class="CCircle external-cls">
+      <div class="CCircle--inner" style="height:{{w}};width:{{w}};">
+        <slot/>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import { basic } from '@/mixins/basic';
+
+  wepy.component({
+    data: {
+      h:0,
+      w:0,
+    },
+    mixins: [basic],
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      radius:Number
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      rpxTopx(rpx){
+        return this.windowWidth/750 * rpx;
+      },
+    },
+    attached() {
+      this.getRect('.CCircle').then(rect => {
+        const { width, height } = rect;
+        const w = `${width - this.radius}rpx`;
+      });
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .CCircle{
+    width:190rpx;
+    height:190rpx;
+    border-radius: 50%;
+    &--inner{
+      background: #FFF;
+      border-radius: 50%;
+    }
+  }
+</style>

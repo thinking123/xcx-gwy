@@ -1,0 +1,73 @@
+<template>
+    <div class="CHeaderPanel external-cls">
+      <div class="CHeaderPanel--header external-cls__header">
+        <div class="vertRect"/>
+        <div>
+          {{title}}
+        </div>
+      </div>
+      <div class="CHeaderPanel--content">
+        <slot/>
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls',
+      'external-cls__header',
+    ],
+    props:{
+      title:String
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  cheaderpanel{
+
+  }
+  .CHeaderPanel{
+    margin-top: 32rpx;
+    margin: 0 auto;
+    width:690rpx;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 4rpx 12rpx 0px rgba(0,0,0,0.06);
+    border-radius:16rpx;
+    overflow: hidden;
+    &--header{
+      padding: 32rpx 30rpx;
+      font-size:32rpx;
+      font-weight:normal;
+      color:rgba(255,255,255,1);
+      display: flex;
+      align-items: center;
+      .vertRect{
+        width:8rpx;
+        height:32rpx;
+        background:rgba(255,255,255,1);
+        margin-right: 16rpx;
+      }
+    }
+
+    &--content{
+      background:rgba(255,255,255,1);
+    }
+  }
+</style>
