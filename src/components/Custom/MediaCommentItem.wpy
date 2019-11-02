@@ -6,7 +6,10 @@
           <span>{{user.name}}</span>
         </div>
 
-        <CRate :rate="user.rate" external-cls="cRate"/>
+        <div v-show="showRate">
+          <CRate :rate="user.rate" external-cls="cRate" />
+        </div>
+
       </div>
       <div class="row2">
         {{user.comment}}
@@ -34,15 +37,21 @@
           name:'',
           rate:'',
           comment:'',
-          publishDate:''
+          publishDate:'',
+          hiddenRate:true
         }
+      },
+      showRate:{
+        type:Boolean,
+        default: true,
+
       }
     },
     events: {
 
     },
     computed:{
-      
+
     },
     methods: {
 

@@ -7,6 +7,8 @@
              @click="handleSelect(tab,index)">
           <image :src="selectedIndex== index ? tab.iconSel : tab.icon"
                  v-if="!!tab.icon"
+                 mode="aspectFit"
+                 bindload="{{onLoadImage}}"
                  class="icon"/>
           <span class="text">{{tab.text}}</span>
         </div>
@@ -111,6 +113,12 @@
       rpxTopx(rpx){
         return this.windowWidth/750 * rpx;
       },
+      onLoadImage(e){
+        console.log('load')
+//event.detail = {height, width}
+        const {height, width} = e.detail;
+        console.log('onload',{height, width});
+      }
     },
     attached(){
       this.selectedIndex = this.initSelected;
@@ -169,14 +177,19 @@
         flex:1;
 
         display: flex;
-        flex-direction: row;
         align-items: center;
         justify-content: center;
-
+        flex-direction: column;
 
 
         &.selected{
           color: $primaryColor;
+        }
+
+        .icon{
+          width: 45rpx;
+          height:45rpx;
+          margin-bottom: 20rpx;
         }
       }
     }

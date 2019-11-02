@@ -1,0 +1,154 @@
+<template>
+  <div class="page myMsg">
+    <CTab :tabs="tabs" bottomLine="64" bottomLineOffset="94" @changeTab="handleTab" external-cls="CTab"/>
+
+    <block v-if="selectedTab==0">
+      <MediaCommentItem v-for="item in items1"
+                        :key="item.id"
+                        :user="item"
+      />
+    </block>
+    <block v-if="selectedTab==1">
+      <MediaCommentItem v-for="item in items2"
+                        :key="item.id"
+                        :user="item"
+                        showRate="{{false}}"
+      />
+    </block>
+    <block v-if="selectedTab==2">
+      <div class="row3">
+        <SystemItemMsg v-for="item in items3"
+                       :key="item.id"
+                       :sysMsg="item"
+        />
+      </div>
+
+    </block>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { getImgUrlEx } from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      tabs:[
+        {
+          text: '评论',
+          icon: 'icon_mynotice01@3x',
+          iconSel: 'icon_mynotice01_pre@3x'
+        },
+        {
+          text: '私信',
+          icon: 'icon_mynotice02@3x',
+          iconSel: 'icon_mynotice02_pre@3x'
+        },
+        {
+          text: '系统',
+          icon: 'icon_mynotice03@3x',
+          iconSel: 'icon_mynotice03_pre@3x'
+        },
+      ],
+      selectedTab:0,
+      items1:[],
+      items2:[],
+      items3:[],
+    },
+    methods: {
+      handleTab({tab ,index}){
+        this.selectedTab = index;
+      },
+    },
+    onShow(){
+
+    },
+    created () {
+      this.tabs.forEach(f=>{
+        f.icon = getImgUrlEx(f.icon);
+        f.iconSel = getImgUrlEx(f.iconSel);
+      });
+
+      let arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          header:'',
+          name:'李小萌smile',
+          rate:'3',
+          comment:'哈哈，确实不错，讲的很有逻辑呀！',
+          publishDate:'09-07 12:00',
+          id:i
+        })
+      }
+      this.items1 = arr;
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          header:'',
+          name:'李小萌smile',
+          rate:'3',
+          comment:'哈哈，确实不错，讲的很有逻辑呀！',
+          publishDate:'09-07 12:00',
+          id:i
+        })
+      }
+      this.items2 = arr;
+
+
+      arr = [];
+      for(let i = 0 ; i < 10 ; i++){
+        arr.push({
+          title:'余额提现到账提醒',
+          publishDate:'09-07 12:00',
+          msg:'哈哈，确实不错，讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀讲的很有逻辑呀！',
+          id:i
+        })
+      }
+      this.items3 = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  .myMsg{
+    ctab{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .CTab{
+      width: 750rpx;
+      font-size:32rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(102,102,102,1);
+
+      height: 160rpx;
+      box-shadow:0px 4rpx 12rpx 0px rgba(0,0,0,0.08);
+    }
+
+
+    .row3{
+      margin-top: 10rpx;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CTab:'~UI/CTab',
+
+  MediaCommentItem:'~Custom/MediaCommentItem',
+  SystemItemMsg:'~Custom/SystemItemMsg',
+    }
+}
+</config>
