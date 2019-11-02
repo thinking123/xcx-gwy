@@ -81,6 +81,8 @@ wepy.app({
 
 /*
 *
+*
+  'pages/section3/taskPage',
   'pages/section3/myCollectPage',
   'pages/section3/myFansPage',
   'pages/section3/myFriendPage',
@@ -125,7 +127,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section3/taskPage',
+  'pages/section3/myNote',
 
     ],
     window: {

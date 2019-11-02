@@ -119,7 +119,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '今日任务',
     usingComponents: {
 
   TaskItem:'~Custom/TaskItem',

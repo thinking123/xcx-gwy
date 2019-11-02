@@ -1,0 +1,83 @@
+<template>
+    <div class="RoundSelectBtn external-cls" :class="{'selected':sel}" @click="onClick">
+      <view class="content">
+        <span>{{placeholder}}</span>
+        <image :src="icon1"  class="icon" mode="aspectFit" v-if="sel"/>
+        <image :src="icon"  class="icon" mode="aspectFit" v-else/>
+      </view>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'icon_arrowdown@3x',
+      icon1:'icon_arrowup@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      placeholder:{
+        type:String,
+        default:'请选择'
+      },
+      sel:Boolean
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      onClick(){
+        this.$emit('sel', !this.sel);
+      }
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon);
+      this.icon1 = getImgUrlEx(this.icon1);
+    }
+  });
+</script>
+<style lang="scss">
+  .RoundSelectBtn{
+    font-size:28rpx;
+    font-family:PingFangSC-,PingFangSC;
+    font-weight:normal;
+    color:rgba(51,51,51,1);
+
+    background:rgba(242,242,242,1);
+    border-radius:32rpx;
+
+    padding: 12rpx 32rpx 12rpx 32rpx;
+
+    .content{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      >label{
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+      }
+      .icon{
+        /*position: absolute;*/
+        width:16rpx;
+        height:12rpx;
+        margin-left: 8rpx;
+      }
+    }
+
+
+    &.selected{
+      color:rgba(79,172,27,1);
+    }
+  }
+</style>

@@ -17,6 +17,12 @@
         icon:'icon_sort_default02@3x',
         iconP:'icon_sort_zheng@3x',
         iconR:'icon_sort_dao@3x',
+
+
+        iconJD:'icon_jiang@3x',
+        iconJ:'icon_jiang_pre@3x',
+        iconSD:'icon_sheng@3x',
+        iconS:'icon_sheng_pre@3x',
     },
     externalClasses:[
       'external-cls'
@@ -32,7 +38,7 @@
 
     },
     computed:{
-      
+
     },
     methods: {
       onClick(t){

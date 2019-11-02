@@ -1,0 +1,101 @@
+<template>
+  <div class="OrderItems1 external-cls">
+    <span class="text1">{{label}}</span>
+    <image :src="iconJD"  class="icon1 icon" mode="aspectFit" v-if="order == 0||order == 2" @click="onClick('p')"/>
+    <image :src="iconJ"  class="icon1 icon" mode="aspectFit" v-if="order == 1" @click="onClick('p')"/>
+
+    <image :src="iconSD"  class="icon2 icon" mode="aspectFit" v-if="order == 0||order == 1" @click="onClick('r')"/>
+    <image :src="iconS"  class="icon2 icon" mode="aspectFit" v-if="order == 2" @click="onClick('r')"/>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+
+      iconJD:'icon_jiang@3x',
+      iconJ:'icon_jiang_pre@3x',
+      iconSD:'icon_sheng@3x',
+      iconS:'icon_sheng_pre@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      //0 no order , 1 p order , 2 re order
+      order:{
+        type:Number,
+        default:0
+      },
+      label:{
+        type:String,
+        default:'时间排序'
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      onClick(t){
+        let order = 0;
+        if(t == 'p'){
+          order = this.order == 1 ? 0 : 1;
+        }else{
+          order = this.order == 2 ? 0 : 2;
+        }
+
+        this.$emit('change' , order);
+      }
+    },
+    created () {
+      this.iconJD = getImgUrlEx(this.iconJD);
+      this.iconJ = getImgUrlEx(this.iconJ);
+      this.iconSD = getImgUrlEx(this.iconSD);
+      this.iconS = getImgUrlEx(this.iconS);
+    }
+  });
+</script>
+<style lang="scss">
+  .OrderItems1{
+    height: 40rpx;
+    font-size:28rpx;
+    font-family:PingFangSC-,PingFangSC;
+    font-weight:normal;
+    color:rgba(51,51,51,1);
+    line-height:40rpx;
+    display: flex;
+    align-items: center;
+
+
+
+    font-size:28rpx;
+    font-family:PingFangSC-,PingFang SC;
+    font-weight:normal;
+    color:rgba(51,51,51,1);
+    line-height:40rpx;
+
+    .icon{
+      width: 30rpx;
+      height: 32rpx;
+    }
+
+    .icon1{
+      margin-right: 32rpx;
+    }
+
+    .icon2{
+      margin-right: 10rpx;
+    }
+
+
+    .text1{
+      margin-right: 32rpx;
+      white-space: nowrap;
+    }
+  }
+</style>
