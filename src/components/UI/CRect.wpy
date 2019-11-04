@@ -98,6 +98,9 @@
     }
 
     &--wrap{
+
+    }
+    &--inner{
       border-radius:8rpx;
       overflow: hidden;
     }
@@ -124,14 +127,15 @@
     align-items: center;
     .CRect{
       &-label{
+        width: 150rpx;
         margin-left: 4rpx;
-        order: 2;
+        order: 0;
         align-self: flex-end;
       }
       &--text{
         margin-right: 16rpx;
-        order: 0;
-        width: 50rpx;
+        order: 2;
+
       }
       &--wrap{
         order: 1;

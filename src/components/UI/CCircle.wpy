@@ -35,8 +35,13 @@
     attached() {
       this.getRect('.CCircle').then(rect => {
         const { width, height } = rect;
-        const w = `${width - this.radius}rpx`;
+        const w = `${width - this.rpxTopx(this.radius)}px`;
+        this.w= w;
       });
+    },
+    created(){
+      const {windowWidth} = wx.getSystemInfoSync();
+      this.windowWidth = windowWidth;
     },
     onLoad () {
 
@@ -48,9 +53,15 @@
     width:190rpx;
     height:190rpx;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &--inner{
       background: #FFF;
       border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 </style>
