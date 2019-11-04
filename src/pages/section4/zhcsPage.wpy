@@ -1,0 +1,136 @@
+<template>
+  <div class="page zhcsPage">
+
+    <image mode="aspectFit" class="icon" :src="icon"/>
+    <div class="row">
+      <div class="col"   v-for="(icon, index) in icons">
+        <image mode="aspectFit"
+
+               :key="icon"
+               class="icon1" :src="icon.src"
+               @click="onClick(index)"
+        />
+        <span>{{icon.text}}</span>
+      </div>
+
+
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { getImgUrlEx } from '@/common/utils';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      icons: [
+        { text: '资料填写', src: 'icon_ai_nav01@3x' },
+        { text: '综合测试', src: 'icon_ai_nav02@3x' },
+        { text: '面相', src: 'icon_ai_nav03@3x' },
+        { text: '手相', src: 'icon_ai_nav04@3x' },
+        { text: '八字', src: 'icon_ai_nav05@3x' },
+        { text: '性格', src: 'icon_ai_nav06@3x' },
+        { text: '情商', src: 'icon_ai_nav07@3x' },
+        { text: '星座', src: 'icon_ai_nav08@3x' }
+      ],
+      icon: 'bg_ai@3x'
+    },
+    methods: {
+      onClick(index){
+        console.log(index);
+      }
+    },
+    onShow(){
+
+    },
+    created () {
+      for (let i = 0; i < 8; i++) {
+        this.icons[i].src = getImgUrlEx(this.icons[i].src);
+      }
+      this.icon = getImgUrlEx(this.icon);
+
+    }
+  });
+</script>
+<style lang="scss">
+  .zhcsPage{
+    height: 100vh;
+    .icon{
+      width:750rpx;
+      height:1624rpx;
+      position: absolute;
+      left:0;
+      top:0;
+    }
+
+    .row{
+
+      position: relative;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      width:690rpx;
+      background:rgba(255,255,255,1);
+      border-radius:16rpx;
+      margin: 0 auto;
+      margin-top: 52rpx;
+      .col{
+        width: 345rpx;
+        height:320rpx;
+
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        >image{
+          width:160rpx;
+          height:160rpx;
+          margin-bottom: 25rpx;
+        }
+
+        &:nth-child(odd)::after{
+          content:'';
+          position: absolute;
+          right:0;
+          bottom:0;
+          width:2px;
+          height: 100%;
+          background:rgba(230,230,230,1);
+        }
+
+        &::before{
+
+          content:'';
+          position: absolute;
+          right:0;
+          bottom:0;
+          height:2px;
+          width: 100%;
+          background:rgba(230,230,230,1);
+        }
+        &:nth-child(7)::before,  &:nth-child(8)::before{
+          content:'';
+          background:transparent;
+        }
+      }
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '综合自我测试',
+    usingComponents: {
+    }
+}
+</config>

@@ -81,6 +81,10 @@ wepy.app({
 
 /*
 *
+*   'pages/section4/rgznPage',
+
+*   'pages/section3/myReportPage',
+
 *  'pages/section3/myMsg',
 
   'pages/section3/myNote',\
@@ -129,7 +133,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section3/myReportPage',
+  'pages/section4/zhcsPage',
 
     ],
     window: {
