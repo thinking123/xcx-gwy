@@ -1,0 +1,42 @@
+<template>
+  <image  mode="aspectFit" class="RgznBg external-cls" :src="icon"/>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  import { getImgUrlEx } from '@/common/utils';
+
+  wepy.component({
+    data: {
+
+      icon: 'bg_ai@3x',
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    created() {
+      this.icon = getImgUrlEx(this.icon);
+    }
+  });
+</script>
+<style lang="scss">
+  .RgznBg{
+    left:0;
+    top:0;
+    width:750rpx;
+    height:1624rpx;
+    position: absolute;
+  }
+</style>
