@@ -1,0 +1,102 @@
+<template>
+  <div class="page baziResultPage">
+    <RgznBg/>
+    <CHeaderPanel :title="item.title"
+                  external-cls__header="CHeaderPanel3"
+                  external-cls="CHeaderPanel"
+                  showLine="{{true}}"
+                  v-for="(item,index) in items"
+                  :key="index"
+    >
+      <div class="p">
+        {{item.content}}
+      </div>
+    </CHeaderPanel>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      items:[
+        {
+          title:'今年运势',
+          content:'今年有雄心壮志，待人耿直大方，富有斗争精神和进取精神，性格乐观喜欢自由，会挣钱也会花钱，出手大方，给人印象极佳。'
+        },
+        {
+          title:'八字算命爱情',
+          content:'简易爱情分析，本白是属于柏拉图式的精神爱情。本白的爱情因为双方生活背景差异大，价值观也有落差，因此对方并不容易真正了解本白，其实只要本白们多沟通，让对方了解自己真正的想法，相处就不会有问题。'
+        },
+        {
+          title:'八字算命财运事业',
+          content:'简易财运事业分析，本白不容易守财，也不容易储蓄，每次累积到一定的财富就会发生一些事情让本白花钱。 根据命理分析，本白不容易守财，也不容易储蓄，每次累积到一定的财富就会发生一些事情让本白花钱。本白对于生命比较达观，因此不会对自己，也不会对家人或朋友太小气。在本白手头比较紧的时候，该花的钱本白还是会花，不会一毛不拔；在本白手头比较宽裕的时候，本白花钱会很大方，不会对自己、家人或朋友小气，正因为如此，本白当然不容易存钱。此外，本白很容易因为朋友的介绍而做了某些投资，而且常常亏本。这是因为本白的个性交游广阔，也认识很多人，所以当朋友来找本白投资时，本白不容易分辨风险，也不容易拒绝，所以当然很容易亏本。如果以一生的时间来衡量，本白今生大部份的财富会被本白拿来做自己想做的事情，本白会认为本白使用过的金钱才是本白真正拥有的财富。之后，这些财富大半会遗留给子孙。'
+        },
+      ]
+    },
+    methods: {
+
+    },
+    onShow(){
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .baziResultPage{
+    .CHeaderPanel3 {
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFang SC;
+      font-weight:600;
+      color:rgba(0,0,0,1);
+      position: relative;
+
+      >view:first-child{
+
+        background:rgba(79,172,27,1) !important;
+      }
+
+    }
+
+    .CHeaderPanel{
+      width:690rpx;
+      border-radius: 0;
+      position: relative;
+      margin-bottom: 32rpx;
+
+
+      &:first-child{
+        margin-top: 52rpx;
+      }
+      .p{
+        font-size:36rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:50rpx;
+        padding: 30rpx;
+      }
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '八字测试结果',
+    usingComponents: {
+  CHeaderPanel:'~UI/CHeaderPanel',
+  RgznBg:'~Custom/RgznBg',
+    }
+}
+</config>

@@ -1,0 +1,44 @@
+<template>
+  <div class="page xingzuoPage">
+
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+    },
+    methods: {
+
+    },
+    onShow(){
+
+    },
+    created () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .xingzuoPage{
+
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+    }
+}
+</config>

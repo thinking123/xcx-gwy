@@ -1,0 +1,146 @@
+<template>
+  <div class="page mianxianResultPage">
+    <RgznBg/>
+    <CHeaderPanel title="面相"
+                  external-cls__header="CHeaderPanel3"
+                  external-cls="CHeaderPanel"
+                  showLine="{{true}}"
+    >
+      <div slot="header" class="header" @click="onReUpload">
+        <image mode="aspectFit" class="icon1" :src="icon1"/>
+        <span>重新上传</span>
+      </div>
+      <div class="row">
+        <image mode="aspectFit" class="row1" :src="img"/>
+
+
+        <div class="p">
+          {{content}}
+        </div>
+      </div>
+    </CHeaderPanel>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  import {getImgUrlEx} from '@/common/utils';
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+
+      icon1:'btn_upload_ex@3x',
+      img:'',
+      content:'本命佛是：【大势至菩萨】\n' +
+        '\n' +
+        ' (每个人从一生下来就有位 菩萨或佛 在守护您，所生之日与有缘之佛结缘，被称为“本命佛”)\n' +
+        '\n' +
+        '推荐：您的属相为马,点击查看生成八字算命网属马的人2019年运程\n' +
+        '\n' +
+        '张华是智慧的钻石，可攻可守，有勇有谋，讲究诚信，喜欢有礼貌，有智慧的人。生活优雅有情调，对生活品味也很重视。'
+    },
+    methods: {
+      onReUpload(){
+
+      }
+    },
+    onShow(){
+
+    },
+    created () {
+
+      this.icon1 = getImgUrlEx(this.icon1)
+    }
+  });
+</script>
+<style lang="scss">
+  .mianxianResultPage{
+    .CHeaderPanel3 {
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFang SC;
+      font-weight:600;
+      color:rgba(0,0,0,1);
+      position: relative;
+      >view:first-child{
+
+        background:rgba(79,172,27,1) !important;
+      }
+
+    }
+
+    .CHeaderPanel{
+      width:690rpx;
+      border-radius: 0;
+      margin: 52rpx auto 0;
+      position: relative;
+
+
+      .header{
+        font-size:36rpx;
+        font-family:PingFangSC-Semibold,PingFang SC;
+        font-weight:600;
+        color:rgba(79,172,27,1);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: absolute;
+        right: 30rpx;
+        top:50%;
+        transform: translateY(-50%);
+        .icon1{
+          width:48rpx;
+          height:46rpx;
+          margin-right: 20rpx;
+
+        }
+
+        .img{
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+
+        }
+      }
+      .row{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30rpx;
+        .row1{
+          width:550rpx;
+          height:400rpx;
+          margin: 32rpx 0 26rpx;
+          background-color: #EEE;
+
+        }
+
+
+        .p{
+          font-size:36rpx;
+          font-family:PingFang-SC-Regular,PingFang-SC;
+          font-weight:400;
+          color:rgba(51,51,51,1);
+          line-height:50rpx;
+        }
+
+      }
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '面相测试结果',
+    usingComponents: {
+  CHeaderPanel:'~UI/CHeaderPanel',
+  RgznBg:'~Custom/RgznBg',
+    }
+}
+</config>

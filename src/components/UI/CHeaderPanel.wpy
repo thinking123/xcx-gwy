@@ -5,6 +5,7 @@
         <div>
           {{title}}
         </div>
+        <slot name="header" />
       </div>
       <div class="CHeaderPanel--content">
         <slot/>
@@ -15,6 +16,9 @@
   import wepy from '@wepy/core'
 
   wepy.component({
+    options: {
+      multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
     data: {
 
     },

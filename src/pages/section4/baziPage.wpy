@@ -1,14 +1,16 @@
 <template>
-  <div class="page tianziliaoPage">
+  <div class="page baziPage">
+
     <RgznBg/>
     <div class="wrap">
+      <CTab type="radius" :tabs="tabs"
+            @changeTab="handleTab"
+            external-cls="ctab"
+            external-cls__selected="ctab__selected"
+            external-cls__tabItem="ctab__tabItem"
+      />
       <div class="form">
         <CLabelInput placeholder="请输入真实姓名" label="姓名" :val.sync="name" @update:val="handlev" />
-        <CLabelRightButton type="normal"
-                           text="性别"
-                           :rightText="selSex"
-                           @click.native="showSex=true"
-                           external-cls="CLabelRightButton"/>
 
         <view class="section1">
           <view class="section__title">出生日期(农历)</view>
@@ -35,33 +37,8 @@
 
 
       </div>
-
-      <CButton text="提交"
-               @tap.native="handleSubmit"
-               external-cls="submit"/>
+      <image :src="icon1" mode="scaleToFill" class="icon1"/>
     </div>
-
-
-    <CPopup  :show="showSex"
-             position="bottom"
-             @close="showSex=false"
-             zIndex="999"
-             overlay="{{ true }}">
-      <div class="sex">
-        <HeaderClose text="选择性别"  external-cls="header" @click="showSex=false"/>
-        <div class="body">
-          <div class="CLabelInput">
-            <CListSelect key="id"
-                         labelKey="text"
-                         :sel="user.sex"
-                         :items="sexItems"
-                         external-cls="row"
-                         @change="onSexChange"
-            />
-          </div>
-        </div>
-      </div>
-    </CPopup>
 
   </div>
 </template>
@@ -77,46 +54,27 @@
       navigationBarTitleText: ''
     },
     computed: {
-      selSex(){
-        if(this.user.sex){
-          const item = this.sexItems.find(f=>f.id == this.user.sex);
-
-          return item.text;
-        }
-
-        return '';
-      }
 
     },
     data: {
+
+      tabs:[
+        {text:'男'},
+        {text:'女'},
+      ],
+      selectedTab:0,
+
       icon:'btn_arrowr@3x',
+      icon1:'btn_test@3x',
       user:{
         name:'',
       },
-      showSex:false,
-      sexItems:[
-        {text:"不限" , id:"0"},
-        {text:"男" , id:"1"},
-        {text:"女" , id:"2"},
-        {text:"保密" , id:"3"},
-      ],
       date: '2016-09-01',
       time: '12:01',
-
     },
     methods: {
-      handlev(v){
-        this.name = v;
-      },
-      onSexChange(key){
-        this.user.sex = key;
-      },
-      handleSubmit(){
-        // if(this.verify()){
-        //   this.login();
-        // }else{
-        //   showMsg("请输入正确的内容")
-        // }
+      handleTab({tab ,index}){
+        this.selectedTab = index;
       },
       bindDateChange(e) {
         this.date = e.$wx.detail.value;
@@ -124,33 +82,55 @@
       bindTimeChange(e) {
         this.time = e.$wx.detail.value;
       },
+      handlev(v){
+        this.name = v;
+      },
     },
     onShow(){
 
     },
     created () {
 
+
       this.icon = getImgUrlEx(this.icon);
+      this.icon1 = getImgUrlEx(this.icon1);
     }
   });
 </script>
 <style lang="scss">
-  .tianziliaoPage{
+  .baziPage{
     .wrap{
       position: relative;
-      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
     }
+    .ctab{
+      width: 460rpx;
+      border-color: rgba(95,57,154,1) !important;
+      color:#000000 !important;
+      margin: 52rpx auto 80rpx;
+    }
+
+    .ctab__selected{
+      background:linear-gradient(180deg,rgba(93,101,188,1) 0%,rgba(95,57,154,1) 100%) !important;
+    }
+    .ctab__tabItem{
+      border-right: 1px solid #FFF !important;
+      border: none !important;
+      &:not(:last-child){
+        border-right: 1px solid #FFF !important;
+      }
+    }
+
+
     .form{
       padding: 0 30rpx;
       margin: 52rpx 30rpx 0;
       background:#FFF;
       box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
       border-radius:16rpx;
-    }
-    .submit{
-      margin: 0 auto;
-      margin-top: 48rpx;
-      font-size: 36rpx;
     }
     .section1{
       display: flex;
@@ -195,30 +175,23 @@
         }
       }
     }
-    .sex{
-      background:rgba(242,242,242,1);
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin: 32rpx 0;
-        }
-      }
+
+    .icon1{
+      width:510rpx;
+      height:510rpx;
+      margin: 80rpx auto;
+
+
     }
   }
 </style>
 <config>
 {
-    navigationBarTitleText: '资料填写',
+    navigationBarTitleText: '八字',
     usingComponents: {
-  CLabelInput:'~UI/CLabelInput',
-  CButton:'~UI/CButton',
+  CTab:'~UI/CTab',
   RgznBg:'~Custom/RgznBg',
-  CPopup:'~UI/CPopup',
-  CListSelect:'~UI/CListSelect',
-  HeaderClose:'~Custom/HeaderClose',
-  CLabelRightButton:'~UI/CLabelRightButton',
+  CLabelInput:'~UI/CLabelInput',
     }
 }
 </config>

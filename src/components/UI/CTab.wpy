@@ -2,8 +2,8 @@
     <div class="CTab  external-cls" :class="{'CTab--radius':type == 'radius'}">
       <div class="tabItemWrap">
         <div v-for="(tab , index) in tabs"
-             class="tabItem"
-             :class="{'selected':index==selectedIndex}"
+             class="tabItem external-cls__tabItem"
+             :class="{'selected external-cls__selected':index==selectedIndex}"
              @click="handleSelect(tab,index)">
           <image :src="selectedIndex== index ? tab.iconSel : tab.icon"
                  v-if="!!tab.icon"
@@ -28,6 +28,8 @@
     },
     externalClasses:[
       'external-cls',
+      'external-cls__selected',
+      'external-cls__tabItem',
       'bottom-cls'
     ],
     mixins:[basic],
