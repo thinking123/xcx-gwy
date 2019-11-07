@@ -1,6 +1,6 @@
 <template>
     <div class="CHeaderPanel external-cls">
-      <div class="CHeaderPanel--header external-cls__header">
+      <div class="CHeaderPanel--header external-cls__header"  :class="{'showLine':showLine}">
         <div class="vertRect"/>
         <div>
           {{title}}
@@ -23,7 +23,11 @@
       'external-cls__header',
     ],
     props:{
-      title:String
+      title:String,
+      showLine:{
+        type:Boolean,
+        default: false
+      },
     },
     events: {
 
@@ -63,6 +67,20 @@
         height:32rpx;
         background:rgba(255,255,255,1);
         margin-right: 16rpx;
+      }
+
+      position: relative;
+
+
+      &.showLine::after{
+        position: absolute;
+        bottom: 0;
+        left:50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 1px;
+        background:rgba(230,230,230,1);
+        content: '';
       }
     }
 

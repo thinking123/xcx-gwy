@@ -80,7 +80,11 @@ wepy.app({
 });
 
 /*
-*
+
+  'pages/section4/resultPage',
+
+*  'pages/section4/tianziliaoPage',
+
 *   'pages/section4/zhcsPage',
 
 *   'pages/section4/rgznPage',
@@ -135,7 +139,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section4/tianziliaoPage',
+  'pages/section4/mianxianPage',
 
     ],
     window: {

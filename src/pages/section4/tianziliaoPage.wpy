@@ -10,26 +10,29 @@
                            @click.native="showSex=true"
                            external-cls="CLabelRightButton"/>
 
-
         <view class="section1">
-          <view class="section__title">时间选择器</view>
-          <image :src="icon" mode="scaleToFill"/>
-          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="bindTimeChange">
-            <view class="picker">
-              当前选择: {{time}}
-            </view>
-          </picker>
-        </view>
-
-        <view class="section2">
-          <view class="section__title">日期选择器</view>
+          <view class="section__title">出生日期(农历)</view>
 
           <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
             <view class="picker">
-              当前选择: {{date}}
+              {{date}}
             </view>
           </picker>
+
+          <image :src="icon" mode="scaleToFill"/>
         </view>
+        <view class="section1 noline">
+          <view class="section__title">出生时辰</view>
+          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="bindTimeChange">
+            <view class="picker">
+              {{time}}
+            </view>
+          </picker>
+
+          <image :src="icon" mode="scaleToFill"/>
+        </view>
+
+
 
       </div>
 
@@ -66,6 +69,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.page({
     store,
@@ -114,17 +118,11 @@
         //   showMsg("请输入正确的内容")
         // }
       },
-      bindDateChange: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
-        this.setData({
-          date: e.detail.value
-        })
+      bindDateChange(e) {
+        this.date = e.$wx.detail.value;
       },
-      bindTimeChange: function (e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
-        this.setData({
-          time: e.detail.value
-        })
+      bindTimeChange(e) {
+        this.time = e.$wx.detail.value;
       },
     },
     onShow(){
@@ -144,12 +142,13 @@
     }
     .form{
       padding: 0 30rpx;
-      margin: 32rpx 30rpx 0;
+      margin: 52rpx 30rpx 0;
       background:#FFF;
       box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
       border-radius:16rpx;
     }
     .submit{
+      margin: 0 auto;
       margin-top: 48rpx;
       font-size: 36rpx;
     }
@@ -157,7 +156,6 @@
       display: flex;
 
       align-items: center;
-      justify-content: space-between;
 
       font-size:32rpx;
       font-family:PingFangSC-Regular,PingFang SC;
@@ -166,15 +164,17 @@
       padding: 45rpx 0;
       box-sizing: border-box;
       position: relative;
+      picker{
+        flex: 1;
+        text-align: right;
+      }
 
       >image{
-        position: absolute;
-        right: 0;
-        top:50%;
-        transform: translateY(-50%);
-        margin-right: 36rpx;
-        width:48rpx;
-        height:48rpx;
+
+
+        margin: 0 0 0 16rpx;
+        width:28rpx;
+        height:28rpx;
       }
       &::after{
         position: absolute;
@@ -182,14 +182,17 @@
         bottom:0;
         height: 1px;
         left: 50%;
-        transform: scaleY(0.5) translateX(-50%);
+        transform:  translateX(-50%);
 
-        width:690rpx;
+        width:630rpx;
         background:rgba(230,230,230,1);
       }
 
-      .picker{
-        margin-right: 60rpx;
+      &.noline{
+        &::after{
+
+          content:none;
+        }
       }
     }
     .sex{
@@ -207,7 +210,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '资料填写',
     usingComponents: {
   CLabelInput:'~UI/CLabelInput',
   CButton:'~UI/CButton',

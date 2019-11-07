@@ -1,0 +1,84 @@
+<template>
+  <div class="page resultPage">
+    <RgznBg/>
+    <CHeaderPanel :title="res.title"
+                  external-cls__header="CHeaderPanel3"
+                  external-cls="CHeaderPanel"
+                  showLine="{{true}}"
+    >
+      <div class="p">
+        {{res.content}}
+      </div>
+    </CHeaderPanel>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {},
+    data: {
+      res:{
+        title:'张华',
+        content:'生于公元1992年农历1月1时20分，年干为庚午，本命元神为辛金，，其生辰八字与一生大运、近期流年列示如下，这是非常专业精致的八字命盘，市面难得一见，请仔细参详！！ 张华的本命佛是：【大势至菩萨】 (每个人从一生下来就有位 菩萨或佛 在守护您，所生之日与有缘之佛结缘，被称为“本命佛”) 推荐：您的属相为马,点击查看生成八字算命网属马的人2019年运程 张华是智慧的钻石，可攻可守，有勇有谋，讲究诚信，喜欢有礼貌，有智慧的人。生活优雅有情调，对生活品味也很重视。'
+      }
+    },
+    methods: {},
+    onShow() {
+
+    },
+    created() {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .resultPage {
+
+    .CHeaderPanel3 {
+      font-size:36rpx;
+      font-family:PingFangSC-Semibold,PingFang SC;
+      font-weight:600;
+      color:rgba(0,0,0,1);
+      >view:first-child{
+
+        background:rgba(79,172,27,1) !important;
+      }
+
+    }
+    .CHeaderPanelvertRect{
+
+    }
+    .CHeaderPanel{
+      width:690rpx;
+      border-radius: 0;
+      margin: 52rpx auto 0;
+      position: relative;
+      .p{
+        font-size:36rpx;
+        font-family:PingFang-SC-Regular,PingFang-SC;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        line-height:50rpx;
+        padding: 60rpx 40rpx;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+</style>
+<config>
+  {
+  navigationBarTitleText: '综合测试结果',
+  usingComponents: {
+  CHeaderPanel:'~UI/CHeaderPanel',
+  RgznBg:'~Custom/RgznBg',
+  }
+  }
+</config>
