@@ -1,5 +1,44 @@
 <template>
-  <div class="page xingzuoPage">
+  <div class="page xinzuoPage">
+
+    <RgznBg/>
+    <div class="wrap">
+      <CTab type="radius" :tabs="tabs"
+            @changeTab="handleTab"
+            external-cls="ctab"
+            external-cls__selected="ctab__selected"
+            external-cls__tabItem="ctab__tabItem"
+      />
+      <div class="form">
+        <CLabelInput placeholder="请输入真实姓名" label="姓名" :val.sync="name" @update:val="handlev" />
+
+        <view class="section1">
+          <view class="section__title">出生日期(农历)</view>
+
+          <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
+            <view class="picker">
+              {{date}}
+            </view>
+          </picker>
+
+          <image :src="icon" mode="scaleToFill"/>
+        </view>
+        <view class="section1 noline">
+          <view class="section__title">出生地点</view>
+          <picker mode="region"  value="{{region}}" start="09:01" end="21:01" bindchange="bindTimeChange">
+            <view class="picker">
+              {{time}}
+            </view>
+          </picker>
+
+          <image :src="icon" mode="scaleToFill"/>
+        </view>
+
+
+
+      </div>
+      <image :src="icon1" mode="scaleToFill" class="icon1"/>
+    </div>
 
   </div>
 </template>
@@ -7,6 +46,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import {getImgUrlEx} from '@/common/utils';
 
   wepy.page({
     store,
@@ -18,27 +58,142 @@
     },
     data: {
 
+      tabs:[
+        {text:'男'},
+        {text:'女'},
+      ],
+      selectedTab:0,
+
+      icon:'btn_arrowr@3x',
+      icon1:'btn_test02@3x',
+      user:{
+        name:'',
+      },
+      date: '2016-09-01',
+      time: '12:01',
+
+      region: ['广东省', '广州市', '海珠区'],
     },
     methods: {
-
+      handleTab({tab ,index}){
+        this.selectedTab = index;
+      },
+      bindDateChange(e) {
+        this.date = e.$wx.detail.value;
+      },
+      bindTimeChange(e) {
+        this.time = e.$wx.detail.value;
+      },
+      handlev(v){
+        this.name = v;
+      },
     },
     onShow(){
 
     },
     created () {
 
+
+      this.icon = getImgUrlEx(this.icon);
+      this.icon1 = getImgUrlEx(this.icon1);
     }
   });
 </script>
 <style lang="scss">
-  .xingzuoPage{
+  .xinzuoPage{
+    .wrap{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
+    }
+    .ctab{
+      width: 460rpx;
+      border-color: rgba(95,57,154,1) !important;
+      color:#000000 !important;
+      margin: 52rpx auto 80rpx;
+    }
+
+    .ctab__selected{
+      background:linear-gradient(180deg,rgba(93,101,188,1) 0%,rgba(95,57,154,1) 100%) !important;
+    }
+    .ctab__tabItem{
+      border-right: 1px solid #FFF !important;
+      border: none !important;
+      &:not(:last-child){
+        border-right: 1px solid #FFF !important;
+      }
+    }
+
+
+    .form{
+      padding: 0 30rpx;
+      margin: 52rpx 30rpx 0;
+      background:#FFF;
+      box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
+      border-radius:16rpx;
+    }
+    .section1{
+      display: flex;
+
+      align-items: center;
+
+      font-size:32rpx;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:rgba(102,102,102,1);
+      padding: 45rpx 0;
+      box-sizing: border-box;
+      position: relative;
+      picker{
+        flex: 1;
+        text-align: right;
+      }
+
+      >image{
+
+
+        margin: 0 0 0 16rpx;
+        width:28rpx;
+        height:28rpx;
+      }
+      &::after{
+        position: absolute;
+        content: '';
+        bottom:0;
+        height: 1px;
+        left: 50%;
+        transform:  translateX(-50%);
+
+        width:630rpx;
+        background:rgba(230,230,230,1);
+      }
+
+      &.noline{
+        &::after{
+
+          content:none;
+        }
+      }
+    }
+
+    .icon1{
+      width:510rpx;
+      height:510rpx;
+      margin: 80rpx auto;
+
+
+    }
   }
 </style>
 <config>
-{
-    navigationBarTitleText: '',
-    usingComponents: {
-    }
-}
+  {
+  navigationBarTitleText: '八字',
+  usingComponents: {
+  CTab:'~UI/CTab',
+  RgznBg:'~Custom/RgznBg',
+  CLabelInput:'~UI/CLabelInput',
+  }
+  }
 </config>
