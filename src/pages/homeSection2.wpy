@@ -170,6 +170,10 @@
         console.log('jinlianopened' ,jinlian.opened);
         eventHub.$emit('jinlianopenedEnd',jinlian)
       });
+      eventHub.$on('jinlianedit', (jinlian) => {
+
+        console.log('jinlianedit' ,jinlian);
+      });
       let arr = [];
       for(let i = 0 ; i < 10 ; i++){
         arr.push({
@@ -198,7 +202,7 @@
 
 
       arr = [];
-      for(let i = 0 ; i < 2 ; i++){
+      for(let i = 0 ; i < 5 ; i++){
         let obj1 = {
           total:'2123',
           wrong:'232',
@@ -209,7 +213,7 @@
           // opened:true,
 
         }
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < 6; j++) {
           let obj2 = {
             total:'2123',
             wrong:'232',
@@ -218,7 +222,7 @@
             items:[],
             level:2,
           }
-          for (let k = 0; k < 2; k++) {
+          for (let k = 0; k < 6; k++) {
             let obj3 = {
               total:'2123',
               wrong:'232',

@@ -1,9 +1,12 @@
 <template>
     <div class="JinLianItem external-cls"
-         :class="{'level1':jinlian.level==1,'level2':jinlian.level==2,'level3':jinlian.level==3,'opened':isOpened}">
+         :class="{'level1':jinlian.level==1,'level2':jinlian.level==2,'level3':jinlian.level==3,'opened':showLine}">
       <block v-if="jinlian.level <= 2">
-        <image  mode="aspectFit" class="vertLine icon1" :src="icon3" @click="onClick1" v-if="isOpened"/>
-        <image  mode="aspectFit" class="vertLine icon1" :src="icon1" @click="onClick1" v-else/>
+        <div  class="vertLine icon1" >
+          <image  mode="aspectFit":src="icon3" @click="onClick1" v-if="isOpened"/>
+          <image  mode="aspectFit" :src="icon1" @click="onClick1" v-else/>
+        </div>
+
       </block>
       <block v-else>
         <div class="vertLine icon3" @click="onClick1"/>
@@ -48,9 +51,10 @@
           id:'',
           opended:false,
           items:[]
-        }
+        },
       },
 
+      notLastItem:Boolean
     },
     events: {
 
@@ -63,6 +67,20 @@
         }
 
         return '-';
+      },
+      showLine(){
+        let res = false;
+        if(this.jinlian){
+          if(this.jinlian.level == 1 && this.isOpened){
+            res = true;
+          }
+
+          if(this.jinlian.level > 1 && !this.notLastItem){
+            res = true;
+          }
+        }
+
+        return res;
       }
     },
     methods: {
@@ -71,6 +89,14 @@
         if(this.jinlian && this.jinlian.level <= 2 && this.jinlian.items.length > 0 ){
           this.isOpened = !this.jinlian.opened;
           eventHub.$emit('jinlianopened', this.jinlian);
+
+        }
+
+      },
+      onClick2(){
+        // this.$emit('opened' , this.jinlian);
+        if(this.jinlian){
+          eventHub.$emit('jinlianedit', this.jinlian);
 
         }
 
@@ -97,14 +123,22 @@
     color:rgba(147,150,153,1);
     line-height:34rpx;
 
+
+
     .icon1{
       width:60rpx;
       height:60rpx;
       margin-right: 24rpx;
+      position: relative;
+      >image{
+        width:100%;
+        height:100%;
+      }
     }
     .icon2{
       width:48rpx;
       height:48rpx;
+      margin-right: 24rpx;
     }
 
     .content{
@@ -126,26 +160,32 @@
 
 
     &.level2{
+      padding-left:40rpx;
       .icon1{
         width:40rpx;
         height:40rpx;
-        margin-right: 24rpx;
-        position: absolute;
+        margin-right: 34rpx;
 
+        position: relative;
 
 
       }
     }
 
-    &.level3{
-      .icon3{
-        width:24rpx;
-        height:24rpx;
+    &.level3 {
+      padding-left: 48rpx;
+
+      .icon3 {
+        width: 24rpx;
+        height: 24rpx;
         margin-right: 24rpx;
-        background:rgba(79,172,27,1);
+        background: rgba(79, 172, 27, 1);
         border-radius: 24rpx;
+        margin-right: 42rpx;
+        position: relative;
       }
     }
+
 
     &.opened{
       .vertLine::after{
@@ -154,13 +194,32 @@
         height:84rpx;
         background:rgba(237,237,237,1);
         position: absolute;
-        bottom: 0;
+        top: 100%;
+        left:50%;
+        transform: translateX(-50%);
       }
+
+      &.level2{
+        .vertLine::after{
+          height:100rpx;
+        }
+
+      }
+      &.level3{
+        .vertLine::after{
+          height:126rpx;
+        }
+
+      }
+
 
     }
 
 
   }
+
+
+
 </style>
 <config>
   {

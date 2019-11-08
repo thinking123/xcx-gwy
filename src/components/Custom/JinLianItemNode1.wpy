@@ -1,8 +1,11 @@
 <template>
     <div class="JinLianItemNode external-cls">
-        <JinLianItem :jinlian="node"/>
+        <JinLianItem :jinlian="node" :notLastItem="notLastItem"/>
       <div style="display:{{show?'block':'none'}}">
-        <JinLianItemNode2 v-for="(item,index) in node.items" :key="index" :node="item"/>
+        <JinLianItemNode2
+
+          :notLastItem="index >= node.items.length - 1"
+          v-for="(item,index) in node.items" :key="index" :node="item"/>
 
       </div>
     </div>
@@ -19,7 +22,8 @@
       'external-cls'
     ],
     props:{
-      node:Object
+      node:Object,
+      notLastItem:Boolean
     },
     events: {
 

@@ -1,6 +1,6 @@
 <template>
     <div class="JinLianItemNode external-cls">
-        <JinLianItem :jinlian="node"/>
+        <JinLianItem :jinlian="node"  :notLastItem="notLastItem"/>
     </div>
 </template>
 <script>
@@ -14,7 +14,8 @@
       'external-cls'
     ],
     props:{
-      node:Object
+      node:Object,
+      notLastItem:Boolean
     },
     events: {
 

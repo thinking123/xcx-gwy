@@ -1,8 +1,11 @@
 <template>
     <div class="JinLianItemNode external-cls">
-        <JinLianItem :jinlian="node" @opened="onOpened"/>
+        <JinLianItem :jinlian="node" @opened="onOpened" external-cls="JinLianItem"/>
       <div style="display:{{show?'block':'none'}}">
-        <JinLianItemNode1 v-for="(item,index) in node.items" :key="index" :node="item"/>
+        <JinLianItemNode1 v-for="(item,index) in node.items"
+
+                          :notLastItem="index >= node.items.length - 1"
+                          :key="index" :node="item"/>
 
       </div>
     </div>
