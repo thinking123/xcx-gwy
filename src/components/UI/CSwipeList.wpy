@@ -178,6 +178,7 @@
 </script>
 <style lang="scss">
   .CSwipeList{
+    position: relative;
     overflow-x: hidden;
     &-wrap{
       display: flex;

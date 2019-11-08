@@ -4,6 +4,7 @@
         {{timu.title}}
       </div>
       <TimuSelector v-for="(item,index) in items"
+                    :onlyShowTimu="onlyShowTimu"
                     :key="index"
                     :item="item"
                     :hadSelected="hadSelected"
@@ -50,7 +51,11 @@
           wrongreason:'',
           rightRag:'',
         }
-      }
+      },
+      onlyShowTimu:{
+        type:Boolean,
+        default: false
+      },
     },
     events: {
 
@@ -80,12 +85,16 @@
             return f.tag == this.answer.rightRag;
           });
           const rightItem = this.timu.items[rightIndex];
+
           if(index == rightIndex){
             item.status = 1;
           }else{
             rightItem.status = 1;
             rightItem.error = true;
             item.status = 2;
+          }
+          if(this.onlyShowTimu){
+            item.status = 1;
           }
           this.$emit('select' , {index , item});
           this.catchMove = false;

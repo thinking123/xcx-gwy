@@ -81,6 +81,8 @@ wepy.app({
 
 /*
 
+  'pages/section4/xinzuoPage',
+
   'pages/section4/baziResultPage',
 
   'pages/section4/mianxianResultPage',
@@ -148,7 +150,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section4/xinzuoPage',
+  'pages/section4/timuPage',
 
     ],
     window: {

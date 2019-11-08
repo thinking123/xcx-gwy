@@ -1,0 +1,91 @@
+<template>
+  <div class="TimuSection4Dialog external-cls">
+    <image :src="icon"  class="icon" mode="aspectFit"/>
+    <div class="row2">
+      测试完成
+    </div>
+
+    <CButton text="查看测试结果"
+             @tap.native="onClick"
+             external-cls="row3"/>
+  </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+  import {getImgUrlEx} from '@/common/utils';
+
+  wepy.component({
+    data: {
+      icon:'icon_selected@3x'
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+      onClick(){
+        this.$emit('close');
+      }
+    },
+    created () {
+      this.icon = getImgUrlEx(this.icon)
+    }
+  });
+</script>
+<style lang="scss">
+
+  .TimuSection4Dialog{
+    width:630rpx;
+    background:rgba(255,255,255,1);
+    border-radius:8rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .icon{
+      width:120rpx;
+      height:120rpx;
+      margin-bottom: 32rpx;
+      margin-top: 64rpx;
+    }
+
+    .row1{
+      font-size:36rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(79,172,27,1);
+      line-height:44rpx;
+      margin-bottom: 32rpx;
+    }
+    .row2{
+      font-size:36rpx;
+      font-family:PingFangSCSemibold-,PingFangSCSemibold;
+      font-weight:normal;
+      color:rgba(79,172,27,1);
+      line-height:36rpx;
+      margin-bottom: 48rpx;
+    }
+    .row3{
+      width:550rpx;
+      height:96rpx;
+      margin-bottom: 64rpx;
+    }
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  CButton:'~UI/CButton',
+  }
+  }
+</config>
+

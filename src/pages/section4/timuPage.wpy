@@ -1,0 +1,270 @@
+<template>
+  <div class="page timuPage" :class="{'timu--night':night}">
+    <RgznBg/>
+    <CSwipeList total="{{items.length}}" :curIndex="curIndex"
+                external-cls="CSwipeList"
+                @swipe="onSwipe">
+      <TimuItem :timuItem="preItem"
+                v-if="preItem"
+                :total="items.length"
+                slot="pre"
+                @select="onSelect"
+                :hadSelected="preItem.hadSelected"
+                external-cls="TimuItem"
+                :index="preIndex"
+                onlyShowTimu="{{true}}"
+                :curIndex="curIndex"/>
+      <TimuItem :timuItem="curItem"
+                :total="items.length"
+                slot="cur"
+                v-if="curItem"
+                @select="onSelect"
+                :hadSelected="curItem.hadSelected"
+                external-cls="TimuItem"
+                onlyShowTimu="{{true}}"
+
+                :index="curIndex"
+                :curIndex="curIndex"/>
+      <TimuItem :timuItem="nextItem"
+                :total="items.length"
+                onlyShowTimu="{{true}}"
+
+                slot="next"
+                v-if="nextItem"
+                @select="onSelect"
+                :hadSelected="nextItem.hadSelected"
+                external-cls="TimuItem"
+                :index="nextIndex"
+                :curIndex="curIndex"/>
+    </CSwipeList>
+
+    <TimuNav v-if="cuoti" @change="onNav" :total="items.length" :curIndex="curIndex"/>
+    <CDialog :show="showCDialog">
+      <TimuSection4Dialog @close="showCDialog=false"/>
+    </CDialog>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { mapGetters} from '@wepy/x';
+
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+      ...mapGetters(['night']),
+      preItem(){
+        if(this.curIndex > 0){
+          return this.items[this.curIndex];
+        }
+
+        return null;
+      },
+      curItem(){
+        if(this.curIndex >=0 && this.curIndex < this.items.length){
+          console.log('cur' , this.items[this.curIndex])
+          return this.items[this.curIndex];
+        }
+
+        return null;
+      },
+      nextItem(){
+        if(this.curIndex < this.items.length - 1){
+          return this.items[this.curIndex + 1];
+        }
+
+        return null;
+      },
+      preIndex(){
+        return this.curIndex - 1;
+      },
+      nextIndex(){
+        return this.curIndex + 1;
+      }
+    },
+    watch:{
+      night(v){
+        console.log(' night(v) ' , v)
+
+      }
+    },
+    data: {
+      cuoti:true,
+      isNight:false,
+      curIndex:0,
+      show:false,
+      showCompleted:false,
+      showNav:true,
+      editText:'',
+      items:[],
+
+      showCDialog:false,
+    },
+    methods: {
+      ontimuHeader(v){
+        if(v){
+          wx.setNavigationBarColor({
+            backgroundColor: '#222324',
+            frontColor:'#ffffff'
+          });
+        }else{
+          wx.setNavigationBarColor({
+            backgroundColor: '#F2F2F2',
+            frontColor:'#000000'
+          });
+        }
+      },
+      onEdit(){
+        this.show = true;
+      },
+      onSwipe(index){
+        this.curIndex = index.$wx.detail;
+      },
+      onNav(index){
+        this.curIndex = index;
+      },
+      onChange(v){
+        this.editText = v;
+      },
+      onSubmit(){
+        this.show = false;
+      },
+      getTag(index){
+        const arr = ['A' , 'B' , 'C' , 'D']
+        return arr[index];
+      },
+      onSelect({curIndex,index:contentIndex,item:contentItem}){
+        const item = this.items[curIndex];
+        item.hadSelected = true;
+        item.timu.items[contentIndex] = contentItem;
+        this.items[curIndex] = item;
+        this.items = [...this.items];
+
+        if(curIndex == this.items.length - 1){
+          this.showCDialog = true;
+        }else{
+          this.curIndex += 1;
+        }
+      }
+    },
+    onShow(){
+
+    },
+    onLoad(query = {}){
+      const {referrer} = query;
+
+      if(referrer && referrer.indexOf('timuCuoti')){
+        this.cuoti = true;
+      }
+
+    },
+    created () {
+      let arr = [];
+      for(let i = 0 ; i < 5 ; i++){
+        const obj = {};
+
+        const comments = [];
+        for(let j = 0 ; j < 10 ; j++){
+          comments.push({
+            header:'',
+            name:'李小萌smile',
+            rate:'3',
+            comment:'哈哈，确实不错，讲的很有逻辑呀！',
+            publishDate:'09-07 12:00',
+            id:j
+          });
+        }
+
+        const items = [];
+        for(let j = 0 ; j < 4 ; j++){
+          items.push({
+            text:'选项内容XXX',
+            status:0,
+            tag:this.getTag(j),
+            error:false,
+          });
+        }
+        const timu = {
+          title:`${i+1}、人际题，领导安排任务，你与小王有矛盾`,
+          items,
+          hadSelected:false
+        }
+
+        const answer = {
+          wrongRate:0.99,
+          wrongreason:'原因内容，后台控制内容',
+          rightRag:'C'
+        }
+
+        arr.push({
+          comments,
+          timu,
+          answer
+        })
+      }
+
+      this.items = arr;
+    }
+  });
+</script>
+<style lang="scss">
+  page{
+    background:rgba(242,242,242,1);
+  }
+
+  .timuPage{
+    height:100vh;
+    overflow: hidden;
+  }
+
+  .timu--night{
+    background:rgba(34,35,36,1) !important;
+  }
+  .CSwipeList{
+
+  }
+
+  .TimuItem{
+    margin: 32rpx 30rpx;
+  }
+
+  .learn{
+    height: 712rpx;
+    .body{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row{
+        margin-top: 46rpx;
+      }
+    }
+  }
+  .TimuCompletedTip{
+    height:712rpx;
+  }
+</style>
+<config>
+  {
+  navigationBarTitleText: '综合测试',
+  usingComponents: {
+  timuHeader:'~Custom/timuHeader',
+  CSwipeList:'~UI/CSwipeList/index',
+  HeaderClose:'~Custom/HeaderClose',
+  RgznBg:'~Custom/RgznBg',
+  TimuItem:'~Custom/TimuItem',
+  TimuTip:'~Custom/TimuTip',
+  TimuCompletedTip:'~Custom/TimuCompletedTip',
+  TimuNav:'~Custom/TimuNav',
+  TimuSection4Dialog:'~Custom/TimuSection4Dialog',
+  CTextarea:'~UI/CTextarea',
+  CButton:'~UI/CButton',
+  CPopup:'~UI/CPopup',
+  CDialog:'~UI/CDialog',
+  }
+  }
+</config>
+

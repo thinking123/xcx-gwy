@@ -11,10 +11,11 @@
         </div>
       </HeaderClose>
       <TimuContent :timu="timuItem.timu" @select="onSelect"
+                   :onlyShowTimu="onlyShowTimu"
                    external-cls="TimuContent"
                    :answer="timuItem.answer"
                    :hadSelected="hadSelected"/>
-      <block v-if="hadSelected">
+      <block v-if="hadSelected && !onlyShowTimu">
         <TimuAnswer :answer="timuItem.answer" :myTag="myTag"
                     external-cls="TimuAnswer"
                     :hadSelected="hadSelected"/>
@@ -53,6 +54,10 @@
       showHeaderText:{
         type:Boolean,
         default: true
+      },
+      onlyShowTimu:{
+        type:Boolean,
+        default: false
       },
       timuItem:{
         type:Object,

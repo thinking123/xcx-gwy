@@ -7,7 +7,7 @@
            :class="{'TimuSelector-wrap--right':status == 1 && !item.error,'TimuSelector-wrap--wrong':status == 2,'TimuSelector-wrap--night':night}"
       >
         <span>{{item.tag}}</span>
-        <image :src="icon1"  class="icon" mode="aspectFit" v-if="status == 1"/>
+        <image :src="icon1"  class="icon" mode="aspectFit" v-if="status == 1 && !onlyShowTimu"/>
       </div>
       <span class="TimuSelector-text">
         {{item.text}}
@@ -39,7 +39,11 @@
           error:false
         }
       },
-      hadSelected:Boolean
+      hadSelected:Boolean,
+      onlyShowTimu:{
+        type:Boolean,
+        default: false
+      },
     },
     events: {
 
