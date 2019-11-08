@@ -1,6 +1,6 @@
 <template>
     <div class="IconText external-cls">
-        <image :src="src"/>
+        <image :src="src" v-if="src"/>
         <span>{{text}}</span>
     </div>
 </template>

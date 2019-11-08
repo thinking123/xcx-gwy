@@ -74,8 +74,14 @@
           if(this.jinlian.level == 1 && this.isOpened){
             res = true;
           }
+          if(this.jinlian.level == 2){
+            if((this.jinlian.level == 2 && this.isOpened) || !this.notLastItem){
+              res = true;
+            }
+          }
 
-          if(this.jinlian.level > 1 && !this.notLastItem){
+
+          if(this.jinlian.level == 3 && !this.notLastItem){
             res = true;
           }
         }

@@ -175,7 +175,7 @@
         console.log('jinlianedit' ,jinlian);
       });
       let arr = [];
-      for(let i = 0 ; i < 10 ; i++){
+      for(let i = 0 ; i < 2 ; i++){
         arr.push({
           title:'课程名称，如资料分析',
           info:'考点：资料分析秒杀综述',
@@ -186,7 +186,7 @@
       this.items1 = arr;
 
       arr = [];
-      for(let i = 0 ; i < 10 ; i++){
+      for(let i = 0 ; i < 2 ; i++){
         arr.push({
           num1:'2',
           num2:'2',
@@ -316,17 +316,21 @@
       border-radius:8rpx;
       align-items: center;
       margin: 32rpx 0;
-      >.titleIcon{
-        font-size:32rpx;
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(51,51,51,1);
-        line-height:40rpx;
-        >image{
-          margin-top:16rpx;
-        }
-      }
 
+
+    }
+    .titleIcon{
+      font-size:32rpx;
+      font-family:PingFangSC-Medium,PingFangSC;
+      font-weight:500;
+      color:rgba(51,51,51,1);
+      line-height:40rpx;
+      >image{
+        margin-bottom:16rpx;
+
+        width:80rpx;
+        height:80rpx;
+      }
     }
 
     .cLabelRightButton{
