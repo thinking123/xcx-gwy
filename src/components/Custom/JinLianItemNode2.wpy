@@ -1,0 +1,47 @@
+<template>
+    <div class="JinLianItemNode external-cls">
+        <JinLianItem :jinlian="node"/>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      node:Object
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    onLoad () {
+
+    }
+  });
+</script>
+<style lang="scss">
+  .JinLianItemNode{
+
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  JinLianItem:'~Custom/JinLianItem',
+
+  }
+  }
+</config>

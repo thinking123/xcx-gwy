@@ -1,13 +1,21 @@
 <template>
-    <div class="JinLianItem external-cls">
-      <image  mode="aspectFit" class=" icon1" :src="icon1" @click="onClick1"/>
+    <div class="JinLianItem external-cls"
+         :class="{'level1':jinlian.level==1,'level2':jinlian.level==2,'level3':jinlian.level==3,'opened':isOpened}">
+      <block v-if="jinlian.level <= 2">
+        <image  mode="aspectFit" class="vertLine icon1" :src="icon3" @click="onClick1" v-if="isOpened"/>
+        <image  mode="aspectFit" class="vertLine icon1" :src="icon1" @click="onClick1" v-else/>
+      </block>
+      <block v-else>
+        <div class="vertLine icon3" @click="onClick1"/>
+      </block>
+
       <div class="content">
         <div class="row1">
-          {{title}}
+          {{jinlian.title}}
         </div>
         <div class="row2">
           <span>正确率：{{rightRatio}}</span>
-          <span>已答错：{{wrong}}/{{total}}</span>
+          <span>已答错：{{jinlian.wrong}}/{{jinlian.total}}</span>
         </div>
       </div>
       <image  mode="aspectFit" class=" icon2" :src="icon2" @click="onClick2"/>
@@ -17,27 +25,40 @@
   import wepy from '@wepy/core'
   import {getImgUrlEx} from '@/common/utils';
 
+  import eventHub from '@/common/eventHub';
   wepy.component({
     data: {
       icon1:'icon_unfold@3x',
+      icon3:'icon_fold@3x',
       icon2:'btn_edit@3x',
+      isOpened:false,
     },
     externalClasses:[
       'external-cls'
     ],
     props:{
-      title:String,
-      total:Number,
-      wrong:Number,
-      id:String
+
+      jinlian:{
+        type:Object,
+        default:{
+          title:'',
+          total:0,
+          wrong:0,
+          level:1,
+          id:'',
+          opended:false,
+          items:[]
+        }
+      },
+
     },
     events: {
 
     },
     computed:{
       rightRatio(){
-        if(this.total && this.wrong){
-          const str = (1 - this.wrong/this.total) * 100;
+        if(this.jinlian && this.jinlian.total && this.jinlian.wrong){
+          const str = (1 - this.jinlian.wrong/this.jinlian.total) * 100;
           return `${str.toFixed(2)}%`;
         }
 
@@ -46,15 +67,19 @@
     },
     methods: {
       onClick1(){
-        this.$emit('add' , this.id);
+        // this.$emit('opened' , this.jinlian);
+        if(this.jinlian && this.jinlian.level <= 2 && this.jinlian.items.length > 0 ){
+          this.isOpened = !this.jinlian.opened;
+          eventHub.$emit('jinlianopened', this.jinlian);
+
+        }
+
       },
-      onClick1(){
-        this.$emit('edit' , this.id);
-      }
     },
     created () {
       this.icon1 = getImgUrlEx(this.icon1);
       this.icon2 = getImgUrlEx(this.icon2);
+      this.icon3 = getImgUrlEx(this.icon3);
     }
   });
 </script>
@@ -99,5 +124,49 @@
       }
     }
 
+
+    &.level2{
+      .icon1{
+        width:40rpx;
+        height:40rpx;
+        margin-right: 24rpx;
+        position: absolute;
+
+
+
+      }
+    }
+
+    &.level3{
+      .icon3{
+        width:24rpx;
+        height:24rpx;
+        margin-right: 24rpx;
+        background:rgba(79,172,27,1);
+        border-radius: 24rpx;
+      }
+    }
+
+    &.opened{
+      .vertLine::after{
+        content: '';
+        width:8rpx;
+        height:84rpx;
+        background:rgba(237,237,237,1);
+        position: absolute;
+        bottom: 0;
+      }
+
+    }
+
+
   }
 </style>
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+
+  }
+  }
+</config>

@@ -1,0 +1,57 @@
+<template>
+    <div class="JinLianItemNode external-cls">
+        <JinLianItem :jinlian="node"/>
+      <div style="display:{{show?'block':'none'}}">
+        <JinLianItemNode2 v-for="(item,index) in node.items" :key="index" :node="item"/>
+
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  import eventHub from '@/common/eventHub';
+  wepy.component({
+    data: {
+      show:false
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      node:Object
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    created () {
+      eventHub.$on('jinlianopenedEnd', (jinlian) => {
+        if(jinlian.id == this.node.id){
+          this.show = jinlian.opened;
+        }
+      });
+    }
+  });
+</script>
+<style lang="scss">
+  .JinLianItemNode{
+
+  }
+</style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  JinLianItem:'~Custom/JinLianItem',
+  JinLianItemNode2:'~Custom/JinLianItemNode2',
+
+  }
+  }
+</config>

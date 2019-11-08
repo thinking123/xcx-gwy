@@ -47,16 +47,8 @@
                          @click.native="onClickCLabelRightButton"
                          external-cls="cLabelRightButton"/>
 
-      <JinLianItem
-        v-for="item in items3"
-        :key="item.id"
-        :id="item.id"
-        :title="item.title"
-        :total="item.total"
-        :wrong="item.wrong"
-        external-cls="jinLianItem"
-        @add="handleJinLianItemAdd"
-        @edit="handleJinLianItemEdit"
+      <JinLianItemTree
+        :items="items3"
       />
       <FixedContinueBtn @click.native="handleCBtn"/>
       </block>
@@ -96,6 +88,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrlEx } from '@/common/utils';
+  import eventHub from '@/common/eventHub';
 
   wepy.page({
     store,
@@ -112,7 +105,7 @@
         {text:'部委课堂'},
         {text:'精炼题目'},
       ],
-      selectedTab:0,
+      selectedTab:2,
       items1:[],
       items2:[],
       items3:[],
@@ -135,7 +128,7 @@
       items4:[],
       curSelItem:'',
       show:false,
-      showCDialog:true,
+      showCDialog:false,
     },
     methods: {
       inputChange(v){
@@ -171,6 +164,12 @@
 
     },
     created () {
+      eventHub.$on('jinlianopened', (jinlian) => {
+
+        jinlian.opened = !jinlian.opened;
+        console.log('jinlianopened' ,jinlian.opened);
+        eventHub.$emit('jinlianopenedEnd',jinlian)
+      });
       let arr = [];
       for(let i = 0 ; i < 10 ; i++){
         arr.push({
@@ -199,13 +198,42 @@
 
 
       arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
+      for(let i = 0 ; i < 2 ; i++){
+        let obj1 = {
           total:'2123',
           wrong:'232',
           title:'言语理解与表达',
-          id:i
-        });
+          id:i,
+          items:[],
+          level:1,
+          // opened:true,
+
+        }
+        for (let j = 0; j < 3; j++) {
+          let obj2 = {
+            total:'2123',
+            wrong:'232',
+            title:'言语理解与表达',
+            id:`${i}-${j}`,
+            items:[],
+            level:2,
+          }
+          for (let k = 0; k < 2; k++) {
+            let obj3 = {
+              total:'2123',
+              wrong:'232',
+              title:'言语理解与表达',
+              id:`${i}-${j}-${k}`,
+              items:[],
+              level:3,
+            }
+
+            obj2.items.push(obj3);
+          }
+
+          obj1.items.push(obj2);
+        }
+        arr.push(obj1);
       }
 
       this.items3 = arr;
@@ -385,7 +413,7 @@
   ClassCard:'~Custom/ClassCard',
   ClassCard1:'~Custom/ClassCard1',
   IconText:'~Custom/IconText',
-  JinLianItem:'~Custom/JinLianItem',
+  JinLianItemTree:'~Custom/JinLianItemTree',
   LogicDialog:'~Custom/LogicDialog',
   FixedContinueBtn:'~Custom/FixedContinueBtn',
   HeaderClose:'~Custom/HeaderClose',

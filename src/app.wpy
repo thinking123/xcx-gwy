@@ -81,6 +81,8 @@ wepy.app({
 
 /*
 
+  'pages/section4/timuPage',
+
   'pages/section4/xinzuoPage',
 
   'pages/section4/baziResultPage',
@@ -150,9 +152,10 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/section4/timuPage',
+  'pages/homeSection2',
 
-    ],
+
+  ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
