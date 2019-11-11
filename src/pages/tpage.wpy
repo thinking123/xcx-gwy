@@ -1,0 +1,82 @@
+<template>
+  <div class="page tpage">
+    <div class="t"/>
+    <CListWrap1 eventName="TList">
+      <TList v-for="(item,index) in items" :list="item"/>
+    </CListWrap1>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import store from 'store';
+
+  import eventHub from '@/common/eventHub';
+  wepy.page({
+    store,
+    config: {
+      navigationBarTitleText: ''
+    },
+    computed: {
+
+    },
+    data: {
+      items:[]
+    },
+    methods: {
+      getRect(selector, all) {
+        return new Promise(resolve => {
+          wx.createSelectorQuery()
+            .in(this)['selectViewport']()
+            .boundingClientRect(rect => {
+              console.log('rect pagesdf' , rect)
+              if (all && Array.isArray(rect) && rect.length) {
+                resolve(rect);
+              }
+
+              if (!all && rect) {
+                resolve(rect);
+              }
+            }).exec();
+        });
+      }
+    },
+    onShow(){
+
+    },
+    created () {
+      eventHub.$on('TList', ({items}) => {
+        console.log('eventHub' , items);
+          this.items = [...this.items , ...items];
+          this.getRect();
+      });
+    }
+  });
+</script>
+<style lang="scss">
+
+  .tpage{
+
+    height:unset;
+
+    .t{
+      background-color: #1D92FB;
+      height: 200px;
+    }
+    .t1{
+      background-color: #8F2A90;
+      height: 800px;
+    }
+  }
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+  CListWrap:'~UI/CListWrap/index',
+  CListWrap1:'~UI/CListWrap1',
+  TList:'~Custom/TList'
+
+  }
+}
+</config>

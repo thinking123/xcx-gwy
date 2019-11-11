@@ -152,12 +152,12 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/homeSection2',
+  'pages/tpage',
 
 
   ],
     window: {
-      backgroundTextStyle: 'light',
+      backgrsoundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '',
       navigationBarTextStyle: 'black'

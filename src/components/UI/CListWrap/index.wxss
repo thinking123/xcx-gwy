@@ -1,0 +1,18 @@
+.CListWrap {
+
+}
+
+.CListWrap-wrap {
+
+}
+
+.CListWrap-wrap-item {
+  flex: 1;
+}
+
+.CListWrap-dst{
+  height: 100px;
+  background-color: #CCCCCC;
+  font-size: 30rpx;
+  text-align: center;
+}

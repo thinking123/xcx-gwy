@@ -1,0 +1,65 @@
+<template>
+    <div class="TList external-cls">
+      <div>
+        {{list.text}}
+      </div>
+      <div>
+        {{list.date}}
+      </div>
+    </div>
+</template>
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+
+    },
+    externalClasses:[
+      'external-cls'
+    ],
+    props:{
+      list:{
+        type:Object,
+        default:{
+          text:'',
+          date:'',
+        }
+      }
+    },
+    events: {
+
+    },
+    computed:{
+
+    },
+    methods: {
+
+    },
+    attached () {
+
+      console.log('onLoad',this)
+    }
+  });
+</script>
+<style lang="scss">
+  .TList{
+    width: 750rpx;
+    padding: 20rpx 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1px solid sandybrown;
+    text-align: center;
+    >view:nth-child(1){
+      float: left;
+    }
+    >view:nth-child(2){
+      float: right;
+    }
+
+    &::after{
+      content:'';
+      display: table;
+      clear:both;
+    }
+  }
+</style>

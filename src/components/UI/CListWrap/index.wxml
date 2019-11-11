@@ -1,0 +1,21 @@
+<view class="CListWrap external-cls"
+>
+
+  <view class="CListWrap-wrap">
+
+    <slot/>
+
+  </view>
+  <view class="CListWrap-loading">
+
+  </view>
+  <view class="CListWrap-dst">
+    <view wx:if="{{isLoading}}">
+      isLoading...
+    </view>
+    <view wx:if="{{isEnd}}">
+      isEnd...
+    </view>
+  </view>
+
+</view>
