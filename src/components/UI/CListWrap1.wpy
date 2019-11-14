@@ -1,5 +1,6 @@
 <template>
   <view class="CListWrap external-cls"
+        style="display: {{show ? 'block' : 'none'}}"
   >
 
     <view class="CListWrap-wrap">
@@ -17,131 +18,157 @@
       <view wx:if="{{isEnd}}">
         isEnd...
       </view>
+      <view wx:if="{{isError}}">
+         {{errorMsg || '加载失败'}}
+      </view>
     </view>
 
   </view>
 
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import eventHub from '@/common/eventHub';
+  import wepy from '@wepy/core';
+  import store from 'store';
+  import { mapMutations, mapGetters } from '@wepy/x';
+  import { get } from '@/http/http';
+  import { showMsg, urlParams } from '@/common/utils';
+
   wepy.component({
+    store,
     data: {
-      items:[],
-      isEnd:false,
-      isLoading:false,
-      page:1,
+      isEnd: false,
+      isLoading: false,
+      page: 1,
+      isError: false,
+      errorMsg:''
+
     },
-    externalClasses:[
+    externalClasses: [
       'external-cls'
     ],
-    props:{
-      threshold:{
-        type:Number,
-        default:1000
+    computed: {
+      ...mapGetters(['items'])
+    },
+    props: {
+      threshold: {
+        type: Number,
+        default: 1000
       },
-      url:String,
-      eventName:{
-        type:String,
-        default:'clistwrap'
-      }
+      url: String,
+      eventName: {
+        type: String,
+        default: 'clistwrap'
+      },
+      type: String,
+      show: {
+        type: Boolean,
+        default: false
+      },
+      params: Object
     },
-    events: {
-
-    },
-    computed:{
-
-    },
+    events: {},
     methods: {
-      intersectionCb(res){
-        const {isLoading,isEnd, threshold} = this;
-        res.intersectionRatio // 相交区域占目标节点的布局区域的比例
-        res.intersectionRect // 相交区域
-        res.intersectionRect.left // 相交区域的左边界坐标
-        res.intersectionRect.top // 相交区域的上边界坐标
-        res.intersectionRect.width // 相交区域的宽度
-        res.intersectionRect.height // 相交区域的高度
+      ...mapMutations([
+        'resetItems',
+        'setItems'
+      ]),
+      intersectionCb(res) {
+        const { isLoading, isEnd, threshold } = this;
+        res.intersectionRatio; // 相交区域占目标节点的布局区域的比例
+        res.intersectionRect; // 相交区域
+        res.intersectionRect.left; // 相交区域的左边界坐标
+        res.intersectionRect.top; // 相交区域的上边界坐标
+        res.intersectionRect.width; // 相交区域的宽度
+        res.intersectionRect.height; // 相交区域的高度
 
-        console.log('relativeToViewport',res,res.boundingClientRect.top )
-        const canload = res.boundingClientRect.top
+        console.log('relativeToViewport', res, res.boundingClientRect.top);
+        const canload = res.boundingClientRect.top;
 
         // this.getRect().then(rect=>{
-          console.log("rect", this,this.$slots);
-          console.log("recboundingClientRectt", res.boundingClientRect.top)
+        console.log('rect', this, this.$slots);
+        console.log('recboundingClientRectt', res.boundingClientRect.top);
         // })
-        if(!isLoading && !isEnd ){
+        if (!isLoading && !isEnd) {
           this.getData();
         }
       },
 
-      request(url){
-        return new Promise((res , rej) => {
-          setTimeout(()=>{
-            let arr = []
-            for(let i = 0 ; i < 10 ; i++){
-              arr.push({
-                text:`arr text z; ${i}`,
-                date:Date.now(),
-                id:Math.random() * 100 ,
-              })
-            }
-            const data = {
-              status:200,
-              data:{
-                items:arr,
-              }
-            }
-            res(data);
-          },1000);
-        });
+      request() {
+        const { url, params = {}, page } = this;
+
+        let obj = { ...params, page: page + 1 };
+        let _url = urlParams(url, obj);
+        console.log('requdser url', _url);
+        return get(_url);
       },
-      getData(){
+      getData() {
         this.isLoading = true;
-        const {eventName, url, items , page} = this;
-        this.request().then(({data:{items:res}}) => {
+        const { eventName, url, page, type } = this;
+        const items = this.items[type] || [];
+        this.request().then(({ rows: { list: res, pageNum, pages, total }, status, message }) => {
+          this.isLoading = false;
+          const s = `${status}`;
+          if (status != 200) {
+            this.isError = true;
+            showMsg(message);
+            this.errorMsg = message;
+            return;
+          }
           const _items = [...items, ...res];
-          if(_items.length > 125){
+          this.setItems({ items: _items, type });
+          console.log('stoer', store);
 
 
-            this.isLoading = false;
+          if (pages == page) {
             this.isEnd = true;
-
-            if(this.ob){
+            if (this.ob) {
               this.ob.disconnect();
             }
-
-
-          }else{
-
-            this.isLoading = false;
+          } else {
             this.items = _items;
-
-            eventHub.$emit(eventName, { items:_items});
           }
 
-        }).catch(err=>{
-          console.log('err',err)
+        }).catch(err => {
+          console.log('err', err);
+          this.isError = true;
+          this.isLoading = false;
+
         });
 
 
-      },
+      }
+    },
+    detached() {
+      const { type } = this;
+      this.resetItems(type);
     },
     created() {
       console.log('created');
       this.ob = wx.createIntersectionObserver(this.$wx, {
-        thresholds:[0,1]
+        thresholds: [0]
       });
     },
     attached() {
       console.log('attached');
-      const {threshold} = this;
-      this.ob.relativeToViewport({bottom: 0}).observe('.CListWrap-dst', this.intersectionCb.bind(this))
+      const { threshold, type } = this;
+      if (!this.ob) {
+        this.ob = wx.createIntersectionObserver(this.$wx, {
+          thresholds: [0]
+        });
+      }
+      this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
+
     }
   });
 </script>
 <style lang="scss">
-  .CListWrap {
+  clistwrap1 {
+    display: block;
 
+  }
+
+  .CListWrap {
+    display: block;
   }
 
   .CListWrap-wrap {
@@ -152,9 +179,9 @@
     flex: 1;
   }
 
-  .CListWrap-dst{
-    height: 100px;
-    background-color: #CCCCCC;
+  .CListWrap-dst {
+    height: 1px;
+    background-color: salmon;
     font-size: 30rpx;
     text-align: center;
   }

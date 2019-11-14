@@ -1,28 +1,28 @@
 import Vuex from '@wepy/x';
-import {getImgUrlEx} from '@/common/utils';
+import { getImgUrlEx } from '@/common/utils';
 
 const tabbar = [
   {
-    icon:'tabbar01@3x',
-    activeIcon:'tabbar01_pre@3x',
-    page:'/pages/home',
-    text:'开通联众'
+    icon: 'tabbar01@3x',
+    activeIcon: 'tabbar01_pre@3x',
+    page: '/pages/home',
+    text: '开通联众'
   },
   {
-    icon:'tabbar02@3x',
-    activeIcon:'tabbar02_pre@3x',
-    page:'/pages/homeSection2',
-    text:'开明真题'
+    icon: 'tabbar02@3x',
+    activeIcon: 'tabbar02_pre@3x',
+    page: '/pages/homeSection2',
+    text: '开明真题'
   },
   {
-    icon:'tabbar03@3x',
-    activeIcon:'tabbar03_pre@3x',
-    page:'/pages/home',
-    text:'开悟自我'
+    icon: 'tabbar03@3x',
+    activeIcon: 'tabbar03_pre@3x',
+    page: '/pages/home',
+    text: '开悟自我'
   }
-].map(m=>{
-  m.icon = getImgUrlEx(m.icon)
-  m.activeIcon = getImgUrlEx(m.activeIcon)
+].map(m => {
+  m.icon = getImgUrlEx(m.icon);
+  m.activeIcon = getImgUrlEx(m.activeIcon);
   return m;
 });
 
@@ -30,87 +30,104 @@ const tabbar = [
 export default new Vuex.Store({
   state: {
     counter: 0,
-    token:null,
-    queue:[],
-    activeTabIndex:0,
+    token: null,
+    queue: [],
+    activeTabIndex: 0,
     tabbar,
-    nickName:'default Nickname',
-    deviceId:'deviceId',
-    wx:{},
-    systemInfo:{},
-    showMediaPlay:false,
-    isMediaPlaying:false,
-    playMedia:{},
-    night:false
+    nickName: 'default Nickname',
+    deviceId: 'deviceId',
+    wx: {},
+    systemInfo: {},
+    showMediaPlay: false,
+    isMediaPlaying: false,
+    playMedia: {},
+    night: false,
+    items: {}
   },
   mutations: {
-    setSystemInfo(state , systemInfo){
-      console.log('systemInfo' , systemInfo)
-      state.systemInfo = systemInfo
+    setSystemInfo(state, systemInfo) {
+      console.log('systemInfo', systemInfo);
+      state.systemInfo = systemInfo;
     },
-    changeTabbar(state , index){
-      state.activeTabIndex = index
+    setItems(state, { items, type }) {
+      console.log('setItems' ,  { items, type })
+      const b = state.items[type] || [];
+      const res = [...b, ...items];
+      const obj = { ...state.items };
+      obj[type] = res;
+      state.items = obj;
+
     },
-    setShowMediaPlay(state , showMediaPlay){
-      state.showMediaPlay = showMediaPlay
+    resetItems(state, type) {
+      state.items[type] = [];
     },
-    setMediaPlaying(state , isMediaPlaying){
-      state.isMediaPlaying = isMediaPlaying
+
+    changeTabbar(state, index) {
+      state.activeTabIndex = index;
     },
-    setPlayMedia(state , playMedia){
-      state.playMedia = playMedia
+    setShowMediaPlay(state, showMediaPlay) {
+      state.showMediaPlay = showMediaPlay;
     },
-    setToken(state , token){
-      console.log('token' , token)
-      state.token = token
+    setMediaPlaying(state, isMediaPlaying) {
+      state.isMediaPlaying = isMediaPlaying;
     },
-    setNight(state , night){
-      state.night = night
+    setPlayMedia(state, playMedia) {
+      state.playMedia = playMedia;
     },
-    pushQueue(state , url){
+    setToken(state, token) {
+      console.log('token', token);
+      state.token = token;
+    },
+    setNight(state, night) {
+      state.night = night;
+    },
+    pushQueue(state, url) {
       state.queue.push(url);
     },
-    popQueue(state){
+    popQueue(state) {
       state.queue.pop();
     },
-    setWxCode(state , code){
-      state.wx = {...state.wx , code}
+    setWxCode(state, code) {
+      state.wx = { ...state.wx, code };
     },
-    setWxSetting(state , setting){
-      state.wx = {...state.wx , setting:{...setting}}
+    setWxSetting(state, setting) {
+      state.wx = { ...state.wx, setting: { ...setting } };
     },
-    setWxUserInfo(state , userInfo){
-      state.wx = {...state.wx , userInfo:{...userInfo}}
+    setWxUserInfo(state, userInfo) {
+      state.wx = { ...state.wx, userInfo: { ...userInfo } };
     }
   },
-  getters:{
-    isSigned(state){
+  getters: {
+    isSigned(state) {
       return !!state.token;
     },
-    isLoading(state){
+    isLoading(state) {
       return state.queue.length > 0;
     },
-    isMediaPlaying(state){
+    isMediaPlaying(state) {
       return state.isMediaPlaying;
     },
-    showMediaPlay(state){
+    showMediaPlay(state) {
       return state.showMediaPlay;
     },
-    playMedia(state){
+    playMedia(state) {
       return state.playMedia;
     },
-    night(state){
+    night(state) {
       return state.night;
+    },
+    items(state) {
+      return state.items;
     }
   },
   actions: {
-    increment ({ commit }) {
+    increment({ commit }) {
       commit('increment');
     },
-    decrement ({ commit }) {
+    decrement({ commit }) {
       commit('decrement');
     },
-    incrementAsync ({ commit }) {
+    incrementAsync({ commit }) {
       setTimeout(() => {
         commit('increment');
       }, 1000);

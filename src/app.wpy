@@ -147,6 +147,26 @@ wepy.app({
 
       'pages/login/loginInput',
       'pages/login/register',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * */
 </script>
 <config>

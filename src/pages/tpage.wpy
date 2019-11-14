@@ -1,8 +1,13 @@
 <template>
   <div class="page tpage">
+    <CTab :tabs="tabs" :bottomLine="bottomLine" @changeTab="handleTab"/>
+
     <div class="t"/>
-    <CListWrap1 eventName="TList">
-      <TList v-for="(item,index) in items" :list="item"/>
+    <CListWrap1 eventName="TList" type="clist" :show="selectedTab == 0">
+      <TList v-for="(item,index) in clist" :list="item"/>
+    </CListWrap1>
+    <CListWrap1 eventName="TList" type="clist1" :show="selectedTab == 1">
+      <TList v-for="(item,index) in clist1" :list="item"/>
     </CListWrap1>
   </div>
 </template>
@@ -10,20 +15,40 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-
-  import eventHub from '@/common/eventHub';
+  import {mapGetters} from '@wepy/x';
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
-    computed: {
+    computed:{
+      ...mapGetters(['items']),
+      clist(){
+        const list = this.items['clist'];
+        console.log('list' , list);
+        return list || [];
+      },
+      clist1(){
+        const list = this.items['clist1'];
+        console.log('list1' , list);
+        return list || [];
+      },
+    },
+
+    data: {
+      tabs:[
+        {text:'验证码登录'},
+        {text:'密码登录'},
+      ],
+      items:[],
+      selectedTab:0,
 
     },
-    data: {
-      items:[]
-    },
     methods: {
+      handleTab({tab ,index}){
+        console.log('tab' , tab , index)
+        this.selectedTab = index
+      },
       getRect(selector, all) {
         return new Promise(resolve => {
           wx.createSelectorQuery()
@@ -45,11 +70,13 @@
 
     },
     created () {
-      eventHub.$on('TList', ({items}) => {
-        console.log('eventHub' , items);
-          this.items = [...this.items , ...items];
-          this.getRect();
-      });
+      console.log('created');
+
+      // eventHub.$on('TList', ({items}) => {
+      //   console.log('eventHub' , items);
+      //     this.items = [...this.items , ...items];
+      //     this.getRect();
+      // });
     }
   });
 </script>
@@ -75,7 +102,9 @@
     usingComponents: {
   CListWrap:'~UI/CListWrap/index',
   CListWrap1:'~UI/CListWrap1',
-  TList:'~Custom/TList'
+  TList:'~Custom/TList',
+  CTab:'~UI/CTab',
+
 
   }
 }
