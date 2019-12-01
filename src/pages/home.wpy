@@ -363,7 +363,12 @@
     .titleIcons{
       display: flex;
       justify-content: space-between;
-      >.titleIcon{
+      .titleIcon{
+        >image{
+
+          width: 100rpx;
+          height:100rpx;
+        }
       }
       align-items: center;
       margin-bottom: 48rpx;

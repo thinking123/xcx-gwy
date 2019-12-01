@@ -6,7 +6,7 @@
     <CListWrap1 eventName="TList" type="clist"
                 :show="selectedTab == 0"
                 :params="params1"
-                url="/api/subjecAudio/getSubjectChapterHomeList"
+                url="/api/subjecAudio/getSubjectScore"
     >
       <TList v-for="(item,index) in clist" :list="item"/>
     </CListWrap1>

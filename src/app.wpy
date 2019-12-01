@@ -172,13 +172,10 @@ wepy.app({
 <config>
 {
     pages: [
+  'pages/home',
+
   'pages/tpage',
 
-  'pages/login/login',
-
-
-  'pages/login/loginInput',
-  'pages/login/register',
 
   ],
     window: {
