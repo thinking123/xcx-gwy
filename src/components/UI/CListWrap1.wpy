@@ -6,7 +6,9 @@
     <view class="CListWrap-wrap">
 
       <slot/>
-
+      <view wx:if="{{curItems.length == 0 && loaded}}" class="noData">
+         没有数据
+      </view>
     </view>
     <view class="CListWrap-loading">
 
@@ -15,7 +17,7 @@
       <view wx:if="{{isLoading}}">
         <CLoading type="spinner"/>
       </view>
-      <view wx:if="{{isEnd}}">
+      <view wx:if="{{isEnd && curItems.length > 0}}">
         没有更多了
       </view>
       <view wx:if="{{isError}}">
@@ -33,6 +35,9 @@
   import { get } from '@/http/http';
   import { showMsg, urlParams } from '@/common/utils';
 
+  const defFun = () => {
+    console.log('defFun')
+  }
   wepy.component({
     store,
     data: {
@@ -46,7 +51,9 @@
       other: {},
       mockPage: 1,
       mockPages: 5,
-      mockTotal: 200
+      mockTotal: 200,
+      curItems:[],
+      loaded:false
     },
     externalClasses: [
       'external-cls'
@@ -72,6 +79,18 @@
       show: {
         type: Boolean,
         default: true
+      },
+      cb:{
+        type:Object,
+        default:defFun
+      },
+      preHandle:{
+        type:Object,
+        default:defFun
+      },
+      funWrap:{
+        type:Object,
+        default:{}
       }
     },
     events: {},
@@ -178,10 +197,11 @@
       },
       getData() {
         this.isLoading = true;
-        const { eventName, url, pageNum, type } = this;
+        const { eventName, url, pageNum, type , cb} = this;
         const items = this.items[type] || [];
         this.request().then(({ rows: { list: res, pageNum, pages, total , ...other}, status, message }) => {
           this.isLoading = false;
+          this.loaded = true;
 
           const s = `${status}`;
           if (status != 200) {
@@ -191,12 +211,14 @@
             return;
           }
 
-          const _items = [...items, ...res];
-          this.setItems({ items: _items, type });
-          console.log('stoer', store);
+          // cb(res);
 
-
-          this.items = _items;
+          if(!!res && Array.isArray(res) && res.length > 0){
+            const _items = [...items, ...res];
+            this.curItems = _items;
+            this.setItems({ items: _items, type });
+            this.items = _items;
+          }
 
           if (pages == pageNum) {
             this.isEnd = true;
@@ -259,6 +281,10 @@
     background-color: salmon;
     font-size: 30rpx;
     text-align: center;
+  }
+
+  .noData{
+      text-align: center;
   }
 
 
