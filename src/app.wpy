@@ -174,6 +174,11 @@ wepy.app({
     pages: [
   'pages/tpage',
 
+  'pages/login/login',
+
+
+  'pages/login/loginInput',
+  'pages/login/register',
 
   ],
     window: {

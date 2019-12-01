@@ -48,35 +48,7 @@
       handleTab({tab ,index}){
         console.log('tab' , tab , index)
         this.selectedTab = index
-      },
-      getRect(selector, all) {
-        return new Promise(resolve => {
-          wx.createSelectorQuery()
-            .in(this)['selectViewport']()
-            .boundingClientRect(rect => {
-              console.log('rect pagesdf' , rect)
-              if (all && Array.isArray(rect) && rect.length) {
-                resolve(rect);
-              }
-
-              if (!all && rect) {
-                resolve(rect);
-              }
-            }).exec();
-        });
       }
-    },
-    onShow(){
-
-    },
-    created () {
-      console.log('created');
-
-      // eventHub.$on('TList', ({items}) => {
-      //   console.log('eventHub' , items);
-      //     this.items = [...this.items , ...items];
-      //     this.getRect();
-      // });
     }
   });
 </script>

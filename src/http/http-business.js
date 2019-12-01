@@ -76,7 +76,8 @@ export function loginByPhone(userPhone, userPwd, deviceId) {
   const loadingText = '正在登入...';
   const errMsg = '登入失败';
 
-  url = urlParams(url, { userPhone, userPwd, deviceId });
+  // url = urlParams(url, { userPhone, userPwd, deviceId });
+  url = urlParams(url, { userPhone, userPwd });
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 

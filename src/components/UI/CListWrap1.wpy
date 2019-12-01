@@ -13,13 +13,13 @@
     </view>
     <view class="CListWrap-dst">
       <view wx:if="{{isLoading}}">
-        isLoading...
+        <CLoading type="spinner"/>
       </view>
       <view wx:if="{{isEnd}}">
-        isEnd...
+        没有更多了
       </view>
       <view wx:if="{{isError}}">
-         {{errorMsg || '加载失败'}}
+        {{errorMsg || '加载失败'}}
       </view>
     </view>
 
@@ -38,10 +38,16 @@
     data: {
       isEnd: false,
       isLoading: false,
-      page: 1,
+      pageNum: 1,
+      pages: 1,
+      total: 0,
       isError: false,
-      errorMsg:''
+      errorMsg: '',
+      other: {},
 
+      mockPage: 1,
+      mockPages: 5,
+      mockTotal: 200
     },
     externalClasses: [
       'external-cls'
@@ -62,7 +68,7 @@
       type: String,
       show: {
         type: Boolean,
-        default: false
+        default: true
       },
       params: Object
     },
@@ -94,19 +100,82 @@
       },
 
       request() {
-        const { url, params = {}, page } = this;
+        const { url, params = {}, pageNum } = this;
 
-        let obj = { ...params, page: page + 1 };
+        let obj = { ...params, pageNum: pageNum + 1 };
         let _url = urlParams(url, obj);
         console.log('requdser url', _url);
         return get(_url);
       },
+
+
+      _request() {
+
+        return new Promise((resolve, reject) => {
+          let res = {};
+          if (this.mockPage <= this.mockPages) {
+            const list = [];
+            for (let i = 0; i < 10; i++) {
+              const id = `${this.mockPage}-${i}`;
+              list.push({
+                id,
+                'chapter': `chapter${id}`,
+                'title': `title${id}`,
+                'vfVideoId': `vfVideoId${id}`
+              });
+            }
+            res = {
+              'message': 'message',
+              'path': 'path',
+              'rows': {
+                list,
+                'pageNum': this.mockPage,
+                'pages': this.mockPages,
+                'subjectTitle': 'subjectTitle',
+                'teacherId': 'teacherId',
+                'teacherQualifications': 'teacherQualifications',
+                'total': this.mockTotal,
+                'totalChaper': 0,
+                'upperBody': 'string'
+              },
+              'status': '200'
+            };
+
+            this.mockPage += 1;
+          } else {
+            res = {
+              'message': 'message',
+              'path': 'path',
+              'rows': {
+                'list': [],
+                'pageNum': this.mockPage,
+                'pages': this.mockPages,
+                'subjectTitle': 'subjectTitle',
+                'teacherId': 'teacherId',
+                'teacherQualifications': 'teacherQualifications',
+                'total': this.mockTotal,
+                'totalChaper': 0,
+                'upperBody': 'string'
+              },
+              'status': '200'
+            };
+          }
+
+          setTimeout(()=>{
+            resolve(res);
+
+          } , 1000);
+
+        });
+
+      },
       getData() {
         this.isLoading = true;
-        const { eventName, url, page, type } = this;
+        const { eventName, url, pageNum, type } = this;
         const items = this.items[type] || [];
-        this.request().then(({ rows: { list: res, pageNum, pages, total }, status, message }) => {
+        this._request().then(({ rows: { list: res, pageNum, pages, total , ...other}, status, message }) => {
           this.isLoading = false;
+
           const s = `${status}`;
           if (status != 200) {
             this.isError = true;
@@ -114,31 +183,30 @@
             this.errorMsg = message;
             return;
           }
+
           const _items = [...items, ...res];
           this.setItems({ items: _items, type });
           console.log('stoer', store);
 
 
-          if (pages == page) {
+          this.items = _items;
+
+          if (pages == pageNum) {
             this.isEnd = true;
             if (this.ob) {
               this.ob.disconnect();
             }
-          } else {
-            this.items = _items;
           }
 
         }).catch(err => {
           console.log('err', err);
           this.isError = true;
           this.isLoading = false;
-
         });
-
-
       }
     },
     detached() {
+      console.log('detached list wrap');
       const { type } = this;
       this.resetItems(type);
     },
@@ -186,4 +254,17 @@
     text-align: center;
   }
 
+
+  cloading{
+    margin:10rpx;
+  }
 </style>
+
+<config>
+  {
+  navigationBarTitleText: '',
+  usingComponents: {
+  'CLoading':'~UI/CLoading',
+  }
+  }
+</config>
