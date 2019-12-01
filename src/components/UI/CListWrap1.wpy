@@ -38,13 +38,12 @@
     data: {
       isEnd: false,
       isLoading: false,
-      pageNum: 1,
-      pages: 1,
+      pageNum: 0,
+      pages: 0,
       total: 0,
       isError: false,
       errorMsg: '',
       other: {},
-
       mockPage: 1,
       mockPages: 5,
       mockTotal: 200
@@ -61,6 +60,10 @@
         default: 1000
       },
       url: String,
+      params:{
+        type:Object,
+        default:{},
+      },
       eventName: {
         type: String,
         default: 'clistwrap'
@@ -69,8 +72,7 @@
       show: {
         type: Boolean,
         default: true
-      },
-      params: Object
+      }
     },
     events: {},
     methods: {
@@ -113,6 +115,11 @@
 
         return new Promise((resolve, reject) => {
           let res = {};
+          if (this.mockPage == 2 ){
+            // this.mockPage += 1;
+            reject('error msdsfsd');
+            return;
+          }
           if (this.mockPage <= this.mockPages) {
             const list = [];
             for (let i = 0; i < 10; i++) {
@@ -173,7 +180,7 @@
         this.isLoading = true;
         const { eventName, url, pageNum, type } = this;
         const items = this.items[type] || [];
-        this._request().then(({ rows: { list: res, pageNum, pages, total , ...other}, status, message }) => {
+        this.request().then(({ rows: { list: res, pageNum, pages, total , ...other}, status, message }) => {
           this.isLoading = false;
 
           const s = `${status}`;

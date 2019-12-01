@@ -3,7 +3,10 @@
     <CTab :tabs="tabs" :bottomLine="bottomLine" @changeTab="handleTab"/>
 
     <div class="t"/>
-    <CListWrap1 eventName="TList" type="clist" :show="selectedTab == 0">
+    <CListWrap1 eventName="TList" type="clist"
+                :show="selectedTab == 0"
+                :params="parmas1"
+                url="/api/subjecAudio/getSubjecAudioHomeList">
       <TList v-for="(item,index) in clist" :list="item"/>
     </CListWrap1>
     <CListWrap1 eventName="TList" type="clist1" :show="selectedTab == 1">
@@ -42,7 +45,9 @@
       ],
       items:[],
       selectedTab:0,
-
+      params1:{
+        labelId:'1'
+      }
     },
     methods: {
       handleTab({tab ,index}){

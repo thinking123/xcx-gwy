@@ -30,6 +30,12 @@
   import {loginByWx} from '@/http/http-business';
   import {_wxLogin} from '@/common/wx';
 
+  /*
+  * mock phone: 15525976631
+  *  pw : 123456
+  * token : dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6
+  *
+  * */
   wepy.page({
     store,
     config: {

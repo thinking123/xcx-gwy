@@ -27,10 +27,12 @@ const tabbar = [
 });
 
 
+const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
+
 export default new Vuex.Store({
   state: {
     counter: 0,
-    token: null,
+    token: mockToken,
     queue: [],
     activeTabIndex: 0,
     tabbar,
