@@ -186,3 +186,77 @@ export function registerByWx(
   return post(url, data, loadingText).then(res => parseRes(res, errMsg));
 
 }
+
+
+/**
+ *  GET /api/getupSleep/clock
+ 用户打卡
+
+ Parameter  Value  Description  Parameter Type  Data Type
+ userId
+ (required)
+ 用户Id
+
+ query  string
+ clockType
+ (required)
+ 打开类型，0 起床 1 睡觉
+
+ query  string
+ */
+export function getupSleepClock(
+  userId,
+  clockType) {
+  const url = '/api/getupSleep/clock';
+
+  const loadingText = '打卡...';
+  const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId,
+    clockType
+  });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+
+
+
+/**
+ * GET /api/learnTime/add
+ 添加学习计时 --编号 001
+
+ userId
+ (required)
+ 用户Id
+
+ query	string
+ learnContent
+ (required)
+ 学习内容
+
+ query	string
+ learnTime
+ (required)
+ 学习时间
+
+ query	string
+ */
+export function learnTimeAdd(
+  userId,
+  learnContent,
+  learnTime
+  ) {
+  const url = '/api/learnTime/add';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId,
+    clockType
+  });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+
