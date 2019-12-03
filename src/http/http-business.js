@@ -3,7 +3,7 @@ import { urlParams } from '@/common/utils';
 
 const reg = /^2/;
 
-function parseRes(res, errMsg, resolveStatus = []) {
+function parseRes(res, errMsg='', resolveStatus = []) {
   if (!!res && reg.test(res.status)) {
     // return res.rows ? res.rows : res
     return res.rows;
@@ -247,16 +247,17 @@ export function learnTimeAdd(
   learnContent,
   learnTime
   ) {
-  const url = '/api/learnTime/add';
+  let url = '/api/learnTime/add';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
   url = urlParams(url, {
     userId,
-    clockType
+    learnContent,
+    learnTime
   });
-  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+  return get(url, {}, '').then(res => parseRes(res));
 }
 
 

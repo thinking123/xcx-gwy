@@ -6,9 +6,11 @@
         <div class="input">
           <div class="inputWrap">
             <input @input="handleInput" :value="val"
+                   :disabled="readonly"
                    :type="type"
                    :placeholder="placeholder"/>
             <image src="/static/icon/btn_reset_gray.png"
+                   v-if="!readonly"
                    v-show="!!val"
                    @click="handleClear"
                    class="close"/>
@@ -42,6 +44,10 @@
       showLine:{
         type:Boolean,
         default: true
+      },
+      readonly:{
+        type:Boolean,
+        default: false
       },
       type:{
         type:String,

@@ -27,7 +27,10 @@ const tabbar = [
 });
 
 
+// const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
 const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
+
+const userId = 3;
 
 export default new Vuex.Store({
   state: {
@@ -44,7 +47,10 @@ export default new Vuex.Store({
     isMediaPlaying: false,
     playMedia: {},
     night: false,
-    items: {}
+    items: {},
+    userInfo:{
+      userId:3
+    }
   },
   mutations: {
     setSystemInfo(state, systemInfo) {

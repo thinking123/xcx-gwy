@@ -74,6 +74,7 @@
         <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @clickBtn="handleLearnTip"
                         :val.sync="learnTip"
                         @update="handlelearnTip"
+                        readonly="{{true}}"
                         external-cls="row"/>
         <CButton text="开始学习"  @tap.native="handleStartLearn" external-cls="row"/>
       </div>
@@ -100,9 +101,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
+  import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
   import { mapGetters , mapState} from '@wepy/x';
   import {navToPage} from '@/common/navUtils';
+  import {learnTimeAdd} from '@/http/http-business';
 
   wepy.page({
     store,
@@ -115,9 +117,13 @@
       timeTip(){
         if(this.time && this.time.length > 0){
           const time = this.time;
-          const t = time[0] * 60 + time[1];
 
-          return `${t}分钟`;
+          let v = `${this.time[1]}分钟`;
+          if (this.time[0] > 0) {
+            v = `${this.time[0]}小时 ${v}`;
+          }
+
+          return v;
         }
 
         return '去设置';
@@ -156,7 +162,7 @@
       timeShow:false,
       time:[],
       setTime:[],
-      learnContent:'sdf',
+      learnContent:'',
       learnTip:''
     },
     methods: {
@@ -199,21 +205,42 @@
         this.timeShow = true;
       },
       handleStartLearn(){
-        const t = this.time;
-        if(t && t.length == 2){
-          const offset = (t[0] * 3600 + t[1] * 60) * 1000
-          navToPage('/pages/section1/timer' , {
-            startTime:new Date().getTime(),
-            endTime:(new Date().getTime() + offset)
-          })
+        const verify = () => {
+          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0 ;
+          if(!isEmptyString(this.learnContent) && t ){
+            return true;
+          }
+
+          return false;
         }
+
+        if(verify()){
+
+          learnTimeAdd(3 , "大幅度发到付" , 100).then(res => {
+            const t = this.time;
+            if(t && t.length == 2){
+              const offset = (t[0] * 3600 + t[1] * 60) * 1000
+              navToPage('/pages/section1/timer' , {
+                startTime:new Date().getTime(),
+                endTime:(new Date().getTime() + offset)
+              })
+            }
+          })
+
+
+        }else{
+          showMsg('内容不全');
+        }
+
 
       },
       handlelearnContent(v){
         this.learnContent = v;
       },
       handlelearnTip(v){
-        this.learnTip = v;
+
+        console.log('handlelearnTip', v);
+        // this.learnTip = v;
       },
       hanleTime(v){
         console.log('time:' , v)
@@ -222,6 +249,17 @@
       handleSetTime(){
         this.timeShow = false;
         this.time = this.setTime;
+//完成5分钟学习后暂停且提醒结束计时
+
+        if(this.time.length == 2){
+          let v = `${this.time[1]}分钟`;
+          if (this.time[0] > 0) {
+            v = `${this.time[0]}小时 ${v}`;
+          }
+          this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
+        }
+
+
       }
     },
     onShow(){

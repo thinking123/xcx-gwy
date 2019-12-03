@@ -45,7 +45,7 @@
       bindChange(e){
         console.log(e)
         this.val = e.$wx.detail.value;
-
+        this.$emit('change' , this.val);
       }
     },
     onLoad () {

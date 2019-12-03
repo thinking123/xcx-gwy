@@ -7,6 +7,8 @@ export function _wxLogin() {
             success: res => {
                 // 发送 res.code 到后台换取 openId, sessionKey, unionId
                 //此处通过code 获取 服务端token
+              console.log('code' , res.code);
+
                 commit('setWxCode' , res.code)
                 resolve(res.code)
             },
