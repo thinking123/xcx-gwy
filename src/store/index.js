@@ -48,8 +48,8 @@ export default new Vuex.Store({
     playMedia: {},
     night: false,
     items: {},
-    userInfo:{
-      userId:3
+    user:{
+      id:3
     }
   },
   mutations: {
@@ -126,6 +126,9 @@ export default new Vuex.Store({
     },
     items(state) {
       return state.items;
+    },
+    user(state) {
+      return state.user;
     }
   },
   actions: {

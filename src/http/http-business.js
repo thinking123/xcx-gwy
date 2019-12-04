@@ -1,10 +1,22 @@
 import { get, post } from './http';
-import { urlParams } from '@/common/utils';
+import { showMsg, urlParams } from '@/common/utils';
 
 const reg = /^2/;
 
-function parseRes(res, errMsg='', resolveStatus = []) {
-  if (!!res && reg.test(res.status)) {
+function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
+
+  // const c = true;
+  // if(typeof beforeCb === 'function'){
+  //   c = beforeCb(res);
+  // }
+  //
+  // if(!c){
+  //   return;
+  // }
+  if ((!!res && reg.test(res.status)) || resolveStatus.includes(res.status) || tipStatus.includes(res.status)) {
+    if (tipStatus.includes(res.status)) {
+      return showMsg(res.message);
+    }
     // return res.rows ? res.rows : res
     return res.rows;
   } else {
@@ -207,7 +219,7 @@ export function registerByWx(
 export function getupSleepClock(
   userId,
   clockType) {
-  const url = '/api/getupSleep/clock';
+  let url = '/api/getupSleep/clock';
 
   const loadingText = '打卡...';
   const errMsg = '打卡失败';
@@ -216,10 +228,8 @@ export function getupSleepClock(
     userId,
     clockType
   });
-  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg, [], ['2001']));
 }
-
-
 
 
 /**
@@ -230,23 +240,23 @@ export function getupSleepClock(
  (required)
  用户Id
 
- query	string
+ query  string
  learnContent
  (required)
  学习内容
 
- query	string
+ query  string
  learnTime
  (required)
  学习时间
 
- query	string
+ query  string
  */
 export function learnTimeAdd(
   userId,
   learnContent,
   learnTime
-  ) {
+) {
   let url = '/api/learnTime/add';
 
   // const loadingText = '打卡...';
@@ -257,7 +267,7 @@ export function learnTimeAdd(
     learnContent,
     learnTime
   });
-  return get(url, {}, '').then(res => parseRes(res));
+  return get(url, {}, '').then(res => parseRes(res, '', [], ['2001']));
 }
 
 

@@ -54,9 +54,9 @@
              overlay="{{ true }}">
       <div class="getup">
         <HeaderClose text="起床睡觉"  external-cls="header" @click="getupShow=false"/>
-        <CButton text="起床" :icon="getupicon1" @tap.native="handleWxClick"
+        <CButton text="起床" :icon="getupicon1" @tap.native="handleGetup(0)"
                  external-cls="btn1"/>
-        <CButton text="睡觉" :icon="getupicon2" @tap.native="handleWxClick"
+        <CButton text="睡觉" :icon="getupicon2" @tap.native="handleGetup(1)"
                  external-cls="btn2"/>
       </div>
     </CPopup>
@@ -88,7 +88,7 @@
       <div class="time">
         <HeaderClose text="选择学习时间"  external-cls="header" @click="timeShow=false"/>
         <div class="body">
-          <CTimePickerView @change="hanleTime" external-cls="row1"/>
+          <CTimePickerView @change="hanleTime" external-cls="row1" :val="setTime"/>
           <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
         </div>
 
@@ -104,7 +104,7 @@
   import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
   import { mapGetters , mapState} from '@wepy/x';
   import {navToPage} from '@/common/navUtils';
-  import {learnTimeAdd} from '@/http/http-business';
+  import { getupSleepClock, learnTimeAdd } from '@/http/http-business';
 
   wepy.page({
     store,
@@ -112,15 +112,18 @@
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters(['isSigned']),
+      ...mapGetters(['isSigned', 'user']),
       ...mapState(['nickName']),
       timeTip(){
         if(this.time && this.time.length > 0){
           const time = this.time;
 
-          let v = `${this.time[1]}分钟`;
+          let v = '';
           if (this.time[0] > 0) {
-            v = `${this.time[0]}小时 ${v}`;
+            v = `${this.time[0]}小时`;
+          }
+          if (this.time[1] > 0) {
+            v += `${this.time[1]}分钟`;
           }
 
           return v;
@@ -176,6 +179,10 @@
             break;
           case 1:
             this.learnShow = true;
+            this.learnTip = '';
+            this.learnContent = '';
+            this.setTime = [];
+            this.time = [];
             break;
           case 2:
             navToPage('/pages/section1/learnLog')
@@ -214,9 +221,11 @@
           return false;
         }
 
-        if(verify()){
 
-          learnTimeAdd(3 , "大幅度发到付" , 100).then(res => {
+
+        if(verify()){
+          let totalT = this.time[0] * 60 + this.time[1];
+          learnTimeAdd(this.user.id , this.learnContent , totalT).then(res => {
             const t = this.time;
             if(t && t.length == 2){
               const offset = (t[0] * 3600 + t[1] * 60) * 1000
@@ -252,14 +261,22 @@
 //完成5分钟学习后暂停且提醒结束计时
 
         if(this.time.length == 2){
-          let v = `${this.time[1]}分钟`;
+          let v = '';
           if (this.time[0] > 0) {
-            v = `${this.time[0]}小时 ${v}`;
+            v = `${this.time[0]}小时`;
+          }
+          if (this.time[1] > 0) {
+            v += `${this.time[1]}分钟`;
           }
           this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
         }
 
 
+      },
+      handleGetup(type){
+        getupSleepClock(this.user.id , type).then(res => {
+          res && showMsg(type == 0 ? '起床' : '睡觉');
+        });
       }
     },
     onShow(){
