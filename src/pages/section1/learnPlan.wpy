@@ -5,7 +5,7 @@
             @changeTab="handleTab"
             external-cls="ctab"/>
 
-      <IconText @click.native="planShow=true"
+      <IconText @click.native="onPlanShow"
                 external-cls="titleIcon"
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
@@ -30,6 +30,7 @@
                           :val.sync="learnContent"/>
           <CTopLabelInput label="设置提醒时间" placeholder="到时会提醒您学习" :btn="timeTip" @clickBtn="handleLearnTip"
                           :val.sync="learnTip"
+                          readonly="{{true}}"
                           @update="handlelearnTip"
                           external-cls="row"/>
           <CButton text="确认添加"  @tap.native="handleStartLearn" external-cls="row"/>
@@ -57,7 +58,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
+  import {getImgUrlEx,isEmptyString} from '@/common/utils';
+  import { learnPlanAdd } from '@/http/http-business';
+  import {navToPage} from '@/common/navUtils';
+  import { mapGetters , mapState} from '@wepy/x';
 
   wepy.page({
     store,
@@ -65,12 +69,21 @@
       navigationBarTitleText: ''
     },
     computed: {
+      ...mapGetters([ 'user']),
+
       timeTip(){
         if(this.time && this.time.length > 0){
           const time = this.time;
-          const t = time[0] * 60 + time[1];
 
-          return `${t}分钟`;
+          let v = '';
+          if (this.time[0] > 0) {
+            v = `${this.time[0]}小时`;
+          }
+          if (this.time[1] > 0) {
+            v += `${this.time[1]}分钟`;
+          }
+
+          return v;
         }
 
         return '去设置';
@@ -109,7 +122,41 @@
         this.timeShow = true;
       },
       handleStartLearn(){
-        console.log(this.learnContent)
+        const verify = () => {
+          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0 ;
+          if(!isEmptyString(this.learnContent) && t ){
+            return true;
+          }
+
+          return false;
+        }
+
+
+
+        if(verify()){
+          let totalT = this.time[0] * 60 + this.time[1];
+          learnPlanAdd(this.user.id , this.learnContent , totalT).then(res => {
+            const t = this.time;
+            if(t && t.length == 2){
+              const offset = (t[0] * 3600 + t[1] * 60) * 1000
+              navToPage('/pages/section1/timer' , {
+                startTime:new Date().getTime(),
+                endTime:(new Date().getTime() + offset)
+              })
+            }
+          })
+
+
+        }else{
+          showMsg('内容不全');
+        }
+      },
+      onPlanShow(){
+        this.planShow = true;
+        this.learnTip = '';
+        this.learnContent = '';
+        this.setTime = [];
+        this.time = [];
       },
       handlelearnContent(v){
         this.learnContent = v;
@@ -124,10 +171,21 @@
       handleSetTime(){
         this.timeShow = false;
         this.time = this.setTime;
+
+        if(this.time.length == 2){
+          let v = '';
+          if (this.time[0] > 0) {
+            v = `${this.time[0]}小时`;
+          }
+          if (this.time[1] > 0) {
+            v += `${this.time[1]}分钟`;
+          }
+          this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
+        }
       }
     },
     onShow(){
-      
+
     },
     created () {
       this.iconText.src = getImgUrlEx(this.iconText.src);

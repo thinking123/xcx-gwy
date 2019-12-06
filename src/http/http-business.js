@@ -271,3 +271,59 @@ export function learnTimeAdd(
 }
 
 
+
+
+/**
+ *GET /api/learnPlan/add
+ 添加学习计划 --编号 001
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ JsonResult {
+message (string, optional): 响应提示 ,
+path (string, optional): 路径 ,
+rows (object, optional): 响应数据 ,
+status (string, optional): 响应状态
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ userId
+ (required)
+ 用户Id
+
+ query	string
+ planContent
+ (required)
+ 学习计划内容
+
+ query	string
+ planTime
+ (required)
+ 学习计划时间
+
+ query	string
+ */
+export function learnPlanAdd(
+  userId,
+  planContent,
+  planTime
+) {
+  let url = '/api/learnPlan/add';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId,
+    planContent,
+    planTime
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+

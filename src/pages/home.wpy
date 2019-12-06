@@ -275,7 +275,10 @@
       },
       handleGetup(type){
         getupSleepClock(this.user.id , type).then(res => {
-          res && showMsg(type == 0 ? '起床' : '睡觉');
+          if(res){
+            showMsg(type == 0 ? '起床' : '睡觉');
+            this.getupShow = false;
+          }
         });
       }
     },
