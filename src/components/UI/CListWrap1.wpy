@@ -3,6 +3,9 @@
         style="display: {{show ? 'block' : 'none'}}"
   >
 
+    <view class="CListWrap-header">
+      <slot name="header"/>
+    </view>
     <view class="CListWrap-wrap">
 
       <slot/>

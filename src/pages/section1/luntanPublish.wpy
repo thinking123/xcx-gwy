@@ -14,7 +14,7 @@
              zIndex="1000"
              overlay="{{ true }}">
       <div class="time">
-        <HeaderClose text="选择学习时间"  external-cls="header" @click="show=false"/>
+        <HeaderClose text="选择分类"  external-cls="header" @click="show=false"/>
         <div class="body">
           <TwoColumnPickerView @change="hanleTime" external-cls="row1"  :hours="hs" :mins="ms"/>
           <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>

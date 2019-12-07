@@ -201,7 +201,7 @@
             navToPage('/pages/section1/learnLog')
             break;
           case 2:
-            navToPage('/pages/section1/learnLog')
+            navToPage('/pages/section1/luntan')
             break;
           case 3:
             navToPage('/pages/section1/nearPage')

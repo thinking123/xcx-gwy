@@ -20,7 +20,9 @@ function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = 
     return res.rows ? res.rows : res
   } else {
     const msg = res && res.message ? res.message : errMsg;
-    throw new Error(msg ? msg : 'error');
+    // throw new Error(msg ? msg : 'error');
+    showMsg(msg);
+    return null;
   }
 }
 
@@ -575,4 +577,111 @@ export function learnDiaryAdd(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+ *
+ * GET /api/forum/getCategory
+ 获取二级分类 --编号 008
 
+ Response Class (Status 200)
+ 请求已完成
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "addTime": "string",
+    "categoryName": "string",
+    "createBy": "string",
+    "createTime": "2019-12-07T08:18:03.712Z",
+    "id": 0,
+    "params": {},
+    "remark": "string",
+    "searchValue": "string",
+    "sort": 0,
+    "updateBy": "string",
+    "updateTime": "2019-12-07T08:18:03.712Z"
+  },
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ token
+ (required)
+ token
+ */
+export function forumgetCategory(
+) {
+  let url = '/api/forum/getCategory';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+
+//todo 获取城市列表
+
+
+/**
+ *
+ * POST /api/forum/post
+ 发帖 --编号 004
+
+ Response Class (Status 200)
+ Successful — 请求已完成 ROW 直接返回 TOKEN
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ kmwtForumPostAdd
+ (required)
+
+ Parameter content type:
+ kmwtForumPostAdd
+
+ body
+ ModelExample Value
+ 新增发帖 {
+categoryId (integer, optional): 帖子分类id ,
+content (string, optional): 内容 ,
+postLabel (integer, optional): 一级分类 ,
+title (string, optional): 标题 ,
+userId (integer, optional): 发帖用户id
+}
+ Response Messages
+ */
+export function forumpost(
+  categoryId,
+  content,
+  postLabel,
+  title,
+  userId
+) {
+  let url = '/api/login/wxlogin';
+  const loadingText = '正在发帖...';
+  const errMsg = '发帖失败';
+  const data = {
+    categoryId,
+    content,
+    postLabel,
+    title,
+    userId
+  };
+  return post(url, data, loadingText).then(res => parseRes(res, errMsg));
+}

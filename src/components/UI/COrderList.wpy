@@ -5,8 +5,16 @@
          :key="index" :class="{'COrderList-item-selected':sel == index}">
       <span class="COrderList-item-text">{{item.text}}</span>
 
-      <image mode="aspectFit" class="icon" :src="iconUp" v-if="sel == index"/>
-      <image mode="aspectFit" class="icon" :src="iconDown" v-else/>
+      <block v-if="orderIndex == index">
+        <div class="COrderList-item__order">
+          <image mode="aspectFit" class="icon" :src="iconUp" v-if="sel == index"/>
+          <image mode="aspectFit" class="icon" :src="iconDown" />
+        </div>
+      </block>
+      <block v-else>
+        <image mode="aspectFit" class="icon" :src="iconUp" v-if="sel == index"/>
+        <image mode="aspectFit" class="icon" :src="iconDown" v-else/>
+      </block>
     </div>
   </div>
 </template>
@@ -27,7 +35,11 @@
         type: Array,
         default: []
       },
-      sel:Number
+      sel:Number,
+      orderIndex:{
+        type:Number,
+        default:-1,
+      }
     },
     events: {},
     computed: {},
@@ -75,6 +87,13 @@
       .icon{
         width:16rpx;
         height:16rpx;
+      }
+
+      &__order{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

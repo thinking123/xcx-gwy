@@ -1,13 +1,45 @@
 <template>
   <div class="page luntan">
-    <div class="selector">
+    <CDockerPoper :show="showDocker" @close="onCloseDocker">
+      <COrderList :items="list" @change="onCOrderList" orderIndex="2" :sel="selOrder" slot="header"/>
+      <div class="poper" slot="poper">
+        <div style="display:{{selOrder==0?'block':'none'}}">
+          <CListSelect :items="list1"  labelKey="text" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
+        </div>
+        <div style="display:{{selOrder==1?'block':'none'}}">
+          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
+            <CCollapseItem v-for="item in list2" :key="item.id"
+                           external-cls="collapse-item"
+                           collapse-item="collapse-item-header"
+                           :title="item.prov" :name="item.id">
+              <div v-for="m in item.items" :key="m.id"
+                   :class="{'selected':curSelItem == m.id}"
+                   @click="onClickCCollapseItem(m)"
+                   class="collapseItem">
+                {{m.school}}
+              </div>
+            </CCollapseItem>
+          </CCollapse>
+        </div>
 
-    </div>
-    <LunTanHeader title="申论" tieziNum="2008" followNum="100" @btn="handleGz"/>
-    <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f1"/>
-    <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f2"/>
-    <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f3"
-    showLine="{{false}}" external-cls="last-top-item"/>
+
+
+
+      </div>
+    </CDockerPoper>
+    <CListWrap1 eventName="TList" type="clist1"
+                :params="params1"
+                url="/api/subjecAudio/getSubjectChapterHomeList"
+                show="{{true}}">
+      <block slot="header">
+        <LunTanHeader title="申论" tieziNum="2008" followNum="100" @btn="handleGz"/>
+        <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f1"/>
+        <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f2"/>
+        <LunTanTopItem desc="【省】关于开展2020年国考冲刺真题演练活动的关于开展2020年国考冲刺真题演练活动的" type="f3"
+                       showLine="{{false}}" external-cls="last-top-item"/>
+      </block>
+    </CListWrap1>
+
     <LunTanMsgItem v-for="item in msgItems" :key="item.id"
       :title="item.title"
       :name="item.name"
@@ -15,6 +47,8 @@
       :publishDate="item.publishDate"
                    @click.native="handleMsgItem(item)"
     />
+
+
     <FixedPublishBtn/>
   </div>
 </template>
@@ -22,6 +56,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { forumgetCategory } from '@/http/http-business';
 
   wepy.page({
     store,
@@ -32,7 +67,23 @@
 
     },
     data: {
-      msgItems:[]
+      msgItems:[],
+      showDocker:false,
+      list:[
+        {text:'分类'},
+        {text:'地区'},
+        {text:'人气'},
+      ],
+      selOrder:-1,
+      list1:[
+      ],
+      list1Sel:-1,
+      list2:[
+      ],
+      list2Sel:-1,
+      list3Sel:-1,
+      expandItems:[],
+      curSelItem:''
     },
     methods: {
       handleGz(){
@@ -40,6 +91,36 @@
       },
       handleMsgItem(item){
 
+      },
+      onCOrderList(index){
+        this.selOrder = index
+        console.log(' this.selOrder :',  this.selOrder );
+        if(index > -1){
+          console.log('this.showDocker')
+          if(index == 2){
+            this.showDocker = false;
+
+          }else{
+            this.showDocker = true;
+          }
+        }else{
+          this.showDocker = false;
+
+        }
+      },
+      onCListSelect1(index){
+        this.list1Sel = index;
+      },
+
+      onExpand(exp){
+        this.expandItems = exp;
+      },
+      onClickCCollapseItem({id}){
+        this.curSelItem = id;
+      },
+      onCloseDocker(){
+        this.showDocker = false;
+        this.selOrder = -1;
       }
     },
     onShow(){
@@ -60,6 +141,16 @@
       }
 
       this.msgItems = arr;
+    },
+    onLoad() {
+
+      forumgetCategory().then(res => {
+          this.list1 = res.map(m=>{
+            m.text = m.categoryName;
+            return m;
+          })
+      });
+
     }
   });
 </script>
@@ -77,6 +168,77 @@
       margin-bottom: 24rpx;
     }
   }
+
+  .poper{
+    width: 750rpx;
+    .c1{
+      width: 750rpx;
+      height: 200rpx;
+      background-color: #07c160;
+    }
+
+    .c2{
+      width: 750rpx;
+      height: 800rpx;
+      background-color: chartreuse;
+    }
+
+    .CListSelect1{
+      background:rgba(242,242,242,1);
+      padding: 32rpx 30rpx;
+      box-sizing: border-box;
+      .CListSelect-item{
+        margin-bottom: 20rpx;
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+    }
+
+  }
+
+  .CCollapse{
+    padding: 30rpx 32rpx 0;
+    background:rgba(242,242,242,1);
+    box-sizing: border-box;
+  }
+  .collapse-item{
+    background: #FFF;
+    width:690rpx;
+    box-sizing: border-box;
+    margin-bottom: 20rpx;
+    border-radius:8rpx;
+  }
+  .collapse-item-header{
+    width: 100% !important;
+  }
+  .collapseItem{
+    font-size:32rpx;
+    font-weight:400;
+
+    line-height:40rpx;
+    display: flex;
+    align-items: center;
+    height: 120rpx;
+    margin-left: 40rpx;
+    position: relative;
+    padding: 0 40rpx;
+
+    &.selected{
+      color:rgba(79,172,27,1);
+    }
+    &::after{
+      content:'';
+      position: absolute;
+      background:rgba(230,230,230,1);
+      height: 1px;
+      width: 100%;
+      top:100%;
+      left: 50%;
+      width:650rpx;
+      transform: translateX(-50%);
+    }
+  }
 </style>
 <config>
 {
@@ -87,6 +249,14 @@
   LunTanTopItem:'~Custom/LunTanTopItem',
   LunTanMsgItem:'~Custom/LunTanMsgItem',
   FixedPublishBtn:'~Custom/FixedPublishBtn',
-    }
+  CDockerPoper:'~UI/CDockerPoper',
+  COrderList:'~UI/COrderList',
+  CListSelect:'~UI/CListSelect',
+
+  CCollapse:'~UI/CCollapse',
+  CCollapseItem:'~UI/CCollapseItem',
+  CListWrap1:'~UI/CListWrap1',
+
+  }
 }
 </config>
