@@ -17,8 +17,7 @@ function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = 
     if (tipStatus.includes(res.status)) {
       return showMsg(res.message);
     }
-    // return res.rows ? res.rows : res
-    return res.rows;
+    return res.rows ? res.rows : res
   } else {
     const msg = res && res.message ? res.message : errMsg;
     throw new Error(msg ? msg : 'error');
@@ -231,7 +230,8 @@ export function getupSleepClock(
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg, [], ['2001']));
 }
 
-
+//todo 学习时间没有返回 学习的id ，
+//todo 没有刷新获取学习时间的接口
 /**
  * GET /api/learnTime/add
  添加学习计时 --编号 001
@@ -272,6 +272,124 @@ export function learnTimeAdd(
 
 
 
+
+
+/**
+ * GET /api/learnTime/finish
+ 结束 --编号 003
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ id
+ (required)
+ 学习计时id
+
+ query	string
+ finishTime
+ (required)
+ 结束时间
+ */
+export function learnTimeFinish(
+  id,
+  finishTime,
+) {
+  let url = ' /api/learnTime/finish';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id,
+    finishTime,
+  });
+  return get(url, {}, '').then(res => parseRes(res, '',[],[2001]));
+}
+
+
+
+
+/**
+ * GET /api/learnTime/suspend
+ 暂停 --编号 002
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ id
+ (required)
+ 学习计时id
+
+ query	string
+ remaindLearnTime
+ (required)
+ 已用时间
+
+ query	string
+ Response Messages
+ HTTP Status Code	Reason	Response Model	Headers
+ 400
+ 请求中有语法问题，或不能满足请求
+
+ 401
+ 未授权客户机访问数据
+
+ 403
+ Forbidden
+
+ 404
+ 服务器找不到给定的资源；文档不存在
+
+ 500
+ 服务器不能完成请求
+
+ 2001
+ 用户已打卡
+ */
+export function learnTimeSuspend(
+  id,
+  remaindLearnTime,
+) {
+  let url = ' /api/learnTime/suspend';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id,
+    remaindLearnTime,
+  });
+  return get(url, {}, '').then(res => parseRes(res, '',[],[2001]));
+}
+//todo 继续学习的接口没有
+
+
+
+//todo 学习计划：没有获取学习计划的列表接口
 
 /**
  *GET /api/learnPlan/add
@@ -326,4 +444,81 @@ export function learnPlanAdd(
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
+
+/**
+ *
+ * GET /api/learnPlan/del
+ 删除学习计划 --编号 003
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ id
+ (required)
+ 计划id
+ */
+export function learnPlanDel(
+  id,
+) {
+  let url = '/api/learnPlan/del';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+
+/**
+ *
+ * GET /api/learnPlan/update
+ 改变学习计划状态 --编号 002
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ id
+ (required)
+ 计划id
+ */
+export function learnPlanUpdate(
+  id,
+) {
+  let url = '/api/learnPlan/update';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 

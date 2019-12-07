@@ -7,11 +7,11 @@
                 :disabled="disabled"
     >
 
-      <div v-for="r in rightTexts" :key="r" slot="right" >
+      <div v-for="(r,index) in rightTexts" :key="r" slot="right" @click="onSwipeItemClick(index)">
         {{r}}
       </div>
       <div class="body-cls" :class="{'body-cls--disabled':disabled}">
-        <checkbox :checked="checked" @change="onChange"
+        <checkbox :checked="disabled" @change="onChange"
                   class="col1"
                   :disabled="disabled"
                   color="#4FAC1B"/>
@@ -21,6 +21,7 @@
         </div>
 
         <CButton :text="btnText"
+                 v-if="!disabled"
                  @tap.native="handleSubmit"
                  external-cls="col3"/>
       </div>
@@ -56,6 +57,10 @@
       disabled:{
         type:Boolean,
         default:false
+      },
+      data:{
+        type:Object,
+        default:{}
       }
 
     },
@@ -70,6 +75,10 @@
         console.log('onChange' , e)
       },
       handleSubmit(){
+        this.$emit('btnclick' , this.data);
+      },
+      onSwipeItemClick(index){
+        this.$emit('onSwipeItemClick' , [this.data,index]);
 
       }
     },

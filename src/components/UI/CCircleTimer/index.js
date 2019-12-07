@@ -70,7 +70,7 @@ Component({
       minRadius: this.data.minRadius,
       hourRadius: this.data.hourRadius,
       attached:this,
-      ratio:10
+      ratio:1
     });
     //
     // const offset = 1000 * (26 + 2 * 60 + 0 * 3600);

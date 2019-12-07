@@ -15,6 +15,9 @@
                :disabled="disabled"
       :text1="c.text1"
       :text2="c.text2"
+               :data="c"
+               @btnclick="onSwipeItemSumbitClick"
+               @onSwipeItemClick="onSwipeItemClick"
     />
 
     <CPopup  :show="planShow"
@@ -45,7 +48,22 @@
       <div class="time">
         <HeaderClose text="选择学习时间"  external-cls="header" @click="timeShow=false"/>
         <div class="body">
-          <CTimePickerView @change="hanleTime" external-cls="row1"/>
+          <view class="section">
+            <picker mode="date" value="{{seLdate}}" start="{{startDate}}"  bindchange="bindDateChange">
+              <view class="picker">
+                日期: {{seLdate}}
+              </view>
+            </picker>
+          </view>
+
+          <view class="section">
+            <picker mode="time" value="{{seLtime}}" start="{{startTime}}"  bindchange="bindTimeChange">
+              <view class="picker">
+                时间: {{seLtime}}
+              </view>
+            </picker>
+          </view>
+
           <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
         </div>
 
@@ -58,10 +76,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import {getImgUrlEx,isEmptyString} from '@/common/utils';
-  import { learnPlanAdd } from '@/http/http-business';
-  import {navToPage} from '@/common/navUtils';
-  import { mapGetters , mapState} from '@wepy/x';
+  import { getImgUrlEx, isEmptyString, getDate, getTime, showMsg } from '@/common/utils';
+  import { learnPlanAdd, learnPlanDel, learnPlanUpdate } from '@/http/http-business';
+  import { navToPage } from '@/common/navUtils';
+  import { mapGetters, mapState } from '@wepy/x';
 
   wepy.page({
     store,
@@ -69,134 +87,170 @@
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters([ 'user']),
+      ...mapGetters(['user']),
 
-      timeTip(){
-        if(this.time && this.time.length > 0){
-          const time = this.time;
-
-          let v = '';
-          if (this.time[0] > 0) {
-            v = `${this.time[0]}小时`;
-          }
-          if (this.time[1] > 0) {
-            v += `${this.time[1]}分钟`;
-          }
-
-          return v;
-        }
+      timeTip() {
+        // if(this.time && this.time.length > 0){
+        //   const time = this.time;
+        //
+        //   let v = '';
+        //   if (this.time[0] > 0) {
+        //     v = `${this.time[0]}小时`;
+        //   }
+        //   if (this.time[1] > 0) {
+        //     v += `${this.time[1]}分钟`;
+        //   }
+        //
+        //   return v;
+        // }
 
         return '去设置';
       }
 
     },
     data: {
-      tabs:[
-        {text:'待完成'},
-        {text:'已完成'},
+      tabs: [
+        { text: '待完成' },
+        { text: '已完成' }
       ],
-      selectedTab:0,
-      iconText:{
-        text:'添加计划',
-        src:'btn_add_plan@3x'
+      selectedTab: 0,
+      iconText: {
+        text: '添加计划',
+        src: 'btn_add_plan@3x'
       },
-      waitComp:[
+      waitComp: [],
+      disabled: false,
+      planShow: false,
 
-      ],
-      disabled:false,
-      planShow:false,
+      timeShow: false,
+      time: [],
+      setTime: [],
 
-      timeShow:false,
-      time:[],
-      setTime:[],
+      learnContent: 'sdf',
+      learnTip: '',
 
-      learnContent:'sdf',
-      learnTip:''
+
+      seLdate: '',
+      seLtime: '',
+      startDate: '',
+      startTime: ''
     },
     methods: {
-      handleTab({tab ,index}){
-        this.selectedTab = index
+      onSwipeItemClick([{id} , index]){
+        console.log('you lcick [data , index]' , [id , index]);
+        learnPlanDel(id).then(res => {
+          if(res){
+            showMsg("删除成功");
+          }
+        })
+
+      },
+      onSwipeItemSumbitClick({id}){
+        // console.log('you lcick id' , id)
+        learnPlanUpdate(id).then(res => {
+          if(res){
+            showMsg("更新成功");
+          }
+        })
+      },
+      bindDateChange: function(e) {
+        this.seLdate = e.$wx.detail.value;
+
+
+        console.log('this.seLdate ', this.seLdate);
+      },
+      bindTimeChange: function(e) {
+        this.seLtime = e.$wx.detail.value;
+      },
+      handleTab({ tab, index }) {
+        this.selectedTab = index;
         this.disabled = index != 0;
       },
-      handleLearnTip(){
+      handleLearnTip() {
         this.timeShow = true;
-      },
-      handleStartLearn(){
-        const verify = () => {
-          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0 ;
-          if(!isEmptyString(this.learnContent) && t ){
-            return true;
-          }
 
-          return false;
+        if (!this.learnTip) {
+          this.startDate = getDate();
+          this.seLdate = getDate();
+          const t = getTime().split(':').slice(0, 2).join(':');
+          this.startTime = t;
+          this.seLtime = t;
         }
 
 
+      },
+      handleStartLearn() {
+        const verify = () => {
+          if (!isEmptyString(this.learnContent) && this.isValidTime()) {
+            return true;
+          }
+          return false;
+        };
 
-        if(verify()){
-          let totalT = this.time[0] * 60 + this.time[1];
-          learnPlanAdd(this.user.id , this.learnContent , totalT).then(res => {
-            const t = this.time;
-            if(t && t.length == 2){
-              const offset = (t[0] * 3600 + t[1] * 60) * 1000
-              navToPage('/pages/section1/timer' , {
-                startTime:new Date().getTime(),
-                endTime:(new Date().getTime() + offset)
-              })
+
+        if (verify()) {
+          const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+          const totalT = selDate.getTime();
+
+          learnPlanAdd(this.user.id, this.learnContent, totalT).then(res => {
+            if (res) {
+              showMsg('添加学习计划成功');
+              this.planShow = false;
             }
-          })
-
-
-        }else{
+          });
+        } else {
           showMsg('内容不全');
         }
       },
-      onPlanShow(){
+      onPlanShow() {
         this.planShow = true;
         this.learnTip = '';
         this.learnContent = '';
         this.setTime = [];
         this.time = [];
       },
-      handlelearnContent(v){
+      handlelearnContent(v) {
         this.learnContent = v;
       },
-      handlelearnTip(v){
+      handlelearnTip(v) {
         this.learnTip = v;
       },
-      hanleTime(v){
-        console.log('time:' , v)
+      hanleTime(v) {
+        console.log('time:', v);
         this.setTime = v;
       },
-      handleSetTime(){
-        this.timeShow = false;
-        this.time = this.setTime;
-
-        if(this.time.length == 2){
-          let v = '';
-          if (this.time[0] > 0) {
-            v = `${this.time[0]}小时`;
-          }
-          if (this.time[1] > 0) {
-            v += `${this.time[1]}分钟`;
-          }
-          this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
+      isValidTime() {
+        if (this.seLtime && this.seLdate) {
+          const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+          return selDate.getTime() > new Date().getTime();
         }
+
+        return false;
+
+      },
+      handleSetTime() {
+        this.timeShow = false;
+
+        if (this.isValidTime()) {
+          this.learnTip = `选择时间：${this.seLdate} ${this.seLtime}`;
+        }
+
       }
     },
-    onShow(){
+    onShow() {
 
     },
-    created () {
+    created() {
       this.iconText.src = getImgUrlEx(this.iconText.src);
 
       const res = [];
-      for(let i = 0 ; i < 10 ; i++){
+      for (let i = 0; i < 10; i++) {
         const obj = {
-          text1:`学习申论-第四章`,
-          text2:`明天 10:30`,
-          disabled:i%2
-        }
+          id:i,
+          text1: `学习申论-第四章`,
+          text2: `明天 10:30`,
+          disabled: i % 2
+        };
         res.push(obj);
       }
 
@@ -271,6 +325,14 @@
 
     }
 
+  }
+
+  .picker{
+    height:100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:$primaryColor;
   }
 </style>
 <config>

@@ -194,3 +194,36 @@ export function ellipseNumber(num , max = 999){
 
   return num;
 }
+
+
+export function formatDateTime(time) {
+
+}
+
+
+export function getDate(date = new Date(), split='-'){
+  const y = date.getFullYear();
+  let m = date.getMonth() + 1;
+  let d = date.getDate();
+
+  m = m <= 9 ? `0${m}` : m;
+  d = d <= 9 ? `0${d}` : d;
+
+  const arr = [y,m,d].join(split);
+
+  return arr;
+}
+
+export function prefixZero(n) {
+  return n <= 9 ? `0${n}` : n;
+}
+
+export function getTime(date = new Date(), split=':') {
+  let h = date.getHours();
+  let m = date.getMinutes();
+  let s = date.getMilliseconds();
+
+  const arr = [h,m,s].map(prefixZero).join(split);
+
+  return arr;
+}
