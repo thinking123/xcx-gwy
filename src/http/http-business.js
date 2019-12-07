@@ -522,3 +522,57 @@ export function learnPlanUpdate(
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
+
+
+/**
+ *
+ * GET /api/learnDiary/add
+ 添加学习日记 --编号 001
+
+ Response Class (Status 200)
+ 手机号未注册
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ userId
+ (required)
+ 用户Id
+
+ query	string
+ diaryContent
+ (required)
+ 学习日记内容
+
+ query	string
+ diaryImg
+ (required)
+ 学习日记图片
+ */
+export function learnDiaryAdd(
+  userId,
+  diaryContent,
+  diaryImg
+) {
+  let url = '/api/learnDiary/add';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId,
+    diaryContent,
+    diaryImg
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+

@@ -3,14 +3,17 @@
     <CButton text="确认"  @tap.native="handleSetTime" external-cls="btn" type="info"/>
     <textarea bindblur="bindTextAreaBlur" placeholder="分享学习心得，记录学习点滴…"
               class="textarea"/>
-    <CUploader external-cls="uploader"/>
+    <CUploader external-cls="uploader" @uploaded="Onuploaded"/>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { mapGetters } from '@wepy/x';
   import {navBack} from '@/common/navUtils';
+  import { isEmptyString, showMsg } from '@/common/utils';
+  import { learnDiaryAdd } from '@/http/http-business';
 
   wepy.page({
     store,
@@ -18,15 +21,32 @@
       navigationBarTitleText: ''
     },
     computed: {
-
+      ...mapGetters([ 'user']),
     },
     data: {
-
+      urls:[],
+      log:''
     },
     methods: {
       handleSetTime(){
-        navBack();
+        if(!isEmptyString(this.log) && this.urls.length > 0){
+
+          learnDiaryAdd(this.user.id , this.log , this.urls[0]).then(res => {
+            showMsg("添加学习日记成功");
+            navBack();
+          })
+        }else{
+          showMsg("输入内容或者图片");
+        }
+      },
+      Onuploaded(urls){
+        this.urls = urls;
+        console.log('urls' , urls)
+      },
+      bindTextAreaBlur(e){
+        this.log = e.$wx.detail.value;
       }
+
     },
     onShow(){
 
@@ -42,6 +62,10 @@
     padding: 0 30rpx;
     display: flex;
     flex-direction: column;
+    min-height: 100vh !important;
+    height:unset;
+
+
 
     &>cbutton{
       align-self: flex-end;
@@ -58,7 +82,6 @@
       height: 400rpx;
     }
     .uploader{
-      position: fixed;
       left: 30rpx;
       bottom: 30rpx;
     }

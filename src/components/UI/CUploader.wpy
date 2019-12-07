@@ -9,8 +9,9 @@
 
       <view class="CUploader__bd">
         <view class="CUploader__files" id="uploaderFiles">
-          <view class="CUploader__file" @click="previewImage" id="{{item}}" v-for="item in files" :key="item">
+          <view class="CUploader__file" @click="previewImage" id="{{item}}" v-for="(item,index) in files" :key="item">
             <image class="CUploader__img" src="{{item}}" mode="aspectFill" />
+            <span class="CUploader__del" @click="onDel(index)">删除</span>
           </view>
         </view>
         <view class="CUploader__input-box">
@@ -22,11 +23,14 @@
 <script>
   import wepy from '@wepy/core'
   import {getImgUrlEx} from '@/common/utils';
+  import {baseUrl} from '@/common/constant';
 
   wepy.component({
     data: {
       files: [],
-      uploadImg:'btn_upload@3x'
+      uploadImg:'btn_upload@3x',
+      filesUrl:[],
+      uploading:false,
     },
     externalClasses:[
       'external-cls'
@@ -35,7 +39,11 @@
       title:String,
       count:{
         type:Number,
-        default:5
+        default:1
+      },
+      total:{
+        type:Number,
+        default:1
       }
     },
     events: {
@@ -46,6 +54,10 @@
     },
     methods: {
       chooseImage: function (e) {
+        if(this.uploading || this.files.length >= this.total) {
+          return;
+        }
+          const _ts = this;
         wx.chooseImage({
           count:this.count,
           sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -53,15 +65,45 @@
           success: res => {
             // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
             console.log('res' , res,this.files)
-            this.files = [...this.files , ...res.tempFilePaths]
+
+            const url = `${baseUrl}/api/upload/uploadImg`;
+
+            this.uploading = true;
+            wx.uploadFile({
+              url,
+              filePath: res.tempFilePaths[0],
+              name: 'file',
+              success(_res) {
+                _ts.files = [..._ts.files , ...res.tempFilePaths]
+
+                const __res = JSON.parse(_res.data);
+                _ts.filesUrl = [..._ts.filesUrl , __res.rows];
+                console.log('_res.rows' , __res , __res.rows)
+
+                _ts.$emit('uploaded' , _ts.filesUrl);
+                _ts.uploading = false;
+              },
+              fail(){
+                _ts.uploading = false;
+              }
+            });
+
           }
         })
       },
       previewImage: function(e){
-        wx.previewImage({
-          current: e.currentTarget.id, // 当前显示图片的http链接
-          urls: this.files // 需要预览的图片http链接列表
-        })
+        if(!this.uploading){
+          wx.previewImage({
+            current: e.currentTarget.id, // 当前显示图片的http链接
+            urls: this.files // 需要预览的图片http链接列表
+          })
+        }
+      },
+      onDel(index){
+        this.files =  this.files.splice(index , 1);
+        this.filesUrl =  this.files.splice(index , 1);
+        this.$emit('uploaded' , this.filesUrl);
+
       }
     },
     created(){
@@ -75,6 +117,13 @@
 <style lang="scss">
   .CUploader{
 
+    &__del{
+      min-width: 50rpx;
+      position: absolute;
+      top:0;
+      right:0;
+      white-space: nowrap;
+    }
     .CUploader__bd{
       .CUploader__files{
         display: flex;
@@ -82,6 +131,7 @@
 
         .CUploader__file{
           margin: 0 10rpx 0 0;
+          position: relative;
         }
         .CUploader__img{
           width:240rpx;
