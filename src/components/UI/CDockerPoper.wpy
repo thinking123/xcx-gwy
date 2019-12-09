@@ -6,7 +6,7 @@
     <div class="CDockerPoper-poper-overlay {{classes}}"
          :class="{'CDockerPoper-poper-overlay--transition':transition}"
          @click="onClose"
-         style="height:{{overLayHeight}}px;top:{{top}}px;">
+         style="height:{{show ? overLayHeight : '0'}}px;top:{{top}}px;">
 
     </div>
     <div class="CDockerPoper-poper" style="height:{{wrapHeight}};" bind:transitionend="onTransitionEnd" :class="{'CDockerPoper-poper--transition':transition}">

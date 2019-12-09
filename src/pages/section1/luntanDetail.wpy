@@ -1,6 +1,8 @@
 <template>
   <div class="page luntanDetail">
-    <LunTanDetailHeader name="张小碗儿" publishDate="2019-08-12" followed="{{true}}"/>
+    <LunTanDetailHeader name="张小碗儿"
+                        @btn="onFollow"
+                        publishDate="2019-08-12" followed="{{true}}"/>
     <div class="content-wrap">
       <div class="title">
         {{title}}
@@ -29,6 +31,7 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
+  import { forumaddScan, forumuserCollect } from '@/http/http-business';
 
   wepy.page({
     store,
@@ -50,10 +53,19 @@
       },
       handleComment(){
 
+      },
+      onFollow(){
+        forumuserCollect();
       }
     },
     onShow(){
-      
+
+    },
+    onLoad(query = {}){
+      const id = query;
+      if(id){
+        forumaddScan(id);
+      }
     },
     created () {
       const arr = [];

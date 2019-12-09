@@ -27,10 +27,9 @@
 
     },
     computed:{
-      
+
     },
     methods: {
-
     },
     created () {
       this.icon = getImgUrlEx(this.icon);
@@ -44,7 +43,7 @@
     position: fixed;
     right: 10rpx;
     bottom: 60rpx;
-
+    z-index: 100;
     .icon{
       width:100rpx;
       height:100rpx;

@@ -49,15 +49,17 @@
 
     </CListWrap1>
 
-    <FixedPublishBtn/>
+    <FixedPublishBtn @click.native="onPubish"/>
   </div>
 </template>
+
 
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import { forumgetCategory } from '@/http/http-business';
+  import { forumforumCollect, forumgetCategory } from '@/http/http-business';
   import {mapGetters} from '@wepy/x';
+  import { navToPage } from '@/common/navUtils';
 
   const listtype = 'forum_getForumList'
   wepy.page({
@@ -117,8 +119,11 @@
 
     },
     methods: {
+      onPubish(){
+        navToPage('/pages/section1/luntanPublish')
+      },
       handleGz(){
-
+        forumforumCollect();
       },
       handleMsgItem(item){
 
