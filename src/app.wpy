@@ -176,8 +176,8 @@ wepy.app({
 {
     pages: [
 
-  'pages/section1/luntan',
-  'pages/section1/luntanPublish'
+  'pages/homeSection2',
+
 
 
 

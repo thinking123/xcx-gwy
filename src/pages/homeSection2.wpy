@@ -10,16 +10,18 @@
 
     </div>
 
-    <block v-if="selectedTab == 0">
-
+    <CListWrap1 :type="type1"
+                :params="params"
+                :show="selectedTab == 0"
+                url="/api/subjecAudio/getSubjecAudioHomeList">
       <ClassCard
-        v-for="item in items1"
+        v-for="item in clist1"
         :key="item.id"
         :title="item.title"
-        :info="item.info"
+        :info="item.viceTitle"
+        :header="item.header"
         external-cls="classCard"/>
-
-    </block>
+    </CListWrap1>
       <block v-if="selectedTab == 1">
 
         <ClassCard1
@@ -89,14 +91,27 @@
   import store from 'store';
   import { getImgUrlEx } from '@/common/utils';
   import eventHub from '@/common/eventHub';
+  import {mapGetters} from '@wepy/x';
 
+  const type1 = 'subjecAudio_getSubjecAudioHomeList_1';
+  const type2 = 'subjecAudio_getSubjecAudioHomeList_2';
+  const type3 = 'subjecAudio_getSubjecAudioHomeList_3';
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
     computed: {
-
+      ...mapGetters(['items']),
+      params(){
+        return {
+          labelId:''
+        }
+      },
+      clist1(){
+        const list = this.items[type1];
+        return list || [];
+      },
     },
     data: {
       search:'',
@@ -105,7 +120,7 @@
         {text:'部委课堂'},
         {text:'精炼题目'},
       ],
-      selectedTab:2,
+      selectedTab:0,
       items1:[],
       items2:[],
       items3:[],
@@ -129,6 +144,10 @@
       curSelItem:'',
       show:false,
       showCDialog:false,
+      type1,
+      type2,
+      type3,
+
     },
     methods: {
       inputChange(v){
@@ -429,6 +448,7 @@
   CPopup:'~UI/CPopup',
   CDialog:'~UI/CDialog',
   CCollapseItem:'~UI/CCollapseItem',
+  CListWrap1:'~UI/CListWrap1',
 
     }
 }
