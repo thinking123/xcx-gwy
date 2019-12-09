@@ -1,5 +1,5 @@
 <template>
-    <div class="LunTanTopItem external-cls" :class="{'f1':type=='f1','f2':type=='f2','f3':type=='f3' , 'showLine':showLine}">
+    <div class="LunTanTopItem external-cls" :class="{'f1':_type=='f1','f2':_type=='f2','f3':_type=='f3' , 'showLine':showLine}">
       <span class="topText">
         {{topText}}
       </span>
@@ -37,7 +37,9 @@
 
     },
     computed:{
-      
+      _type(){
+        return `f${this.type + 1}`;
+      }
     },
     methods: {
 

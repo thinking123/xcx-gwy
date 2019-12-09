@@ -10,7 +10,7 @@
 
       <slot/>
       <view wx:if="{{curItems.length == 0 && loaded}}" class="noData">
-         没有数据
+        没有数据
       </view>
     </view>
     <view class="CListWrap-loading">
@@ -37,10 +37,11 @@
   import { mapMutations, mapGetters } from '@wepy/x';
   import { get } from '@/http/http';
   import { showMsg, urlParams } from '@/common/utils';
+  import {parseRes} from '@/http/http-business';
 
   const defFun = () => {
-    console.log('defFun')
-  }
+    console.log('defFun');
+  };
   wepy.component({
     store,
     data: {
@@ -55,8 +56,8 @@
       mockPage: 1,
       mockPages: 5,
       mockTotal: 200,
-      curItems:[],
-      loaded:false
+      curItems: [],
+      loaded: false
     },
     externalClasses: [
       'external-cls'
@@ -70,9 +71,9 @@
         default: 1000
       },
       url: String,
-      params:{
-        type:Object,
-        default:{},
+      params: {
+        type: Object,
+        default: {}
       },
       eventName: {
         type: String,
@@ -83,17 +84,25 @@
         type: Boolean,
         default: true
       },
-      cb:{
-        type:Object,
-        default:defFun
+      cb: {
+        type: Object,
+        default: defFun
       },
-      preHandle:{
-        type:Object,
-        default:defFun
+      preHandle: {
+        type: Object,
+        default: defFun
       },
-      funWrap:{
-        type:Object,
-        default:{}
+      funWrap: {
+        type: Object,
+        default: {}
+      }
+    },
+    watch: {
+      url(nv, ov) {
+        const { type } = this;
+        this.resetItems(type);
+        this.init(true);
+
       }
     },
     events: {},
@@ -129,7 +138,7 @@
         let obj = { ...params, pageNum: pageNum + 1 };
         let _url = urlParams(url, obj);
         console.log('requdser url', _url);
-        return get(_url);
+        return get(_url).then(parseRes);
       },
 
 
@@ -137,7 +146,7 @@
 
         return new Promise((resolve, reject) => {
           let res = {};
-          if (this.mockPage == 2 ){
+          if (this.mockPage == 2) {
             // this.mockPage += 1;
             reject('error msdsfsd');
             return;
@@ -190,19 +199,19 @@
             };
           }
 
-          setTimeout(()=>{
+          setTimeout(() => {
             resolve(res);
 
-          } , 1000);
+          }, 1000);
 
         });
 
       },
       getData() {
         this.isLoading = true;
-        const { eventName, url, pageNum, type , cb} = this;
+        const { eventName, url, pageNum, type, cb } = this;
         const items = this.items[type] || [];
-        this.request().then(({ rows: { list: res, pageNum, pages, total , ...other}, status, message }) => {
+        this.request().then(({ rows: { list: res, pageNum, pages, total, ...other }, status, message }) => {
           this.isLoading = false;
           this.loaded = true;
 
@@ -216,7 +225,7 @@
 
           // cb(res);
 
-          if(!!res && Array.isArray(res) && res.length > 0){
+          if (!!res && Array.isArray(res) && res.length > 0) {
             const _items = [...items, ...res];
             this.curItems = _items;
             this.setItems({ items: _items, type });
@@ -235,12 +244,36 @@
           this.isError = true;
           this.isLoading = false;
         });
+      },
+      init(refresh = false) {
+        const { threshold, type } = this;
+
+
+        if(refresh){
+          console.log('refresh')
+          this.ob = wx.createIntersectionObserver(this.$wx, {
+            thresholds: [0]
+          });
+
+          this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
+        }else{
+          // if (!this.ob) {
+          //   this.ob = wx.createIntersectionObserver(this.$wx, {
+          //     thresholds: [0]
+          //   });
+          // }
+          this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
+        }
+
       }
     },
     detached() {
       console.log('detached list wrap');
       const { type } = this;
       this.resetItems(type);
+      if (this.ob) {
+        this.ob.disconnect();
+      }
     },
     created() {
       console.log('created');
@@ -249,15 +282,7 @@
       });
     },
     attached() {
-      console.log('attached');
-      const { threshold, type } = this;
-      if (!this.ob) {
-        this.ob = wx.createIntersectionObserver(this.$wx, {
-          thresholds: [0]
-        });
-      }
-      this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
-
+      this.init();
     }
   });
 </script>
@@ -286,13 +311,13 @@
     text-align: center;
   }
 
-  .noData{
-      text-align: center;
+  .noData {
+    text-align: center;
   }
 
 
-  cloading{
-    margin:10rpx;
+  cloading {
+    margin: 10rpx;
   }
 </style>
 

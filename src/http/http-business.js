@@ -3,7 +3,7 @@ import { showMsg, urlParams } from '@/common/utils';
 
 const reg = /^2/;
 
-function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
+export function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
 
   // const c = true;
   // if(typeof beforeCb === 'function'){
