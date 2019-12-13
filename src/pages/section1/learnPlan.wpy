@@ -10,15 +10,40 @@
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
     </div>
-    <SwipeItem v-for="c in waitComp"
-               external-cls="row1"
-               :disabled="disabled"
-      :text1="c.text1"
-      :text2="c.text2"
-               :data="c"
-               @btnclick="onSwipeItemSumbitClick"
-               @onSwipeItemClick="onSwipeItemClick"
-    />
+    <CListWrap1 eventName="TList" :type="listtype1"
+                :params="params1"
+                :show="selectedTab == 0"
+                url="/api/learnPlan/getLearnPlanList">
+
+      <SwipeItem v-for="c in clist1"
+                 external-cls="row1"
+                 :disabled="disabled"
+                 :text1="c.planContent"
+                 :text2="c.planTime"
+                 :data="c"
+                 @btnclick="onSwipeItemSumbitClick"
+                 @onSwipeItemClick="onSwipeItemClick"
+      />
+
+    </CListWrap1>
+    <CListWrap1 eventName="TList" :type="listtype2"
+                :params="params2"
+                :show="selectedTab == 1"
+                url="/api/learnPlan/getLearnPlanList">
+
+      <SwipeItem v-for="c in clist2"
+                 external-cls="row1"
+                 disabled="{{true}}"
+                 :text1="c.planContent"
+                 :text2="c.planTime"
+                 :data="c"
+                 @btnclick="onSwipeItemSumbitClick"
+                 @onSwipeItemClick="onSwipeItemClick"
+      />
+
+    </CListWrap1>
+
+
 
     <CPopup  :show="planShow"
              position="bottom"
@@ -81,34 +106,42 @@
   import { navToPage } from '@/common/navUtils';
   import { mapGetters, mapState } from '@wepy/x';
 
+  const listtype1 = 'leanplanlsit1';
+  const listtype2 = 'leanplanlsit2';
   wepy.page({
     store,
     config: {
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters(['user']),
-
+      ...mapGetters(['user','items']),
+      clist1(){
+        const list = this.items[this.listtype1];
+        return list || [];
+      },
+      clist2(){
+        const list = this.items[this.listtype2];
+        return list || [];
+      },
+      params(){
+        return {
+          planState:this.selectedTab,
+        }
+      },
       timeTip() {
-        // if(this.time && this.time.length > 0){
-        //   const time = this.time;
-        //
-        //   let v = '';
-        //   if (this.time[0] > 0) {
-        //     v = `${this.time[0]}小时`;
-        //   }
-        //   if (this.time[1] > 0) {
-        //     v += `${this.time[1]}分钟`;
-        //   }
-        //
-        //   return v;
-        // }
-
         return '去设置';
       }
 
     },
     data: {
+      listtype1,
+      listtype2,
+      params1:{
+        planState:0
+      },
+      params2:{
+        planState:1
+      },
       tabs: [
         { text: '待完成' },
         { text: '已完成' }
@@ -348,6 +381,7 @@
   HeaderClose:'~Custom/HeaderClose',
   CTopLabelInput:'~UI/CTopLabelInput',
   CButton:'~UI/CButton',
+  CListWrap1:'~UI/CListWrap1',
   CTimePickerView:'~UI/CTimePickerView'
     }
 }

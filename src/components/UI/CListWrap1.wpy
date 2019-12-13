@@ -9,7 +9,7 @@
     <view class="CListWrap-wrap">
 
       <slot/>
-      <view wx:if="{{curItems.length == 0 && loaded}}" class="noData">
+      <view wx:if="{{curItems.length == 0 && loaded && !isError}}" class="noData">
         没有数据
       </view>
     </view>
@@ -163,77 +163,12 @@
           return null;
         }
       },
-      _request() {
-
-        return new Promise((resolve, reject) => {
-          let res = {};
-          if (this.mockPage == 2) {
-            // this.mockPage += 1;
-            reject('error msdsfsd');
-            return;
-          }
-          if (this.mockPage <= this.mockPages) {
-            const list = [];
-            for (let i = 0; i < 10; i++) {
-              const id = `${this.mockPage}-${i}`;
-              list.push({
-                id,
-                'chapter': `chapter${id}`,
-                'title': `title${id}`,
-                'vfVideoId': `vfVideoId${id}`
-              });
-            }
-            res = {
-              'message': 'message',
-              'path': 'path',
-              'rows': {
-                list,
-                'pageNum': this.mockPage,
-                'pages': this.mockPages,
-                'subjectTitle': 'subjectTitle',
-                'teacherId': 'teacherId',
-                'teacherQualifications': 'teacherQualifications',
-                'total': this.mockTotal,
-                'totalChaper': 0,
-                'upperBody': 'string'
-              },
-              'status': '200'
-            };
-
-            this.mockPage += 1;
-          } else {
-            res = {
-              'message': 'message',
-              'path': 'path',
-              'rows': {
-                'list': [],
-                'pageNum': this.mockPage,
-                'pages': this.mockPages,
-                'subjectTitle': 'subjectTitle',
-                'teacherId': 'teacherId',
-                'teacherQualifications': 'teacherQualifications',
-                'total': this.mockTotal,
-                'totalChaper': 0,
-                'upperBody': 'string'
-              },
-              'status': '200'
-            };
-          }
-
-          setTimeout(() => {
-            resolve(res);
-
-          }, 1000);
-
-        });
-
-      },
       getData() {
         this.isLoading = true;
         const { eventName, url, pageNum, type, cb } = this;
         const items = this.items[type] || [];
         this.request().then((_res) => {
-          const { rows: { list: res, pageNum, pages, total, ...other }, status, message } = _res;
+          const { rows: { list: res, pageNum, pages, total, ...other } = {}, status, message } = _res;
           this.isLoading = false;
           this.loaded = true;
 
