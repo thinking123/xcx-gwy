@@ -11,6 +11,7 @@
                 :text="iconText.text" :src="iconText.src"/>
     </div>
     <CListWrap1 eventName="TList" :type="listtype1"
+                :reloadKey="refreshKey1"
                 :params="params1"
                 :show="selectedTab == 0"
                 url="/api/learnPlan/getLearnPlanList">
@@ -134,6 +135,7 @@
 
     },
     data: {
+      refreshKey1:new Date().getTime(),
       listtype1,
       listtype2,
       params1:{
@@ -229,6 +231,7 @@
             if (res) {
               showMsg('添加学习计划成功');
               this.planShow = false;
+              this.refreshKey1 = new Date().getTime();
             }
           });
         } else {

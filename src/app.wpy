@@ -175,8 +175,9 @@ wepy.app({
 <config>
 {
     pages: [
+  'pages/section1/learnPlan',
 
-  'pages/homeSection2',
+
 
 
 

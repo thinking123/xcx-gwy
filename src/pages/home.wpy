@@ -33,10 +33,10 @@
 
     </div>
     <div class="titleIcons">
-        <IconText v-for="(item , index) in titleIcons"
-                  @click.native="handleIconText(index)"
-                  external-cls="titleIcon"
-                  :text="item.text" :src="item.src"/>
+      <IconText v-for="(item , index) in titleIcons"
+                @click.native="handleIconText(index)"
+                external-cls="titleIcon"
+                :text="item.text" :src="item.src"/>
     </div>
     <div class="line">
 
@@ -47,49 +47,49 @@
              :src="item"/>
     </div>
     <CTabbar/>
-    <CPopup  :show="getupShow"
-             position="bottom"
-             @close="getupShow=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup :show="getupShow"
+            position="bottom"
+            @close="getupShow=false"
+            zIndex="999"
+            overlay="{{ true }}">
       <div class="getup">
-        <HeaderClose text="起床睡觉"  external-cls="header" @click="getupShow=false"/>
+        <HeaderClose text="起床睡觉" external-cls="header" @click="getupShow=false"/>
         <CButton text="起床" :icon="getupicon1" @tap.native="handleGetup(0)"
                  external-cls="btn1"/>
         <CButton text="睡觉" :icon="getupicon2" @tap.native="handleGetup(1)"
                  external-cls="btn2"/>
       </div>
     </CPopup>
-    <CPopup  :show="learnShow"
-             position="bottom"
-             @close="learnShow=false"
-             zIndex="999"
-             overlay="{{ true }}">
-    <div class="learn">
-      <HeaderClose text="学习计时"  external-cls="header" @click="learnShow=false"/>
-      <div class="body">
-        <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
-                        @update="handlelearnContent"
-                        :val.sync="learnContent"/>
-        <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @clickBtn="handleLearnTip"
-                        :val.sync="learnTip"
-                        @update="handlelearnTip"
-                        readonly="{{true}}"
-                        external-cls="row"/>
-        <CButton text="开始学习"  @tap.native="handleStartLearn" external-cls="row"/>
+    <CPopup :show="learnShow"
+            position="bottom"
+            @close="learnShow=false"
+            zIndex="999"
+            overlay="{{ true }}">
+      <div class="learn">
+        <HeaderClose text="学习计时" external-cls="header" @click="learnShow=false"/>
+        <div class="body">
+          <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
+                          @update="handlelearnContent"
+                          :val.sync="learnContent"/>
+          <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @clickBtn="handleLearnTip"
+                          :val.sync="learnTip"
+                          @update="handlelearnTip"
+                          readonly="{{true}}"
+                          external-cls="row"/>
+          <CButton text="开始学习" @tap.native="handleStartLearn" external-cls="row"/>
+        </div>
       </div>
-    </div>
     </CPopup>
-    <CPopup  :show="timeShow"
-             position="bottom"
-             @close="timeShow=false"
-             zIndex="1000"
-             overlay="{{ true }}">
+    <CPopup :show="timeShow"
+            position="bottom"
+            @close="timeShow=false"
+            zIndex="1000"
+            overlay="{{ true }}">
       <div class="time">
-        <HeaderClose text="选择学习时间"  external-cls="header" @click="timeShow=false"/>
+        <HeaderClose text="选择学习时间" external-cls="header" @click="timeShow=false"/>
         <div class="body">
           <CTimePickerView @change="hanleTime" external-cls="row1" :val="setTime"/>
-          <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
+          <CButton text="确认" @tap.native="handleSetTime" external-cls="row2"/>
         </div>
 
       </div>
@@ -102,8 +102,8 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
-  import { mapGetters , mapState} from '@wepy/x';
-  import {navToPage} from '@/common/navUtils';
+  import { mapGetters, mapState } from '@wepy/x';
+  import { navToPage } from '@/common/navUtils';
   import { getupSleepClock, learnTimeAdd } from '@/http/http-business';
 
   wepy.page({
@@ -114,8 +114,8 @@
     computed: {
       ...mapGetters(['isSigned', 'user']),
       ...mapState(['nickName']),
-      timeTip(){
-        if(this.time && this.time.length > 0){
+      timeTip() {
+        if (this.time && this.time.length > 0) {
           const time = this.time;
 
           let v = '';
@@ -133,46 +133,46 @@
       }
     },
     data: {
-      titleIcons:[
+      titleIcons: [
         {
-          text:'起床睡觉',
-          src:'home_icon_nav01.png'
+          text: '起床睡觉',
+          src: 'home_icon_nav01.png'
         },
         {
-          text:'学习计时',
-          src:'home_icon_nav02.png'
+          text: '学习计时',
+          src: 'home_icon_nav02.png'
         },
         {
-          text:'学习日记',
-          src:'home_icon_nav03.png'
+          text: '学习日记',
+          src: 'home_icon_nav03.png'
         },
         {
-          text:'学习计划',
-          src:'home_icon_nav04.png'
+          text: '学习计划',
+          src: 'home_icon_nav04.png'
         }
       ],
-      panelIcons:[
+      panelIcons: [
         'home_img_huiyuan@3x.png',
         'home_img_kaiming@3x.png',
         'home_img_luntan@3x.png',
-        'home_img_fujin@3x.png',
+        'home_img_fujin@3x.png'
       ],
-      getupShow:false,
-      getupicon1:'icon_get_up@3x',
-      getupicon2:'icon_sleep@3x',
-      learnShow:false,
+      getupShow: false,
+      getupicon1: 'icon_get_up@3x',
+      getupicon2: 'icon_sleep@3x',
+      learnShow: false,
 
-      timeShow:false,
-      time:[],
-      setTime:[],
-      learnContent:'',
-      learnTip:''
+      timeShow: false,
+      time: [],
+      setTime: [],
+      learnContent: '',
+      learnTip: ''
     },
     methods: {
-      handleSign(){
-        navToPage('/pages/login/login')
+      handleSign() {
+        navToPage('/pages/login/login');
       },
-      handleIconText(index){
+      handleIconText(index) {
         switch (index) {
           case 0:
             this.getupShow = true;
@@ -185,82 +185,80 @@
             this.time = [];
             break;
           case 2:
-            navToPage('/pages/section1/learnLog')
+            navToPage('/pages/section1/learnLog');
             break;
           case 3:
-            navToPage('/pages/section1/learnPlan')
+            navToPage('/pages/section1/learnPlan');
             break;
         }
       },
-      handleImage(index){
+      handleImage(index) {
         switch (index) {
           case 0:
-            navToPage('/pages/section1/MemberCenter')
+            navToPage('/pages/section1/MemberCenter');
             break;
           case 1:
-            navToPage('/pages/section1/learnLog')
+            navToPage('/pages/section1/learnLog');
             break;
           case 2:
-            navToPage('/pages/section1/luntan')
+            navToPage('/pages/section1/luntan');
             break;
           case 3:
-            navToPage('/pages/section1/nearPage')
+            navToPage('/pages/section1/nearPage');
             break;
         }
       },
-      handleLearnTip(){
+      handleLearnTip() {
         this.timeShow = true;
       },
-      handleStartLearn(){
+      handleStartLearn() {
         const verify = () => {
-          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0 ;
-          if(!isEmptyString(this.learnContent) && t ){
+          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0;
+          if (!isEmptyString(this.learnContent) && t) {
             return true;
           }
 
           return false;
-        }
+        };
 
 
-
-        if(verify()){
+        if (verify()) {
           let totalT = this.time[0] * 60 + this.time[1];
-          learnTimeAdd(this.user.id , this.learnContent , totalT).then(res => {
+          learnTimeAdd(this.user.id, this.learnContent, totalT).then(res => {
+            this.learnShow = false;
             const t = this.time;
-            if(t && t.length == 2){
-              const offset = (t[0] * 3600 + t[1] * 60) * 1000
-              navToPage('/pages/section1/timer' , {
-                startTime:new Date().getTime(),
-                endTime:(new Date().getTime() + offset)
-              })
+            if (t && t.length == 2) {
+              const offset = (t[0] * 3600 + t[1] * 60) * 1000;
+              navToPage('/pages/section1/timer', {
+                startTime: new Date().getTime(),
+                endTime: (new Date().getTime() + offset)
+              });
             }
-          })
-
-
-        }else{
+          });
+        } else {
           showMsg('内容不全');
         }
 
 
       },
-      handlelearnContent(v){
+      handlelearnContent(v) {
         this.learnContent = v;
       },
-      handlelearnTip(v){
+      handlelearnTip(v) {
 
         console.log('handlelearnTip', v);
         // this.learnTip = v;
       },
-      hanleTime(v){
-        console.log('time:' , v)
+      hanleTime(v) {
+        console.log('time:', v);
         this.setTime = v;
       },
-      handleSetTime(){
+      handleSetTime() {
         this.timeShow = false;
         this.time = this.setTime;
 //完成5分钟学习后暂停且提醒结束计时
 
-        if(this.time.length == 2){
+        if (this.time.length == 2) {
           let v = '';
           if (this.time[0] > 0) {
             v = `${this.time[0]}小时`;
@@ -273,27 +271,27 @@
 
 
       },
-      handleGetup(type){
-        getupSleepClock(this.user.id , type).then(res => {
-          if(res){
+      handleGetup(type) {
+        getupSleepClock(this.user.id, type).then(res => {
+          if (res) {
             showMsg(type == 0 ? '起床' : '睡觉');
             this.getupShow = false;
           }
         });
       }
     },
-    onShow(){
+    onShow() {
 
     },
-    created () {
-      this.titleIcons = this.titleIcons.map(m=>{
-        m.src = getImgUrlEx(m.src)
-        return m
-      })
-      this.panelIcons = this.panelIcons.map(getImgUrlEx)
+    created() {
+      this.titleIcons = this.titleIcons.map(m => {
+        m.src = getImgUrlEx(m.src);
+        return m;
+      });
+      this.panelIcons = this.panelIcons.map(getImgUrlEx);
 
-      this.getupicon1 = getImgUrlEx(this.getupicon1)
-      this.getupicon2 = getImgUrlEx(this.getupicon2)
+      this.getupicon1 = getImgUrlEx(this.getupicon1);
+      this.getupicon2 = getImgUrlEx(this.getupicon2);
 
       // navToPage('/pages/section1/nearDetailPage')
     }

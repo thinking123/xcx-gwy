@@ -20,9 +20,8 @@ export function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipSt
     return res.rows ? res.rows : res
   } else {
     const msg = res && res.message ? res.message : errMsg;
-    // throw new Error(msg ? msg : 'error');
     showMsg(msg);
-    return null;
+    throw new Error(msg ? msg : 'error');
   }
 }
 

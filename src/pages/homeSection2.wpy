@@ -22,21 +22,24 @@
         :header="item.header"
         external-cls="classCard"/>
     </CListWrap1>
-      <block v-if="selectedTab == 1">
 
-        <ClassCard1
-          v-for="item in items2"
-          :key="item.id"
-          :num1="item.num1"
-          :num2="item.num2"
-          :free="item.free"
-          :title="item.title"
-          :price="item.price"
-          :good="item.good"
-          external-cls="classCard1"
-        />
+    <CListWrap1 :type="type2"
+                :params="params1"
+                :show="selectedTab == 1"
+                url="/api/classroom/getClassroomHome">
+      <ClassCard1
+        v-for="item in clist2"
+        :key="item.id"
+        :num1="item.totalChapter"
+        :src="item.cover"
+        free="{{item.price == 0}}"
+        :title="item.title"
+        :price="item.price"
+        :good="item.good"
+        external-cls="classCard1"
+      />
+    </CListWrap1>
 
-      </block>
 
     <block v-if="selectedTab == 2">
           <div class="titleIcons">
@@ -108,8 +111,17 @@
           labelId:''
         }
       },
+      params1(){
+        return {
+          labelId:''
+        }
+      },
       clist1(){
         const list = this.items[type1];
+        return list || [];
+      },
+      clist2(){
+        const list = this.items[type2];
         return list || [];
       },
     },

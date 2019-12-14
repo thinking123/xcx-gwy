@@ -58,6 +58,9 @@
       liked:{
         type:Boolean
       },
+      src:{
+        type:String,
+      }
 
     },
     events: {

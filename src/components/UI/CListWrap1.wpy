@@ -95,6 +95,10 @@
       funWrap: {
         type: Object,
         default: {}
+      },
+      reloadKey:{
+        type:String,
+        default:new Date().getTime(),
       }
     },
     watch: {
@@ -103,6 +107,15 @@
         this.resetItems(type);
         this.init(true);
 
+      },
+      reloadKey(nv , ov){
+        console.log('reloadKey' , nv , ov);
+        if(nv !== ov){
+          const { type } = this;
+          this.resetItems(type);
+          this.init(true);
+
+        }
       }
     },
     events: {},

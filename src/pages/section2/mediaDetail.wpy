@@ -16,6 +16,7 @@
     <div class="row2">
       第一章：言语理解与表达
     </div>
+
     <MediaItem  v-for="item in mediaItems"
                 :media="item"
                 :key="item.id"
@@ -83,7 +84,7 @@
       }
     },
     onShow(){
-      
+
     },
     created () {
       let arr = [];
@@ -156,7 +157,9 @@
   MediaHeaderCard:'~Custom/MediaHeaderCard',
   MediaItem:'~Custom/MediaItem',
   MediaPlayBar:'~Custom/MediaPlayBar',
-  OrderItems:'~Custom/OrderItems'
+  OrderItems:'~Custom/OrderItems',
+  CListWrap1:'~UI/CListWrap1',
+
   }
   }
 </config>

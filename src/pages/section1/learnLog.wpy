@@ -32,6 +32,7 @@
         if(!isEmptyString(this.log) && this.urls.length > 0){
 
           learnDiaryAdd(this.user.id , this.log , this.urls[0]).then(res => {
+
             showMsg("添加学习日记成功");
             navBack();
           })
