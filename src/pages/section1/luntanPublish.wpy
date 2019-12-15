@@ -43,6 +43,7 @@
       title:'',
       selText:'去添加',
       show:false,
+      //todo 获取一级分类的接口
       hs:[
         '一级分类',
         '一级分类',

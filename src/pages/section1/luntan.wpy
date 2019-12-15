@@ -27,7 +27,7 @@
 
       </div>
     </CDockerPoper>
-    <CListWrap1 eventName="TList" :type="listtype"
+    <CListWrap1 :type="listtype"
                 :params="params"
                 :url="url">
       <block slot="header">
