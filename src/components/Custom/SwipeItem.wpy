@@ -11,10 +11,13 @@
         {{r}}
       </div>
       <div class="body-cls" :class="{'body-cls--disabled':disabled}">
-        <checkbox checked="{{checked}}"
-                  class="col1"
-                  disabled="{{disabled}}"
-                  color="#4FAC1B"/>
+        <checkbox-group bindchange="onChange">
+          <checkbox checked="{{checked}}"
+                    class="col1"
+                    disabled="{{disabled}}"
+                    color="#4FAC1B"/>
+        </checkbox-group>
+
         <div class="col2">
           <span>{{text1}}</span>
           <span>{{text2}}</span>
@@ -77,7 +80,8 @@
     },
     methods: {
       onChange(e){
-        console.log('onChange' , e)
+        // console.log('onChange' , e)
+        this.checked = !this.checked;
       },
       handleSubmit(){
         console.log('submit' , this.data)

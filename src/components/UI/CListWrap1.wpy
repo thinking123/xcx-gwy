@@ -109,6 +109,12 @@
       reloadKey(nv , ov){
         console.log('reloadKey' , nv , ov);
         if(nv !== ov){
+          // const { type } = this;
+          // this.isEnd = false;
+          // this.isError = false;
+          // this.isLoading = false;
+          // this.resetItems(type);
+
 
           this.reload();
           // this.init(true);

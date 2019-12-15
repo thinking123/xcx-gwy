@@ -36,7 +36,6 @@
     watch:{
       classes(v){
         // console.log('classes in transiton : ' , v )
-        console.log('logs : ' , v)
       }
     },
     computed:{
@@ -63,7 +62,6 @@
         return str;
       },
       cls(){
-        console.log('cls : ' , this.classes)
 
         return " custom-class c-transition  " + this.classes;
       }
@@ -72,7 +70,6 @@
 
     },
     onLoad () {
-      // console.log('cls : ' , this.sty , this.cls)
     }
   });
 </script>
