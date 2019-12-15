@@ -136,6 +136,10 @@
         this.isEnd = false;
         this.isError = false;
         this.isLoading = false;
+        this.pageNum = 0;
+        this.pages = 0;
+        this.total = 0;
+        this.init(true);
       },
       intersectionCb(res) {
         const { isLoading, isEnd, threshold ,show} = this;
@@ -181,6 +185,10 @@
             this.errorMsg = message;
             return;
           }
+
+          this.pageNum = pageNum;
+          this.pages = pages;
+          this.total = total;
 
           // cb(res);
 

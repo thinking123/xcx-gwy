@@ -6,6 +6,7 @@
             external-cls="ctab"/>
 
       <IconText @click.native="onPlanShow"
+                v-if="selectedTab == 0"
                 external-cls="titleIcon"
                 external-img="titleImg"
                 :text="iconText.text" :src="iconText.src"/>
