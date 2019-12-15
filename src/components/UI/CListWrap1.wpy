@@ -103,17 +103,15 @@
     },
     watch: {
       url(nv, ov) {
-        const { type } = this;
-        this.resetItems(type);
-        this.init(true);
+        this.reload();
 
       },
       reloadKey(nv , ov){
         console.log('reloadKey' , nv , ov);
         if(nv !== ov){
-          const { type } = this;
-          this.resetItems(type);
-          this.init(true);
+
+          this.reload();
+          // this.init(true);
 
         }
       }
@@ -124,27 +122,21 @@
         'resetItems',
         'setItems'
       ]),
+      reload(){
+        const { type } = this;
+
+        this.resetItems(type);
+
+        this.isEnd = false;
+        this.isError = false;
+        this.isLoading = false;
+      },
       intersectionCb(res) {
         const { isLoading, isEnd, threshold ,show} = this;
-        res.intersectionRatio; // 相交区域占目标节点的布局区域的比例
-        res.intersectionRect; // 相交区域
-        res.intersectionRect.left; // 相交区域的左边界坐标
-        res.intersectionRect.top; // 相交区域的上边界坐标
-        res.intersectionRect.width; // 相交区域的宽度
-        res.intersectionRect.height; // 相交区域的高度
-
-        console.log('relativeToViewport', res, res.boundingClientRect.top);
-        const canload = res.boundingClientRect.top;
-
-        // this.getRect().then(rect=>{
-        console.log('rect', this, this.$slots);
-        console.log('recboundingClientRectt', res.boundingClientRect.top);
-        // })
         if (!isLoading && !isEnd && show) {
           this.getData();
         }
       },
-
       request() {
         const { url, params = {}, pageNum } = this;
 
@@ -155,15 +147,6 @@
       },
 
       parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
-
-        // const c = true;
-        // if(typeof beforeCb === 'function'){
-        //   c = beforeCb(res);
-        // }
-        //
-        // if(!c){
-        //   return;
-        // }
         if ((!!res && reg.test(res.status)) || resolveStatus.includes(res.status) || tipStatus.includes(res.status)) {
           if (tipStatus.includes(res.status)) {
             return showMsg(res.message);
@@ -217,7 +200,6 @@
       },
       init(refresh = false) {
         const { threshold, type } = this;
-
 
         if(refresh){
           console.log('refresh')

@@ -28,6 +28,7 @@
 
     </CListWrap1>
     <CListWrap1 eventName="TList" :type="listtype2"
+                :reloadKey="refreshKey2"
                 :params="params2"
                 :show="selectedTab == 1"
                 url="/api/learnPlan/getLearnPlanList">
@@ -38,21 +39,18 @@
                  :text1="c.planContent"
                  :text2="c.planTime"
                  :data="c"
-                 @btnclick="onSwipeItemSumbitClick"
-                 @onSwipeItemClick="onSwipeItemClick"
       />
 
     </CListWrap1>
 
 
-
-    <CPopup  :show="planShow"
-             position="bottom"
-             @close="planShow=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup :show="planShow"
+            position="bottom"
+            @close="planShow=false"
+            zIndex="999"
+            overlay="{{ true }}">
       <div class="learn">
-        <HeaderClose text="添加计划"  external-cls="header" @click="planShow=false"/>
+        <HeaderClose text="添加计划" external-cls="header" @click="planShow=false"/>
         <div class="body">
           <CTopLabelInput label="计划内容" placeholder="准备学点啥，如学习申论第一章" external-cls="row"
                           @update="handlelearnContent"
@@ -62,20 +60,20 @@
                           readonly="{{true}}"
                           @update="handlelearnTip"
                           external-cls="row"/>
-          <CButton text="确认添加"  @tap.native="handleStartLearn" external-cls="row"/>
+          <CButton text="确认添加" @tap.native="handleStartLearn" external-cls="row"/>
         </div>
       </div>
     </CPopup>
-    <CPopup  :show="timeShow"
-             position="bottom"
-             @close="timeShow=false"
-             zIndex="1000"
-             overlay="{{ true }}">
+    <CPopup :show="timeShow"
+            position="bottom"
+            @close="timeShow=false"
+            zIndex="1000"
+            overlay="{{ true }}">
       <div class="time">
-        <HeaderClose text="选择学习时间"  external-cls="header" @click="timeShow=false"/>
+        <HeaderClose text="选择学习时间" external-cls="header" @click="timeShow=false"/>
         <div class="body">
           <view class="section">
-            <picker mode="date" value="{{seLdate}}" start="{{startDate}}"  bindchange="bindDateChange">
+            <picker mode="date" value="{{seLdate}}" start="{{startDate}}" bindchange="bindDateChange">
               <view class="picker">
                 日期: {{seLdate}}
               </view>
@@ -83,14 +81,14 @@
           </view>
 
           <view class="section">
-            <picker mode="time" value="{{seLtime}}" start="{{startTime}}"  bindchange="bindTimeChange">
+            <picker mode="time" value="{{seLtime}}" start="{{startTime}}" bindchange="bindTimeChange">
               <view class="picker">
                 时间: {{seLtime}}
               </view>
             </picker>
           </view>
 
-          <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
+          <CButton text="确认" @tap.native="handleSetTime" external-cls="row2"/>
         </div>
 
       </div>
@@ -115,19 +113,19 @@
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters(['user','items']),
-      clist1(){
+      ...mapGetters(['user', 'items']),
+      clist1() {
         const list = this.items[this.listtype1];
         return list || [];
       },
-      clist2(){
+      clist2() {
         const list = this.items[this.listtype2];
         return list || [];
       },
-      params(){
+      params() {
         return {
-          planState:this.selectedTab,
-        }
+          planState: this.selectedTab
+        };
       },
       timeTip() {
         return '去设置';
@@ -135,14 +133,15 @@
 
     },
     data: {
-      refreshKey1:new Date().getTime(),
+      refreshKey1: new Date().getTime(),
+      refreshKey2: new Date().getTime(),
       listtype1,
       listtype2,
-      params1:{
-        planState:0
+      params1: {
+        planState: 0
       },
-      params2:{
-        planState:1
+      params2: {
+        planState: 1
       },
       tabs: [
         { text: '待完成' },
@@ -171,22 +170,25 @@
       startTime: ''
     },
     methods: {
-      onSwipeItemClick([{id} , index]){
-        console.log('you lcick [data , index]' , [id , index]);
+      onSwipeItemClick([{ id }, index]) {
         learnPlanDel(id).then(res => {
-          if(res){
-            showMsg("删除成功");
-          }
-        })
+          showMsg('删除成功');
+          this.refreshKey1 = new Date().getTime();
+        });
 
       },
-      onSwipeItemSumbitClick({id}){
-        // console.log('you lcick id' , id)
+      onSwipeItemSumbitClick({ id }) {
+
+        //todo 学习计划的id 为 null
+        console.log('you lcick id', id);
         learnPlanUpdate(id).then(res => {
-          if(res){
-            showMsg("更新成功");
+          if (res) {
+            showMsg('更新成功');
+            this.refreshKey1 = new Date().getTime();
+            this.refreshKey2 = new Date().getTime();
+
           }
-        })
+        });
       },
       bindDateChange: function(e) {
         this.seLdate = e.$wx.detail.value;
@@ -278,19 +280,6 @@
     },
     created() {
       this.iconText.src = getImgUrlEx(this.iconText.src);
-
-      const res = [];
-      for (let i = 0; i < 10; i++) {
-        const obj = {
-          id:i,
-          text1: `学习申论-第四章`,
-          text2: `明天 10:30`,
-          disabled: i % 2
-        };
-        res.push(obj);
-      }
-
-      this.waitComp = res;
     }
   });
 </script>

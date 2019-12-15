@@ -11,9 +11,9 @@
         {{r}}
       </div>
       <div class="body-cls" :class="{'body-cls--disabled':disabled}">
-        <checkbox :checked="disabled" @change="onChange"
+        <checkbox checked="{{checked}}"
                   class="col1"
-                  :disabled="disabled"
+                  disabled="{{disabled}}"
                   color="#4FAC1B"/>
         <div class="col2">
           <span>{{text1}}</span>
@@ -21,7 +21,7 @@
         </div>
 
         <CButton :text="btnText"
-                 v-if="!disabled"
+                 v-if="!disabled && checked"
                  @tap.native="handleSubmit"
                  external-cls="col3"/>
       </div>
@@ -41,6 +41,11 @@
     externalClasses:[
       'external-cls'
     ],
+    watch:{
+      checked(v){
+
+      }
+    },
     props:{
       rightSwipeWidth:{
         default:200
@@ -75,6 +80,7 @@
         console.log('onChange' , e)
       },
       handleSubmit(){
+        console.log('submit' , this.data)
         this.$emit('btnclick' , this.data);
       },
       onSwipeItemClick(index){

@@ -24,7 +24,7 @@
 <script>
   import wepy from '@wepy/core'
   import {touch} from '@/mixins/touch';
-  import {rpxTopx} from '@/common/utils';
+  import {rpxTopx} from '@/mixins/rpxTopx';
 
   const THRESHOLD = 0.3;
 
@@ -41,7 +41,7 @@
       'external-cls',
       'right-cls'
     ],
-    mixins: [touch],
+    mixins: [touch,rpxTopx],
     props:{
       disabled: Boolean,
       leftWidth: {
@@ -68,10 +68,9 @@
 
     },
     methods: {
-
       open(position) {
         let { leftWidth, rightWidth } = this;
-        rightWidth = rpxTopx(rightWidth);
+        rightWidth = this.rpxTopx(rightWidth);
 
         const offset = position === 'left' ? leftWidth : -rightWidth;
         this.swipeMove(offset);
@@ -101,7 +100,7 @@
         let { leftWidth, rightWidth } = this;
         const { offset } = this;
 
-        rightWidth = rpxTopx(rightWidth);
+        rightWidth = this.rpxTopx(rightWidth);
         if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
           this.open('right');
         } else if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
@@ -185,12 +184,12 @@
     attached(){
       setTimeout(()=>{
 
-        this.rightWidthPx = rpxTopx(this.rightWidth) + 'px';
+        this.rightWidthPx = this.rpxTopx(this.rightWidth) + 'px';
         console.log('this.rightWidthPx' , this.rightWidthPx);
       } , 500)
     },
     onLoad () {
-      this.rightWidthPx = rpxTopx(this.rightWidth);
+      this.rightWidthPx = this.rpxTopx(this.rightWidth);
       console.log('this.rightWidthPx' , this.rightWidthPx)
     }
   });
