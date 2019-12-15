@@ -334,7 +334,7 @@
 </style>
 <config>
   {
-  navigationBarTitleText: '开明真题',
+  navigationBarTitleText: '搜索',
   usingComponents: {
   CTabbar:'~UI/CTabbar',
   CSearch:'~UI/CSearch',

@@ -1,7 +1,9 @@
 <template>
   <div class="page homeSection2">
     <div class="header">
-      <CSearch :val="search" @change="inputChange" external-cls="search" type="readonly"/>
+      <CSearch :val="search" @change="inputChange"
+               @click.native="onNavSearch"
+               external-cls="search" type="readonly"/>
 
 
       <CTab type="radius" :tabs="tabs"
@@ -95,6 +97,7 @@
   import { getImgUrlEx } from '@/common/utils';
   import eventHub from '@/common/eventHub';
   import {mapGetters} from '@wepy/x';
+  import { navToPage } from '@/common/navUtils';
 
   const type1 = 'subjecAudio_getSubjecAudioHomeList_1';
   const type2 = 'subjecAudio_getSubjecAudioHomeList_2';
@@ -163,7 +166,12 @@
     },
     methods: {
       inputChange(v){
-        this.search = v;
+        // this.search = v;
+        // navToPage('/pages/section2/searchPage')
+      },
+      onNavSearch(v){
+        // this.search = v;
+        navToPage('/pages/section2/searchPage')
       },
       handleTab({tab ,index}){
         this.selectedTab = index
