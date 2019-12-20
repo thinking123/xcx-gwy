@@ -227,3 +227,23 @@ export function getTime(date = new Date(), split=':') {
 
   return arr;
 }
+
+export function delNullProperty(obj) {
+
+  if(!isObj(obj)){
+    return obj;
+  }
+
+  for(let k in obj){
+    if(obj[k] === null || obj[k] === undefined || obj[k] === ''){
+      delete obj[k];
+    }
+  }
+
+  return obj || {};
+
+}
+
+// export function isObj(obj) {
+//   return typeof obj === 'object' && obj !== null;
+// }

@@ -1,12 +1,13 @@
 import { baseUrl } from '@/common/constant';
 import store from 'store';
 
-let delay = null;
+let delay = {};
 const state = store.state;
 const {commit} = store;
 
-function showLoading(loadingText='') {
-  delay = setTimeout(()=>{
+function showLoading(loadingText='', url) {
+  delay[url] = setTimeout(()=>{
+    console.log('loading')
     wx.showLoading({
       title: loadingText,
       mask: true
@@ -14,10 +15,12 @@ function showLoading(loadingText='') {
   } , 300)
 }
 
-function hideLoading(loadingText='') {
+function hideLoading(loadingText='', url) {
   wx.hideLoading();
-  clearInterval(delay)
-  delay = null;
+  console.log('del loading',delay)
+
+  clearTimeout(delay[url])
+  delete delay[url];
 }
 function http(url, data, loadingText, header, method = 'GET') {
 
@@ -40,7 +43,7 @@ function http(url, data, loadingText, header, method = 'GET') {
   console.log('url', _url);
 
   commit('pushQueue' , url)
-  showLoading(loadingText);
+  showLoading(loadingText , url);
 
 
   return new Promise((resolve, reject) => {
@@ -50,13 +53,13 @@ function http(url, data, loadingText, header, method = 'GET') {
       header: header,
       method: method,
       success: res => {
-        hideLoading(loadingText);
+        hideLoading(loadingText, url);
         commit('popQueue')
         resolve(res ? res.data : null);
 
       },
       fail: err => {
-        hideLoading(loadingText);
+        hideLoading(loadingText, url);
         commit('popQueue')
         reject(err);
       }

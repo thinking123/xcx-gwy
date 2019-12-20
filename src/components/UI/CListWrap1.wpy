@@ -106,6 +106,9 @@
         this.reload();
 
       },
+      params(nv, ov) {
+        this.reload();
+      },
       reloadKey(nv , ov){
         console.log('reloadKey' , nv , ov);
         if(nv !== ov){

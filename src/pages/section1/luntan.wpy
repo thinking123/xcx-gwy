@@ -4,7 +4,9 @@
       <COrderList :items="list" @change="onCOrderList" orderIndex="2" :sel="selOrder" slot="header"/>
       <div class="poper" slot="poper">
         <div style="display:{{selOrder==0?'block':'none'}}">
-          <CListSelect :items="list1"  labelKey="text" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
+          <CListSelect :items="list1"
+                       key="id"
+                       labelKey="name" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
         </div>
         <div style="display:{{selOrder==1?'block':'none'}}">
           <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
@@ -57,9 +59,10 @@
 <script>
   import wepy from '@wepy/core';
   import store from 'store';
-  import { forumforumCollect, forumgetCategory } from '@/http/http-business';
+  import { forumforumCollect, forumgetCategory, getCity, getLabel } from '@/http/http-business';
   import {mapGetters} from '@wepy/x';
   import { navToPage } from '@/common/navUtils';
+  import { delNullProperty } from '@/common/utils';
 
   const listtype = 'forum_getForumList'
   wepy.page({
@@ -68,7 +71,7 @@
       navigationBarTitleText: ''
     },
     computed: {
-      ...mapGetters(['items']),
+      ...mapGetters(['items',"user"]),
       clist(){
         const list = this.items[listtype];
         console.log('list' , list);
@@ -83,14 +86,15 @@
         return l.slice(3);
       },
       params(){
-        // if(this.selOrder == 2){
-        //   return {};
-        // }
-
-        return {
-          labelId:this.labelId,
+        let p = {
+          labelId:this.list1Sel,
           cityCode:this.cityCode,
+          userId:this.user.id,
         }
+
+        p = delNullProperty(p);
+
+        return p;
       }
     },
     data: {
@@ -104,7 +108,7 @@
       selOrder:-1,
       list1:[
       ],
-      list1Sel:-1,
+      list1Sel:'',
       list2:[
       ],
       list2Sel:-1,
@@ -154,6 +158,9 @@
       },
       onCListSelect1(index){
         this.list1Sel = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+
       },
 
       onExpand(exp){
@@ -195,6 +202,15 @@
       //     })
       // });
 
+
+      getCity().then(res => {
+        this.list2 = res;
+      });
+
+      getLabel().then(res => {
+        this.list1 = res;
+
+      })
     }
   });
 </script>

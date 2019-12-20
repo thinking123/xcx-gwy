@@ -175,7 +175,8 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/home',
+  'pages/section1/luntan',
+
 
 
 

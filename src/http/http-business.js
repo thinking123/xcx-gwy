@@ -862,6 +862,83 @@ export function forumuserCollect(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+ *
+ *
+ * /api/common/getCity
+ 获取城市接口 --编号 001
+
+ Response Class (Status 200)
+ 请求已完成
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "cityName": "string",
+    "citySort": 0,
+    "createTime": "string",
+    "id": 0,
+    "isDel": 0
+  },
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter	Value	Description	Parameter Type	Data Type
+ token
+ (required)
+ token
+
+ header	string
+
+ */
+export function getCity(
+) {
+  let url = '/api/common/getCity';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ *GET /api/forum/getLabel
+ 获取一级分类 --编号 009
+
+ Response Class (Status 200)
+ 请求已完成
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "id": 0,
+    "name": "string",
+    "sort": 0
+  },
+  "status": "string"
+}
+
+ */
+export function getLabel(
+) {
+  let url = '/api/forum/getLabel';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 
 
 //todo 获取城市列表
