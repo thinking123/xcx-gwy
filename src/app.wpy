@@ -175,10 +175,7 @@ wepy.app({
 <config>
 {
     pages: [
-  'pages/homeSection2',
-
-  'pages/section2/searchPage',
-
+  'pages/home',
 
 
 

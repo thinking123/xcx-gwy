@@ -54,11 +54,9 @@ export default new Vuex.Store({
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
-      console.log('systemInfo', systemInfo);
       state.systemInfo = systemInfo;
     },
     setItems(state, { items, type }) {
-      console.log('setItems' ,  { items, type })
       const b = state.items[type] || [];
       const res = [...b, ...items];
       const obj = { ...state.items };
@@ -103,6 +101,9 @@ export default new Vuex.Store({
     },
     setWxUserInfo(state, userInfo) {
       state.wx = { ...state.wx, userInfo: { ...userInfo } };
+    },
+    setUser(state, user) {
+      state.user = user;
     }
   },
   getters: {

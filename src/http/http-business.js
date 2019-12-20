@@ -17,7 +17,7 @@ export function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipSt
     if (tipStatus.includes(res.status)) {
       return showMsg(res.message);
     }
-    return res.rows ? res.rows : res
+    return res.rows ? res.rows : res;
   } else {
     const msg = res && res.message ? res.message : errMsg;
     showMsg(msg);
@@ -201,6 +201,43 @@ export function registerByWx(
 
 
 /**
+ *  GET /api/login/getMsgById
+ 通过id获取用户信息 --编号 007
+
+ Response Class (Status 200)
+ Successful — 请求已完成 rows 直接返回token
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter  Value  Description  Parameter Type  Data Type
+ id
+ id
+
+ query  string
+ */
+export function getMsgById(
+  userId) {
+  let url = '/api/login/getMsgById';
+
+  const loadingText = '打卡...';
+  const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id: userId
+  });
+  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+}
+
+/**
  *  GET /api/getupSleep/clock
  用户打卡
 
@@ -215,6 +252,21 @@ export function registerByWx(
  打开类型，0 起床 1 睡觉
 
  query  string
+
+ res : {id: 3, openid: "o46rv0E8sy9FKYCkm-Y9z-xUkLic",…}
+ createTime: null
+ deviceId: null
+ id: 3
+ isVip: 0
+ openid: "o46rv0E8sy9FKYCkm-Y9z-xUkLic"
+ token: null
+ userCity: null
+ userHead: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erRwRs5Wy2UL497AuEFIQ17qujbaXDrO3icvyB1MD4AicRx3UqKY7OjhYicbV78Rp1vlzfibp0HrKWtVA/132"
+ userIntegral: 0
+ userName: "ThinKing"
+ userPhone: null
+ userPwd: null
+ vipTime: null
  */
 export function getupSleepClock(
   userId,
@@ -272,9 +324,6 @@ export function learnTimeAdd(
 }
 
 
-
-
-
 /**
  * GET /api/learnTime/finish
  结束 --编号 003
@@ -293,19 +342,19 @@ export function learnTimeAdd(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  id
  (required)
  学习计时id
 
- query	string
+ query  string
  finishTime
  (required)
  结束时间
  */
 export function learnTimeFinish(
   id,
-  finishTime,
+  finishTime
 ) {
   let url = ' /api/learnTime/finish';
 
@@ -314,12 +363,10 @@ export function learnTimeFinish(
 
   url = urlParams(url, {
     id,
-    finishTime,
+    finishTime
   });
-  return get(url, {}, '').then(res => parseRes(res, '',[],[2001]));
+  return get(url, {}, '').then(res => parseRes(res, '', [], [2001]));
 }
-
-
 
 
 /**
@@ -340,19 +387,19 @@ export function learnTimeFinish(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  id
  (required)
  学习计时id
 
- query	string
+ query  string
  remaindLearnTime
  (required)
  已用时间
 
- query	string
+ query  string
  Response Messages
- HTTP Status Code	Reason	Response Model	Headers
+ HTTP Status Code  Reason  Response Model  Headers
  400
  请求中有语法问题，或不能满足请求
 
@@ -373,7 +420,7 @@ export function learnTimeFinish(
  */
 export function learnTimeSuspend(
   id,
-  remaindLearnTime,
+  remaindLearnTime
 ) {
   let url = ' /api/learnTime/suspend';
 
@@ -382,12 +429,12 @@ export function learnTimeSuspend(
 
   url = urlParams(url, {
     id,
-    remaindLearnTime,
+    remaindLearnTime
   });
-  return get(url, {}, '').then(res => parseRes(res, '',[],[2001]));
+  return get(url, {}, '').then(res => parseRes(res, '', [], [2001]));
 }
-//todo 继续学习的接口没有
 
+//todo 继续学习的接口没有
 
 
 //todo 学习计划：没有获取学习计划的列表接口
@@ -410,22 +457,22 @@ status (string, optional): 响应状态
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  userId
  (required)
  用户Id
 
- query	string
+ query  string
  planContent
  (required)
  学习计划内容
 
- query	string
+ query  string
  planTime
  (required)
  学习计划时间
 
- query	string
+ query  string
  */
 export function learnPlanAdd(
   userId,
@@ -441,6 +488,67 @@ export function learnPlanAdd(
     userId,
     planContent,
     planTime
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+
+/**
+ *
+ * /api/learnTime/getLearnTime
+ 根据id获取学习计划 --编号 004
+
+ Response Class (Status 200)
+ 请求已完成
+
+ ModelExample Value
+ {
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+ Response Content Type
+ Parameters
+ Parameter  Value  Description  Parameter Type  Data Type
+ token
+ (required)
+ token
+
+ header  string
+ id
+ 学习计划id
+
+ query  string
+ Response Messages
+ HTTP Status Code  Reason  Response Model  Headers
+ 400
+ 请求中有语法问题，或不能满足请求
+
+ 401
+ 未授权客户机访问数据
+
+ 403
+ Forbidden
+
+ 404
+ 服务器找不到给定的资源；文档不存在
+
+ 500
+ 服务器不能完成请求
+ */
+export function getLearnTime(
+  id
+) {
+  let url = '/api/learnTime/getLearnTime';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
@@ -465,13 +573,13 @@ export function learnPlanAdd(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  id
  (required)
  计划id
  */
 export function learnPlanDel(
-  id,
+  id
 ) {
   let url = '/api/learnPlan/del';
 
@@ -504,13 +612,13 @@ export function learnPlanDel(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  id
  (required)
  计划id
  */
 export function learnPlanUpdate(
-  id,
+  id
 ) {
   let url = '/api/learnPlan/update';
 
@@ -522,7 +630,6 @@ export function learnPlanUpdate(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
-
 
 
 /**
@@ -544,17 +651,17 @@ export function learnPlanUpdate(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  userId
  (required)
  用户Id
 
- query	string
+ query  string
  diaryContent
  (required)
  学习日记内容
 
- query	string
+ query  string
  diaryImg
  (required)
  学习日记图片
@@ -576,6 +683,7 @@ export function learnDiaryAdd(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+
 /**
  *
  * GET /api/forum/getCategory
@@ -607,22 +715,21 @@ export function learnDiaryAdd(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  token
  (required)
  token
  */
-export function forumgetCategory(
-) {
+export function forumgetCategory() {
   let url = '/api/forum/getCategory';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, {
-  });
+  url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+
 /**
  *
  * GET /api/forum/addScan
@@ -642,7 +749,7 @@ export function forumgetCategory(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  id
  (required)
  帖子
@@ -682,12 +789,12 @@ export function forumaddScan(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  userId
  (required)
  用户Id
 
- query	string
+ query  string
  labelId
  (required)
  一级分类id
@@ -729,12 +836,12 @@ export function forumforumCollect(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  userId
  (required)
  用户Id
 
- query	string
+ query  string
  collectUserId
  (required)
  被关注用户id
@@ -779,7 +886,7 @@ export function forumuserCollect(
 
  Response Content Type
  Parameters
- Parameter	Value	Description	Parameter Type	Data Type
+ Parameter  Value  Description  Parameter Type  Data Type
  kmwtForumPostAdd
  (required)
 
