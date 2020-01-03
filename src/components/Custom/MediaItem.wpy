@@ -1,5 +1,7 @@
 <template>
-    <div class="MediaItem external-cls" :class="{'MediaItem__isLearning':isLearning , 'MediaItem__text':typeItem == 'text'}">
+    <div class="MediaItem external-cls"
+         @click="onClick1"
+         :class="{'MediaItem__isLearning':isLearning , 'MediaItem__text':typeItem == 'text'}">
 
       <image :src="icon3"  class="icon3" mode="aspectFit" @click="onPlay" v-show="typeItem == 'text'"/>
 
@@ -29,6 +31,7 @@
   import {getImgUrlEx} from '@/common/utils';
   import store from 'store';
   import { mapGetters} from '@wepy/x';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.component({
     store,
@@ -66,6 +69,12 @@
 
     },
     methods: {
+      onClick1(){
+        // navToPage(  '/pages/section2/bwktDetail')
+        navToPage(  '/pages/section2/mediaPlayDetail')
+
+
+      },
       onClick(){
         this.$emit('change' , this.media);
       },

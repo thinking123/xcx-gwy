@@ -17,7 +17,7 @@ const tabbar = [
   {
     icon: 'tabbar03@3x',
     activeIcon: 'tabbar03_pre@3x',
-    page: '/pages/home',
+    page: '/pages/homeSection3',
     text: '开悟自我'
   }
 ].map(m => {

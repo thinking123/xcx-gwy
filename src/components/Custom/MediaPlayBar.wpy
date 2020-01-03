@@ -1,5 +1,5 @@
 <template>
-    <div class="MediaPlayBar external-cls" v-show="showMediaPlay">
+    <div class="MediaPlayBar external-cls" v-show="showMediaPlay" @click="onClick">
       <image :src="icon1"  class="icon1" mode="aspectFit" @click="onClose" v-if="showClose"/>
       <image :src="user.header"  class="header" mode="aspectFill" @click="onUser"/>
       <div class="content">
@@ -26,6 +26,7 @@
   import store from 'store';
   import { mapGetters , mapMutations} from '@wepy/x';
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.component({
     store,
@@ -75,6 +76,10 @@
         this.setShowMediaPlay(false);
         this.setMediaPlaying(false);
       },
+      onClick(){
+        navToPage(  '/pages/section2/mediaPlayDetail')
+
+      }
 
     },
     created () {

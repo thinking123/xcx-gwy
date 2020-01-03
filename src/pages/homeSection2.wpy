@@ -135,7 +135,7 @@
         {text:'部委课堂'},
         {text:'精炼题目'},
       ],
-      selectedTab:0,
+      selectedTab:2,
       items1:[],
       items2:[],
       items3:[],
@@ -197,6 +197,17 @@
       },
       onClickLogicDialog(){
 
+      },
+      handleIconText(index){
+        if(index == 0){
+          return navToPage('/pages/section2/timu');
+        }
+        if(index == 1){
+          return navToPage('/pages/section2/timuCuoti');
+        }
+        if(index == 2){
+          return navToPage('/pages/section2/bijiben');
+        }
       }
     },
     onShow(){

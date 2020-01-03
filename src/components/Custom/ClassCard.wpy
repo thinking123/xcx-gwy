@@ -1,5 +1,5 @@
 <template>
-    <div class="ClassCard external-cls">
+    <div class="ClassCard external-cls" @click="onClick">
       <div class="row1">
         <CCircleImg external-cls="col1" :src="header"/>
         <span>{{title}}</span>
@@ -15,6 +15,7 @@
 <script>
   import wepy from '@wepy/core'
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.component({
     data: {
@@ -37,7 +38,9 @@
 
     },
     methods: {
-
+      onClick(){
+        navToPage('/pages/section2/mediaDetail')
+      }
     },
     created(){
       this.icon1 = getImgUrlEx(this.icon1)

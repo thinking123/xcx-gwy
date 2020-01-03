@@ -1,5 +1,5 @@
 <template>
-    <div class="ClassCard1 external-cls">
+    <div class="ClassCard1 external-cls" @click="onClick">
       <div class="col1">
         <image :src="icon" class="icon" v-if="good"/>
         <image :src="src" class="bg"/>
@@ -33,6 +33,7 @@
 <script>
   import wepy from '@wepy/core'
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.component({
     data: {
@@ -70,7 +71,9 @@
 
     },
     methods: {
-
+      onClick(){
+        navToPage('/pages/section2/bwktDetail');
+      }
     },
     created(){
       this.icon2 = getImgUrlEx(this.icon2);

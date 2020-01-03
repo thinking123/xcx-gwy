@@ -3,6 +3,7 @@
 
       <div class="FixedBottomComment__body">
         <CInput placeholder="留言评价"  :val.sync="val"
+                @click="onInput"
                 theme="radius"
                 external-cls="cInput"
                 @update:val="handleInput"/>
@@ -15,6 +16,7 @@
 <script>
   import wepy from '@wepy/core'
   import {getImgUrlEx ,ellipseNumber} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.component({
     data: {
@@ -56,9 +58,17 @@
     },
     methods: {
       handleInput(v){
+
         this.$emit('change' , v)
       },
+      onInput(v){
+        navToPage('/pages/section2/mediaSubmitCommentPage')
+
+      },
       onComment(){
+        console.log('        navToPage(  \'/pages/section2/mediaCommentPage\')\n')
+        navToPage('/pages/section2/mediaCommentPage')
+
         this.$emit('comment')
       },
       onLike(){
