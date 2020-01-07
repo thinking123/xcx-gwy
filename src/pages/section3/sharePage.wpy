@@ -16,6 +16,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -34,17 +35,19 @@
     },
     methods: {
       onInvite(){
+        // navToPage('/pages/section3/takeMoney')
 
       },
       onTakeMoney(){
+        navToPage('/pages/section3/takeMoney')
 
       },
       onShowDetail(){
-
+        navToPage('/pages/section3/moneyDetail')
       },
     },
     onShow(){
-      
+
     },
     created () {
 

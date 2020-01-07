@@ -22,6 +22,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrlEx } from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -33,20 +34,22 @@
     },
     data: {
       icons: [
-        { text: '资料填写', src: 'icon_ai_nav01@3x' },
-        { text: '综合测试', src: 'icon_ai_nav02@3x' },
-        { text: '面相', src: 'icon_ai_nav03@3x' },
-        { text: '手相', src: 'icon_ai_nav04@3x' },
-        { text: '八字', src: 'icon_ai_nav05@3x' },
-        { text: '性格', src: 'icon_ai_nav06@3x' },
-        { text: '情商', src: 'icon_ai_nav07@3x' },
-        { text: '星座', src: 'icon_ai_nav08@3x' }
+        { text: '资料填写', src: 'icon_ai_nav01@3x',url:'/pages/section4/tianziliaoPage' },
+        { text: '综合测试', src: 'icon_ai_nav02@3x',url:'/pages/section4/timuPage' },
+        { text: '面相', src: 'icon_ai_nav03@3x',url:'/pages/section4/mianxianResultPage' },
+        { text: '手相', src: 'icon_ai_nav04@3x',url:'/pages/section4/mianxianResultPage' },
+        { text: '八字', src: 'icon_ai_nav05@3x',url:'/pages/section4/baziResultPage' },
+        { text: '性格', src: 'icon_ai_nav06@3x',url:'/' },
+        { text: '情商', src: 'icon_ai_nav07@3x' ,url:'/'},
+        { text: '星座', src: 'icon_ai_nav08@3x',url:'/pages/section4/xinzuoPage' }
       ],
       icon: 'bg_ai@3x'
     },
     methods: {
       onClick(index){
         console.log(index);
+        const url = this.icons[index].url;
+        navToPage(url);
       }
     },
     onShow(){

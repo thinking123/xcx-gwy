@@ -43,6 +43,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrlEx } from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -65,56 +66,92 @@
       btns:[
         {
           text:'今日任务',
-          icon:'icon_my01@3x'
+          icon:'icon_my01@3x',
+          url:'/pages/section3/taskPage'
         },
         {
           text:'人工智能',
-          icon:'icon_my02@3x'
+          icon:'icon_my02@3x',
+          url:'/pages/section4/rgznPage'
         },
         {
           text:'心灵测试',
-          icon:'icon_my03@3x'
+          icon:'icon_my03@3x',
+          url:'/'
         },
         {
           text:'我的笔记',
-          icon:'icon_my04@3x'
+          icon:'icon_my04@3x',
+          url:'/pages/section3/myNote'
         },
         {
           text:'我的信息',
-          icon:'icon_my05@3x'
+          icon:'icon_my05@3x',
+          url:'/pages/section3/myMsg'
         },
         {
           text:'我的报告',
-          icon:'icon_my06@3x'
+          icon:'icon_my06@3x',
+          url:'/pages/section3/myReportPage'
         },
         {
           text:'设置',
-          icon:'icon_my07@3x'
+          icon:'icon_my07@3x',
+          url:'/'
         },
       ]
     },
     methods: {
       onHeaderClick(){
-
+        navToPage('/pages/section3/selfPage')
       },
       onItemClick(index){
-        console.log(this.titles[index]);
+        let url = ''
+        if(index == 0){
+          url =   '/pages/section3/sharePage' ;
+        }
+        if(index == 1){
+          url = '/pages/section3/friendPage';
+        }
+        if(index == 2){
+          url = '/pages/section3/myFansPage';
+        }
+        if(index == 3){
+          url = '/pages/section3/myCollectPage';
+        }
+        navToPage(url);
+        // console.log(this.titles[index]);
       },
       onClickCLabelRightButton(index){
         console.log(this.btns[index]);
+        navToPage(this.btns[index].url);
       }
     },
     onShow(){
-      
+
     },
     created () {
       this.icon1 = getImgUrlEx(this.icon1);
       const arr = [];
       for(let i = 0 ; i < 4 ; i++){
-        arr.push({
+
+        let obj = {
           top:'60',
           bottom:'粉丝',
-        })
+        }
+        if(i == 0){
+          obj.bottom = '邀请奖励';
+        }
+        if(i == 1){
+          obj.bottom = '好友';
+        }
+
+        if(i == 3){
+          obj.bottom = '收藏';
+        }
+        arr.push(obj)
+
+
       }
 
       this.titles = arr;

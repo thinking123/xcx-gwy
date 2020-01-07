@@ -14,6 +14,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import { getImgUrlEx } from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -36,6 +37,24 @@
       onClick(e){
         const id = e.target.dataset.icon;
         console.log(id);
+
+        let url = '';
+        if(id == 1){
+          url = '/pages/section4/zhcsPage';
+        }
+        if(id == 2){
+          // url = '/pages/section4/tianziliaoPage';
+        }
+        if(id == 3){
+          url = '/';
+        }
+        if(id == 4){
+          url = '/';
+        }
+        if(id == 5){
+          url = '/';
+        }
+        navToPage(url);
       }
     },
     onShow() {

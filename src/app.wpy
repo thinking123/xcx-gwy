@@ -155,22 +155,50 @@ wepy.app({
   'pages/login/register',
 
 
-*/
 
+
+*/
+/*
+*
+
+* */
 </script>
 
 <config>
 {
     pages: [
-  'pages/homeSection2',
+  'pages/section4/zhcsPage',
+
+  'pages/section4/rgznPage',
 
 
-  'pages/section3/timuCuoti',
-  'pages/section3/selfPage',
-  'pages/section2/bijiben',
-  'pages/section2/bwktDetail',
-  'pages/section2/timu',
-  'pages/section3/selfPage',
+  'pages/section3/taskPage',
+
+  'pages/section4/timuPage',
+
+  'pages/section4/xinzuoPage',
+
+  'pages/section4/baziResultPage',
+
+  'pages/section4/mianxianResultPage',
+
+
+  'pages/section4/baziPage',
+
+  'pages/section4/mianxianPage',
+
+  'pages/section4/resultPage',
+
+  'pages/section4/tianziliaoPage',
+
+
+
+  'pages/section3/myReportPage',
+
+  'pages/section3/myMsg',
+
+  'pages/section3/myNote',
+  'pages/section3/myCollectPage',
 
   ],
     window: {
