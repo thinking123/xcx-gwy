@@ -1,7 +1,7 @@
 <template>
   <div class="page mianxianResultPage">
     <RgznBg/>
-    <CHeaderPanel title="面相"
+    <CHeaderPanel title="手相"
                   external-cls__header="CHeaderPanel3"
                   external-cls="CHeaderPanel"
                   showLine="{{true}}"
@@ -138,7 +138,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '面相测试结果',
+    navigationBarTitleText: '手相测试结果',
     usingComponents: {
   CHeaderPanel:'~UI/CHeaderPanel',
   RgznBg:'~Custom/RgznBg',

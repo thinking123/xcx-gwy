@@ -37,7 +37,7 @@
 
 
       </div>
-      <image :src="icon1" mode="scaleToFill" class="icon1"/>
+      <image :src="icon1" mode="scaleToFill" class="icon1" @click="onNav"/>
     </div>
 
   </div>
@@ -47,6 +47,7 @@
   import wepy from '@wepy/core';
   import store from 'store';
   import {getImgUrlEx} from '@/common/utils';
+  import { navToPage } from '@/common/navUtils';
 
   wepy.page({
     store,
@@ -85,6 +86,9 @@
       handlev(v){
         this.name = v;
       },
+      onNav(){
+        navToPage('/pages/section4/baziResultPage')
+      }
     },
     onShow(){
 

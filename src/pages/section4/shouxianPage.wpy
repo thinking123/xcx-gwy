@@ -22,7 +22,7 @@
         </div>
 
 
-        <CButton text="查看面相测试结果"
+        <CButton text="查看手相测试结果"
                  @tap.native="handleSubmit"
                  external-cls="submit"/>
 
@@ -54,8 +54,7 @@
     },
     methods: {
       handleSubmit(){
-        navToPage('/pages/section4/mianxianResultPage');
-
+        navToPage('/pages/section4/shouxianResultPage');
       },
       onClick(){
         const t = this;
@@ -160,7 +159,7 @@
 </style>
 <config>
 {
-    navigationBarTitleText: '面相',
+    navigationBarTitleText: '手相',
     usingComponents: {
   CHeaderPanel:'~UI/CHeaderPanel',
   RgznBg:'~Custom/RgznBg',

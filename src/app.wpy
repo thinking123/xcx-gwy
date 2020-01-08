@@ -102,6 +102,8 @@ wepy.app({
   'pages/section4/baziPage',
 
   'pages/section4/mianxianPage',
+  'pages/section4/shouxianPage',
+  'pages/section4/shouxianResultPage',
 
   'pages/section4/resultPage',
 
@@ -179,9 +181,12 @@ wepy.app({
   'pages/section4/xinzuoPage',
 
   'pages/section4/baziResultPage',
+  'pages/section4/xinzuoResultPage',
 
   'pages/section4/mianxianResultPage',
 
+  'pages/section4/shouxianPage',
+  'pages/section4/shouxianResultPage',
 
   'pages/section4/baziPage',
 
