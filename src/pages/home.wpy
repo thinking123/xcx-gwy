@@ -198,7 +198,7 @@
             navToPage('/pages/section1/MemberCenter');
             break;
           case 1:
-            navToPage('/pages/section1/learnLog');
+            navToPage('/pages/section1/kaimingwutong');
             break;
           case 2:
             navToPage('/pages/section1/luntan');
