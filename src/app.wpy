@@ -1,10 +1,9 @@
 <style lang="scss">
-
-page{
+page {
   width: 100%;
   height: 100%;
 }
-.page{
+.page {
   width: 100%;
   height: 100%;
 }
@@ -12,17 +11,24 @@ page{
 
 <script>
 import wepy from '@wepy/core';
-import './index'
+import './index';
 import eventHub from './common/eventHub';
-import { _wxGetSetting, _wxGetUserInfo, _wxLogin ,wx_getSystemInfo} from '@/common/wx';
+import './common/console';
+import {
+  _wxGetSetting,
+  _wxGetUserInfo,
+  _wxLogin,
+  wx_getSystemInfo
+} from '@/common/wx';
 import { showMsg } from '@/common/utils';
-import {commit} from 'store';
+import { commit } from 'store';
+console.log('Dev : ', DEV, BASE_URL);
 
 wepy.app({
   hooks: {
     // App 级别 hook，对整个 App 生效
     // 同时存在 Page hook 和 App hook 时，优先执行 Page hook，返回值再交由 App hook 处
-    'before-setData': function (dirty) {
+    'before-setData': function(dirty) {
       // console.log('setData dirty: ', dirty);
       return dirty;
     }
@@ -32,7 +38,9 @@ wepy.app({
   },
 
   onLaunch() {
+    // debugConsole(true);
     this.init();
+
     // this.testAsync();
     // eventHub.$on('app-launch', (...args) => {
     //   // console.log('app-launch event emitted, the params are:');
@@ -41,41 +49,38 @@ wepy.app({
   },
 
   methods: {
-
-    init(){
+    init() {
       this.loginWx();
     },
-    async loginWx(){
+    async loginWx() {
       //todo
       return;
 
-      try{
-
-
+      try {
         await _wxLogin();
         const setting = await _wxGetSetting();
-        console.log('setting' , setting)
+        console.log('setting', setting);
         if (setting['scope.userInfo']) {
           //授权过用户信息
-          await _wxGetUserInfo()
+          await _wxGetUserInfo();
         }
 
         const systemInfo = await wx_getSystemInfo();
-        console.log('systemInfo' , systemInfo)
+        console.log('systemInfo', systemInfo);
         this.$options.globalData.systemInfo = systemInfo;
-      }catch (e) {
+      } catch (e) {
         showMsg(e);
       }
     },
-    sleep (s) {
+    sleep(s) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve('promise resolved')
-        }, s * 1000)
-      })
+          resolve('promise resolved');
+        }, s * 1000);
+      });
     },
 
-    async testAsync () {
+    async testAsync() {
       let d = await this.sleep(3);
       console.log(d);
     }
@@ -170,15 +175,15 @@ wepy.app({
 
 
 
+  'pages/section1/luntan',
 * */
 </script>
 <config>
 {
     pages: [
-  'pages/section1/luntan',
-
-
-
+ 'pages/login/login',
+ 'pages/login/loginInput',
+'pages/login/register',
 
 
 

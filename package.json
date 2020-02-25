@@ -4,9 +4,9 @@
   "description": "A WePY project",
   "main": "weapp/app.js",
   "scripts": {
-    "dev": "./node_modules/.bin/wepy build --watch --log trace",
+    "d": "sudo ./node_modules/.bin/wepy build --watch --log trace",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache",
-    "clean": "rm -rf weapp",
+    "c": "sudo rm -rf weapp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "wepy": {
@@ -30,6 +30,7 @@
     "@wepy/compiler-babel": "^2.0.1",
     "@wepy/compiler-less": "^2.0.1",
     "@wepy/compiler-sass": "^2.0.1",
+    "@wepy/plugin-define": "^2.0.3",
     "@wepy/plugin-eslint": "^0.1.5",
     "babel-eslint": "^7.2.1",
     "cross-env": "^5.1.3",

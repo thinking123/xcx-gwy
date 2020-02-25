@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "store": ["src/store/index.js"],
+      "components/*": ["src/components/*"],
+      "UI/*": ["src/components/UI/*"],
+      "Custom/*": ["src/components/Custom/*"],
+      "icon/*": ["static/icon/*"],
+      "image/*": ["static/image/*"],
+      "utils": ["src/common/utils.js"],
+      "baseUI": ["src/css/baseUI.scss"],
+      "lessUI": ["src/css/var.less"],
+      "basePage": ["src/css/basePage.scss"],
+      "baseCss": ["src/css/base.scss"],
+      "newBase": ["src/css/newBase.scss"]
+    }
+  },
+  "exclude": ["node_modules", "weapp", ".idea"]
+}

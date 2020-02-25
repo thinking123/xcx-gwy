@@ -739,6 +739,11 @@
   resolved "https://registry.yarnpkg.com/@wepy/core/-/core-2.0.0-alpha.9.tgz#a8a0bc6aed69223f97fd318c97a95adde37ae5ca"
   integrity sha512-eRj+20xKDtop6QLPL1K0q1seH13XYM6WvUjxFba9RdBFjItQ0vTzwCCFMX5N/cPEUGk3QmVizlsFNVo0cQk89A==
 
+"@wepy/plugin-define@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@wepy/plugin-define/-/plugin-define-2.0.3.tgz#baa9e678edb6441037fee131033ea822c0ea8981"
+  integrity sha512-VDFbydxufEFk93swwHbRGiHaLvlmmFIVyBkVyqHHcKArlyapHEfXZo0L7tASCyG1cK+x1BPKA3l2EZXlt1IJPQ==
+
 "@wepy/plugin-eslint@^0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@wepy/plugin-eslint/-/plugin-eslint-0.1.5.tgz#198ed559ac625b1fd5c7ae382dad82d06289654f"
