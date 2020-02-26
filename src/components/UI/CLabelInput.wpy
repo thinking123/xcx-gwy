@@ -1,131 +1,120 @@
 <template>
-    <div class="CLabelInput external-cls" :class="{'bottomLine':showLine}">
-      <span v-if="!!label" class="label external-cls-label">{{label}}</span>
-      <input @input="handleInput" :value="val"
-             :type="type"
-             :placeholder="placeholder"/>
-      <image src="/static/icon/btn_reset_gray.png"
-             v-show="!!val"
-             @click="handleClear"
-             class="close external-cls-close"/>
-    </div>
+  <div class="CLabelInput external-cls" :class="{ bottomLine: showLine }">
+    <span v-if="!!label" class="label external-cls-label">{{ label }}</span>
+    <input
+      @input="handleInput"
+      :value="val"
+      :type="type"
+      :placeholder="placeholder"
+    />
+    <image
+      src="btn_reset_gray"
+      v-show="!!val"
+      @click="handleClear"
+      class="close external-cls-close"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrl} from '@/common/utils';
+import wepy from '@wepy/core';
+import { getImgUrl } from '@/common/utils';
 
-  wepy.component({
-    data: {
-      close:'/static/icon/btn_reset_gray.png'
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls', 'external-cls-label', 'external-cls-close'],
+  props: {
+    label: String,
+    val: {
+      type: String
     },
-    externalClasses:[
-      'external-cls',
-      'external-cls-label',
-      'external-cls-close',
-    ],
-    props:{
-      label:String,
-      val:{
-        type:String
-      },
-      placeholder:{
-        type:String,
-        default:"请输入"
-      },
-      showLine:{
-        type:Boolean,
-        default: true
-      },
-      type:{
-        type:String,
-        default:'text'
-      }
+    placeholder: {
+      type: String,
+      default: '请输入'
     },
-    events: {
-
+    showLine: {
+      type: Boolean,
+      default: true
     },
-    computed:{
-
-    },
-    methods: {
-      handleInput(e){
-        const v = e.$wx.detail.value
-        console.log('v' ,   v)
-        this.$emit('update:val' , v)
-      },
-      handleClear(){
-        this.$emit('update:val' , '')
-      }
-    },
-    onLoad () {
-      this.close = getImgUrl(this.close);
+    type: {
+      type: String,
+      default: 'text'
     }
-  });
+  },
+  events: {},
+  computed: {},
+  methods: {
+    handleInput(e) {
+      const v = e.$wx.detail.value;
+      console.log('v', v);
+      this.$emit('update:val', v);
+    },
+    handleClear() {
+      this.$emit('update:val', '');
+    }
+  },
+  onLoad() {}
+});
 </script>
 <style lang="scss">
-  $white:#FFFFFF;
-  $lineColor:#CCCCCC;
-  $textBlack:#000000;
-  $textBlack1:#333333;
-  $disabledColor:lightgray;
-  $zIndexTop:900;
-  $zIndexMiddle:50;
+$white: #ffffff;
+$lineColor: #cccccc;
+$textBlack: #000000;
+$textBlack1: #333333;
+$disabledColor: lightgray;
+$zIndexTop: 900;
+$zIndexMiddle: 50;
 
-  $pageBg:#F2F2F2;
-  $pageBgGray:#F5F5F5;
+$pageBg: #f2f2f2;
+$pageBgGray: #f5f5f5;
 
+$primaryColor: #4fac1b;
+$redColor: #ee4138;
+$infoColor: #ffffff;
+$textColor: #333333;
+$textColorGray: #999999;
+$textColorGray1: #666666;
 
-  $primaryColor:#4FAC1B;
-  $redColor:#EE4138;
-  $infoColor:#FFFFFF;
-  $textColor:#333333;
-  $textColorGray:#999999;
-  $textColorGray1:#666666;
+.CLabelInput {
+  display: flex;
+  align-items: center;
+  width: 630rpx;
+  height: 120rpx;
+  position: relative;
+  font-size: 32rpx;
 
-
-
-  .CLabelInput{
-    display: flex;
-    align-items: center;
+  &.bottomLine::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 630rpx;
-    height: 120rpx;
-    position: relative;
-    font-size:32rpx;
-
-    &.bottomLine::after{
-      position: absolute;
-      bottom: 0;
-      left:50%;
-      transform: translateX(-50%);
-      width: 630rpx;
-      height: 1px;
-      background-color: $lineColor;
-      content: '';
-    }
-    >input{
-
-      font-weight:400;
-      color:#000000;
-      caret-color: $primaryColor;
-      padding-right: 50rpx;
-      flex:1;
-    }
-    input::placeholder {
-      color: #CCCCCC;
-    }
-    .label{
-      width: 166rpx;
-      /*margin-right: 40rpx;*/
-      color: #666666;
-      font-weight:400;
-    }
-    .close{
-      width: 44rpx;
-      height: 44rpx;
-      position: absolute;
-      right: 0;
-      top:50%;
-      transform: translateY(-50%);
-    }
+    height: 1px;
+    background-color: $lineColor;
+    content: '';
   }
+  > input {
+    font-weight: 400;
+    color: #000000;
+    caret-color: $primaryColor;
+    padding-right: 50rpx;
+    flex: 1;
+  }
+  input::placeholder {
+    color: #cccccc;
+  }
+  .label {
+    width: 166rpx;
+    /*margin-right: 40rpx;*/
+    color: #666666;
+    font-weight: 400;
+  }
+  .close {
+    width: 44rpx;
+    height: 44rpx;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
 </style>

@@ -1,8 +1,9 @@
 const path = require('path');
 const DefinePlugin = require('@wepy/plugin-define');
+const SrcPlugin = require('wepy-image-src-pre-prefix-plugin');
 
-var prod = process.env.NODE_ENV === 'production';
-
+const prod = process.env.NODE_ENV === 'production';
+const CDN = 'http://qiniu.kaimingwutong.com/';
 module.exports = {
   wpyExt: '.wpy',
   cliLogs: !prod,
@@ -47,10 +48,15 @@ module.exports = {
   },
   plugins: [
     DefinePlugin({
-      BASE_URL: JSON.stringify('http://foobar.com'),
+      BASE_URL: JSON.stringify('https://www.kaimingwutong.com/login'),
       // 'process.env.NODE_ENV': 'development',
       // 'typeof window': JSON.stringify('undefined'),
-      DEV: true
+      DEV: true,
+      CDN: JSON.stringify(CDN)
+    }),
+    SrcPlugin({
+      ext: 'png',
+      baseUrl: CDN
     })
   ],
   appConfig: {

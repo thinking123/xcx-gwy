@@ -15,7 +15,7 @@
 
 let oldConsole = null;
 let newConsole = {};
-// const open = DEV;
+const open = DEV;
 function noop() {}
 function debugConsole(open) {
   if (open) {
@@ -33,4 +33,4 @@ function debugConsole(open) {
   }
 }
 
-debugConsole(true);
+debugConsole(open);

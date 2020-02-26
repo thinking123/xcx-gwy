@@ -22,7 +22,6 @@ import {
 } from '@/common/wx';
 import { showMsg } from '@/common/utils';
 import { commit } from 'store';
-console.log('Dev : ', DEV, BASE_URL);
 
 wepy.app({
   hooks: {
@@ -176,14 +175,20 @@ wepy.app({
 
 
   'pages/section1/luntan',
+
+
+   'pages/login/login',
+'pages/login/register',
+
+
+  'pages/home',
 * */
 </script>
 <config>
 {
     pages: [
- 'pages/login/login',
- 'pages/login/loginInput',
-'pages/login/register',
+  'pages/home',
+
 
 
 

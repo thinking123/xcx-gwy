@@ -1,162 +1,172 @@
 <template>
   <div class="page login">
-    <image :src="img1" class="row1"/>
+    <image src="login1" class="row1" />
     <div class="row2">
       让您通透未来
     </div>
-    <CWXButton text="微信授权登录" :icon="icon1"
-               v-if="showWxBtn"
-               @getuserinfo="handleGetUerInfo"
-               external-cls="row3"/>
-    <CButton text="微信授权登录" :icon="icon1" @tap.native="handleWxClick"
-             v-else
-             external-cls="row3"/>
+    <CWXButton
+      text="微信授权登录"
+      icon="icon_wechat"
+      v-if="showWxBtn"
+      @getuserinfo="handleGetUerInfo"
+      external-cls="row3"
+    />
+    <CButton
+      text="微信授权登录"
+      icon="icon_wechat"
+      @tap.native="handleWxClick"
+      v-else
+      external-cls="row3"
+    />
 
-    <CButton text="手机号码登录" :icon="icon2" @tap.native="handlePhoneClick" type="info"  external-cls="row4"/>
+    <CButton
+      text="手机号码登录"
+      icon="icon_phone"
+      @tap.native="handlePhoneClick"
+      type="info"
+      external-cls="row4"
+    />
     <div class="row5">
-      <CRightButtonIcon text="随便逛逛" external-cls="col1" @tap.native="handlegoto"/>
-      <CRightButtonIcon text="快捷注册" external-cls="col2" @tap.native="handleRegister"/>
+      <CRightButtonIcon
+        text="随便逛逛"
+        external-cls="col1"
+        @tap.native="handlegoto"
+      />
+      <CRightButtonIcon
+        text="快捷注册"
+        external-cls="col2"
+        @tap.native="handleRegister"
+      />
     </div>
   </div>
 </template>
 
-
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { getImgUrl, showMsg } from '@/common/utils';
-  import {navToPage , reLaunch} from '@/common/navUtils';
-  import { mapGetters , mapState , mapMutations} from '@wepy/x';
-  import {loginByWx} from '@/http/http-business';
-  import {_wxLogin} from '@/common/wx';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrl, showMsg } from '@/common/utils';
+import { navToPage, reLaunch } from '@/common/navUtils';
+import { mapGetters, mapState, mapMutations } from '@wepy/x';
+import { loginByWx } from '@/http/http-business';
+import { _wxLogin } from '@/common/wx';
 
-  /*
-  * mock phone: 15525976631
-  *  pw : 123456
-  * token : dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6
-  *
-  * */
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    // mixins:[utilMixin],
-    computed: {
-      ...mapState(['wx']),
-      showWxBtn(){
-        return !this.wx.userInfo;
-      }
-    },
-    data: {
-      img1:'/static/image/login1.png',
-      icon1:'/static/icon/icon_wechat.png',
-      icon2:'/static/icon/icon_phone.png'
-    },
-    methods: {
-      ...mapMutations(['setToken']),
-      async wxLogin(userInfo){
-        try {
-          const wx = this.wx;
-          userInfo = !!userInfo ? userInfo : wx.userInfo;
-          console.log('userInfo' , userInfo)
-          // 刷新微信code
-          await _wxLogin();
-          const {token} = await loginByWx(
-            wx.code,
-            userInfo.avatarUrl,
-            userInfo.nickName,
-            userInfo.gender,
-          );
-
-          this.setToken(token);
-          reLaunch('/pages/home')
-        }catch (e) {
-          showMsg(e);
-        }
-      },
-      handleGetUerInfo(userInfo){
-        this.wxLogin(userInfo);
-      },
-      handleWxClick(){
-        this.wxLogin();
-      },
-      handlePhoneClick(){
-        // console.log('click')
-        navToPage('/pages/login/loginInput')
-      },
-      handlegoto(){
-        console.log('handlegoto')
-        navToPage('/pages/home')
-      },
-      handleRegister(){
-        console.log('handleRegister')
-        navToPage('/pages/login/register')
-      }
-    },
-    onShow(){
-      // console.log('show' , this.getImgUrl('sdfsdf'))
-      console.log('store ;' , store.state)
-    },
-    created () {
-      this.img1 = getImgUrl(this.img1)
-      this.icon1 = getImgUrl(this.icon1)
-      this.icon2 = getImgUrl(this.icon2)
-
-      // navToPage('/pages/login/loginInput')
+/*
+ * mock phone: 15525976631
+ *  pw : 123456
+ * token : dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6
+ *
+ * */
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  // mixins:[utilMixin],
+  computed: {
+    ...mapState(['wx']),
+    showWxBtn() {
+      return !this.wx.userInfo;
     }
-  });
+  },
+  data: {},
+  methods: {
+    ...mapMutations(['setToken']),
+    async wxLogin(userInfo) {
+      try {
+        const wx = this.wx;
+        userInfo = !!userInfo ? userInfo : wx.userInfo;
+        console.log('userInfo', userInfo);
+        // 刷新微信code
+        await _wxLogin();
+        const { token } = await loginByWx(
+          wx.code,
+          userInfo.avatarUrl,
+          userInfo.nickName,
+          userInfo.gender
+        );
+
+        this.setToken(token);
+        reLaunch('/pages/home');
+      } catch (e) {
+        showMsg(e);
+      }
+    },
+    handleGetUerInfo(userInfo) {
+      this.wxLogin(userInfo);
+    },
+    handleWxClick() {
+      this.wxLogin();
+    },
+    handlePhoneClick() {
+      // console.log('click')
+      navToPage('/pages/login/loginInput');
+    },
+    handlegoto() {
+      console.log('handlegoto');
+      navToPage('/pages/home');
+    },
+    handleRegister() {
+      console.log('handleRegister');
+      navToPage('/pages/login/register');
+    }
+  },
+  onShow() {
+    console.log('store ;', store.state);
+  },
+  created() {
+    // navToPage('/pages/login/loginInput')
+  }
+});
 </script>
 <style lang="scss" scoped>
-  @import "~basePage";
-  .login{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@import '~basePage';
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    .externalButton{
-      color:yellow !important;
-    }
-    .row1{
-      width: 320rpx;
-      height: 86rpx;
-      margin-top: 178rpx;
-    }
-    .row2{
-      font-size:40rpx;
-      font-weight:bold;
-      color:#626466;
-      line-height:56rpx;
-      letter-spacing: 20rpx;
-    }
-
-    .row3{
-      margin-top: 154rpx;
-    }
-
-    .row4{
-      margin-top: 40rpx;
-    }
-
-    .row5{
-      margin-top: 64rpx;
-      display: flex;
-      justify-content: space-between;
-      /*margin: 64rpx 60rpx 0;*/
-      /*padding: 0 64rpx;*/
-      width: 100%;
-      .col1{
-        /*float: left;*/
-        margin-left: 64rpx;
-      }
-
-      .col2{
-        /*float: right;*/
-        margin-right: 64rpx;
-      }
-    }
+  .externalButton {
+    color: yellow !important;
+  }
+  .row1 {
+    width: 320rpx;
+    height: 86rpx;
+    margin-top: 178rpx;
+  }
+  .row2 {
+    font-size: 40rpx;
+    font-weight: bold;
+    color: #626466;
+    line-height: 56rpx;
+    letter-spacing: 20rpx;
   }
 
+  .row3 {
+    margin-top: 154rpx;
+  }
+
+  .row4 {
+    margin-top: 40rpx;
+  }
+
+  .row5 {
+    margin-top: 64rpx;
+    display: flex;
+    justify-content: space-between;
+    /*margin: 64rpx 60rpx 0;*/
+    /*padding: 0 64rpx;*/
+    width: 100%;
+    .col1 {
+      /*float: left;*/
+      margin-left: 64rpx;
+    }
+
+    .col2 {
+      /*float: right;*/
+      margin-right: 64rpx;
+    }
+  }
+}
 </style>
 <config>
 {

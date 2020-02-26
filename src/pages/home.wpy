@@ -1,525 +1,553 @@
 <template>
   <div class="page home">
-    <LearningFloat external-cls="LearningFloat"/>
+    <LearningFloat external-cls="LearningFloat" />
     <div class="signed" v-if="isSigned">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
       </CCircleImg>
       <div class="title">
         <div class="row1">
-          <span>{{user.userName}}</span>
-          <CTag text="学神"/>
+          <span>{{ user.userName }}</span>
+          <CTag text="学神" />
         </div>
         <div class="row2">
           <span>目标：学习申论和行测...</span>
           <span>浙江理工大学</span>
         </div>
       </div>
-      <div class="right">
-        {{user.userIntegral}}分
-      </div>
+      <div class="right">{{ user.userIntegral }}分</div>
     </div>
     <div class="notSigned" v-else>
-      <CCircleImg external-cls="cirImg"/>
+      <CCircleImg external-cls="cirImg" />
       <span class="title">Hi，欢迎来到开通联众</span>
-      <CButton text="登录"
-               @tap.native="handleSign"
-               type="info"
-               external-cls="signBtn"/>
+      <CButton
+        text="登录"
+        @tap.native="handleSign"
+        type="info"
+        external-cls="signBtn"
+      />
     </div>
     <div class="title">
       学习打卡
     </div>
-    <div class="map">
-
-    </div>
+    <div class="map"></div>
     <div class="titleIcons">
-      <IconText v-for="(item , index) in titleIcons"
-                @click.native="handleIconText(index)"
-                external-cls="titleIcon"
-                :text="item.text" :src="item.src"/>
+      <IconText
+        v-for="(item, index) in titleIcons"
+        @click.native="handleIconText(index)"
+        external-cls="titleIcon"
+        :key="index"
+        :text="item.text"
+        :src="item.src"
+      />
     </div>
-    <div class="line">
-
-    </div>
+    <div class="line"></div>
     <div class="panelIcons">
-      <image v-for="(item , index) in panelIcons"
-             @click="handleImage(index)"
-             :src="item"/>
+      <image
+        v-for="(item, index) in panelIcons"
+        @click="handleImage(index)"
+        :key="index"
+        :src="item"
+      />
     </div>
-    <CTabbar/>
-    <CPopup :show="getupShow"
-            position="bottom"
-            @close="getupShow=false"
-            zIndex="999"
-            overlay="{{ true }}">
+    <CTabbar />
+    <CPopup
+      :show="getupShow"
+      position="bottom"
+      @close="getupShow = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="getup">
-        <HeaderClose text="起床睡觉" external-cls="header" @click="getupShow=false"/>
-        <CButton text="起床" :icon="getupicon1" @tap.native="handleGetup(0)"
-                 external-cls="btn1"/>
-        <CButton text="睡觉" :icon="getupicon2" @tap.native="handleGetup(1)"
-                 external-cls="btn2"/>
+        <HeaderClose
+          text="起床睡觉"
+          external-cls="header"
+          @click="getupShow = false"
+        />
+        <CButton
+          text="起床"
+          icon="icon_get_up@3x"
+          @tap.native="handleGetup(0)"
+          external-cls="btn1"
+        />
+        <CButton
+          text="睡觉"
+          icon="icon_sleep@3x"
+          @tap.native="handleGetup(1)"
+          external-cls="btn2"
+        />
       </div>
     </CPopup>
-    <CPopup :show="learnShow"
-            position="bottom"
-            @close="learnShow=false"
-            zIndex="999"
-            overlay="{{ true }}">
+    <CPopup
+      :show="learnShow"
+      position="bottom"
+      @close="learnShow = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="学习计时" external-cls="header" @click="learnShow=false"/>
+        <HeaderClose
+          text="学习计时"
+          external-cls="header"
+          @click="learnShow = false"
+        />
         <div class="body">
-          <CTopLabelInput label="本次学习内容" placeholder="本次学习内容，如：学申论" external-cls="row"
-                          @update="handlelearnContent"
-                          :val.sync="learnContent"/>
-          <CTopLabelInput label="设置学习结束提醒" placeholder="到时会提醒学习结束" :btn="timeTip" @clickBtn="handleLearnTip"
-                          :val.sync="learnTip"
-                          @update="handlelearnTip"
-                          readonly="{{true}}"
-                          external-cls="row"/>
-          <CButton text="开始学习" @tap.native="handleStartLearn" external-cls="row"/>
+          <CTopLabelInput
+            label="本次学习内容"
+            placeholder="本次学习内容，如：学申论"
+            external-cls="row"
+            @update="handlelearnContent"
+            :val.sync="learnContent"
+          />
+          <CTopLabelInput
+            label="设置学习结束提醒"
+            placeholder="到时会提醒学习结束"
+            :btn="timeTip"
+            @clickBtn="handleLearnTip"
+            :val.sync="learnTip"
+            @update="handlelearnTip"
+            readonly="{{true}}"
+            external-cls="row"
+          />
+          <CButton
+            text="开始学习"
+            @tap.native="handleStartLearn"
+            external-cls="row"
+          />
         </div>
       </div>
     </CPopup>
-    <CPopup :show="timeShow"
-            position="bottom"
-            @close="timeShow=false"
-            zIndex="1000"
-            overlay="{{ true }}">
+    <CPopup
+      :show="timeShow"
+      position="bottom"
+      @close="timeShow = false"
+      zIndex="1000"
+      overlay="{{ true }}"
+    >
       <div class="time">
-        <HeaderClose text="选择学习时间" external-cls="header" @click="timeShow=false"/>
+        <HeaderClose
+          text="选择学习时间"
+          external-cls="header"
+          @click="timeShow = false"
+        />
         <div class="body">
-          <CTimePickerView @change="hanleTime" external-cls="row1" :val="setTime"/>
-          <CButton text="确认" @tap.native="handleSetTime" external-cls="row2"/>
+          <CTimePickerView
+            @change="hanleTime"
+            external-cls="row1"
+            :val="setTime"
+          />
+          <CButton
+            text="确认"
+            @tap.native="handleSetTime"
+            external-cls="row2"
+          />
         </div>
-
       </div>
-
     </CPopup>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
-  import { mapGetters, mapState ,mapMutations} from '@wepy/x';
-  import { navToPage } from '@/common/navUtils';
-  import { getLearnTime, getMsgById, getupSleepClock, learnTimeAdd } from '@/http/http-business';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
+import { mapGetters, mapState, mapMutations } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
+import {
+  getLearnTime,
+  getMsgById,
+  getupSleepClock,
+  learnTimeAdd
+} from '@/http/http-business';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      ...mapGetters(['isSigned', 'user']),
-      ...mapState(['nickName']),
-      timeTip() {
-        if (this.time && this.time.length > 0) {
-          const time = this.time;
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['isSigned', 'user']),
+    ...mapState(['nickName']),
+    timeTip() {
+      if (this.time && this.time.length > 0) {
+        const time = this.time;
 
-          let v = '';
-          if (this.time[0] > 0) {
-            v = `${this.time[0]}小时`;
-          }
-          if (this.time[1] > 0) {
-            v += `${this.time[1]}分钟`;
-          }
-
-          return v;
+        let v = '';
+        if (this.time[0] > 0) {
+          v = `${this.time[0]}小时`;
+        }
+        if (this.time[1] > 0) {
+          v += `${this.time[1]}分钟`;
         }
 
-        return '去设置';
+        return v;
+      }
+
+      return '去设置';
+    }
+  },
+  data: {
+    titleIcons: [
+      {
+        text: '起床睡觉',
+        src: 'home_icon_nav01.png'
+      },
+      {
+        text: '学习计时',
+        src: 'home_icon_nav02.png'
+      },
+      {
+        text: '学习日记',
+        src: 'home_icon_nav03.png'
+      },
+      {
+        text: '学习计划',
+        src: 'home_icon_nav04.png'
+      }
+    ],
+    panelIcons: [
+      'home_img_huiyuan@3x.png',
+      'home_img_kaiming@3x.png',
+      'home_img_luntan@3x.png',
+      'home_img_fujin@3x.png'
+    ],
+    getupShow: false,
+    learnShow: false,
+
+    timeShow: false,
+    time: [],
+    setTime: [],
+    learnContent: '',
+    learnTip: ''
+  },
+  methods: {
+    ...mapMutations(['setUser']),
+    handleSign() {
+      navToPage('/pages/login/login');
+    },
+    handleIconText(index) {
+      switch (index) {
+        case 0:
+          this.getupShow = true;
+          break;
+        case 1:
+          this.learnShow = true;
+          this.learnTip = '';
+          this.learnContent = '';
+          this.setTime = [];
+          this.time = [];
+          break;
+        case 2:
+          navToPage('/pages/section1/learnLog');
+          break;
+        case 3:
+          navToPage('/pages/section1/learnPlan');
+          break;
       }
     },
-    data: {
-      titleIcons: [
-        {
-          text: '起床睡觉',
-          src: 'home_icon_nav01.png'
-        },
-        {
-          text: '学习计时',
-          src: 'home_icon_nav02.png'
-        },
-        {
-          text: '学习日记',
-          src: 'home_icon_nav03.png'
-        },
-        {
-          text: '学习计划',
-          src: 'home_icon_nav04.png'
-        }
-      ],
-      panelIcons: [
-        'home_img_huiyuan@3x.png',
-        'home_img_kaiming@3x.png',
-        'home_img_luntan@3x.png',
-        'home_img_fujin@3x.png'
-      ],
-      getupShow: false,
-      getupicon1: 'icon_get_up@3x',
-      getupicon2: 'icon_sleep@3x',
-      learnShow: false,
-
-      timeShow: false,
-      time: [],
-      setTime: [],
-      learnContent: '',
-      learnTip: ''
+    handleImage(index) {
+      switch (index) {
+        case 0:
+          navToPage('/pages/section1/MemberCenter');
+          break;
+        case 1:
+          navToPage('/pages/section1/learnLog');
+          break;
+        case 2:
+          navToPage('/pages/section1/luntan');
+          break;
+        case 3:
+          navToPage('/pages/section1/nearPage');
+          break;
+      }
     },
-    methods: {
-      ...mapMutations(['setUser']),
-      handleSign() {
-        navToPage('/pages/login/login');
-      },
-      handleIconText(index) {
-        switch (index) {
-          case 0:
-            this.getupShow = true;
-            break;
-          case 1:
-            this.learnShow = true;
-            this.learnTip = '';
-            this.learnContent = '';
-            this.setTime = [];
-            this.time = [];
-            break;
-          case 2:
-            navToPage('/pages/section1/learnLog');
-            break;
-          case 3:
-            navToPage('/pages/section1/learnPlan');
-            break;
-        }
-      },
-      handleImage(index) {
-        switch (index) {
-          case 0:
-            navToPage('/pages/section1/MemberCenter');
-            break;
-          case 1:
-            navToPage('/pages/section1/learnLog');
-            break;
-          case 2:
-            navToPage('/pages/section1/luntan');
-            break;
-          case 3:
-            navToPage('/pages/section1/nearPage');
-            break;
-        }
-      },
-      handleLearnTip() {
-        this.timeShow = true;
-      },
-      handleStartLearn() {
-        const verify = () => {
-          const t = !!this.time && this.time[0] > 0 || this.time[1] > 0;
-          if (!isEmptyString(this.learnContent) && t) {
-            return true;
-          }
-
-          return false;
-        };
-
-
-        if (verify()) {
-          let totalT = this.time[0] * 60 + this.time[1];
-          learnTimeAdd(this.user.id, this.learnContent, totalT).then(res => {
-            this.learnShow = false;
-            const t = this.time;
-            if (t && t.length == 2) {
-              const offset = (t[0] * 3600 + t[1] * 60) * 1000;
-              navToPage('/pages/section1/timer', {
-                startTime: new Date().getTime(),
-                endTime: (new Date().getTime() + offset)
-              });
-            }
-          });
-        } else {
-          showMsg('内容不全');
+    handleLearnTip() {
+      this.timeShow = true;
+    },
+    handleStartLearn() {
+      const verify = () => {
+        const t = (!!this.time && this.time[0] > 0) || this.time[1] > 0;
+        if (!isEmptyString(this.learnContent) && t) {
+          return true;
         }
 
+        return false;
+      };
 
-      },
-      handlelearnContent(v) {
-        this.learnContent = v;
-      },
-      handlelearnTip(v) {
-
-        console.log('handlelearnTip', v);
-        // this.learnTip = v;
-      },
-      hanleTime(v) {
-        console.log('time:', v);
-        this.setTime = v;
-      },
-      handleSetTime() {
-        this.timeShow = false;
-        this.time = this.setTime;
-//完成5分钟学习后暂停且提醒结束计时
-
-        if (this.time.length == 2) {
-          let v = '';
-          if (this.time[0] > 0) {
-            v = `${this.time[0]}小时`;
-          }
-          if (this.time[1] > 0) {
-            v += `${this.time[1]}分钟`;
-          }
-          this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
-        }
-
-
-      },
-      handleGetup(type) {
-        getupSleepClock(this.user.id, type).then(res => {
-          if (res) {
-            showMsg(type == 0 ? '起床' : '睡觉');
-            this.getupShow = false;
+      if (verify()) {
+        let totalT = this.time[0] * 60 + this.time[1];
+        learnTimeAdd(this.user.id, this.learnContent, totalT).then(res => {
+          this.learnShow = false;
+          const t = this.time;
+          if (t && t.length == 2) {
+            const offset = (t[0] * 3600 + t[1] * 60) * 1000;
+            navToPage('/pages/section1/timer', {
+              startTime: new Date().getTime(),
+              endTime: new Date().getTime() + offset
+            });
           }
         });
+      } else {
+        showMsg('内容不全');
       }
     },
-    onShow() {
-
+    handlelearnContent(v) {
+      this.learnContent = v;
     },
-    onLoad(query = {}){
-      //todo mock
-      const {userId = 3} = query;
-
-
-      getMsgById(userId).then(res => {
-        this.setUser(res);
-      });
-
-
-
+    handlelearnTip(v) {
+      console.log('handlelearnTip', v);
+      // this.learnTip = v;
     },
-    created() {
-      this.titleIcons = this.titleIcons.map(m => {
-        m.src = getImgUrlEx(m.src);
-        return m;
+    hanleTime(v) {
+      console.log('time:', v);
+      this.setTime = v;
+    },
+    handleSetTime() {
+      this.timeShow = false;
+      this.time = this.setTime;
+      //完成5分钟学习后暂停且提醒结束计时
+
+      if (this.time.length == 2) {
+        let v = '';
+        if (this.time[0] > 0) {
+          v = `${this.time[0]}小时`;
+        }
+        if (this.time[1] > 0) {
+          v += `${this.time[1]}分钟`;
+        }
+        this.learnTip = `完成${v}学习后暂停且提醒结束计时`;
+      }
+    },
+    handleGetup(type) {
+      getupSleepClock(this.user.id, type).then(res => {
+        if (res) {
+          showMsg(type == 0 ? '起床' : '睡觉');
+          this.getupShow = false;
+        }
       });
-      this.panelIcons = this.panelIcons.map(getImgUrlEx);
-
-      this.getupicon1 = getImgUrlEx(this.getupicon1);
-      this.getupicon2 = getImgUrlEx(this.getupicon2);
-
-      // navToPage('/pages/section1/nearDetailPage')
     }
-  });
+  },
+  onShow() {},
+  onLoad(query = {}) {
+    //todo mock
+    const { userId = 3 } = query;
+
+    getMsgById(userId).then(res => {
+      this.setUser(res);
+    });
+  },
+  created() {
+    this.titleIcons = this.titleIcons.map(m => {
+      m.src = getImgUrlEx(m.src);
+      return m;
+    });
+    this.panelIcons = this.panelIcons.map(getImgUrlEx);
+
+    // navToPage('/pages/section1/nearDetailPage')
+  }
+});
 </script>
 <style lang="scss">
-  @import "~basePage";
-  @import "~baseUI";
-  .home{
-    width: initial;
-    margin: 32rpx 30rpx 0;
+@import '~basePage';
+@import '~baseUI';
+.home {
+  width: initial;
+  margin: 32rpx 30rpx 0;
 
-
-    .signed{
+  .signed {
     position: relative;
+    display: flex;
+    align-items: center;
+    .cirImg {
+    }
+    .title {
+      margin-left: 20rpx;
+
+      .row1 {
+        font-size: 32rpx;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 1);
+        line-height: 32rpx;
+        margin-bottom: 20rpx;
+        > ctag {
+          width: 64rpx;
+          height: 32rpx;
+          margin-left: 8rpx;
+        }
+      }
+
+      .row2 {
+        font-size: 24rpx;
+        font-weight: 400;
+        color: rgba(153, 153, 153, 1);
+        line-height: 28rpx;
+        display: flex;
+        align-items: center;
+        > label {
+          margin-right: 20rpx;
+        }
+      }
+    }
+    .right {
+      width: 122rpx;
+      height: 72rpx;
+      background: rgba(79, 172, 27, 0.1);
+      border-radius: 36rpx 0px 0px 36rpx;
+
+      font-size: 28rpx;
+      font-weight: normal;
+      color: rgba(79, 172, 27, 1);
       display: flex;
       align-items: center;
-      .cirImg{
-      }
-      .title{
-        margin-left: 20rpx;
-
-        .row1{
-          font-size:32rpx;
-          font-weight:bold;
-          color:rgba(0,0,0,1);
-          line-height:32rpx;
-          margin-bottom: 20rpx;
-          > ctag{
-            width:64rpx;
-            height:32rpx;
-            margin-left: 8rpx;
-          }
-        }
-
-        .row2{
-          font-size:24rpx;
-          font-weight:400;
-          color:rgba(153,153,153,1);
-          line-height:28rpx;
-          display: flex;
-          align-items: center;
-          >label{
-            margin-right: 20rpx;
-          }
-        }
-      }
-      .right{
-        width:122rpx;
-        height:72rpx;
-        background:rgba(79,172,27,0.1);
-        border-radius:36rpx 0px 0px 36rpx;
-
-
-        font-size:28rpx;
-        font-weight:normal;
-        color:rgba(79,172,27,1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        right: -30rpx;
-        top:50%;
-        transform: translateY(-50%);
-      }
-    }
-
-    .btn1{
-
-      width:690rpx;
-      height:96rpx;
-      box-shadow:0px 8px 16px -4px rgba(237,200,0,0.3);
-      border-radius:48px;
-
-
-      font-size:36rpx;
-      font-weight:600;
-      color:rgba(255,255,255,1);
-      background:rgba(237,200,0,1) !important;
-      border-color: rgba(237,200,0,1) !important;
-
-      margin: 48rpx 30rpx;
-    }
-    .btn2{
-
-      width:690rpx;
-      height:96rpx;
-      box-shadow:0px 8px 16px -4px rgba(107,144,213,0.3);
-      border-radius:48px;
-
-
-      font-size:36rpx;
-      font-weight:600;
-      color:rgba(255,255,255,1);
-      background:rgba(107,144,213,1) !important;
-
-      border-color: rgba(107,144,213,1) !important;
-
-      margin: 48rpx 30rpx;
-    }
-
-    .getup{
-      height: 472rpx;
-    }
-
-    .learn{
-      height: 712rpx;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-        }
-      }
-    }
-
-    .time{
-
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row1{
-          margin: 62rpx 0 64rpx 0;
-        }
-
-        .row2{
-          margin-bottom: 62rpx;
-        }
-      }
-
-    }
-    .LearningFloat{
-      top: 172rpx;
-      right: 10rpx;
-    }
-    .cirImg{
-      height: 80rpx;
-      width: 80rpx;
-    }
-  .notSigned{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .title{
-        margin-left: 20rpx;
-        font-size:32rpx;
-        font-weight:normal;
-        color:#000000;
-        line-height:32rpx;
-        flex:1;
-        margin-left: 20rpx;
-      }
-
-    .signBtn{
-      width:128rpx;
-      height:64rpx;
-      font-size:32rpx;
+      justify-content: center;
+      position: absolute;
+      right: -30rpx;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 
-    .title{
-      font-size:40rpx;
-      font-weight:normal;
-      color:$textBlack;
-      line-height:48rpx;
-      margin: 50rpx 0 32rpx;
-      font-weight: bold;
-    }
+  .btn1 {
+    width: 690rpx;
+    height: 96rpx;
+    box-shadow: 0px 8px 16px -4px rgba(237, 200, 0, 0.3);
+    border-radius: 48px;
 
-    .map{
-      margin-bottom: 32rpx;
-      width: 690rpx;
-      height: 380rpx;
-      background-color: #A1CBFF;
-      border-radius:8px;
-    }
+    font-size: 36rpx;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    background: rgba(237, 200, 0, 1) !important;
+    border-color: rgba(237, 200, 0, 1) !important;
 
-    .titleIcons{
+    margin: 48rpx 30rpx;
+  }
+  .btn2 {
+    width: 690rpx;
+    height: 96rpx;
+    box-shadow: 0px 8px 16px -4px rgba(107, 144, 213, 0.3);
+    border-radius: 48px;
+
+    font-size: 36rpx;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    background: rgba(107, 144, 213, 1) !important;
+
+    border-color: rgba(107, 144, 213, 1) !important;
+
+    margin: 48rpx 30rpx;
+  }
+
+  .getup {
+    height: 472rpx;
+  }
+
+  .learn {
+    height: 712rpx;
+    .body {
       display: flex;
-      justify-content: space-between;
-      .titleIcon{
-        >image{
-
-          width: 100rpx;
-          height:100rpx;
-        }
-      }
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 48rpx;
-    }
-    .line{
-      height: 24rpx;
-      background-color: $pageBgGray;
-      position: relative;
-      width: 750rpx;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .panelIcons{
-      display: flex;
-      justify-content: space-between;
-      >image{
-        width: 330rpx;
-        height: 180rpx;
-        margin-bottom: 40rpx;
+      .row {
+        margin-top: 46rpx;
       }
-      >image:nth-child(1) ,>image:nth-child(2){
-        margin: 48rpx 0 30rpx;
-      }
-      flex-wrap: wrap;
     }
   }
+
+  .time {
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row1 {
+        margin: 62rpx 0 64rpx 0;
+      }
+
+      .row2 {
+        margin-bottom: 62rpx;
+      }
+    }
+  }
+  .LearningFloat {
+    top: 172rpx;
+    right: 10rpx;
+  }
+  .cirImg {
+    height: 80rpx;
+    width: 80rpx;
+  }
+  .notSigned {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .title {
+      margin-left: 20rpx;
+      font-size: 32rpx;
+      font-weight: normal;
+      color: #000000;
+      line-height: 32rpx;
+      flex: 1;
+      margin-left: 20rpx;
+    }
+
+    .signBtn {
+      width: 128rpx;
+      height: 64rpx;
+      font-size: 32rpx;
+    }
+  }
+
+  .title {
+    font-size: 40rpx;
+    font-weight: normal;
+    color: $textBlack;
+    line-height: 48rpx;
+    margin: 50rpx 0 32rpx;
+    font-weight: bold;
+  }
+
+  .map {
+    margin-bottom: 32rpx;
+    width: 690rpx;
+    height: 380rpx;
+    background-color: #a1cbff;
+    border-radius: 8px;
+  }
+
+  .titleIcons {
+    display: flex;
+    justify-content: space-between;
+    .titleIcon {
+      > image {
+        width: 100rpx;
+        height: 100rpx;
+      }
+    }
+    align-items: center;
+    margin-bottom: 48rpx;
+  }
+  .line {
+    height: 24rpx;
+    background-color: $pageBgGray;
+    position: relative;
+    width: 750rpx;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .panelIcons {
+    display: flex;
+    justify-content: space-between;
+    > image {
+      width: 330rpx;
+      height: 180rpx;
+      margin-bottom: 40rpx;
+    }
+    > image:nth-child(1),
+    > image:nth-child(2) {
+      margin: 48rpx 0 30rpx;
+    }
+    flex-wrap: wrap;
+  }
+}
 </style>
 <config>
 {

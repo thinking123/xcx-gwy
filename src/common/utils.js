@@ -1,22 +1,23 @@
-
-
 export function getImgUrl(url) {
-  console.log('image url: ' , url)
+  console.log('image url: ', url);
   return url;
 }
 
 export function getImgUrlEx(url) {
-
-  if(url.indexOf('.png') == -1){
-    url = `${url}.png`
+  if (url.indexOf('.png') == -1) {
+    url = `${url}.png`;
   }
-  url = `/static/icon/${url}`
 
-  console.log('image url: ' , url)
+  url = encodeURIComponent(url);
+  url = CDN + url;
+
+  console.log('image url: ', url);
   return url;
 }
 export function isFunction(functionToCheck) {
-  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+  return (
+    functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+  );
 }
 
 export function isPhone(p) {
@@ -25,59 +26,61 @@ export function isPhone(p) {
   return phoneReg.test(p);
 }
 
-
 export function showMsg(title, showIcon = false) {
   if (!title) {
-    return
+    return;
   }
 
-  let icon = 'success'
-  let isError = title instanceof Error ||
+  let icon = 'success';
+  let isError =
+    title instanceof Error ||
     typeof title !== 'string' ||
     //小程序 系统error
-    (title.errMsg && title.errMsg.length > 0)
+    (title.errMsg && title.errMsg.length > 0);
 
   if (isError) {
     //本地图标
-    icon = 'fail'
-    title = title.message ? title.message : title.errMsg
-    title = title ? title : 'error'
+    icon = 'fail';
+    title = title.message ? title.message : title.errMsg;
+    title = title ? title : 'error';
   }
 
-  if(title && title == '您因违规已被永久封禁'){
-    console.log('locked ')
-    return
+  if (title && title == '您因违规已被永久封禁') {
+    console.log('locked ');
+    return;
   }
   let options = {
     title: title,
     mask: true
-  }
+  };
 
-  options = Object.assign(options, {icon: showIcon ? icon : 'none'})
-  wx.showToast(options)
+  options = Object.assign(options, { icon: showIcon ? icon : 'none' });
+  wx.showToast(options);
 
-  console.log(title, icon, isError)
+  console.log(title, icon, isError);
 }
 
-
-export function urlParams(url, params , noEncode = false) {
-  let p = ''
-  if(noEncode){
-    p = Object.keys(params).map(function (key) {
-      return [key, params[key]].join("=");
-    }).join("&");
-  }else{
-    p = Object.keys(params).map(function (key) {
-      return [key, params[key]].map(encodeURIComponent).join("=");
-    }).join("&");
+export function urlParams(url, params, noEncode = false) {
+  let p = '';
+  if (noEncode) {
+    p = Object.keys(params)
+      .map(function(key) {
+        return [key, params[key]].join('=');
+      })
+      .join('&');
+  } else {
+    p = Object.keys(params)
+      .map(function(key) {
+        return [key, params[key]].map(encodeURIComponent).join('=');
+      })
+      .join('&');
   }
 
   if (p.length === 0) {
-    return url
+    return url;
   }
-  return `${url}?${p}`
+  return `${url}?${p}`;
 }
-
 
 export function isDef(value) {
   return value !== undefined && value !== null;
@@ -91,10 +94,14 @@ export function isObj(x) {
 export function rpxTopx(rpx) {
   const app = getApp();
   // app.$wepy.$options
-  const {globalData:{systemInfo:{windowWidth}}} = app.$wepy.$options;
-  if(windowWidth){
-      return rpx*windowWidth / 750;
-  }else {
+  const {
+    globalData: {
+      systemInfo: { windowWidth }
+    }
+  } = app.$wepy.$options;
+  if (windowWidth) {
+    return (rpx * windowWidth) / 750;
+  } else {
     console.error('not get store.state.systemInfo');
     return rpx;
   }
@@ -104,7 +111,7 @@ export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 export function isEmptyString(str) {
-    return !(!!str && typeof str === 'string' && str.trim().length > 0);
+  return !(!!str && typeof str === 'string' && str.trim().length > 0);
 }
 
 export function isNumber(value) {
@@ -112,16 +119,17 @@ export function isNumber(value) {
 }
 
 export function formatTime(secs) {
+  var sec_num = parseInt(secs, 10);
+  var hours = Math.floor(sec_num / 3600);
+  var minutes = Math.floor(sec_num / 60) % 60;
+  var seconds = sec_num % 60;
 
-  var sec_num = parseInt(secs, 10)
-  var hours   = Math.floor(sec_num / 3600)
-  var minutes = Math.floor(sec_num / 60) % 60
-  var seconds = sec_num % 60
-
-  return [hours,minutes,seconds]
-    .map(v => v < 10 ? "0" + v : v)
-    // .filter((v,i) => v !== "00" || i > 0)
-    .join(":")
+  return (
+    [hours, minutes, seconds]
+      .map(v => (v < 10 ? '0' + v : v))
+      // .filter((v,i) => v !== "00" || i > 0)
+      .join(':')
+  );
 }
 // export function range(num: number, min: number, max: number) {
 //   return Math.min(Math.max(num, min), max);
@@ -142,7 +150,7 @@ export function formatTime(secs) {
 //   return systemInfo;
 // }
 //
-export function addUnit(value){
+export function addUnit(value) {
   if (!isDef(value)) {
     return undefined;
   }
@@ -174,34 +182,28 @@ export function numberToDate(date) {
 
   if (m > 0) {
     res += `${m}:`;
-  }else{
-    res += '0:'
+  } else {
+    res += '0:';
   }
 
   if (s > 0) {
     res += `${twoBits(s)}`;
   }
 
-
   return res || '0:00';
 }
 
-
-export function ellipseNumber(num , max = 999){
-  if(num > max){
+export function ellipseNumber(num, max = 999) {
+  if (num > max) {
     return `${max}+`;
   }
 
   return num;
 }
 
+export function formatDateTime(time) {}
 
-export function formatDateTime(time) {
-
-}
-
-
-export function getDate(date = new Date(), split='-'){
+export function getDate(date = new Date(), split = '-') {
   const y = date.getFullYear();
   let m = date.getMonth() + 1;
   let d = date.getDate();
@@ -209,7 +211,7 @@ export function getDate(date = new Date(), split='-'){
   m = m <= 9 ? `0${m}` : m;
   d = d <= 9 ? `0${d}` : d;
 
-  const arr = [y,m,d].join(split);
+  const arr = [y, m, d].join(split);
 
   return arr;
 }
@@ -218,30 +220,28 @@ export function prefixZero(n) {
   return n <= 9 ? `0${n}` : n;
 }
 
-export function getTime(date = new Date(), split=':') {
+export function getTime(date = new Date(), split = ':') {
   let h = date.getHours();
   let m = date.getMinutes();
   let s = date.getMilliseconds();
 
-  const arr = [h,m,s].map(prefixZero).join(split);
+  const arr = [h, m, s].map(prefixZero).join(split);
 
   return arr;
 }
 
 export function delNullProperty(obj) {
-
-  if(!isObj(obj)){
+  if (!isObj(obj)) {
     return obj;
   }
 
-  for(let k in obj){
-    if(obj[k] === null || obj[k] === undefined || obj[k] === ''){
+  for (let k in obj) {
+    if (obj[k] === null || obj[k] === undefined || obj[k] === '') {
       delete obj[k];
     }
   }
 
   return obj || {};
-
 }
 
 // export function isObj(obj) {
