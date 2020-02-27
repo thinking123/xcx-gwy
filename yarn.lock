@@ -4528,8 +4528,10 @@ webpack-sources@^1.1.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-"wepy-image-src-pre-prefix-plugin@file:../../mycode/wepy-image-src-plugin":
-  version "1.0.2"
+wepy-image-src-pre-prefix-plugin@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/wepy-image-src-pre-prefix-plugin/-/wepy-image-src-pre-prefix-plugin-1.0.3.tgz#abab29059e346f4209e3b96867f182ebf69bd3ff"
+  integrity sha512-RdsQz50YOba7BkG+X+uVR/sbWZ3qnB74ooBQOlBhFpHEII2jFmctiU7Wsq96FnK03eCUOvHjLgX0DqEaQJkNqg==
 
 which-module@^1.0.0:
   version "1.0.0"

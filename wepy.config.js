@@ -48,7 +48,7 @@ module.exports = {
   },
   plugins: [
     DefinePlugin({
-      BASE_URL: JSON.stringify('https://www.kaimingwutong.com/login'),
+      BASE_URL: JSON.stringify('https://www.kaimingwutong.com/'),
       // 'process.env.NODE_ENV': 'development',
       // 'typeof window': JSON.stringify('undefined'),
       DEV: true,

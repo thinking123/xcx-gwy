@@ -3,8 +3,12 @@ import { showMsg, urlParams } from '@/common/utils';
 
 const reg = /^2/;
 
-export function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
-
+export function parseRes(
+  res,
+  errMsg = '请求失败',
+  resolveStatus = [],
+  tipStatus = []
+) {
   // const c = true;
   // if(typeof beforeCb === 'function'){
   //   c = beforeCb(res);
@@ -13,7 +17,11 @@ export function parseRes(res, errMsg = '请求失败', resolveStatus = [], tipSt
   // if(!c){
   //   return;
   // }
-  if ((!!res && reg.test(res.status)) || resolveStatus.includes(res.status) || tipStatus.includes(res.status)) {
+  if (
+    (!!res && reg.test(res.status)) ||
+    resolveStatus.includes(res.status) ||
+    tipStatus.includes(res.status)
+  ) {
     if (tipStatus.includes(res.status)) {
       return showMsg(res.message);
     }
@@ -121,12 +129,7 @@ export function loginByVcode(userPhone, vcode, deviceId) {
  * @param userSex
  * @returns {Promise<T | never>}
  */
-export function loginByWx(
-  code,
-  userHead,
-  userName,
-  userSex
-) {
+export function loginByWx(code, userHead, userName, userSex) {
   let url = '/api/login/wxlogin';
   const loadingText = '正在登入...';
   const errMsg = '登入失败';
@@ -155,7 +158,6 @@ export function registerByPhone(userPhone, vcode, userPwd) {
   return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
 }
 
-
 // //是否注册过
 // export function isSignUp() {
 //   const url = '/api/singUp/isSingUp';
@@ -181,11 +183,7 @@ export function registerByPhone(userPhone, vcode, userPwd) {
  * @param userPhone
  * @returns 请求已完成 ROW 直接返回 TOKEN
  */
-export function registerByWx(
-  openid,
-  userHead,
-  userName,
-  userPhone) {
+export function registerByWx(openid, userHead, userName, userPhone) {
   const url = '/api/login/registerByWx';
   const loadingText = '正在注册...';
   const errMsg = '注册失败';
@@ -196,9 +194,7 @@ export function registerByWx(
     userPhone
   };
   return post(url, data, loadingText).then(res => parseRes(res, errMsg));
-
 }
-
 
 /**
  *  GET /api/login/getMsgById
@@ -224,8 +220,7 @@ export function registerByWx(
 
  query  string
  */
-export function getMsgById(
-  userId) {
+export function getMsgById(userId) {
   let url = '/api/login/getMsgById';
 
   const loadingText = '打卡...';
@@ -268,9 +263,7 @@ export function getMsgById(
  userPwd: null
  vipTime: null
  */
-export function getupSleepClock(
-  userId,
-  clockType) {
+export function getupSleepClock(userId, clockType) {
   let url = '/api/getupSleep/clock';
 
   const loadingText = '打卡...';
@@ -280,7 +273,9 @@ export function getupSleepClock(
     userId,
     clockType
   });
-  return get(url, {}, loadingText).then(res => parseRes(res, errMsg, [], ['2001']));
+  return get(url, {}, loadingText).then(res =>
+    parseRes(res, errMsg, [], ['2001'])
+  );
 }
 
 //todo 学习时间没有返回 学习的id ，
@@ -305,11 +300,7 @@ export function getupSleepClock(
 
  query  string
  */
-export function learnTimeAdd(
-  userId,
-  learnContent,
-  learnTime
-) {
+export function learnTimeAdd(userId, learnContent, learnTime) {
   let url = '/api/learnTime/add';
 
   // const loadingText = '打卡...';
@@ -322,7 +313,6 @@ export function learnTimeAdd(
   });
   return get(url, {}, '').then(res => parseRes(res, '', [], ['2001']));
 }
-
 
 /**
  * GET /api/learnTime/finish
@@ -352,10 +342,7 @@ export function learnTimeAdd(
  (required)
  结束时间
  */
-export function learnTimeFinish(
-  id,
-  finishTime
-) {
+export function learnTimeFinish(id, finishTime) {
   let url = ' /api/learnTime/finish';
 
   // const loadingText = '打卡...';
@@ -367,7 +354,6 @@ export function learnTimeFinish(
   });
   return get(url, {}, '').then(res => parseRes(res, '', [], [2001]));
 }
-
 
 /**
  * GET /api/learnTime/suspend
@@ -418,10 +404,7 @@ export function learnTimeFinish(
  2001
  用户已打卡
  */
-export function learnTimeSuspend(
-  id,
-  remaindLearnTime
-) {
+export function learnTimeSuspend(id, remaindLearnTime) {
   let url = ' /api/learnTime/suspend';
 
   // const loadingText = '打卡...';
@@ -435,7 +418,6 @@ export function learnTimeSuspend(
 }
 
 //todo 继续学习的接口没有
-
 
 //todo 学习计划：没有获取学习计划的列表接口
 
@@ -474,11 +456,7 @@ status (string, optional): 响应状态
 
  query  string
  */
-export function learnPlanAdd(
-  userId,
-  planContent,
-  planTime
-) {
+export function learnPlanAdd(userId, planContent, planTime) {
   let url = '/api/learnPlan/add';
 
   // const loadingText = '打卡...';
@@ -491,7 +469,6 @@ export function learnPlanAdd(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
-
 
 /**
  *
@@ -539,9 +516,7 @@ export function learnPlanAdd(
  500
  服务器不能完成请求
  */
-export function getLearnTime(
-  id
-) {
+export function getLearnTime(id) {
   let url = '/api/learnTime/getLearnTime';
 
   // const loadingText = '打卡...';
@@ -552,7 +527,6 @@ export function getLearnTime(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
-
 
 /**
  *
@@ -578,9 +552,7 @@ export function getLearnTime(
  (required)
  计划id
  */
-export function learnPlanDel(
-  id
-) {
+export function learnPlanDel(id) {
   let url = '/api/learnPlan/del';
 
   // const loadingText = '打卡...';
@@ -591,7 +563,6 @@ export function learnPlanDel(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
-
 
 /**
  *
@@ -617,9 +588,7 @@ export function learnPlanDel(
  (required)
  计划id
  */
-export function learnPlanUpdate(
-  id
-) {
+export function learnPlanUpdate(id) {
   let url = '/api/learnPlan/update';
 
   // const loadingText = '打卡...';
@@ -630,7 +599,6 @@ export function learnPlanUpdate(
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
-
 
 /**
  *
@@ -666,11 +634,7 @@ export function learnPlanUpdate(
  (required)
  学习日记图片
  */
-export function learnDiaryAdd(
-  userId,
-  diaryContent,
-  diaryImg
-) {
+export function learnDiaryAdd(userId, diaryContent, diaryImg) {
   let url = '/api/learnDiary/add';
 
   // const loadingText = '打卡...';
@@ -756,9 +720,7 @@ export function forumgetCategory() {
 
 
  */
-export function forumaddScan(
-  id
-) {
+export function forumaddScan(id) {
   let url = '/api/forum/addScan';
 
   // const loadingText = '打卡...';
@@ -801,10 +763,7 @@ export function forumaddScan(
 
 
  */
-export function forumforumCollect(
-  userId,
-  labelId
-) {
+export function forumforumCollect(userId, labelId) {
   let url = '/api/forum/forumCollect';
 
   // const loadingText = '打卡...';
@@ -847,10 +806,7 @@ export function forumforumCollect(
  被关注用户id
 
  */
-export function forumuserCollect(
-  userId,
-  collectUserId
-) {
+export function forumuserCollect(userId, collectUserId) {
   let url = '/api/forum/userCollect';
 
   // const loadingText = '打卡...';
@@ -896,15 +852,13 @@ export function forumuserCollect(
  header	string
 
  */
-export function getCity(
-) {
+export function getCity() {
   let url = '/api/common/getCity';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, {
-  });
+  url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
@@ -928,21 +882,17 @@ export function getCity(
 }
 
  */
-export function getLabel(
-) {
+export function getLabel() {
   let url = '/api/forum/getLabel';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, {
-  });
+  url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
-
 //todo 获取城市列表
-
 
 /**
  *
@@ -981,13 +931,7 @@ userId (integer, optional): 发帖用户id
 }
  Response Messages
  */
-export function forumpost(
-  categoryId,
-  content,
-  postLabel,
-  title,
-  userId
-) {
+export function forumpost(categoryId, content, postLabel, title, userId) {
   let url = '/api/login/wxlogin';
   const loadingText = '正在发帖...';
   const errMsg = '发帖失败';

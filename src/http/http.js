@@ -1,10 +1,9 @@
-// import { baseUrl } from '@/common/constant';
+import { baseUrl } from '@/common/constant';
 import store from 'store';
 
 let delay = {};
 const state = store.state;
 const { commit } = store;
-const baseUrl = BASE_URL;
 function showLoading(loadingText = '', url) {
   delay[url] = setTimeout(() => {
     console.log('loading');

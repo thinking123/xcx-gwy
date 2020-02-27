@@ -17,10 +17,7 @@ wepy.component({
   events: {},
   computed: {},
   methods: {},
-  created() {
-    this.icon = getImgUrlEx(this.icon);
-    console.log('icon : page ', this.icon);
-  }
+  created() {}
 });
 </script>
 <style lang="scss">

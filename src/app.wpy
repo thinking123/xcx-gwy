@@ -52,9 +52,6 @@ wepy.app({
       this.loginWx();
     },
     async loginWx() {
-      //todo
-      return;
-
       try {
         await _wxLogin();
         const setting = await _wxGetSetting();

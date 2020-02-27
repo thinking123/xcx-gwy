@@ -36,6 +36,6 @@
     "babel-eslint": "^7.2.1",
     "cross-env": "^5.1.3",
     "less": "^3.8.1",
-    "wepy-image-src-pre-prefix-plugin": "/Users/waibao/mycode/wepy-image-src-plugin"
+    "wepy-image-src-pre-prefix-plugin": "^1.0.3"
   }
 }

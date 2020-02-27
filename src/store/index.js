@@ -17,7 +17,7 @@ const tabbar = [
   {
     icon: 'tabbar03@3x',
     activeIcon: 'tabbar03_pre@3x',
-    page: '/pages/home',
+    page: '/pages/homeSection3',
     text: '开悟自我'
   }
 ].map(m => {
@@ -26,9 +26,9 @@ const tabbar = [
   return m;
 });
 
-
 // const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
-const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
+const mockToken =
+  'dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6';
 
 const userId = 3;
 
@@ -48,8 +48,8 @@ export default new Vuex.Store({
     playMedia: {},
     night: false,
     items: {},
-    user:{
-      id:3
+    user: {
+      id: 3
     }
   },
   mutations: {
@@ -62,7 +62,6 @@ export default new Vuex.Store({
       const obj = { ...state.items };
       obj[type] = res;
       state.items = obj;
-
     },
     resetItems(state, type) {
       state.items[type] = [];

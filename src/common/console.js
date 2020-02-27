@@ -33,4 +33,4 @@ function debugConsole(open) {
   }
 }
 
-debugConsole(open);
+// debugConsole(open);

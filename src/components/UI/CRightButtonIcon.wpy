@@ -1,56 +1,42 @@
 <template>
-    <div class="CRightButtonIcon external-cls">
-      <span class="CRightButtonIconText">{{text}}</span>
-      <image :src="icon"  class="icon" mode="aspectFit"/>
-    </div>
+  <div class="CRightButtonIcon external-cls">
+    <span class="CRightButtonIconText">{{ text }}</span>
+    <image src="btn_arrowr@3x" class="icon" mode="aspectFit" />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import { getImgUrlEx } from '@/common/utils';
+import wepy from '@wepy/core';
+import { getImgUrlEx } from '@/common/utils';
 
-  wepy.component({
-    data: {
-        icon:'btn_arrowr@3x'
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      text:String,
-    },
-    events: {
-
-    },
-    computed:{
-      
-    },
-    methods: {
-
-    },
-    created () {
-      this.icon = getImgUrlEx(this.icon)
-    }
-  });
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    text: String
+  },
+  events: {},
+  computed: {},
+  methods: {},
+  created() {}
+});
 </script>
 <style lang="scss">
-  .CRightButtonIcon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.CRightButtonIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #000000;
+  line-height: 32rpx;
 
-    font-size:32rpx;
-    font-weight:500;
-    color:#000000;
-    line-height:32rpx;
-
-    .icon{
-      width:20rpx;
-      height:32rpx;
-      margin-left: 12rpx;
-    }
-    .CRightButtonIconText{
-
-    }
+  .icon {
+    width: 20rpx;
+    height: 32rpx;
+    margin-left: 12rpx;
   }
+  .CRightButtonIconText {
+  }
+}
 </style>
