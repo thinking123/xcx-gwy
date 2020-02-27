@@ -1,92 +1,90 @@
 <template>
   <div class="page learnLog">
-    <CButton text="确认"  @tap.native="handleSetTime" external-cls="btn" type="info"/>
-    <textarea bindblur="bindTextAreaBlur" placeholder="分享学习心得，记录学习点滴…"
-              class="textarea"/>
-    <CUploader external-cls="uploader" @uploaded="Onuploaded"/>
+    <CButton
+      text="确认"
+      @tap.native="handleSetTime"
+      external-cls="btn"
+      type="info"
+    />
+    <textarea
+      bindblur="bindTextAreaBlur"
+      placeholder="分享学习心得，记录学习点滴…"
+      class="textarea"
+    />
+    <CUploader external-cls="uploader" @uploaded="Onuploaded" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapGetters } from '@wepy/x';
-  import {navBack} from '@/common/navUtils';
-  import { isEmptyString, showMsg } from '@/common/utils';
-  import { learnDiaryAdd } from '@/http/http-business';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters } from '@wepy/x';
+import { navBack } from '@/common/navUtils';
+import { isEmptyString, showMsg } from '@/common/utils';
+import { learnDiaryAdd } from '@/http/http-business';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      ...mapGetters([ 'user']),
-    },
-    data: {
-      urls:[],
-      log:''
-    },
-    methods: {
-      handleSetTime(){
-        if(!isEmptyString(this.log) && this.urls.length > 0){
-
-          learnDiaryAdd(this.user.id , this.log , this.urls[0]).then(res => {
-
-            showMsg("添加学习日记成功");
-            navBack();
-          })
-        }else{
-          showMsg("输入内容或者图片");
-        }
-      },
-      Onuploaded(urls){
-        this.urls = urls;
-        console.log('urls' , urls)
-      },
-      bindTextAreaBlur(e){
-        this.log = e.$wx.detail.value;
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  data: {
+    urls: [],
+    log: ''
+  },
+  methods: {
+    handleSetTime() {
+      if (!isEmptyString(this.log) && this.urls.length > 0) {
+        learnDiaryAdd(this.user.id, this.log, this.urls[0]).then(res => {
+          showMsg('添加学习日记成功');
+          navBack();
+        });
+      } else {
+        showMsg('输入内容或者图片');
       }
-
     },
-    onShow(){
-
+    Onuploaded(urls) {
+      this.urls = urls;
+      console.log('urls', urls);
     },
-    created () {
-
+    bindTextAreaBlur(e) {
+      this.log = e.$wx.detail.value;
     }
-  });
+  },
+  onShow() {},
+  created() {}
+});
 </script>
 <style lang="scss">
-  .learnLog{
-    width:auto;
-    padding: 0 30rpx;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh !important;
-    height:unset;
+.learnLog {
+  width: auto;
+  padding: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh !important;
+  height: unset;
 
-
-
-    &>cbutton{
-      align-self: flex-end;
-    }
-
-    .btn{
-      width:160rpx;
-      height:80rpx;
-
-    }
-
-    .textarea{
-      margin-top: 48rpx;
-      height: 400rpx;
-    }
-    .uploader{
-      left: 30rpx;
-      bottom: 30rpx;
-    }
+  & > cbutton {
+    align-self: flex-end;
   }
+
+  .btn {
+    width: 160rpx;
+    height: 80rpx;
+  }
+
+  .textarea {
+    margin-top: 48rpx;
+    height: 400rpx;
+  }
+  .uploader {
+    left: 30rpx;
+    bottom: 30rpx;
+  }
+}
 </style>
 <config>
 {
