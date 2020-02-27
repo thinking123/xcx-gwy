@@ -1,38 +1,39 @@
-import { baseUrl } from '@/common/constant';
+// import { baseUrl } from '@/common/constant';
 import store from 'store';
 
 let delay = {};
 const state = store.state;
-const {commit} = store;
-
-function showLoading(loadingText='', url) {
-  delay[url] = setTimeout(()=>{
-    console.log('loading')
+const { commit } = store;
+const baseUrl = BASE_URL;
+function showLoading(loadingText = '', url) {
+  delay[url] = setTimeout(() => {
+    console.log('loading');
     wx.showLoading({
       title: loadingText,
       mask: true
     });
-  } , 300)
+  }, 300);
 }
 
-function hideLoading(loadingText='', url) {
+function hideLoading(loadingText = '', url) {
   wx.hideLoading();
-  console.log('del loading',delay)
+  console.log('del loading', delay);
 
-  clearTimeout(delay[url])
+  clearTimeout(delay[url]);
   delete delay[url];
 }
 function http(url, data, loadingText, header, method = 'GET') {
-
   // const app = getApp();
   if (url.indexOf('/') == 0) {
     url = url.substr(1);
   }
 
-
-  if (state.token && url
-    && url.indexOf('login') == -1
-    && url.indexOf('vcode') == -1) {
+  if (
+    state.token &&
+    url &&
+    url.indexOf('login') == -1 &&
+    url.indexOf('vcode') == -1
+  ) {
     //授权token
     header.token = state.token;
   }
@@ -42,9 +43,8 @@ function http(url, data, loadingText, header, method = 'GET') {
   const _url = `${baseUrl}${url}`;
   console.log('url', _url);
 
-  commit('pushQueue' , url)
-  showLoading(loadingText , url);
-
+  commit('pushQueue', url);
+  showLoading(loadingText, url);
 
   return new Promise((resolve, reject) => {
     wx.request({
@@ -54,13 +54,12 @@ function http(url, data, loadingText, header, method = 'GET') {
       method: method,
       success: res => {
         hideLoading(loadingText, url);
-        commit('popQueue')
+        commit('popQueue');
         resolve(res ? res.data : null);
-
       },
       fail: err => {
         hideLoading(loadingText, url);
-        commit('popQueue')
+        commit('popQueue');
         reject(err);
       }
     });

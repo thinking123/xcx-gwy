@@ -3,7 +3,7 @@ const DefinePlugin = require('@wepy/plugin-define');
 const SrcPlugin = require('wepy-image-src-pre-prefix-plugin');
 
 const prod = process.env.NODE_ENV === 'production';
-const CDN = 'http://qiniu.kaimingwutong.com/';
+const CDN = 'https://qiniu.kaimingwutong.com/';
 module.exports = {
   wpyExt: '.wpy',
   cliLogs: !prod,
