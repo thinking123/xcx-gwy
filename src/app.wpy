@@ -238,6 +238,7 @@ wepy.app({
     "pages/section1/timer",
     "pages/section1/learnPlan",
     "pages/section1/learnLog",
+    "pages/section1/map",
     "pages/login/loginInput",
     "pages/login/register",
    

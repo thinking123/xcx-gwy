@@ -49,7 +49,13 @@ export default new Vuex.Store({
     night: false,
     items: {},
     user: {
-      id: 3
+      id: 3,
+      userName: '',
+      learnTarget: '',
+      learnTitle: '',
+      schoolName: '',
+      userIntegral: 0,
+      learnNum: 0
     }
   },
   mutations: {

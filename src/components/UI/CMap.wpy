@@ -1,0 +1,55 @@
+<template>
+  <map
+    id="cmap"
+    style="width: 690rpx; height: 380rpx;"
+    latitude="38.099994"
+    longitude="102.32452"
+    scale="3"
+  >
+    <cover-view class="cover-view" bindtap="onClick">
+      全国:{{ total || 0 }}
+    </cover-view>
+  </map>
+</template>
+<script>
+import wepy from '@wepy/core';
+import { navToPage } from '@/common/navUtils';
+
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    total: Number
+  },
+  events: {},
+  computed: {},
+  methods: {
+    onClick() {
+      navToPage('/pages/section1/map');
+    }
+  },
+  created() {
+    this.mapCtx = this.$wx.createMapContext('myMap');
+  }
+});
+</script>
+<style lang="scss">
+map {
+  position: relative;
+}
+
+.cover-view {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 28rpx;
+  text-align: center;
+  line-height: 28rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 25rpx;
+  padding: 12rpx 28rpx;
+  font-size: 24rpx;
+}
+</style>

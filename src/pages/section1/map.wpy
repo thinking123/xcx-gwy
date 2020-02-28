@@ -1,0 +1,146 @@
+<template>
+  <div>
+    <map
+      id="cmap1"
+      style="width: 750rpx; height: {{windowHeight}};"
+      latitude="38.099994"
+      longitude="102.32452"
+      scale="3"
+      markers="{{markers}}"
+    >
+      <cover-view class="title" bindtap="onClick">
+        全国:{{ total || 0 }}
+      </cover-view>
+    </map>
+  </div>
+</template>
+
+<script>
+import wepy from '@wepy/core';
+import { getImgUrlEx } from '@/common/utils';
+const geoCoordMap = {
+  北京: ['116.46', '39.92'],
+  上海: ['121.48', '31.22'],
+  天津: ['117.2', '39.13'],
+  重庆: ['106.54', '29.59'],
+  河北: ['114.48', '38.03'],
+  山西: ['112.53', '37.87'],
+  辽宁: ['123.38', '41.8'],
+  吉林: ['125.35', '43.88'],
+  黑龙江: ['126.63', '45.75'],
+  浙江: ['120.19', '30.26'],
+  福建: ['119.3', '26.08'],
+  山东: ['106.54', '29.59'],
+  河南: ['113.65', '34.76'],
+  湖北: ['114.31', '30.52'],
+  湖南: ['113', '28.21'],
+  广东: ['113.23', '23.16'],
+  海南: ['110.35', '20.02'],
+  四川: ['104.06', '30.67'],
+  贵州: ['106.71', '26.57'],
+  云南: ['102.73', '25.04'],
+  江西: ['115.89', '28.68'],
+  陕西: ['108.95', '34.27'],
+  青海: ['101.74', '36.56'],
+  甘肃: ['103.73', '36.03'],
+  广西: ['106.54', '29.59'],
+  新疆: ['87.68', '43.77'],
+  内蒙古: ['111.65', '40.82'],
+  西藏: ['91.11', '29.97'],
+  宁夏: ['106.27', '38.47'],
+  台湾: ['121.5', '25.14'],
+  香港: ['114.1', '22.2'],
+  澳门: ['113.33', '22.13'],
+  安徽: ['117.27', '31.86'],
+  江苏: ['118.78', '32.04']
+};
+wepy.page({
+  computed: {},
+  data: {
+    markers: [],
+    total: 0,
+    windowHeight: 0
+  },
+  methods: {
+    init() {
+      const temp = {
+        // content: 'this is lab',
+        color: '#FFFFFF',
+        fontSize: '25rpx',
+        textAlign: 'center',
+        anchorX: '-20',
+        anchorY: '-25',
+        bgColor: '#000000',
+        borderRadius: '999',
+        borderWidth: '2'
+      };
+
+      const markers = [];
+      const img = getImgUrlEx('transprant_img');
+      Object.keys(geoCoordMap).forEach((f, index) => {
+        const ll = geoCoordMap[f];
+        const marker = {
+          id: index,
+          latitude: ll[1],
+          longitude: ll[0],
+          //   name: 'T.I.T 创意园',
+          iconPath: img,
+          label: {
+            content: `${f}:0`,
+            color: '#FFFFFF',
+            fontSize: '25rpx',
+            textAlign: 'center',
+            anchorX: '-20',
+            anchorY: '-25',
+            bgColor: '#000000',
+            borderRadius: '999',
+            borderWidth: '2'
+          }
+        };
+
+        markers.push(marker);
+      });
+
+      this.markers = markers;
+    }
+  },
+  onShow() {},
+  onLoad() {
+    this.init();
+  },
+  created() {
+    const { windowHeight } = wx.getSystemInfoSync();
+    this.windowHeight = windowHeight + 'px';
+    // this.mapCtx = this.$wx.createMapContext('cmap1');
+  }
+});
+</script>
+<style lang="scss">
+.title {
+  width: 750rpx;
+  height: 80rpx;
+  background: rgba(79, 172, 27, 0.9);
+  opacity: 0.9;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  font-size: 36rpx;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 80rpx;
+  text-align: center;
+}
+
+map {
+  position: relative;
+}
+</style>
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+   
+    }
+}
+</config>

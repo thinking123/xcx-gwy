@@ -110,6 +110,11 @@ wepy.page({
       navToPage('/pages/login/register');
     }
   },
+  onLoad() {
+    if (DEV) {
+      this.handlegoto();
+    }
+  },
   onShow() {
     console.log('store ;', store.state);
   },

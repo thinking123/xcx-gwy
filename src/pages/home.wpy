@@ -8,11 +8,11 @@
       <div class="title">
         <div class="row1">
           <span>{{ user.userName }}</span>
-          <CTag text="学神" />
+          <CTag :text="user.learnTarget" />
         </div>
         <div class="row2">
-          <span>目标：学习申论和行测...</span>
-          <span>浙江理工大学</span>
+          <span>{{ user.learnTitle }}</span>
+          <span>{{ user.schoolName }}</span>
         </div>
       </div>
       <div class="right">{{ user.userIntegral }}分</div>
@@ -30,7 +30,8 @@
     <div class="title">
       学习打卡
     </div>
-    <div class="map"></div>
+    <CMap :total="user.learnNum"></CMap>
+
     <div class="titleIcons">
       <IconText
         v-for="(item, index) in titleIcons"
@@ -524,6 +525,7 @@ wepy.page({
     }
     align-items: center;
     margin-bottom: 48rpx;
+    margin-top: 32rpx;
   }
   .line {
     height: 24rpx;
@@ -562,7 +564,8 @@ wepy.page({
   HeaderClose:'~Custom/HeaderClose',
   CPopup:'~UI/CPopup',
   CTopLabelInput:'~UI/CTopLabelInput',
-  CTimePickerView:'~UI/CTimePickerView'
+  CTimePickerView:'~UI/CTimePickerView',
+  CMap:'~UI/CMap'
     }
 }
 </config>

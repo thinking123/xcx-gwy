@@ -1,0 +1,56 @@
+<template>
+  <cover-view class="cover-view external-cls" bindtap="onClick">
+    {{ text }}
+  </cover-view>
+</template>
+<script>
+import wepy from '@wepy/core';
+
+wepy.component({
+  data: {
+    markers: [
+      {
+        id: 1,
+        latitude: 23.099994,
+        longitude: 113.32452,
+        name: 'T.I.T 创意园'
+      }
+    ],
+    latitude: 38.099994,
+    longitude: 102.32452
+  },
+  externalClasses: ['external-cls'],
+  props: {
+    text: String
+  },
+  events: {},
+  computed: {},
+  methods: {
+    onClick() {
+      console.log('to map');
+    }
+  },
+  created() {
+    this.mapCtx = this.$wx.createMapContext('myMap');
+  }
+});
+</script>
+<style lang="scss">
+map {
+  position: relative;
+}
+
+.cover-view {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 28rpx;
+  text-align: center;
+  line-height: 28rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 25rpx;
+  padding: 12rpx 28rpx;
+}
+</style>
