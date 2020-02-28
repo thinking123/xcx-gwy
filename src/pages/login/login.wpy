@@ -112,7 +112,7 @@ wepy.page({
   },
   onLoad() {
     if (DEV) {
-      this.handlegoto();
+      // this.handlegoto();
     }
   },
   onShow() {

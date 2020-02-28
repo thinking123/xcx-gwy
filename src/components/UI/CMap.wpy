@@ -29,7 +29,7 @@ wepy.component({
     }
   },
   created() {
-    this.mapCtx = this.$wx.createMapContext('myMap');
+    // this.mapCtx = this.$wx.createMapContext('myMap');
   }
 });
 </script>
