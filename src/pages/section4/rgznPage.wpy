@@ -1,102 +1,99 @@
 <template>
   <div class="page rgznPage" @click="onClick">
-
-    <image  mode="aspectFit" class="icon1" :src="icons.icon1" data-icon="1"/>
-    <image  mode="aspectFit" class="icon2" :src="icons.icon2" data-icon="2"/>
-    <image  mode="aspectFit" class="icon3" :src="icons.icon3" data-icon="3"/>
-    <image  mode="aspectFit" class="icon4" :src="icons.icon4" data-icon="4"/>
-    <image  mode="aspectFit" class="icon5" :src="icons.icon5" data-icon="5"/>
-    <image  mode="aspectFit" class="icon" :src="icons.icon"/>
+    <image mode="aspectFit" class="icon1" :src="icons.icon1" data-icon="1" />
+    <image mode="aspectFit" class="icon2" :src="icons.icon2" data-icon="2" />
+    <image mode="aspectFit" class="icon3" :src="icons.icon3" data-icon="3" />
+    <image mode="aspectFit" class="icon4" :src="icons.icon4" data-icon="4" />
+    <image mode="aspectFit" class="icon5" :src="icons.icon5" data-icon="5" />
+    <image mode="aspectFit" class="icon" :src="icons.icon" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { getImgUrlEx } from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {},
-    data: {
-      icons: {
-        icon1: 'icon_ai01@3x',
-        icon2: 'icon_ai02@3x',
-        icon3: 'icon_ai03@3x',
-        icon4: 'icon_ai04@3x',
-        icon5: 'icon_ai05@3x',
-        icon: 'bg_ai@3x',
-      }
-
-    },
-    methods: {
-      onClick(e){
-        const id = e.target.dataset.icon;
-        console.log(id);
-      }
-    },
-    onShow() {
-
-    },
-    created() {
-      Object.keys(this.icons).forEach(f => {
-        const obj = this.icons[f];
-        this.icons[f] = getImgUrlEx(this.icons[f]);
-      });
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {},
+  data: {
+    icons: {
+      icon1: 'icon_ai01@3x',
+      icon2: 'icon_ai02@3x',
+      icon3: 'icon_ai03@3x',
+      icon4: 'icon_ai04@3x',
+      icon5: 'icon_ai05@3x',
+      icon: 'bg_ai@3x'
     }
-  });
+  },
+  methods: {
+    onClick(e) {
+      const id = e.target.dataset.icon;
+      console.log(id);
+      navToPage('/pages/section4/zhcsPage');
+    }
+  },
+  onShow() {},
+  created() {
+    Object.keys(this.icons).forEach(f => {
+      const obj = this.icons[f];
+      this.icons[f] = getImgUrlEx(this.icons[f]);
+    });
+  }
+});
 </script>
 <style lang="scss">
-  .rgznPage {
-    height: 100vh;
-    >image{
-      position: absolute;
-      &:last-child{
-        position: initial;
-      }
+.rgznPage {
+  height: 100vh;
+  > image {
+    position: absolute;
+    &:last-child {
+      position: initial;
     }
-    .icon1{
-      width:602rpx;
-      height:232rpx;
-      top:146rpx;
-      left:50%;
-      transform: translateX(-50%);
-    }
-
-    .icon2{
-      top:446rpx;
-      left:60rpx;
-      width:300rpx;
-      height:300rpx;
-    }
-    .icon3{
-      top:446rpx;
-      right:60rpx;
-      width:300rpx;
-      height:300rpx;
-    }
-    .icon4{
-      top:772rpx;
-      left:60rpx;
-      width:300rpx;
-      height:300rpx;
-    }
-    .icon5{
-      top:772rpx;
-      right:60rpx;
-      width:300rpx;
-      height:300rpx;
-    }
-
-    .icon{
-      width:750rpx;
-      height:1624rpx;
-    }
-
   }
+  .icon1 {
+    width: 602rpx;
+    height: 232rpx;
+    top: 146rpx;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .icon2 {
+    top: 446rpx;
+    left: 60rpx;
+    width: 300rpx;
+    height: 300rpx;
+  }
+  .icon3 {
+    top: 446rpx;
+    right: 60rpx;
+    width: 300rpx;
+    height: 300rpx;
+  }
+  .icon4 {
+    top: 772rpx;
+    left: 60rpx;
+    width: 300rpx;
+    height: 300rpx;
+  }
+  .icon5 {
+    top: 772rpx;
+    right: 60rpx;
+    width: 300rpx;
+    height: 300rpx;
+  }
+
+  .icon {
+    width: 750rpx;
+    height: 1624rpx;
+  }
+}
 </style>
 <config>
   {

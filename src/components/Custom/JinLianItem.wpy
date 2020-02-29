@@ -1,231 +1,226 @@
 <template>
-    <div class="JinLianItem external-cls"
-         :class="{'level1':jinlian.level==1,'level2':jinlian.level==2,'level3':jinlian.level==3,'opened':showLine}">
-      <block v-if="jinlian.level <= 2">
-        <div  class="vertLine icon1" >
-          <image  mode="aspectFit":src="icon3" @click="onClick1" v-if="isOpened"/>
-          <image  mode="aspectFit" :src="icon1" @click="onClick1" v-else/>
-        </div>
-
-      </block>
-      <block v-else>
-        <div class="vertLine icon3" @click="onClick1"/>
-      </block>
-
-      <div class="content">
-        <div class="row1">
-          {{jinlian.title}}
-        </div>
-        <div class="row2">
-          <span>正确率：{{rightRatio}}</span>
-          <span>已答错：{{jinlian.wrong}}/{{jinlian.total}}</span>
-        </div>
+  <div
+    class="JinLianItem external-cls"
+    :class="{
+      level1: jinlian.level == 1,
+      level2: jinlian.level == 2,
+      level3: jinlian.level == 3,
+      opened: showLine
+    }"
+  >
+    <block v-if="jinlian.level <= 2">
+      <div class="vertLine icon1">
+        <image
+          mode="aspectFit"
+          src="icon_fold@3x"
+          @click="onClick1"
+          v-if="isOpened"
+        />
+        <image mode="aspectFit" src="icon_unfold@3x" @click="onClick1" v-else />
       </div>
-      <image  mode="aspectFit" class=" icon2" :src="icon2" @click="onClick2"/>
+    </block>
+    <block v-else>
+      <div class="vertLine icon3" @click="onClick1" />
+    </block>
+
+    <div class="content">
+      <div class="row1">
+        {{ jinlian.title }}
+      </div>
+      <div class="row2">
+        <span>正确率：{{ rightRatio }}</span>
+        <span>已答错：{{ jinlian.wrong }}/{{ jinlian.total }}</span>
+      </div>
     </div>
+    <image
+      mode="aspectFit"
+      class=" icon2"
+      src="btn_edit@3x"
+      @click="onClick2"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import { getImgUrlEx } from '@/common/utils';
 
-  import eventHub from '@/common/eventHub';
-  wepy.component({
-    data: {
-      icon1:'icon_unfold@3x',
-      icon3:'icon_fold@3x',
-      icon2:'btn_edit@3x',
-      isOpened:false,
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-
-      jinlian:{
-        type:Object,
-        default:{
-          title:'',
-          total:0,
-          wrong:0,
-          level:1,
-          id:'',
-          opended:false,
-          items:[]
-        },
-      },
-
-      notLastItem:Boolean
-    },
-    events: {
-
-    },
-    computed:{
-      rightRatio(){
-        if(this.jinlian && this.jinlian.total && this.jinlian.wrong){
-          const str = (1 - this.jinlian.wrong/this.jinlian.total) * 100;
-          return `${str.toFixed(2)}%`;
-        }
-
-        return '-';
-      },
-      showLine(){
-        let res = false;
-        if(this.jinlian){
-          if(this.jinlian.level == 1 && this.isOpened){
-            res = true;
-          }
-          if(this.jinlian.level == 2){
-            if((this.jinlian.level == 2 && this.isOpened) || !this.notLastItem){
-              res = true;
-            }
-          }
-
-
-          if(this.jinlian.level == 3 && !this.notLastItem){
-            res = true;
-          }
-        }
-
-        return res;
+import eventHub from '@/common/eventHub';
+wepy.component({
+  data: {
+    // icon1:'icon_unfold@3x',
+    // icon3:'icon_fold@3x',
+    // icon2:'btn_edit@3x',
+    isOpened: false
+  },
+  externalClasses: ['external-cls'],
+  props: {
+    jinlian: {
+      type: Object,
+      default: {
+        title: '',
+        total: 0,
+        wrong: 0,
+        level: 1,
+        id: '',
+        opended: false,
+        items: []
       }
     },
-    methods: {
-      onClick1(){
-        // this.$emit('opened' , this.jinlian);
-        if(this.jinlian && this.jinlian.level <= 2 && this.jinlian.items.length > 0 ){
-          this.isOpened = !this.jinlian.opened;
-          eventHub.$emit('jinlianopened', this.jinlian);
 
-        }
+    notLastItem: Boolean
+  },
+  events: {},
+  computed: {
+    rightRatio() {
+      if (this.jinlian && this.jinlian.total && this.jinlian.wrong) {
+        const str = (1 - this.jinlian.wrong / this.jinlian.total) * 100;
+        return `${str.toFixed(2)}%`;
+      }
 
-      },
-      onClick2(){
-        // this.$emit('opened' , this.jinlian);
-        if(this.jinlian){
-          eventHub.$emit('jinlianedit', this.jinlian);
-
-        }
-
-      },
+      return '-';
     },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-      this.icon3 = getImgUrlEx(this.icon3);
+    showLine() {
+      let res = false;
+      if (this.jinlian) {
+        if (this.jinlian.level == 1 && this.isOpened) {
+          res = true;
+        }
+        if (this.jinlian.level == 2) {
+          if ((this.jinlian.level == 2 && this.isOpened) || !this.notLastItem) {
+            res = true;
+          }
+        }
+
+        if (this.jinlian.level == 3 && !this.notLastItem) {
+          res = true;
+        }
+      }
+
+      return res;
     }
-  });
+  },
+  methods: {
+    onClick1() {
+      // this.$emit('opened' , this.jinlian);
+      if (
+        this.jinlian &&
+        this.jinlian.level <= 2 &&
+        this.jinlian.items.length > 0
+      ) {
+        this.isOpened = !this.jinlian.opened;
+        eventHub.$emit('jinlianopened', this.jinlian);
+      }
+    },
+    onClick2() {
+      // this.$emit('opened' , this.jinlian);
+      if (this.jinlian) {
+        eventHub.$emit('jinlianedit', this.jinlian);
+      }
+    }
+  },
+  created() {
+    // this.icon1 = getImgUrlEx(this.icon1);
+    // this.icon2 = getImgUrlEx(this.icon2);
+    // this.icon3 = getImgUrlEx(this.icon3);
+  }
+});
 </script>
 <style lang="scss">
-  .JinLianItem{
-    background:rgba(255,255,255,1);
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    padding: 24rpx 36rpx 24rpx 30rpx;
-    width:690rpx;
-    font-size:24rpx;
-    font-family:PingFang-SC-Regular,PingFang-SC;
-    font-weight:400;
-    color:rgba(147,150,153,1);
-    line-height:34rpx;
+.JinLianItem {
+  background: rgba(255, 255, 255, 1);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 24rpx 36rpx 24rpx 30rpx;
+  width: 690rpx;
+  font-size: 24rpx;
+  font-family: PingFang-SC-Regular, PingFang-SC;
+  font-weight: 400;
+  color: rgba(147, 150, 153, 1);
+  line-height: 34rpx;
 
-
-
-    .icon1{
-      width:60rpx;
-      height:60rpx;
-      margin-right: 24rpx;
-      position: relative;
-      >image{
-        width:100%;
-        height:100%;
-      }
+  .icon1 {
+    width: 60rpx;
+    height: 60rpx;
+    margin-right: 24rpx;
+    position: relative;
+    > image {
+      width: 100%;
+      height: 100%;
     }
-    .icon2{
-      width:48rpx;
-      height:48rpx;
-      margin-right: 24rpx;
-    }
-
-    .content{
-      flex:1;
-      .row1{
-        font-size:32rpx;
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(51,51,51,1);
-        line-height:44rpx;
-        margin-bottom: 8rpx;
-      }
-      .row2{
-        >label:first-child{
-          margin-right: 60rpx;
-        }
-      }
-    }
-
-
-    &.level2{
-      padding-left:40rpx;
-      .icon1{
-        width:40rpx;
-        height:40rpx;
-        margin-right: 34rpx;
-
-        position: relative;
-
-
-      }
-    }
-
-    &.level3 {
-      padding-left: 48rpx;
-
-      .icon3 {
-        width: 24rpx;
-        height: 24rpx;
-        margin-right: 24rpx;
-        background: rgba(79, 172, 27, 1);
-        border-radius: 24rpx;
-        margin-right: 42rpx;
-        position: relative;
-      }
-    }
-
-
-    &.opened{
-      .vertLine::after{
-        content: '';
-        width:8rpx;
-        height:84rpx;
-        background:rgba(237,237,237,1);
-        position: absolute;
-        top: 100%;
-        left:50%;
-        transform: translateX(-50%);
-      }
-
-      &.level2{
-        .vertLine::after{
-          height:100rpx;
-        }
-
-      }
-      &.level3{
-        .vertLine::after{
-          height:126rpx;
-        }
-
-      }
-
-
-    }
-
-
+  }
+  .icon2 {
+    width: 48rpx;
+    height: 48rpx;
+    margin-right: 24rpx;
   }
 
+  .content {
+    flex: 1;
+    .row1 {
+      font-size: 32rpx;
+      font-family: PingFangSC-Medium, PingFangSC;
+      font-weight: 500;
+      color: rgba(51, 51, 51, 1);
+      line-height: 44rpx;
+      margin-bottom: 8rpx;
+    }
+    .row2 {
+      > label:first-child {
+        margin-right: 60rpx;
+      }
+    }
+  }
 
+  &.level2 {
+    padding-left: 40rpx;
+    .icon1 {
+      width: 40rpx;
+      height: 40rpx;
+      margin-right: 34rpx;
 
+      position: relative;
+    }
+  }
+
+  &.level3 {
+    padding-left: 48rpx;
+
+    .icon3 {
+      width: 24rpx;
+      height: 24rpx;
+      margin-right: 24rpx;
+      background: rgba(79, 172, 27, 1);
+      border-radius: 24rpx;
+      margin-right: 42rpx;
+      position: relative;
+    }
+  }
+
+  &.opened {
+    .vertLine::after {
+      content: '';
+      width: 8rpx;
+      height: 84rpx;
+      background: rgba(237, 237, 237, 1);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &.level2 {
+      .vertLine::after {
+        height: 100rpx;
+      }
+    }
+    &.level3 {
+      .vertLine::after {
+        height: 126rpx;
+      }
+    }
+  }
+}
 </style>
 <config>
   {

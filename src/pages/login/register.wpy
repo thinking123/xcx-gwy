@@ -1,127 +1,131 @@
 <template>
   <div class="page register">
     <div class="form">
-      <CLabelInput placeholder="请输入手机号码" label="手机号" :val.sync="phone" @update:val="handlev" type="number"/>
-      <CCountDownInput placeholder="请输入短信验证码" label="验证码" :val.sync="code" @update:val="handleCode" type="number"/>
-      <CLabelInput placeholder="请设置登录密码" label="密 码"
-                   :val.sync="pw"
-                   :showLine="false"
-                   type="password"
-                   @update:val="handlePw"/>
+      <CLabelInput
+        placeholder="请输入手机号码"
+        label="手机号"
+        :val.sync="phone"
+        @update:val="handlev"
+        type="number"
+      />
+      <CCountDownInput
+        placeholder="请输入短信验证码"
+        label="验证码"
+        :val.sync="code"
+        @update:val="handleCode"
+        type="number"
+      />
+      <CLabelInput
+        placeholder="请设置登录密码"
+        label="密 码"
+        :val.sync="pw"
+        :showLine="false"
+        type="password"
+        @update:val="handlePw"
+      />
     </div>
 
-    <CButton text="注册"
-             @tap.native="handleSubmit"
-             external-cls="submit"/>
+    <CButton text="注册" @tap.native="handleSubmit" external-cls="submit" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapMutations} from '@wepy/x';
-  import {isPhone , showMsg} from '@/common/utils';
-  import {redirectTo} from '@/common/navUtils';
-  import {registerByPhone , checkPhone , getPhoneCode , checkVCode} from '@/http/http-business';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapMutations } from '@wepy/x';
+import { isPhone, showMsg } from '@/common/utils';
+import { redirectTo } from '@/common/navUtils';
+import {
+  registerByPhone,
+  checkPhone,
+  getPhoneCode,
+  checkVCode
+} from '@/http/http-business';
 
-  wepy.page({
-    store,
-    computed: {
-
-    },
-    data: {
-      phone:'',
-      code:'',
-      pw:''
-    },
-    methods: {
-      ...mapMutations(['setToken']),
-      async handleSubmit(){
-        if(this.verify()){
-          console.log('submit')
-          try {
-            await checkVCode(
-              this.phone,
-              this.code
-            )
-            await registerByPhone(
-              this.phone,
-              this.code,
-              this.pw
-            )
-
-            redirectTo('/pages/login/login')
-          }catch (e) {
-            showMsg(e);
-          }
-
-        }else{
-          showMsg("请输入正确的内容")
-        }
-      },
-      handlev(v){
-        console.log('hv : ' , v)
-        this.phone = v;
-      },
-      handlePw(v){
-        this.pw = v;
-      },
-      handleCode(v){
-        console.log('code' , v)
-        this.code = v
-      },
-      async countCheck(v) {
-        let isOk = false;
+wepy.page({
+  store,
+  computed: {},
+  data: {
+    phone: '',
+    code: '',
+    pw: ''
+  },
+  methods: {
+    ...mapMutations(['setUser']),
+    async handleSubmit() {
+      if (this.verify()) {
         try {
-          if (!isPhone(this.phone)) {
-            showMsg('请输入正确手机号');
-            return;
-          }
-          await checkPhone(this.phone);
-          getPhoneCode(this.phone)
-          isOk = true;
+          await checkVCode(this.phone, this.code);
+          const res = await registerByPhone(this.phone, this.code, this.pw);
+          this.setUser(res);
+          redirectTo('/pages/login/login');
         } catch (e) {
           showMsg(e);
-        } finally {
-          return isOk;
         }
-      },
-      verify(){
-        let isOk = isPhone(this.phone)
-
-        isOk = isOk && /\d{4}/.test(this.code)
-        isOk = isOk && !!this.pw
-
+      } else {
+        showMsg('请输入正确的内容');
+      }
+    },
+    handlev(v) {
+      console.log('hv : ', v);
+      this.phone = v;
+    },
+    handlePw(v) {
+      this.pw = v;
+    },
+    handleCode(v) {
+      console.log('code', v);
+      this.code = v;
+    },
+    async countCheck(v) {
+      let isOk = false;
+      try {
+        if (!isPhone(this.phone)) {
+          showMsg('请输入正确手机号');
+          return;
+        }
+        await checkPhone(this.phone);
+        getPhoneCode(this.phone);
+        isOk = true;
+      } catch (e) {
+        showMsg(e);
+      } finally {
         return isOk;
       }
     },
-    onShow(){
-    },
-    created () {
+    verify() {
+      let isOk = isPhone(this.phone);
 
+      isOk = isOk && /\d{4}/.test(this.code);
+      isOk = isOk && !!this.pw;
+
+      return isOk;
     }
-  });
+  },
+  onShow() {},
+  created() {}
+});
 </script>
 <style lang="scss">
-  @import "~basePage";
-  @import "~baseUI";
-  .register{
-    background-color: $pageBg;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .form{
-      padding: 0 30rpx;
-      margin: 32rpx 30rpx 0;
-      background:$white;
-      box-shadow:0px 4px 8px 0px rgba(0,0,0,0.05);
-      border-radius:16px;
-    }
-    .submit{
-      margin-top: 48rpx;
-      font-size: 36rpx;
-    }
+@import '~basePage';
+@import '~baseUI';
+.register {
+  background-color: $pageBg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .form {
+    padding: 0 30rpx;
+    margin: 32rpx 30rpx 0;
+    background: $white;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
   }
+  .submit {
+    margin-top: 48rpx;
+    font-size: 36rpx;
+  }
+}
 </style>
 <config>
 {

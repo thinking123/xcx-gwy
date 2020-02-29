@@ -1,6 +1,6 @@
 <template>
   <div class="page home">
-    <LearningFloat external-cls="LearningFloat" />
+    <LearningFloat external-cls="LearningFloat" v-if="isSigned" />
     <div class="signed" v-if="isSigned">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
@@ -8,10 +8,10 @@
       <div class="title">
         <div class="row1">
           <span>{{ user.userName }}</span>
-          <CTag :text="user.learnTarget" />
+          <CTag :text="user.learnTitle" />
         </div>
         <div class="row2">
-          <span>{{ user.learnTitle }}</span>
+          <span>{{ user.learnTarget }}</span>
           <span>{{ user.schoolName }}</span>
         </div>
       </div>
@@ -153,7 +153,7 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
-import { navToPage } from '@/common/navUtils';
+import { navToPage, navBack } from '@/common/navUtils';
 import {
   getLearnTime,
   getMsgById,
@@ -224,9 +224,12 @@ wepy.page({
   methods: {
     ...mapMutations(['setUser']),
     handleSign() {
-      navToPage('/pages/login/login');
+      navBack();
     },
     handleIconText(index) {
+      if (!this.isSigned) {
+        return showMsg('请先登入');
+      }
       switch (index) {
         case 0:
           this.getupShow = true;
@@ -331,11 +334,12 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     //todo mock
-    const { userId = 3 } = query;
-
-    getMsgById(userId).then(res => {
-      this.setUser(res);
-    });
+    // if (this.isSigned) {
+    //   const { userId = 3 } = this.user;
+    //   getMsgById(userId).then(res => {
+    //     this.setUser(res);
+    //   });
+    // }
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {

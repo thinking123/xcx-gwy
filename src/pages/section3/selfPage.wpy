@@ -1,130 +1,186 @@
 <template>
   <div class="page selfPage">
     <div class="row1">
-      <CLabelRightButton type="normal"
-                         text="头像"
-                         rightIcon="{{user.header || icon1}}"
-                         @click.native="onClickCLabelRightButton(0)"
-                         external-cls="CLabelRightButton"/>
-      <CLabelRightButton type="normal"
-                         text="昵称"
-                         :rightText="user.nickName"
-                         @click.native="onClickCLabelRightButton(1)"
-                         external-cls="CLabelRightButton"/>
-      <CLabelRightButton type="normal"
-                         text="性别"
-                         :rightText="selSex"
-                         @click.native="onClickCLabelRightButton(2)"
-                         external-cls="CLabelRightButton"/>
-      <CLabelRightButton type="normal"
-                         text="手机号"
-                         hideRightIcon="{{true}}"
-                         rightText="{{user.phone}}"
-                         @click.native="onClickCLabelRightButton(3)"
-                         external-cls="CLabelRightButton"/>
-      <CLabelRightButton type="normal"
-                         text="微信绑定"
-                         showLine="{{false}}"
-                         :hideRightIcon="user.bindWx"
-                         rightText="{{user.bindWx ? '已经绑定' : '去绑定'}}"
-                         @click.native="onClickCLabelRightButton(4)"
-                         external-cls="CLabelRightButton"/>
-
-
+      <CLabelRightButton
+        type="normal"
+        text="头像"
+        rightIcon="{{user.userHead || icon1}}"
+        @click.native="onClickCLabelRightButton(0)"
+        external-cls="CLabelRightButton"
+      />
+      <CLabelRightButton
+        type="normal"
+        text="昵称"
+        :rightText="user.nickName"
+        @click.native="onClickCLabelRightButton(1)"
+        external-cls="CLabelRightButton"
+      />
+      <CLabelRightButton
+        type="normal"
+        text="性别"
+        :rightText="selSex"
+        @click.native="onClickCLabelRightButton(2)"
+        external-cls="CLabelRightButton"
+      />
+      <CLabelRightButton
+        type="normal"
+        text="手机号"
+        hideRightIcon="{{true}}"
+        rightText="{{user.phone}}"
+        @click.native="onClickCLabelRightButton(3)"
+        external-cls="CLabelRightButton"
+      />
+      <CLabelRightButton
+        type="normal"
+        text="微信绑定"
+        showLine="{{false}}"
+        :hideRightIcon="user.bindWx"
+        rightText="{{user.bindWx ? '已经绑定' : '去绑定'}}"
+        @click.native="onClickCLabelRightButton(4)"
+        external-cls="CLabelRightButton"
+      />
     </div>
     <div class="row2">
-      <CLabelRightButton type="normal"
-                         text="院校"
-                         rightIcon="{{user.school}}"
-                         @click.native="onClickCLabelRightButton(5)"
-                         external-cls="CLabelRightButton"/>
-      <CLabelRightButton type="normal"
-                         text="学习目标"
-                         :rightText="user.dest"
-                         showLine="{{false}}"
-                         @click.native="onClickCLabelRightButton(6)"
-                         external-cls="CLabelRightButton"/>
+      <CLabelRightButton
+        type="normal"
+        text="院校"
+        rightIcon="{{user.school}}"
+        @click.native="onClickCLabelRightButton(5)"
+        external-cls="CLabelRightButton"
+      />
+      <CLabelRightButton
+        type="normal"
+        text="学习目标"
+        :rightText="user.dest"
+        showLine="{{false}}"
+        @click.native="onClickCLabelRightButton(6)"
+        external-cls="CLabelRightButton"
+      />
     </div>
     <div class="row3" @click.native="onClickCLabelRightButton(7)">
       退出当前帐号
     </div>
-    <CListPoper :show="showHeader" showClose="{{true}}"
-                @close="showHeader=false"
-                @item="onHeaderItem"
-                :items="headers"/>
+    <CListPoper
+      :show="showHeader"
+      showClose="{{true}}"
+      @close="showHeader = false"
+      @item="onHeaderItem"
+      :items="headers"
+    />
 
-    <CPopup  :show="showNick"
-             position="bottom"
-             @close="showNick=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="showNick"
+      position="bottom"
+      @close="showNick = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="nick">
-        <HeaderClose text="修改昵称"  external-cls="header" @click="showNick=false"/>
+        <HeaderClose
+          text="修改昵称"
+          external-cls="header"
+          @click="showNick = false"
+        />
         <div class="body">
           <div class="CLabelInput">
-            <CLabelInput placeholder="请输入姓名" label="昵称"
-                         :val.sync="user.nickName"
-                         :showLine="false"
-                         @update:val="onNickVal"/>
+            <CLabelInput
+              placeholder="请输入姓名"
+              label="昵称"
+              :val.sync="user.nickName"
+              :showLine="false"
+              @update:val="onNickVal"
+            />
           </div>
 
-          <CButton text="保存"  @tap.native="onSubmitNick" external-cls="row"/>
+          <CButton text="保存" @tap.native="onSubmitNick" external-cls="row" />
         </div>
       </div>
     </CPopup>
 
-    <CPopup  :show="showSex"
-             position="bottom"
-             @close="showSex=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="showSex"
+      position="bottom"
+      @close="showSex = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="sex">
-        <HeaderClose text="选择性别"  external-cls="header" @click="showSex=false"/>
+        <HeaderClose
+          text="选择性别"
+          external-cls="header"
+          @click="showSex = false"
+        />
         <div class="body">
           <div class="CLabelInput">
-            <CListSelect key="id"
-                         labelKey="text"
-                         :sel="user.sex"
-                         :items="sexItems"
-                         external-cls="row"
-                         @change="onSexChange"
+            <CListSelect
+              key="id"
+              labelKey="text"
+              :sel="user.sex"
+              :items="sexItems"
+              external-cls="row"
+              @change="onSexChange"
             />
           </div>
         </div>
       </div>
     </CPopup>
 
-    <CPopup  :show="showDest"
-             position="bottom"
-             @close="showDest=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="showDest"
+      position="bottom"
+      @close="showDest = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="填写学习目标"  external-cls="header" @click="showDest=false"/>
+        <HeaderClose
+          text="填写学习目标"
+          external-cls="header"
+          @click="showDest = false"
+        />
         <div class="body">
-          <CTextarea :val="user.dest" @change="onChangeDest" placeholder="请填写" total="{{200}}" showLine="{{false}}"/>
-          <CButton text="确认"  @tap.native="onSubmitDest" external-cls="row"/>
+          <CTextarea
+            :val="user.dest"
+            @change="onChangeDest"
+            placeholder="请填写"
+            total="{{200}}"
+            showLine="{{false}}"
+          />
+          <CButton text="确认" @tap.native="onSubmitDest" external-cls="row" />
         </div>
       </div>
     </CPopup>
-    <CPopup  :show="showSchool"
-             position="bottom"
-             @close="showSchool=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="showSchool"
+      position="bottom"
+      @close="showSchool = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="school">
-        <HeaderClose text="选择院校"  @click="showSchool=false"/>
+        <HeaderClose text="选择院校" @click="showSchool = false" />
         <div class="body">
-          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
-            <CCollapseItem v-for="item in items2" :key="item.id"
-                           external-cls="collapse-item"
-                           collapse-item="collapse-item-header"
-                           :title="item.text" :name="item.id">
-              <div v-for="m in item.items" :key="m.id"
-                   :class="{'selected':curSelSchool == m.id}"
-                   @click="onClickCCollapseItem(m)"
-                   class="collapseItem">
-                {{m.text}}
+          <CCollapse
+            :value="expandItems"
+            @change="onExpand"
+            external-cls="CCollapse"
+          >
+            <CCollapseItem
+              v-for="item in items2"
+              :key="item.id"
+              external-cls="collapse-item"
+              collapse-item="collapse-item-header"
+              :title="item.text"
+              :name="item.id"
+            >
+              <div
+                v-for="m in item.items"
+                :key="m.id"
+                :class="{ selected: curSelSchool == m.id }"
+                @click="onClickCCollapseItem(m)"
+                class="collapseItem"
+              >
+                {{ m.text }}
               </div>
             </CCollapseItem>
           </CCollapse>
@@ -135,288 +191,283 @@
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapState, mapMutations } from '@wepy/x';
+import { getImgUrlEx } from '@/common/utils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      selSex(){
-        if(this.user.sex){
-          const item = this.sexItems.find(f=>f.id == this.user.sex);
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['isSigned', 'user']),
+    selSex() {
+      if (this.user.sex) {
+        const item = this.sexItems.find(f => f.id == this.user.sex);
 
-          return item.text;
-        }
-
-        return '';
-      }
-    },
-    data: {
-      icon1:'img_my_head@3x',
-      user:{
-        header:'',
-        nickName:'nickname',
-        sex:0,
-        phone:'1596886096',
-        bindWx:false,
-        school:'东华大学',
-        schoolId:0,
-        dest:'学习申论',
-      },
-      showHeader:false,
-      headers:['拍照','手机相册'],
-      dest:'',
-      nick:'',
-      showDest:false,
-      showNick:false,
-      showSex:false,
-      showSchool:false,
-      sexItems:[
-        {text:"不限" , id:"0"},
-        {text:"男" , id:"1"},
-        {text:"女" , id:"2"},
-        {text:"保密" , id:"3"},
-      ],
-      items2:[],
-      expandItems:[],
-      curSelSchool:'',
-    },
-    methods: {
-      onClickCLabelRightButton(index){
-        console.log('btn' , index);
-        switch (index) {
-          case 0:
-            this.showHeader=true;
-            break;
-          case 1:
-            this.showNick=true;
-            break;
-          case 2:
-            this.showSex=true;
-            break;
-          case 5:
-            this.showSchool=true;
-            break;
-          case 6:
-            this.showDest=true;
-            break;
-        }
-      },
-      onHeaderItem(index){
-        console.log(index);
-        this.showHeader=false;
-      },
-      onChangeDest(v){
-        this.dest = v;
-      },
-
-      onNickVal(v){
-        this.nick = v;
-      },
-
-      onSubmitDest(){
-        this.user.dest = this.dest;
-        this.showDest=false;
-      },
-
-      onSubmitNick(){
-        this.showNick = false;
-        this.user.nickName = this.nick;
-      },
-      onSexChange(key){
-        this.user.sex = key;
-      },
-      onExpand(exp){
-        this.expandItems = exp;
-      },
-      onClickCCollapseItem({id}){
-        this.curSelSchool = id;
-        // this.showSchool = false;
-      },
-    },
-    onShow(){
-      
-    },
-    created() {
-
-      this.icon1 = getImgUrlEx(this.icon1);
-      const arr = [];
-      for (let i = 0; i < 10; i++) {
-        let obj = [];
-        for (let j = 0; j < 5; j++) {
-          const v = {
-            text: '中国科学技术大学',
-            id: `${i}-${j}`
-          };
-
-          obj.push(v);
-        }
-
-        arr.push({
-          items: obj,
-          text: '北京',
-          id: i
-        });
-
+        return item.text;
       }
 
-      this.items2 = arr;
+      return '';
     }
-  });
+  },
+  data: {
+    icon1: 'img_my_head@3x',
+    user: {
+      header: '',
+      nickName: 'nickname',
+      sex: 0,
+      phone: '1596886096',
+      bindWx: false,
+      school: '东华大学',
+      schoolId: 0,
+      dest: '学习申论'
+    },
+    showHeader: false,
+    headers: ['拍照', '手机相册'],
+    dest: '',
+    nick: '',
+    showDest: false,
+    showNick: false,
+    showSex: false,
+    showSchool: false,
+    sexItems: [
+      { text: '不限', id: '0' },
+      { text: '男', id: '1' },
+      { text: '女', id: '2' },
+      { text: '保密', id: '3' }
+    ],
+    items2: [],
+    expandItems: [],
+    curSelSchool: ''
+  },
+  methods: {
+    onClickCLabelRightButton(index) {
+      console.log('btn', index);
+      switch (index) {
+        case 0:
+          this.showHeader = true;
+          break;
+        case 1:
+          this.showNick = true;
+          break;
+        case 2:
+          this.showSex = true;
+          break;
+        case 5:
+          this.showSchool = true;
+          break;
+        case 6:
+          this.showDest = true;
+          break;
+      }
+    },
+    onHeaderItem(index) {
+      console.log(index);
+      this.showHeader = false;
+    },
+    onChangeDest(v) {
+      this.dest = v;
+    },
+
+    onNickVal(v) {
+      this.nick = v;
+    },
+
+    onSubmitDest() {
+      this.user.dest = this.dest;
+      this.showDest = false;
+    },
+
+    onSubmitNick() {
+      this.showNick = false;
+      this.user.nickName = this.nick;
+    },
+    onSexChange(key) {
+      this.user.sex = key;
+    },
+    onExpand(exp) {
+      this.expandItems = exp;
+    },
+    onClickCCollapseItem({ id }) {
+      this.curSelSchool = id;
+      // this.showSchool = false;
+    }
+  },
+  onShow() {},
+  created() {
+    this.icon1 = getImgUrlEx(this.icon1);
+    const arr = [];
+    for (let i = 0; i < 10; i++) {
+      let obj = [];
+      for (let j = 0; j < 5; j++) {
+        const v = {
+          text: '中国科学技术大学',
+          id: `${i}-${j}`
+        };
+
+        obj.push(v);
+      }
+
+      arr.push({
+        items: obj,
+        text: '北京',
+        id: i
+      });
+    }
+
+    this.items2 = arr;
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.selfPage {
+  .CLabelRightButton {
+    width: 690rpx;
+    height: 120rpx;
+    padding: 30rpx 0;
+    box-sizing: border-box;
+    margin: 0 30rpx;
   }
-  .selfPage{
 
-    .CLabelRightButton{
-      width: 690rpx;
-      height: 120rpx;
-      padding: 30rpx 0;
-      box-sizing: border-box;
-      margin: 0 30rpx;
-    }
+  .row1 {
+    background-color: #fff;
+    width: 100%;
+    margin: 24rpx 0;
+  }
+  .row2 {
+    background-color: #fff;
+    width: 100%;
+    margin-bottom: 24rpx;
+  }
+  .row3 {
+    width: 750rpx;
+    height: 120rpx;
+    background: rgba(255, 255, 255, 1);
+    font-size: 32rpx;
+    font-family: PingFangSC-Medium, PingFangSC;
+    font-weight: 500;
+    color: rgba(102, 102, 102, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .row1{
-      background-color: #FFF;
-      width: 100%;
-      margin: 24rpx 0;
-    }
-    .row2{
-      background-color: #FFF;
-      width: 100%;
-      margin-bottom: 24rpx;
-    }
-    .row3{
-      width:750rpx;
-      height:120rpx;
-      background:rgba(255,255,255,1);
-      font-size:32rpx;
-      font-family:PingFangSC-Medium,PingFangSC;
-      font-weight:500;
-      color:rgba(102,102,102,1);
+  .learn {
+    height: 712rpx;
+    .body {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-    }
-
-    .learn{
-      height: 712rpx;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-        }
+      .row {
+        margin-top: 46rpx;
       }
     }
-    .sex{
-      background:rgba(242,242,242,1);
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin: 32rpx 0;
-        }
-      }
-    }
-    .nick{
-      height:492rpx;
-      background:rgba(242,242,242,1);
-      .header{
-        background-color: #FFF;
-      }
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .CLabelInput{
-          width:690rpx;
-          height:100rpx;
-          margin-top: 66rpx;
-          background:rgba(255,255,255,1);
-          box-shadow:0px 4rpx 8rpx 0px rgba(0,0,0,0.05);
-          border-radius:16rpx;
-          box-sizing: border-box;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .row{
-          margin-top: 46rpx;
-
-          width:690rpx;
-          height:96rpx;
-        }
-      }
-    }
-
-    .CCollapse{
-      padding: 30rpx 32rpx 0;
-      background:rgba(242,242,242,1);
-      box-sizing: border-box;
-    }
-
-    .school{
-      height: 100vh;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-        }
-      }
-    }
-
-
-    .collapseItem{
-      font-size:32rpx;
-      font-family:PingFang-SC-Regular,PingFang-SC;
-      font-weight:400;
-
-      line-height:40rpx;
+  }
+  .sex {
+    background: rgba(242, 242, 242, 1);
+    .body {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      height: 120rpx;
-      margin-left: 40rpx;
-      position: relative;
-      padding: 0 40rpx;
+      .row {
+        margin: 32rpx 0;
+      }
+    }
+  }
+  .nick {
+    height: 492rpx;
+    background: rgba(242, 242, 242, 1);
+    .header {
+      background-color: #fff;
+    }
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .CLabelInput {
+        width: 690rpx;
+        height: 100rpx;
+        margin-top: 66rpx;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 4rpx 8rpx 0px rgba(0, 0, 0, 0.05);
+        border-radius: 16rpx;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .row {
+        margin-top: 46rpx;
 
-      &.selected{
-        color:rgba(79,172,27,1);
+        width: 690rpx;
+        height: 96rpx;
       }
-      &::after{
-        content:'';
-        position: absolute;
-        background:rgba(230,230,230,1);
-        height: 1px;
-        width: 100%;
-        top:100%;
-        left: 50%;
-        width:650rpx;
-        transform: translateX(-50%);
-      }
-    }
-    .collapse-item{
-      background: #FFF;
-      width:690rpx;
-      box-sizing: border-box;
-      margin-bottom: 20rpx;
-      border-radius:8rpx;
-    }
-    .collapse-item-header{
-      width: 100% !important;
     }
   }
 
+  .CCollapse {
+    padding: 30rpx 32rpx 0;
+    background: rgba(242, 242, 242, 1);
+    box-sizing: border-box;
+  }
+
+  .school {
+    height: 100vh;
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row {
+        margin-top: 46rpx;
+      }
+    }
+  }
+
+  .collapseItem {
+    font-size: 32rpx;
+    font-family: PingFang-SC-Regular, PingFang-SC;
+    font-weight: 400;
+
+    line-height: 40rpx;
+    display: flex;
+    align-items: center;
+    height: 120rpx;
+    margin-left: 40rpx;
+    position: relative;
+    padding: 0 40rpx;
+
+    &.selected {
+      color: rgba(79, 172, 27, 1);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      background: rgba(230, 230, 230, 1);
+      height: 1px;
+      width: 100%;
+      top: 100%;
+      left: 50%;
+      width: 650rpx;
+      transform: translateX(-50%);
+    }
+  }
+  .collapse-item {
+    background: #fff;
+    width: 690rpx;
+    box-sizing: border-box;
+    margin-bottom: 20rpx;
+    border-radius: 8rpx;
+  }
+  .collapse-item-header {
+    width: 100% !important;
+  }
+}
 </style>
 <config>
 {

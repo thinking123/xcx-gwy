@@ -70,7 +70,7 @@ wepy.page({
   },
   data: {},
   methods: {
-    ...mapMutations(['setToken']),
+    ...mapMutations(['setUser']),
     async wxLogin(userInfo) {
       try {
         const wx = this.wx;
@@ -78,14 +78,14 @@ wepy.page({
         console.log('userInfo', userInfo);
         // 刷新微信code
         await _wxLogin();
-        const { token } = await loginByWx(
+        const user = await loginByWx(
           wx.code,
           userInfo.avatarUrl,
           userInfo.nickName,
           userInfo.gender
         );
 
-        this.setToken(token);
+        this.setUser(user);
         reLaunch('/pages/home');
       } catch (e) {
         showMsg(e);
@@ -98,15 +98,13 @@ wepy.page({
       this.wxLogin();
     },
     handlePhoneClick() {
-      // console.log('click')
       navToPage('/pages/login/loginInput');
     },
     handlegoto() {
-      console.log('handlegoto');
+      this.setUser(null);
       navToPage('/pages/home');
     },
     handleRegister() {
-      console.log('handleRegister');
       navToPage('/pages/login/register');
     }
   },

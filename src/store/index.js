@@ -26,9 +26,8 @@ const tabbar = [
   return m;
 });
 
-// const mockToken = "dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6"
-const mockToken =
-  'dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6';
+const mockToken = null;
+// const mockToken = 'dqBtp9EPY8Z8wlGcpJxJX6wPTT1XHwwkXmxOvHGU5RpwVSrOn2Yyq9lAbiLUk8voI0si38KxpXANo0tTuKjTe51yjyM7dPj6';
 
 const userId = 3;
 
@@ -86,7 +85,6 @@ export default new Vuex.Store({
       state.playMedia = playMedia;
     },
     setToken(state, token) {
-      console.log('token', token);
       state.token = token;
     },
     setNight(state, night) {
@@ -109,6 +107,8 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
+      state.activeTabIndex = 0;
+      state.token = user ? user.token : null;
     }
   },
   getters: {

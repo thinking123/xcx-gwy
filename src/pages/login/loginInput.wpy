@@ -64,7 +64,7 @@ wepy.page({
     pw: '123456'
   },
   methods: {
-    ...mapMutations(['setToken']),
+    ...mapMutations(['setToken', 'setUser']),
     handleSubmit() {
       if (this.verify()) {
         this.login();
@@ -82,7 +82,7 @@ wepy.page({
           res = await loginByPhone(this.phone, this.pw, this.deviceId);
         }
 
-        this.setToken(res.token);
+        this.setUser(res);
         reLaunch('/pages/home');
       } catch (e) {
         showMsg(e);

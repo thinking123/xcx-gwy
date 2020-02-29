@@ -1,159 +1,144 @@
 <template>
   <div class="page sharePage">
-
-    <image :src="icon1" mode="aspectFit" class="icon1"></image>
-    <image :src="icon2" mode="aspectFit" class="icon2"></image>
-    <div class="row1">{{code}}</div>
+    <image src="bg_yaoqing@3x" mode="aspectFit" class="icon1" />
+    <image src="bg_invite@2x" mode="aspectFit" class="icon2" />
+    <div class="row1">{{ code }}</div>
     <div class="row2" @click="onInvite"></div>
-    <div class="row3">{{money}}</div>
-    <div class="row4">{{personNum}}</div>
+    <div class="row3">{{ money }}</div>
+    <div class="row4">{{ personNum }}</div>
     <div class="row5" @click="onTakeMoney"></div>
     <div class="row6" @click="onShowDetail">查看明细 >></div>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {},
+  data: {
+    code: 'A890R9',
+    money: '20.00',
+    personNum: 20
+  },
+  methods: {
+    onInvite() {},
+    onTakeMoney() {
+      navToPage('/pages/section3/takeMoney');
     },
-    computed: {
-
-    },
-    data: {
-      icon1:'bg_yaoqing@3x',
-      icon2:'bg_invite@2x',
-      code:'A890R9',
-      money:'20.00',
-      personNum:20
-    },
-    methods: {
-      onInvite(){
-
-      },
-      onTakeMoney(){
-
-      },
-      onShowDetail(){
-
-      },
-    },
-    onShow(){
-      
-    },
-    created () {
-
-      this.icon1 = getImgUrlEx(this.icon1)
-      this.icon2 = getImgUrlEx(this.icon2)
+    onShowDetail() {
+      navToPage('/pages/section3/moneyDetail');
     }
-  });
+  },
+  onShow() {},
+  created() {}
+});
 </script>
 <style lang="scss">
-  page{
-
-    background:rgba(79,172,27,1);
-    overflow: auto;
+page {
+  background: rgba(79, 172, 27, 1);
+  overflow: auto;
+}
+.sharePage {
+  width: 750rpx;
+  height: 1448rpx;
+  position: relative;
+  .icon1 {
+    width: 750rpx;
+    height: 604rpx;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
-  .sharePage{
-    width:750rpx;
-    height:1448rpx;
-    position: relative;
-    .icon1{
-      width:750rpx;
-      height:604rpx;
-      position: absolute;
-      left: 0;
-      top:0;
-    }
-    .icon2{
-      width:630rpx;
-      height:856rpx;
-      position: absolute;
+  .icon2 {
+    width: 630rpx;
+    height: 856rpx;
+    position: absolute;
 
-      top:416rpx;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .row1{
-      position: absolute;
-
-      top:560rpx;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size:120rpx;
-      font-family:PingFangSC-Medium,PingFangSC;
-      font-weight:500;
-      color:rgba(79,172,27,1);
-      line-height:120rpx;
-    }
-    .row2{
-      position: absolute;
-      width:270rpx;
-      height:96rpx;
-
-      top:728rpx;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-
-
-    .row3{
-      position: absolute;
-
-      top:968rpx;
-      left: 138rpx;
-      font-size:48rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(255,108,12,1);
-      line-height:56rpx;
-    }
-
-    .row4{
-      position: absolute;
-
-      top:968rpx;
-      right: 188rpx;
-      font-size:48rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(79,172,27,1);
-      line-height:56rpx;
-    }
-
-    .row5{
-      position: absolute;
-      width:270rpx;
-      height:96rpx;
-      top:1072rpx;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .row6{
-      position: absolute;
-      width:270rpx;
-      height:96rpx;
-      bottom:76rpx;
-      left: 50%;
-      transform: translateX(-50%);
-
-      font-size:36rpx;
-      font-family:PingFangSC-Semibold,PingFangSC;
-      font-weight:600;
-      color:rgba(255,255,255,1);
-      line-height:36rpx;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    top: 416rpx;
+    left: 50%;
+    transform: translateX(-50%);
   }
+
+  .row1 {
+    position: absolute;
+
+    top: 560rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 120rpx;
+    font-family: PingFangSC-Medium, PingFangSC;
+    font-weight: 500;
+    color: rgba(79, 172, 27, 1);
+    line-height: 120rpx;
+  }
+  .row2 {
+    position: absolute;
+    width: 270rpx;
+    height: 96rpx;
+
+    top: 728rpx;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .row3 {
+    position: absolute;
+
+    top: 968rpx;
+    left: 138rpx;
+    font-size: 48rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(255, 108, 12, 1);
+    line-height: 56rpx;
+  }
+
+  .row4 {
+    position: absolute;
+
+    top: 968rpx;
+    right: 188rpx;
+    font-size: 48rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(79, 172, 27, 1);
+    line-height: 56rpx;
+  }
+
+  .row5 {
+    position: absolute;
+    width: 270rpx;
+    height: 96rpx;
+    top: 1072rpx;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .row6 {
+    position: absolute;
+    width: 270rpx;
+    height: 96rpx;
+    bottom: 76rpx;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 36rpx;
+    font-family: PingFangSC-Semibold, PingFangSC;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    line-height: 36rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 </style>
 <config>
 {
