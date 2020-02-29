@@ -1,20 +1,26 @@
 <template>
   <div class="page mediaPlayDetail">
     <div class="row1">
-      {{detail.title}}
+      {{ detail.title }}
     </div>
-    <image :src="detail.header"  class="row2" mode="aspectFit"/>
-    <CSlider :max="media.total" :val="media.val"/>
+    <image :src="detail.header" class="row2" mode="aspectFit" />
+    <CSlider :max="media.total" :val="media.val" />
     <div class="row3">
-      <IconText @click.native="handleIconText"
-                external-cls="titleIcon titleIcon1"
-                data-set="list"
-                text="播放列表" :src="icon1"/>
-      <PlayController/>
-      <IconText @click.native="handleIconText"
-                external-cls="titleIcon titleIcon2"
-                data-set="share"
-                text="分享课程" :src="icon2"/>
+      <IconText
+        @click.native="handleIconText"
+        external-cls="titleIcon titleIcon1"
+        data-set="list"
+        text="播放列表"
+        :src="icon1"
+      />
+      <PlayController />
+      <IconText
+        @click.native="handleIconText"
+        external-cls="titleIcon titleIcon2"
+        data-set="share"
+        text="分享课程"
+        :src="icon2"
+      />
     </div>
 
     <ClassCard
@@ -22,7 +28,8 @@
       :key="item.id"
       :title="item.title"
       :info="item.info"
-      external-cls="classCard"/>
+      external-cls="classCard"
+    />
 
     <FixedBottomComment
       :commentNum="detail.commentNum"
@@ -33,18 +40,26 @@
       @like="onLike"
     />
 
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="show = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="getup">
-        <HeaderClose text="播放列表"  external-cls="header" @click="show=false" :icon="icon1"/>
-        <MediaPlayItem  v-for="item in items2"
-                        :key="item.id"
-                        :title="item.title"
-                        :time="item.time"
-                        :desc="item.desc"
+        <HeaderClose
+          text="播放列表"
+          external-cls="header"
+          @click="show = false"
+          :icon="icon1"
+        />
+        <MediaPlayItem
+          v-for="item in items2"
+          :key="item.id"
+          :title="item.title"
+          :time="item.time"
+          :desc="item.desc"
         />
       </div>
     </CPopup>
@@ -52,142 +67,138 @@
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapGetters , mapMutations} from '@wepy/x';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { getImgUrlEx } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['isMediaPlaying', 'playMedia'])
+  },
+  data: {
+    detail: {
+      title: '第一期 | 课程名称，如方法综述',
+      header: '',
+      commentNum: 20,
+      likeNum: 9992,
+      liked: true
     },
-    computed: {
-      ...mapGetters(['isMediaPlaying' , 'playMedia']),
+    media: {
+      total: 530,
+      val: 99
     },
-    data: {
-      detail:{
-        title:'第一期 | 课程名称，如方法综述',
-        header:'',
-        commentNum:20,
-        likeNum:9992,
-        liked:true
-      },
-      media:{
-        total:530,
-        val:99,
-      },
-      icon1:'btn_list@3x',
-      icon2:'btn_bottom_share@3x',
-      items1:[],
-      items2:[],
-      show:true
+    icon1: 'btn_list@3x',
+    icon2: 'btn_bottom_share@3x',
+    items1: [],
+    items2: [],
+    show: true
+  },
+  methods: {
+    ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
+    onInput(v) {
+      navToPage('/pages/section2/mediaSubmitCommentPage');
     },
-    methods: {
-      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
-      onInput(v){
-
-      },
-      onComment(v){
-
-      },
-      onLike(v){
-        this.detail.liked = v;
-      },
-      handleIconText(e){
-        const type = e.$wx.target.dataset.set;
-        if(type == 'list'){
-          this.show = true;
-        }else{
-
-        }
+    onComment(v) {
+      navToPage('/pages/section2/mediaCommentPage');
+    },
+    onLike(v) {
+      this.detail.liked = v;
+    },
+    handleIconText(e) {
+      const type = e.$wx.target.dataset.set;
+      if (type == 'list') {
+        this.show = true;
+      } else {
       }
-    },
-    onShow(){
-      
-    },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-      let arr = [];
-      for(let i = 0 ; i < 1 ; i++){
-        arr.push({
-          title:'课程名称，如资料分析',
-          info:'考点：资料分析秒杀综述',
-          id:i
-        });
-      }
-
-      this.items1 = arr;
-
-      arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
-          title:'第一期 | 课程名称，如方法综述',
-          time:'12 : 00',
-          desc:'2020年公考',
-          id:i
-        });
-      }
-
-      this.items2 = arr;
     }
-  });
+  },
+  onShow() {},
+  created() {
+    this.icon1 = getImgUrlEx(this.icon1);
+    this.icon2 = getImgUrlEx(this.icon2);
+    let arr = [];
+    for (let i = 0; i < 1; i++) {
+      arr.push({
+        title: '课程名称，如资料分析',
+        info: '考点：资料分析秒杀综述',
+        id: i
+      });
+    }
+
+    this.items1 = arr;
+
+    arr = [];
+    for (let i = 0; i < 10; i++) {
+      arr.push({
+        title: '第一期 | 课程名称，如方法综述',
+        time: '12 : 00',
+        desc: '2020年公考',
+        id: i
+      });
+    }
+
+    this.items2 = arr;
+  }
+});
 </script>
 <style lang="scss">
-  .mediaPlayDetail{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-    .row1{
-      font-size:40rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(0,0,0,1);
-      line-height:48rpx;
-      margin: 60rpx 0 64rpx;
-    }
-    .row2{
-      width:400rpx;
-      height:500rpx;
-      box-shadow:0px 16rpx 32rpx -4rpx rgba(0,0,0,0.2);
-      border-radius:8rpx;
-      margin-bottom: 80rpx;
-    }
-
-    .row3{
-      display: flex;
-      margin: 120rpx 40rpx 80rpx;
-      justify-content: space-between;
-      align-self: stretch;
-      .titleIcon{
-        margin-top: 30rpx;
-        >image{
-          width:48rpx;
-          height:48rpx;
-          margin-bottom: 16rpx;
-        }
-
-        font-size:24rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(98,100,102,1);
-        line-height:32rpx;
-      }
-    }
-
-
-    .classCard{
-      background:rgba(242,242,242,1);
-      margin-bottom: 24rpx;
-    }
-
-    .getup{
-      height: 920rpx;
-    }
-
+.mediaPlayDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  .row1 {
+    font-size: 40rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 1);
+    line-height: 48rpx;
+    margin: 60rpx 0 64rpx;
   }
+  .row2 {
+    width: 400rpx;
+    height: 500rpx;
+    box-shadow: 0px 16rpx 32rpx -4rpx rgba(0, 0, 0, 0.2);
+    border-radius: 8rpx;
+    margin-bottom: 80rpx;
+  }
+
+  .row3 {
+    display: flex;
+    margin: 120rpx 40rpx 80rpx;
+    justify-content: space-between;
+    align-self: stretch;
+    .titleIcon {
+      margin-top: 30rpx;
+      > image {
+        width: 48rpx;
+        height: 48rpx;
+        margin-bottom: 16rpx;
+      }
+
+      font-size: 24rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(98, 100, 102, 1);
+      line-height: 32rpx;
+    }
+  }
+
+  .classCard {
+    background: rgba(242, 242, 242, 1);
+    margin-bottom: 24rpx;
+  }
+
+  .getup {
+    height: 920rpx;
+  }
+}
 </style>
 <config>
   {

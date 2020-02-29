@@ -1,34 +1,44 @@
 <template>
   <div class="page homeSection2">
     <div class="header">
-      <CSearch :val="search" @change="inputChange"
-               @click.native="onNavSearch"
-               external-cls="search" type="readonly"/>
+      <CSearch
+        :val="search"
+        @change="inputChange"
+        @click.native="onNavSearch"
+        external-cls="search"
+        type="readonly"
+      />
 
-
-      <CTab type="radius" :tabs="tabs"
-            @changeTab="handleTab"
-            external-cls="ctab"/>
-
+      <CTab
+        type="radius"
+        :tabs="tabs"
+        @changeTab="handleTab"
+        external-cls="ctab"
+      />
     </div>
 
-    <CListWrap1 :type="type1"
-                :params="params"
-                :show="selectedTab == 0"
-                url="/api/subjecAudio/getSubjecAudioHomeList">
+    <CListWrap1
+      :type="type1"
+      :params="params"
+      :show="selectedTab == 0"
+      url="/api/subjecAudio/getSubjecAudioHomeList"
+    >
       <ClassCard
         v-for="item in clist1"
         :key="item.id"
         :title="item.title"
         :info="item.viceTitle"
         :header="item.header"
-        external-cls="classCard"/>
+        external-cls="classCard"
+      />
     </CListWrap1>
 
-    <CListWrap1 :type="type2"
-                :params="params1"
-                :show="selectedTab == 1"
-                url="/api/classroom/getClassroomHome">
+    <CListWrap1
+      :type="type2"
+      :params="params1"
+      :show="selectedTab == 1"
+      url="/api/classroom/getClassroomHome"
+    >
       <ClassCard1
         v-for="item in clist2"
         :key="item.id"
@@ -42,41 +52,60 @@
       />
     </CListWrap1>
 
-
-    <block v-if="selectedTab == 2">
-          <div class="titleIcons">
-            <IconText v-for="(item , index) in titleIcons"
-                      @click.native="handleIconText(index)"
-                      external-cls="titleIcon"
-                      :text="item.text" :src="item.src"/>
-          </div>
-      <CLabelRightButton type="primary" text="公务员行测" rightText="切换题库" showLine="{{false}}"
-                         @click.native="onClickCLabelRightButton"
-                         external-cls="cLabelRightButton"/>
-
-      <JinLianItemTree
-        :items="items3"
+    <div style="display: {{selectedTab == 2 ? 'block' : 'none'}}">
+      <div class="titleIcons">
+        <IconText
+          v-for="(item, index) in titleIcons"
+          @click.native="handleIconText(index)"
+          external-cls="titleIcon"
+          :key="index"
+          :text="item.text"
+          :src="item.src"
+        />
+      </div>
+      <CLabelRightButton
+        type="primary"
+        text="公务员行测"
+        rightText="切换题库"
+        showLine="{{false}}"
+        @click.native="onClickCLabelRightButton"
+        external-cls="cLabelRightButton"
       />
-      <FixedContinueBtn @click.native="handleCBtn"/>
-      </block>
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="999"
-             overlay="{{ true }}">
+
+      <JinLianItemTree :items="items3" />
+      <FixedContinueBtn @click.native="handleCBtn" />
+    </div>
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="show = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="切换题库"  @click="show=false"/>
+        <HeaderClose text="切换题库" @click="show = false" />
         <div class="body">
-          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
-            <CCollapseItem v-for="item in items4" :key="item.id"
-                           external-cls="collapse-item"
-                           collapse-item="collapse-item-header"
-                           :title="item.text" :name="item.id">
-              <div v-for="m in item.items" :key="m.id"
-                        :class="{'selected':curSelItem == m.id}"
-                        @click="onClickCCollapseItem(m)"
-                         class="collapseItem">
-                {{m.text}}
+          <CCollapse
+            :value="expandItems"
+            @change="onExpand"
+            external-cls="CCollapse"
+          >
+            <CCollapseItem
+              v-for="item in items4"
+              :key="item.id"
+              external-cls="collapse-item"
+              collapse-item="collapse-item-header"
+              :title="item.text"
+              :name="item.id"
+            >
+              <div
+                v-for="m in item.items"
+                :key="m.id"
+                :class="{ selected: curSelItem == m.id }"
+                @click="onClickCCollapseItem(m)"
+                class="collapseItem"
+              >
+                {{ m.text }}
               </div>
             </CCollapseItem>
           </CCollapse>
@@ -84,370 +113,361 @@
       </div>
     </CPopup>
     <CDialog :show="showCDialog">
-      <LogicDialog rightRate="{{0.99}}" completedNum="{{100}}" total="{{200}}" @btn="onClickLogicDialog"/>
+      <LogicDialog
+        rightRate="{{0.99}}"
+        completedNum="{{100}}"
+        total="{{200}}"
+        @btn="onClickLogicDialog"
+      />
     </CDialog>
-    <CTabbar/>
-
+    <CTabbar />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { getImgUrlEx } from '@/common/utils';
-  import eventHub from '@/common/eventHub';
-  import {mapGetters} from '@wepy/x';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx } from '@/common/utils';
+import eventHub from '@/common/eventHub';
+import { mapGetters } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
 
-  const type1 = 'subjecAudio_getSubjecAudioHomeList_1';
-  const type2 = 'subjecAudio_getSubjecAudioHomeList_2';
-  const type3 = 'subjecAudio_getSubjecAudioHomeList_3';
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+const type1 = 'subjecAudio_getSubjecAudioHomeList_1';
+const type2 = 'subjecAudio_getSubjecAudioHomeList_2';
+const type3 = 'subjecAudio_getSubjecAudioHomeList_3';
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['items']),
+    params() {
+      return {
+        labelId: ''
+      };
     },
-    computed: {
-      ...mapGetters(['items']),
-      params(){
-        return {
-          labelId:''
-        }
-      },
-      params1(){
-        return {
-          labelId:''
-        }
-      },
-      clist1(){
-        const list = this.items[type1];
-        return list || [];
-      },
-      clist2(){
-        const list = this.items[type2];
-        return list || [];
-      },
+    params1() {
+      return {
+        labelId: ''
+      };
     },
-    data: {
-      search:'',
-      tabs:[
-        {text:'随听音频'},
-        {text:'部委课堂'},
-        {text:'精炼题目'},
-      ],
-      selectedTab:0,
-      items1:[],
-      items2:[],
-      items3:[],
-      titleIcons:[
-        {
-          text:'AI每日练',
-          src:'icon_course01@3x'
-        },
-        {
-          text:'高频错题',
-          src:'icon_course02@3x'
-        },
-        {
-          text:'笔记本',
-          src:'icon_course03@3x'
-        }
-      ],
-
-      expandItems:[],
-      items4:[],
-      curSelItem:'',
-      show:false,
-      showCDialog:false,
-      type1,
-      type2,
-      type3,
-
+    clist1() {
+      const list = this.items[type1];
+      return list || [];
     },
-    methods: {
-      inputChange(v){
-        // this.search = v;
-        // navToPage('/pages/section2/searchPage')
+    clist2() {
+      const list = this.items[type2];
+      return list || [];
+    }
+  },
+  data: {
+    search: '',
+    tabs: [{ text: '随听音频' }, { text: '部委课堂' }, { text: '精炼题目' }],
+    selectedTab: 0,
+    items1: [],
+    items2: [],
+    items3: [],
+    titleIcons: [
+      {
+        text: 'AI每日练',
+        src: 'icon_course01@3x'
       },
-      onNavSearch(v){
-        // this.search = v;
-        navToPage('/pages/section2/searchPage')
+      {
+        text: '高频错题',
+        src: 'icon_course02@3x'
       },
-      handleTab({tab ,index}){
-        this.selectedTab = index
-      },
-      handleJinLianItemAdd(id){
-        console.log('id' , id);
-      },
-      handleJinLianItemEdit(id){
-        console.log('id' , id);
-      },
-      handleCBtn(){
-
-      },
-      onClickCLabelRightButton(){
-        this.show = true;
-      },
-      onExpand(exp){
-        this.expandItems = exp;
-      },
-      onClickCCollapseItem({id}){
-        this.curSelItem = id;
-        this.show = false;
-      },
-      onClickLogicDialog(){
-
+      {
+        text: '笔记本',
+        src: 'icon_course03@3x'
       }
-    },
-    onShow(){
+    ],
 
+    expandItems: [],
+    items4: [],
+    curSelItem: '',
+    show: false,
+    showCDialog: false,
+    type1,
+    type2,
+    type3
+  },
+  methods: {
+    inputChange(v) {
+      // this.search = v;
+      // navToPage('/pages/section2/searchPage')
     },
-    created () {
-      eventHub.$on('jinlianopened', (jinlian) => {
-
-        jinlian.opened = !jinlian.opened;
-        console.log('jinlianopened' ,jinlian.opened);
-        eventHub.$emit('jinlianopenedEnd',jinlian)
+    onNavSearch(v) {
+      // this.search = v;
+      navToPage('/pages/section2/searchPage');
+    },
+    handleTab({ tab, index }) {
+      this.selectedTab = index;
+    },
+    handleJinLianItemAdd(id) {
+      console.log('id', id);
+    },
+    handleJinLianItemEdit(id) {
+      console.log('id', id);
+    },
+    handleCBtn() {
+      navToPage('/pages/section2/timu');
+    },
+    onClickCLabelRightButton() {
+      this.show = true;
+    },
+    onExpand(exp) {
+      this.expandItems = exp;
+    },
+    onClickCCollapseItem({ id }) {
+      this.curSelItem = id;
+      this.show = false;
+    },
+    onClickLogicDialog() {
+      navToPage('/pages/section2/timu');
+    },
+    handleIconText(index) {
+      const routes = ['timu', 'timu?p=cuoti', 'timuCuoti'].map(
+        r => `/pages/section2/${r}`
+      );
+      navToPage(routes[index]);
+    }
+  },
+  onShow() {},
+  created() {
+    eventHub.$on('jinlianopened', jinlian => {
+      jinlian.opened = !jinlian.opened;
+      console.log('jinlianopened', jinlian.opened);
+      eventHub.$emit('jinlianopenedEnd', jinlian);
+    });
+    eventHub.$on('jinlianedit', jinlian => {
+      console.log('jinlianedit', jinlian);
+    });
+    let arr = [];
+    for (let i = 0; i < 2; i++) {
+      arr.push({
+        title: '课程名称，如资料分析',
+        info: '考点：资料分析秒杀综述',
+        id: i
       });
-      eventHub.$on('jinlianedit', (jinlian) => {
+    }
 
-        console.log('jinlianedit' ,jinlian);
+    this.items1 = arr;
+
+    arr = [];
+    for (let i = 0; i < 2; i++) {
+      arr.push({
+        num1: '2',
+        num2: '2',
+        free: i % 2,
+        price: '123.12',
+        title: '真题讲课程名称课程名称课程名称课程名称',
+        good: 'good',
+        id: i
       });
-      let arr = [];
-      for(let i = 0 ; i < 2 ; i++){
-        arr.push({
-          title:'课程名称，如资料分析',
-          info:'考点：资料分析秒杀综述',
-          id:i
-        });
-      }
+    }
 
-      this.items1 = arr;
+    this.items2 = arr;
 
-      arr = [];
-      for(let i = 0 ; i < 2 ; i++){
-        arr.push({
-          num1:'2',
-          num2:'2',
-          free:i%2,
-          price:'123.12',
-          title:'真题讲课程名称课程名称课程名称课程名称',
-          good:'good',
-          id:i
-        });
-      }
-
-      this.items2 = arr;
-
-
-      arr = [];
-      for(let i = 0 ; i < 5 ; i++){
-        let obj1 = {
-          total:'2123',
-          wrong:'232',
-          title:'言语理解与表达',
-          id:i,
-          items:[],
-          level:1,
-          // opened:true,
-
-        }
-        for (let j = 0; j < 6; j++) {
-          let obj2 = {
-            total:'2123',
-            wrong:'232',
-            title:'言语理解与表达',
-            id:`${i}-${j}`,
-            items:[],
-            level:2,
-          }
-          for (let k = 0; k < 6; k++) {
-            let obj3 = {
-              total:'2123',
-              wrong:'232',
-              title:'言语理解与表达',
-              id:`${i}-${j}-${k}`,
-              items:[],
-              level:3,
-            }
-
-            obj2.items.push(obj3);
-          }
-
-          obj1.items.push(obj2);
-        }
-        arr.push(obj1);
-      }
-
-      this.items3 = arr;
-
-
-      arr = [];
-      for (let i = 0; i < 10; i++) {
-        let obj = [];
-        for (let j = 0; j < 5; j++) {
-          const v = {
-            text:'公务员行测',
-            id: `${i}-${j}`
+    arr = [];
+    for (let i = 0; i < 5; i++) {
+      let obj1 = {
+        total: '2123',
+        wrong: '232',
+        title: '言语理解与表达',
+        id: i,
+        items: [],
+        level: 1
+        // opened:true,
+      };
+      for (let j = 0; j < 6; j++) {
+        let obj2 = {
+          total: '2123',
+          wrong: '232',
+          title: '言语理解与表达',
+          id: `${i}-${j}`,
+          items: [],
+          level: 2
+        };
+        for (let k = 0; k < 6; k++) {
+          let obj3 = {
+            total: '2123',
+            wrong: '232',
+            title: '言语理解与表达',
+            id: `${i}-${j}-${k}`,
+            items: [],
+            level: 3
           };
 
-          obj.push(v);
+          obj2.items.push(obj3);
         }
 
-        arr.push({
-          items:obj,
-          text:'公务员考试',
-          id:i
-        })
+        obj1.items.push(obj2);
+      }
+      arr.push(obj1);
+    }
 
+    this.items3 = arr;
+
+    arr = [];
+    for (let i = 0; i < 10; i++) {
+      let obj = [];
+      for (let j = 0; j < 5; j++) {
+        const v = {
+          text: '公务员行测',
+          id: `${i}-${j}`
+        };
+
+        obj.push(v);
       }
 
-      this.items4 = arr;
-
-
-      this.titleIcons = this.titleIcons.map(m=>{
-        m.src = getImgUrlEx(m.src)
-        return m
-      })
+      arr.push({
+        items: obj,
+        text: '公务员考试',
+        id: i
+      });
     }
-  });
+
+    this.items4 = arr;
+
+    this.titleIcons = this.titleIcons.map(m => {
+      m.src = getImgUrlEx(m.src);
+      return m;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
-  }
-  .homeSection2{
-    height: auto;
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.homeSection2 {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .header {
+    background: rgba(255, 255, 255, 1);
     display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
+    .search {
+      margin: 32rpx;
+    }
 
-    .header{
-      background:rgba(255,255,255,1);
+    .ctab {
+      width: 690rpx;
+      margin-bottom: 32rpx;
+    }
+  }
+
+  .classCard {
+    margin: 32rpx auto;
+  }
+
+  .classCard1 {
+    margin: 30rpx 32rpx;
+  }
+
+  .titleIcons {
+    display: flex;
+    justify-content: space-around;
+    width: 690rpx;
+    height: 200rpx;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 8rpx;
+    align-items: center;
+    margin: 32rpx 0;
+  }
+  .titleIcon {
+    font-size: 32rpx;
+    font-family: PingFangSC-Medium, PingFangSC;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 1);
+    line-height: 40rpx;
+    > image {
+      margin-bottom: 16rpx;
+
+      width: 80rpx;
+      height: 80rpx;
+    }
+  }
+
+  .cLabelRightButton {
+    font-size: 32rpx;
+    font-family: PingFangSC-Medium, PingFangSC;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 1);
+    line-height: 44rpx;
+    padding: 28rpx 30rpx;
+    width: 690rpx;
+    height: 100rpx;
+    box-sizing: border-box;
+    margin-bottom: 32rpx;
+  }
+
+  .jinLianItem:last-child {
+    margin-bottom: 32rpx;
+  }
+
+  .learn {
+    height: 712rpx;
+    .body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      .search{
-        margin:32rpx;
+      .row {
+        margin-top: 46rpx;
       }
-
-      .ctab{
-        width:690rpx;
-        margin-bottom:32rpx;
-      }
-    }
-
-    .classCard{
-      margin: 32rpx auto;
-    }
-
-    .classCard1{
-      margin: 30rpx 32rpx;
-    }
-
-
-    .titleIcons{
-      display: flex;
-      justify-content: space-around;
-      width:690rpx;
-      height:200rpx;
-      background:rgba(255,255,255,1);
-      border-radius:8rpx;
-      align-items: center;
-      margin: 32rpx 0;
-
-
-    }
-    .titleIcon{
-      font-size:32rpx;
-      font-family:PingFangSC-Medium,PingFangSC;
-      font-weight:500;
-      color:rgba(51,51,51,1);
-      line-height:40rpx;
-      >image{
-        margin-bottom:16rpx;
-
-        width:80rpx;
-        height:80rpx;
-      }
-    }
-
-    .cLabelRightButton{
-      font-size:32rpx;
-      font-family:PingFangSC-Medium,PingFangSC;
-      font-weight:500;
-      color:rgba(51,51,51,1);
-      line-height:44rpx;
-      padding:28rpx 30rpx;
-      width:690rpx;
-      height:100rpx;
-      box-sizing: border-box;
-      margin-bottom: 32rpx;
-    }
-
-
-    .jinLianItem:last-child{
-      margin-bottom: 32rpx;
-    }
-
-
-    .learn{
-      height: 712rpx;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-        }
-      }
-    }
-
-    .collapseItem{
-      font-size:32rpx;
-      font-family:PingFang-SC-Regular,PingFang-SC;
-      font-weight:400;
-
-      line-height:40rpx;
-      display: flex;
-      align-items: center;
-      height: 120rpx;
-      margin-left: 40rpx;
-      position: relative;
-      padding: 0 40rpx;
-
-      &.selected{
-        color:rgba(79,172,27,1);
-      }
-      &::after{
-        content:'';
-        position: absolute;
-        background:rgba(230,230,230,1);
-        height: 1px;
-        width: 100%;
-        top:100%;
-        left: 50%;
-        width:650rpx;
-        transform: translateX(-50%);
-      }
-    }
-
-    .CCollapse{
-      padding: 30rpx 32rpx 0;
-      background:rgba(242,242,242,1);
-      box-sizing: border-box;
-    }
-    .collapse-item{
-      background: #FFF;
-      width:690rpx;
-      box-sizing: border-box;
-      margin-bottom: 20rpx;
-      border-radius:8rpx;
-  }
-    .collapse-item-header{
-      width: 100% !important;
     }
   }
+
+  .collapseItem {
+    font-size: 32rpx;
+    font-family: PingFang-SC-Regular, PingFang-SC;
+    font-weight: 400;
+
+    line-height: 40rpx;
+    display: flex;
+    align-items: center;
+    height: 120rpx;
+    margin-left: 40rpx;
+    position: relative;
+    padding: 0 40rpx;
+
+    &.selected {
+      color: rgba(79, 172, 27, 1);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      background: rgba(230, 230, 230, 1);
+      height: 1px;
+      width: 100%;
+      top: 100%;
+      left: 50%;
+      width: 650rpx;
+      transform: translateX(-50%);
+    }
+  }
+
+  .CCollapse {
+    padding: 30rpx 32rpx 0;
+    background: rgba(242, 242, 242, 1);
+    box-sizing: border-box;
+  }
+  .collapse-item {
+    background: #fff;
+    width: 690rpx;
+    box-sizing: border-box;
+    margin-bottom: 20rpx;
+    border-radius: 8rpx;
+  }
+  .collapse-item-header {
+    width: 100% !important;
+  }
+}
 </style>
 <config>
 {

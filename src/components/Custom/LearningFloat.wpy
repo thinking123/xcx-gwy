@@ -1,5 +1,5 @@
 <template>
-  <div class="LearningFloat external-cls">
+  <div class="LearningFloat external-cls" @click="onNav">
     <image src="icon_inlearning@3x" />
     <span class="text">
       {{ text }}
@@ -10,6 +10,7 @@
 <script>
 import wepy from '@wepy/core';
 import { getImgUrlEx } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
 
 wepy.component({
   data: {
@@ -22,7 +23,14 @@ wepy.component({
   },
   events: {},
   computed: {},
-  methods: {},
+  methods: {
+    onNav() {
+      navToPage('/pages/section1/timer', {
+        startTime: new Date().getTime(),
+        endTime: new Date().getTime() + 1000 * 3600
+      });
+    }
+  },
   onLoad() {
     this.icon = getImgUrlEx(this.icon);
   }

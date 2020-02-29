@@ -226,6 +226,7 @@ wepy.app({
     "pages/section2/mediaDetail",
     "pages/section2/mediaIntro",
     "pages/section2/searchPage",
+    "pages/section2/bwktDetail",
     "pages/homeSection2",
     "pages/section1/nearPage",
     "pages/section1/nearDetailPage",
