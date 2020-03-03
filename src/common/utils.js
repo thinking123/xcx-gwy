@@ -60,7 +60,7 @@ export function showMsg(title, showIcon = false) {
   console.log(title, icon, isError);
 }
 
-export function urlParams(url, params, noEncode = false) {
+export function urlParams(url, params = {}, noEncode = false) {
   let p = '';
   if (noEncode) {
     p = Object.keys(params)

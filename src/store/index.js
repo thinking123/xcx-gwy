@@ -56,11 +56,15 @@ export default new Vuex.Store({
       userIntegral: 0,
       learnNum: 0
     },
-    location: null
+    location: null,
+    totalOnlineNum: 0
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
       state.systemInfo = systemInfo;
+    },
+    setTotalOnlineNum(state, totalOnlineNum) {
+      state.totalOnlineNum = totalOnlineNum;
     },
     setItems(state, { items, type }) {
       const b = state.items[type] || [];
@@ -139,6 +143,9 @@ export default new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    totalOnlineNum(state) {
+      return state.totalOnlineNum;
     }
   },
   actions: {

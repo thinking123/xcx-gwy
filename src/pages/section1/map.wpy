@@ -18,6 +18,8 @@
 <script>
 import wepy from '@wepy/core';
 import { getImgUrlEx } from '@/common/utils';
+import { selectUserNumList } from '@/http/http-business';
+
 const geoCoordMap = {
   北京: ['116.46', '39.92'],
   上海: ['121.48', '31.22'],
@@ -105,7 +107,9 @@ wepy.page({
     }
   },
   onShow() {},
-  onLoad() {
+  onLoad(query = {total = 0}) {
+    this.total = total;
+    selectUserNumList().then(list => {});
     this.init();
   },
   created() {

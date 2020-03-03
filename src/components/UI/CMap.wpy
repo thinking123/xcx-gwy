@@ -25,7 +25,7 @@ wepy.component({
   computed: {},
   methods: {
     onClick() {
-      navToPage('/pages/section1/map');
+      navToPage('/pages/section1/map', { total: this.total });
     }
   },
   created() {

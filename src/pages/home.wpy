@@ -30,7 +30,7 @@
     <div class="title">
       学习打卡
     </div>
-    <CMap :total="user.learnNum"></CMap>
+    <CMap :total="totalOnlineNum"></CMap>
 
     <div class="titleIcons">
       <IconText
@@ -159,7 +159,8 @@ import {
   getMsgById,
   getupSleepClock,
   learnTimeAdd,
-  refreshLocation
+  refreshLocation,
+  getUserNum
 } from '@/http/http-business';
 
 wepy.page({
@@ -168,8 +169,7 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['isSigned', 'user']),
-    ...mapState(['nickName']),
+    ...mapGetters(['isSigned', 'user', 'totalOnlineNum']),
     timeTip() {
       if (this.time && this.time.length > 0) {
         const time = this.time;
@@ -335,6 +335,7 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     refreshLocation();
+    getUserNum();
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {
@@ -345,7 +346,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/section1/nearPage');
+      // navToPage('/pages/section1/nearPage');
     }
   }
 });

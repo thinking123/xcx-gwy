@@ -140,6 +140,7 @@ wepy.app({
     "pages/section1/luntanPublish",
     "pages/section1/MemberCenter",
     "pages/home",
+    "pages/section1/map",
 
     "pages/section1/nearPage",
     "pages/section1/nearDetailPage",

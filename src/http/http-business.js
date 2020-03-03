@@ -893,6 +893,97 @@ export function getLabel() {
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
+/**
+ GET /api/map/getUserNum
+首页地图数量 --编号 001
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+
+ */
+export function getUserNum() {
+  let url = '/api/map/getUserNum';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '')
+    .then(res => parseRes(res, ''))
+    .then(t => {
+      store.commit('setTotalOnlineNum', t);
+      return t;
+    });
+}
+
+/**
+ GET /api/map/selectUserNumList
+分省的数量 --编号 002
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "adCode": "string",
+    "cityCaption": "string",
+    "cityOrder": 0,
+    "cityState": 0,
+    "createBy": "string",
+    "createTime": "2020-03-03T02:51:43.052Z",
+    "params": {},
+    "parentCode": "string",
+    "parentLevel": 0,
+    "remark": "string",
+    "searchValue": "string",
+    "updateBy": "string",
+    "updateTime": "2020-03-03T02:51:43.052Z"
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+
+ */
+export function selectUserNumList() {
+  let url = '/api/map/selectUserNumList';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
 //todo 获取城市列表
 
 /**
