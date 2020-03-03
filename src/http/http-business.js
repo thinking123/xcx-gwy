@@ -530,6 +530,90 @@ export function getLearnTime(id) {
 }
 
 /**
+ GET /api/learnTime/finish
+结束 --编号 003
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+id	
+(required)
+学习计时id
+
+query	string
+finishTime	
+(required)
+结束时间
+
+query	string
+ */
+export function learnTimefinish(id) {
+  let url = '/api/learnTime/finish';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ /api/learnTime/suspend
+暂停 --编号 002
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+id	
+(required)
+学习计时id
+
+query	string
+remaindLearnTime	
+(required)
+已用时间
+
+ */
+export function learnTimesuspend(id, remaindLearnTime) {
+  let url = '/api/learnTime/suspend';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id,
+    remaindLearnTime
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
  *
  * GET /api/learnPlan/del
  删除学习计划 --编号 003
