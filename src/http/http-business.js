@@ -932,7 +932,7 @@ userId (integer, optional): 发帖用户id
  Response Messages
  */
 export function forumpost(categoryId, content, postLabel, title, userId) {
-  let url = '/api/login/wxlogin';
+  let url = '/api/forum/post';
   const loadingText = '正在发帖...';
   const errMsg = '发帖失败';
   const data = {

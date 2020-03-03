@@ -1,308 +1,319 @@
 <template>
   <div class="page luntan">
     <CDockerPoper :show="showDocker" @close="onCloseDocker">
-      <COrderList :items="list" @change="onCOrderList" orderIndex="2" :sel="selOrder" slot="header"/>
+      <COrderList
+        :items="list"
+        @change="onCOrderList"
+        orderIndex="2"
+        :sel="selOrder"
+        slot="header"
+      />
       <div class="poper" slot="poper">
         <div style="display:{{selOrder==0?'block':'none'}}">
-          <CListSelect :items="list1"
-                       key="id"
-                       labelKey="name" external-cls="CListSelect1" :sel="list1Sel" @change="onCListSelect1"/>
+          <CListSelect
+            :items="list1"
+            key="id"
+            labelKey="name"
+            external-cls="CListSelect1"
+            :sel="list1Sel"
+            @change="onCListSelect1"
+          />
         </div>
         <div style="display:{{selOrder==1?'block':'none'}}">
-          <CCollapse :value="expandItems" @change="onExpand"      external-cls="CCollapse">
-            <CCollapseItem v-for="item in list2" :key="item.id"
-                           external-cls="collapse-item"
-                           collapse-item="collapse-item-header"
-                           :title="item.prov" :name="item.id">
-              <div v-for="m in item.items" :key="m.id"
-                   :class="{'selected':curSelItem == m.id}"
-                   @click="onClickCCollapseItem(m)"
-                   class="collapseItem">
-                {{m.school}}
-              </div>
-            </CCollapseItem>
-          </CCollapse>
+          <CListSelect
+            :items="list2"
+            key="id"
+            labelKey="cityName"
+            external-cls="CListSelect1"
+            :sel="list2Sel"
+            @change="onCListSelect2"
+          />
         </div>
-
-
-
-
       </div>
     </CDockerPoper>
-    <CListWrap1 :type="listtype"
-                :params="params"
-                :url="url">
+    <CListWrap1 :type="listtype" :params="params" :url="url">
       <block slot="header">
-        <LunTanHeader title="申论" tieziNum="2008" followNum="100" @btn="handleGz"/>
+        <LunTanHeader
+          title="申论"
+          tieziNum="2008"
+          followNum="100"
+          @btn="handleGz"
+          v-if="header"
+        />
       </block>
       <LunTanTopItem
-        v-for="(item,index) in topList" :key="item.id"
+        v-for="(item, index) in topList"
+        :key="item.id"
         :desc="item.content"
         showLine="{{index < 2}}"
-        :type="index"/>
-
-      <LunTanMsgItem v-for="item in otherList" :key="item.id"
-                     :title="item.title"
-                     :name="item.userId"
-                     :readerNum="item.scanNum"
-                     :publishDate="item.addTime"
-                     @click.native="handleMsgItem(item)"
+        :type="index"
       />
 
+      <LunTanMsgItem
+        v-for="item in otherList"
+        :key="item.id"
+        :title="item.title"
+        :name="item.userId"
+        :readerNum="item.scanNum"
+        :publishDate="item.addTime"
+        @click.native="handleMsgItem(item)"
+      />
     </CListWrap1>
 
-    <FixedPublishBtn @click.native="onPubish"/>
+    <FixedPublishBtn @click.native="onPubish" />
   </div>
 </template>
 
-
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { forumforumCollect, forumgetCategory, getCity, getLabel } from '@/http/http-business';
-  import {mapGetters} from '@wepy/x';
-  import { navToPage } from '@/common/navUtils';
-  import { delNullProperty } from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import {
+  forumforumCollect,
+  forumgetCategory,
+  getCity,
+  getLabel
+} from '@/http/http-business';
+import { mapGetters } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
+import { delNullProperty } from '@/common/utils';
 
-  const listtype = 'forum_getForumList'
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+const listtype = 'forum_getForumList';
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['items', 'user']),
+    clist() {
+      const list = this.items[listtype];
+      console.log('list', list);
+      return list || [];
     },
-    computed: {
-      ...mapGetters(['items',"user"]),
-      clist(){
-        const list = this.items[listtype];
-        console.log('list' , list);
-        return list || [];
-      },
-      topList(){
-        const l = this.clist || [];
-        return l.slice(0,3);
-      },
-      otherList(){
-        const l = this.clist || [];
-        return l.slice(3);
-      },
-      params(){
-        let p = {
-          labelId:this.list1Sel,
-          cityCode:this.cityCode,
-          userId:this.user.id,
-        }
+    topList() {
+      const l = this.clist || [];
+      return l.slice(0, 3);
+    },
+    otherList() {
+      const l = this.clist || [];
+      return l.slice(3);
+    },
+    params() {
+      const selV = (i, arr, key) =>
+        i && arr && i > -1 && i < arr.length ? arr[i][key] : '';
+      let p = {
+        labelId: selV(this.list1Sel, this.list1, 'id'),
+        cityCode: selV(this.list2Sel, this.list2, 'id'),
+        userId: this.user.id
+      };
 
-        p = delNullProperty(p);
+      p = delNullProperty(p);
 
-        return p;
+      return p;
+    },
+    header() {
+      if (
+        this.list1 &&
+        this.list1Sel > -1 &&
+        this.list1Sel < this.list1.length
+      ) {
+        return this.list1[this.list1Sel];
       }
-    },
-    data: {
-      msgItems:[],
-      showDocker:false,
-      list:[
-        {text:'分类'},
-        {text:'地区'},
-        {text:'人气'},
-      ],
-      selOrder:-1,
-      list1:[
-      ],
-      list1Sel:'',
-      list2:[
-      ],
-      list2Sel:-1,
-      list3Sel:-1,
-      expandItems:[],
-      curSelItem:'',
-
-      labelId:'',
-      cityCode:'',
-      url:'/api/forum/getForumList',
-      listtype,
-
-    },
-    methods: {
-      onPubish(){
-        navToPage('/pages/section1/luntanPublish')
-      },
-      handleGz(){
-        forumforumCollect();
-      },
-      handleMsgItem(item){
-
-      },
-      onCOrderList(index){
-        this.selOrder = index
-        // console.log(' this.selOrder :',  this.selOrder );
-
-        if(index == 2){
-          this.url = "/api/forum/getForumListByScan";
-        }else{
-          this.url = "/api/forum/getForumList";
-        }
-
-        if(index > -1){
-          // console.log('this.showDocker')
-          if(index == 2){
-            this.showDocker = false;
-
-
-          }else{
-            this.showDocker = true;
-          }
-        }else{
-          this.showDocker = false;
-
-        }
-      },
-      onCListSelect1(index){
-        this.list1Sel = index;
-        this.showDocker = false;
-        this.selOrder = -1;
-
-      },
-
-      onExpand(exp){
-        this.expandItems = exp;
-      },
-      onClickCCollapseItem({id}){
-        this.curSelItem = id;
-      },
-      onCloseDocker(){
-        this.showDocker = false;
-        this.selOrder = -1;
-      }
-    },
-    onShow(){
-
-    },
-    created () {
-      const arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        const v = {
-          title:'[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
-          name:'Smile',
-          readerNum:'123213',
-          publishDate:'2019-08-12',
-          id:i,
-        }
-
-        arr.push(v);
-      }
-
-      this.msgItems = arr;
-    },
-    onLoad() {
-
-      // forumgetCategory().then(res => {
-      //     this.list1 = res.map(m=>{
-      //       m.text = m.categoryName;
-      //       return m;
-      //     })
-      // });
-
-
-      getCity().then(res => {
-        this.list2 = res;
-      });
-
-      getLabel().then(res => {
-        this.list1 = res;
-
-      })
+      return '';
     }
-  });
+  },
+  data: {
+    msgItems: [],
+    showDocker: false,
+    list: [{ text: '分类' }, { text: '地区' }, { text: '人气' }],
+    selOrder: -1,
+    list1: [],
+    list1Sel: '',
+    list2: [],
+    list2Sel: -1,
+    list3Sel: -1,
+    expandItems: [],
+    curSelItem: '',
+
+    labelId: '',
+    cityCode: '',
+    url: '/api/forum/getForumList',
+    listtype
+  },
+  methods: {
+    onPubish() {
+      navToPage('/pages/section1/luntanPublish');
+    },
+    handleGz() {
+      forumforumCollect();
+    },
+    handleMsgItem(item) {},
+    onCOrderList(index) {
+      this.selOrder = index;
+      // console.log(' this.selOrder :',  this.selOrder );
+
+      if (index == 2) {
+        this.url = '/api/forum/getForumListByScan';
+      } else {
+        this.url = '/api/forum/getForumList';
+      }
+
+      if (index > -1) {
+        // console.log('this.showDocker')
+        if (index == 2) {
+          this.showDocker = false;
+        } else {
+          this.showDocker = true;
+        }
+      } else {
+        this.showDocker = false;
+      }
+    },
+    onCListSelect1(index) {
+      this.list1Sel = index;
+      this.showDocker = false;
+      this.selOrder = -1;
+    },
+    onCListSelect2(index) {
+      this.list2Sel = index;
+      this.showDocker = false;
+      this.selOrder = -1;
+    },
+    onExpand(exp) {
+      this.expandItems = exp;
+    },
+    onClickCCollapseItem({ id }) {
+      this.curSelItem = id;
+    },
+    onCloseDocker() {
+      this.showDocker = false;
+      this.selOrder = -1;
+    }
+  },
+  onShow() {},
+  created() {
+    const arr = [];
+    for (let i = 0; i < 10; i++) {
+      const v = {
+        title:
+          '[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
+        name: 'Smile',
+        readerNum: '123213',
+        publishDate: '2019-08-12',
+        id: i
+      };
+
+      arr.push(v);
+    }
+
+    this.msgItems = arr;
+  },
+  onLoad() {
+    // forumgetCategory().then(res => {
+    //     this.list1 = res.map(m=>{
+    //       m.text = m.categoryName;
+    //       return m;
+    //     })
+    // });
+
+    getCity().then(res => {
+      this.list2 = res;
+    });
+
+    getLabel().then(res => {
+      this.list1 = res;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  .luntan{
-    background:rgba(242,242,242,1);
-    .selector{
-      width:750rpx;
-      height:100rpx;
-      background:rgba(255,255,255,1);
-      box-shadow:0px 4rpx 12rpx 0px rgba(0,0,0,0.06)
-    }
-
-    .last-top-item{
-      margin-bottom: 24rpx;
-    }
-
-    luntantopitem:last-of-type{
-      margin-bottom: 24rpx;
-    }
+.luntan {
+  background: rgba(242, 242, 242, 1);
+  .selector {
+    width: 750rpx;
+    height: 100rpx;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4rpx 12rpx 0px rgba(0, 0, 0, 0.06);
   }
 
-  .poper{
+  .last-top-item {
+    margin-bottom: 24rpx;
+  }
+
+  luntantopitem:last-of-type {
+    margin-bottom: 24rpx;
+  }
+}
+
+.poper {
+  width: 750rpx;
+  .c1 {
     width: 750rpx;
-    .c1{
-      width: 750rpx;
-      height: 200rpx;
-      background-color: #07c160;
-    }
+    height: 200rpx;
+    background-color: #07c160;
+  }
 
-    .c2{
-      width: 750rpx;
-      height: 800rpx;
-      background-color: chartreuse;
-    }
+  .c2 {
+    width: 750rpx;
+    height: 800rpx;
+    background-color: chartreuse;
+  }
 
-    .CListSelect1{
-      background:rgba(242,242,242,1);
-      padding: 32rpx 30rpx;
-      box-sizing: border-box;
-      .CListSelect-item{
-        margin-bottom: 20rpx;
-        &:last-child{
-          margin-bottom: 0;
-        }
+  .CListSelect1 {
+    background: rgba(242, 242, 242, 1);
+    padding: 32rpx 30rpx;
+    box-sizing: border-box;
+    .CListSelect-item {
+      margin-bottom: 20rpx;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
+  }
+}
 
-  }
+.CCollapse {
+  padding: 30rpx 32rpx 0;
+  background: rgba(242, 242, 242, 1);
+  box-sizing: border-box;
+}
+.collapse-item {
+  background: #fff;
+  width: 690rpx;
+  box-sizing: border-box;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+}
+.collapse-item-header {
+  width: 100% !important;
+}
+.collapseItem {
+  font-size: 32rpx;
+  font-weight: 400;
 
-  .CCollapse{
-    padding: 30rpx 32rpx 0;
-    background:rgba(242,242,242,1);
-    box-sizing: border-box;
-  }
-  .collapse-item{
-    background: #FFF;
-    width:690rpx;
-    box-sizing: border-box;
-    margin-bottom: 20rpx;
-    border-radius:8rpx;
-  }
-  .collapse-item-header{
-    width: 100% !important;
-  }
-  .collapseItem{
-    font-size:32rpx;
-    font-weight:400;
+  line-height: 40rpx;
+  display: flex;
+  align-items: center;
+  height: 120rpx;
+  margin-left: 40rpx;
+  position: relative;
+  padding: 0 40rpx;
 
-    line-height:40rpx;
-    display: flex;
-    align-items: center;
-    height: 120rpx;
-    margin-left: 40rpx;
-    position: relative;
-    padding: 0 40rpx;
-
-    &.selected{
-      color:rgba(79,172,27,1);
-    }
-    &::after{
-      content:'';
-      position: absolute;
-      background:rgba(230,230,230,1);
-      height: 1px;
-      width: 100%;
-      top:100%;
-      left: 50%;
-      width:650rpx;
-      transform: translateX(-50%);
-    }
+  &.selected {
+    color: rgba(79, 172, 27, 1);
   }
+  &::after {
+    content: '';
+    position: absolute;
+    background: rgba(230, 230, 230, 1);
+    height: 1px;
+    width: 100%;
+    top: 100%;
+    left: 50%;
+    width: 650rpx;
+    transform: translateX(-50%);
+  }
+}
 </style>
 <config>
 {

@@ -1,137 +1,198 @@
 <template>
   <div class="page luntanPublish">
-    <CButton text="发布"  @tap.native="handleSubmit" external-cls="btn" type="info"/>
+    <CButton
+      text="发布"
+      @tap.native="handleSubmit"
+      external-cls="btn"
+      type="info"
+    />
 
-    <CInput placeholder="标题"  :val.sync="title" @update:val="handlev"/>
-    <textarea bindblur="bindTextAreaBlur" placeholder="分享帖子，记录学习点滴…"
-              class="textarea"/>
+    <CInput placeholder="标题" :val.sync="title" @update:val="handlev" />
+    <textarea
+      bindinput="bindTextAreaBlur"
+      placeholder="分享帖子，记录学习点滴…"
+      class="textarea"
+    />
 
-    <SelectorRightButton text="帖子分类" :rightText="selText" @click.native="show=true"/>
+    <SelectorRightButton
+      text="帖子分类"
+      :rightText="selText"
+      @click.native="show = true"
+    />
 
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="1000"
-             overlay="{{ true }}">
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="onCloseCPopup"
+      zIndex="1000"
+      overlay="{{ true }}"
+    >
       <div class="time">
-        <HeaderClose text="选择分类"  external-cls="header" @click="show=false"/>
+        <HeaderClose
+          text="选择分类"
+          external-cls="header"
+          @click="onCloseCPopup"
+        />
         <div class="body">
-          <TwoColumnPickerView @change="hanleTime" external-cls="row1"  :hours="hs" :mins="ms"/>
-          <CButton text="确认"  @tap.native="handleSetTime" external-cls="row2"/>
+          <TwoColumnPickerView
+            @changeIndex="hanleTime"
+            external-cls="row1"
+            :hours="list1"
+            hourLabel="name"
+            minLabel="categoryName"
+            :mins="list2"
+            :val="time"
+          />
+          <CButton
+            text="确认"
+            @tap.native="handleSetTime"
+            external-cls="row2"
+          />
         </div>
-
       </div>
-
     </CPopup>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {navBack} from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { navBack } from '@/common/navUtils';
+import { forumgetCategory, getLabel, forumpost } from '@/http/http-business';
+import { isEmptyString, showMsg } from '@/common/utils';
+import { mapGetters } from '@wepy/x';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+
+  data: {
+    title: '',
+    selText: '去添加',
+    show: false,
+    //todo 获取一级分类的接口
+    hs: ['一级分类', '一级分类', '一级分类', '一级分类'],
+    ms: ['言语理解与表达', '数量关系'],
+    setTime: [],
+    time: [],
+    list1: [],
+    selList1: -1,
+    list2: [],
+    selList2: -1
+  },
+  methods: {
+    verify() {
+      if (
+        isEmptyString(this.title) ||
+        isEmptyString(this.content) ||
+        this.selList1 === -1 ||
+        this.selList2 === -1
+      ) {
+        showMsg('请完成内容');
+        return false;
+      }
+      return true;
     },
-    computed: {
-
-    },
-    data: {
-      title:'',
-      selText:'去添加',
-      show:false,
-      //todo 获取一级分类的接口
-      hs:[
-        '一级分类',
-        '一级分类',
-        '一级分类',
-        '一级分类',
-      ],
-      ms:[
-        '言语理解与表达',
-        '数量关系'
-      ],
-      setTime:[],
-      time:[],
-    },
-    methods: {
-      handleSubmit(){
-        navBack();
-      },
-      bindTextAreaBlur(){
-
-      },
-      handlev(v){
-        this.title = v;
-      },
-      handleSelText(){
-
-      },
-      hanleTime(v){
-        console.log('time:' , v)
-        this.setTime = v;
-      },
-      handleSetTime(){
-        this.show = false;
-        this.time = this.setTime;
-        this.selText = this.time.join('|');
+    handleSubmit() {
+      if (this.verify()) {
+        forumpost(
+          this.list1[this.selList1].id,
+          this.content,
+          this.list2[this.selList2].id,
+          this.title,
+          this.user.id
+        ).then(() => {
+          showMsg('发帖成功');
+          navBack();
+        });
       }
     },
-    onShow(){
-
+    bindTextAreaBlur(event) {
+      const c = event.$wx.detail.value;
+      this.content = c;
     },
-    created () {
-
+    handlev(v) {
+      this.title = v;
+    },
+    handleSelText() {},
+    hanleTime(v) {
+      console.log('time:', v);
+      this.setTime = v;
+    },
+    handleSetTime() {
+      this.show = false;
+      this.time = this.setTime;
+      // this.selText = this.time.join('|');
+      this.selList1 = this.time[0];
+      this.selList2 = this.time[1];
+      this.selText =
+        this.list1[this.selList1].name +
+        ' ' +
+        this.list2[this.selList2].categoryName;
+    },
+    onCloseCPopup() {
+      this.show = false;
+      // this.time = [this.time[0], this.time[1]];
+      // console.log('onCloseCPopup');
     }
-  });
+  },
+  onShow() {},
+  onLoad() {
+    getLabel().then(res => {
+      this.list1 = res;
+    });
+    forumgetCategory().then(res => {
+      this.list2 = res;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  .luntanPublish{
-    width:auto;
-    padding: 0 30rpx;
+.luntanPublish {
+  width: auto;
+  padding: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+
+  & > cbutton {
+    align-self: flex-end;
+  }
+
+  .btn {
+    width: 160rpx;
+    height: 80rpx;
+  }
+
+  .textarea {
+    margin-top: 48rpx;
+    height: 400rpx;
+  }
+  .uploader {
+    position: fixed;
+    left: 30rpx;
+    bottom: 30rpx;
+  }
+}
+
+.time {
+  .body {
     display: flex;
     flex-direction: column;
-
-    &>cbutton{
-      align-self: flex-end;
+    align-items: center;
+    .row1 {
+      margin: 62rpx 0 64rpx 0;
     }
 
-    .btn{
-      width:160rpx;
-      height:80rpx;
-
-    }
-
-    .textarea{
-      margin-top: 48rpx;
-      height: 400rpx;
-    }
-    .uploader{
-      position: fixed;
-      left: 30rpx;
-      bottom: 30rpx;
+    .row2 {
+      margin-bottom: 62rpx;
     }
   }
-
-  .time{
-
-    .body{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      .row1{
-        margin: 62rpx 0 64rpx 0;
-      }
-
-      .row2{
-        margin-bottom: 62rpx;
-      }
-    }
-
-  }
+}
 </style>
 <config>
 {

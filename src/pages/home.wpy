@@ -349,6 +349,9 @@ wepy.page({
     this.panelIcons = this.panelIcons.map(getImgUrlEx);
 
     // navToPage('/pages/section1/nearDetailPage')
+    if (DEV) {
+      // navToPage('/pages/section1/luntan');
+    }
   }
 });
 </script>
