@@ -107,8 +107,8 @@ wepy.page({
     }
   },
   onShow() {},
-  onLoad(query = {total = 0}) {
-    this.total = total;
+  onLoad(query = {}) {
+    this.total = query.total || 0;
     selectUserNumList().then(list => {});
     this.init();
   },

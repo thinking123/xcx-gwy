@@ -121,7 +121,6 @@ wepy.app({
     "pages/section2/bwktDetail",
     "pages/homeSection2",
     "pages/section1/question",
-    "pages/section1/kaimingwutong",
     "pages/section1/timer",
     "pages/section1/learnPlan",
     "pages/section1/learnLog",
@@ -139,6 +138,7 @@ wepy.app({
     "pages/section1/MemberCenter",
     "pages/home",
     "pages/section1/map",
+    "pages/section1/kaimingwutong",
 
     "pages/section1/luntanDetail",
     "pages/section1/luntan",

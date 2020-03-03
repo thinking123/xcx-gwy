@@ -71,7 +71,8 @@ import {
   forumforumCollect,
   forumgetCategory,
   getCity,
-  getLabel
+  getLabel,
+  selectPro
 } from '@/http/http-business';
 import { mapGetters } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
@@ -216,7 +217,7 @@ wepy.page({
     //     })
     // });
 
-    getCity().then(res => {
+    selectPro().then(res => {
       this.list2 = res;
     });
 

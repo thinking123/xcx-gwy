@@ -1368,3 +1368,45 @@ export function refreshLocation() {
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 }
+
+/**
+GET /api/cityCode/selectPro
+获取省级地区
+
+Response Class (Status 200)
+Successful — 请求已完成
+
+ModelExample Value
+JsonResult«KmwtCityCode» {
+message (string, optional): 响应提示 ,
+path (string, optional): 路径 ,
+rows (KmwtCityCode, optional): 响应数据 ,
+status (string, optional): 响应状态
+}
+KmwtCityCode {
+adCode (string, optional),
+cityCaption (string, optional),
+cityOrder (integer, optional),
+cityState (integer, optional),
+createBy (string, optional),
+createTime (string, optional),
+params (object, optional),
+parentCode (string, optional),
+parentLevel (integer, optional),
+remark (string, optional),
+searchValue (string, optional),
+updateBy (string, optional),
+updateTime (string, optional)
+}
+
+
+ */
+export function selectPro() {
+  let url = '/api/cityCode/selectPro';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
