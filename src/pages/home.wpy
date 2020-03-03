@@ -158,7 +158,8 @@ import {
   getLearnTime,
   getMsgById,
   getupSleepClock,
-  learnTimeAdd
+  learnTimeAdd,
+  refreshLocation
 } from '@/http/http-business';
 
 wepy.page({
@@ -333,13 +334,7 @@ wepy.page({
   },
   onShow() {},
   onLoad(query = {}) {
-    //todo mock
-    // if (this.isSigned) {
-    //   const { userId = 3 } = this.user;
-    //   getMsgById(userId).then(res => {
-    //     this.setUser(res);
-    //   });
-    // }
+    refreshLocation();
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {
@@ -350,7 +345,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/section1/MemberCenter');
+      navToPage('/pages/section1/nearPage');
     }
   }
 });

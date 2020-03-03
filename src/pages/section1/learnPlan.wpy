@@ -1,365 +1,400 @@
 <template>
   <div class="page learnPlan">
     <div class="header">
-      <CTab type="radius" :tabs="tabs"
-            @changeTab="handleTab"
-            external-cls="ctab"/>
+      <CTab
+        type="radius"
+        :tabs="tabs"
+        @changeTab="handleTab"
+        external-cls="ctab"
+      />
 
-      <IconText @click.native="onPlanShow"
-                v-if="selectedTab == 0"
-                external-cls="titleIcon"
-                external-img="titleImg"
-                :text="iconText.text" :src="iconText.src"/>
+      <IconText
+        @click.native="onPlanShow"
+        v-if="selectedTab == 0"
+        external-cls="titleIcon"
+        external-img="titleImg"
+        :text="iconText.text"
+        :src="iconText.src"
+      />
     </div>
-    <CListWrap1 eventName="TList" :type="listtype1"
-                :reloadKey="refreshKey1"
-                :params="params1"
-                :show="selectedTab == 0"
-                url="/api/learnPlan/getLearnPlanList">
-
-      <SwipeItem v-for="c in clist1"
-                 external-cls="row1"
-                 :disabled="disabled"
-                 :text1="c.planContent"
-                 :text2="c.planTime"
-                 :data="c"
-                 @btnclick="onSwipeItemSumbitClick"
-                 @onSwipeItemClick="onSwipeItemClick"
+    <CListWrap1
+      eventName="TList"
+      :type="listtype1"
+      :reloadKey="refreshKey1"
+      :params="params1"
+      :show="selectedTab == 0"
+      url="/api/learnPlan/getLearnPlanList"
+    >
+      <SwipeItem
+        v-for="(c, index) in clist1"
+        :key="index"
+        external-cls="row1"
+        :disabled="disabled"
+        :text1="c.planContent"
+        :text2="c.planTime"
+        :data="c"
+        @btnclick="onSwipeItemSumbitClick"
+        @onSwipeItemClick="onSwipeItemClick"
       />
-
     </CListWrap1>
-    <CListWrap1 eventName="TList" :type="listtype2"
-                :reloadKey="refreshKey2"
-                :params="params2"
-                :show="selectedTab == 1"
-                url="/api/learnPlan/getLearnPlanList">
-
-      <SwipeItem v-for="c in clist2"
-                 external-cls="row1"
-                 disabled="{{true}}"
-                 :text1="c.planContent"
-                 :text2="c.planTime"
-                 :data="c"
+    <CListWrap1
+      eventName="TList"
+      :type="listtype2"
+      :reloadKey="refreshKey2"
+      :params="params2"
+      :show="selectedTab == 1"
+      url="/api/learnPlan/getLearnPlanList"
+    >
+      <SwipeItem
+        v-for="(c, index) in clist2"
+        :key="index"
+        external-cls="row1"
+        disabled="{{true}}"
+        :text1="c.planContent"
+        :text2="c.planTime"
+        :data="c"
       />
-
     </CListWrap1>
 
-
-    <CPopup :show="planShow"
-            position="bottom"
-            @close="planShow=false"
-            zIndex="999"
-            overlay="{{ true }}">
+    <CPopup
+      :show="planShow"
+      position="bottom"
+      @close="planShow = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="添加计划" external-cls="header" @click="planShow=false"/>
+        <HeaderClose
+          text="添加计划"
+          external-cls="header"
+          @click="planShow = false"
+        />
         <div class="body">
-          <CTopLabelInput label="计划内容" placeholder="准备学点啥，如学习申论第一章" external-cls="row"
-                          @update="handlelearnContent"
-                          :val.sync="learnContent"/>
-          <CTopLabelInput label="设置提醒时间" placeholder="到时会提醒您学习" :btn="timeTip" @clickBtn="handleLearnTip"
-                          :val.sync="learnTip"
-                          readonly="{{true}}"
-                          @update="handlelearnTip"
-                          external-cls="row"/>
-          <CButton text="确认添加" @tap.native="handleStartLearn" external-cls="row"/>
+          <CTopLabelInput
+            label="计划内容"
+            placeholder="准备学点啥，如学习申论第一章"
+            external-cls="row"
+            @update="handlelearnContent"
+            :val.sync="learnContent"
+          />
+          <CTopLabelInput
+            label="设置提醒时间"
+            placeholder="到时会提醒您学习"
+            :btn="timeTip"
+            @clickBtn="handleLearnTip"
+            :val.sync="learnTip"
+            readonly="{{true}}"
+            @update="handlelearnTip"
+            external-cls="row"
+          />
+          <CButton
+            text="确认添加"
+            @tap.native="handleStartLearn"
+            external-cls="row"
+          />
         </div>
       </div>
     </CPopup>
-    <CPopup :show="timeShow"
-            position="bottom"
-            @close="timeShow=false"
-            zIndex="1000"
-            overlay="{{ true }}">
+    <CPopup
+      :show="timeShow"
+      position="bottom"
+      @close="timeShow = false"
+      zIndex="1000"
+      overlay="{{ true }}"
+    >
       <div class="time">
-        <HeaderClose text="选择学习时间" external-cls="header" @click="timeShow=false"/>
+        <HeaderClose
+          text="选择学习时间"
+          external-cls="header"
+          @click="timeShow = false"
+        />
         <div class="body">
           <view class="section">
-            <picker mode="date" value="{{seLdate}}" start="{{startDate}}" bindchange="bindDateChange">
-              <view class="picker">
-                日期: {{seLdate}}
-              </view>
+            <picker
+              mode="date"
+              value="{{seLdate}}"
+              start="{{startDate}}"
+              bindchange="bindDateChange"
+            >
+              <view class="picker"> 日期: {{ seLdate }} </view>
             </picker>
           </view>
 
           <view class="section">
-            <picker mode="time" value="{{seLtime}}" start="{{startTime}}" bindchange="bindTimeChange">
-              <view class="picker">
-                时间: {{seLtime}}
-              </view>
+            <picker
+              mode="time"
+              value="{{seLtime}}"
+              start="{{startTime}}"
+              bindchange="bindTimeChange"
+            >
+              <view class="picker"> 时间: {{ seLtime }} </view>
             </picker>
           </view>
 
-          <CButton text="确认" @tap.native="handleSetTime" external-cls="row2"/>
+          <CButton
+            text="确认"
+            @tap.native="handleSetTime"
+            external-cls="row2"
+          />
         </div>
-
       </div>
-
     </CPopup>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { getImgUrlEx, isEmptyString, getDate, getTime, showMsg } from '@/common/utils';
-  import { learnPlanAdd, learnPlanDel, learnPlanUpdate } from '@/http/http-business';
-  import { navToPage } from '@/common/navUtils';
-  import { mapGetters, mapState } from '@wepy/x';
+import wepy from '@wepy/core';
+import store from 'store';
+import {
+  getImgUrlEx,
+  isEmptyString,
+  getDate,
+  getTime,
+  showMsg
+} from '@/common/utils';
+import {
+  learnPlanAdd,
+  learnPlanDel,
+  learnPlanUpdate
+} from '@/http/http-business';
+import { navToPage } from '@/common/navUtils';
+import { mapGetters, mapState } from '@wepy/x';
 
-  const listtype1 = 'leanplanlsit1';
-  const listtype2 = 'leanplanlsit2';
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+const listtype1 = 'leanplanlsit1';
+const listtype2 = 'leanplanlsit2';
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user', 'items']),
+    clist1() {
+      const list = this.items[this.listtype1];
+      return list || [];
     },
-    computed: {
-      ...mapGetters(['user', 'items']),
-      clist1() {
-        const list = this.items[this.listtype1];
-        return list || [];
-      },
-      clist2() {
-        const list = this.items[this.listtype2];
-        return list || [];
-      },
-      params() {
-        return {
-          planState: this.selectedTab
-        };
-      },
-      timeTip() {
-        return '去设置';
-      }
-
+    clist2() {
+      const list = this.items[this.listtype2];
+      return list || [];
     },
-    data: {
-      refreshKey1: new Date().getTime(),
-      refreshKey2: new Date().getTime(),
-      listtype1,
-      listtype2,
-      params1: {
-        planState: 0
-      },
-      params2: {
-        planState: 1
-      },
-      tabs: [
-        { text: '待完成' },
-        { text: '已完成' }
-      ],
-      selectedTab: 0,
-      iconText: {
-        text: '添加计划',
-        src: 'btn_add_plan@3x'
-      },
-      waitComp: [],
-      disabled: false,
-      planShow: false,
-
-      timeShow: false,
-      time: [],
-      setTime: [],
-
-      learnContent: 'sdf',
-      learnTip: '',
-
-
-      seLdate: '',
-      seLtime: '',
-      startDate: '',
-      startTime: ''
+    params() {
+      return {
+        planState: this.selectedTab
+      };
     },
-    methods: {
-      onSwipeItemClick([{ id }, index]) {
-        learnPlanDel(id).then(res => {
-          showMsg('删除成功');
-          this.refreshKey1 = new Date().getTime();
-        });
-
-      },
-      onSwipeItemSumbitClick({ id }) {
-
-        //todo 学习计划的id 为 null
-        console.log('you lcick id', id);
-        learnPlanUpdate(id).then(res => {
-          if (res) {
-            showMsg('更新成功');
-            this.refreshKey1 = new Date().getTime();
-            this.refreshKey2 = new Date().getTime();
-
-          }
-        });
-      },
-      bindDateChange: function(e) {
-        this.seLdate = e.$wx.detail.value;
-
-
-        console.log('this.seLdate ', this.seLdate);
-      },
-      bindTimeChange: function(e) {
-        this.seLtime = e.$wx.detail.value;
-      },
-      handleTab({ tab, index }) {
-        this.selectedTab = index;
-        this.disabled = index != 0;
-      },
-      handleLearnTip() {
-        this.timeShow = true;
-
-        if (!this.learnTip) {
-          this.startDate = getDate();
-          this.seLdate = getDate();
-          const t = getTime().split(':').slice(0, 2).join(':');
-          this.startTime = t;
-          this.seLtime = t;
-        }
-
-
-      },
-      handleStartLearn() {
-        const verify = () => {
-          if (!isEmptyString(this.learnContent) && this.isValidTime()) {
-            return true;
-          }
-          return false;
-        };
-
-
-        if (verify()) {
-          const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
-          const totalT = selDate.getTime();
-
-          learnPlanAdd(this.user.id, this.learnContent, totalT).then(res => {
-            if (res) {
-              showMsg('添加学习计划成功');
-              this.planShow = false;
-              this.refreshKey1 = new Date().getTime();
-            }
-          });
-        } else {
-          showMsg('内容不全');
-        }
-      },
-      onPlanShow() {
-        this.planShow = true;
-        this.learnTip = '';
-        this.learnContent = '';
-        this.setTime = [];
-        this.time = [];
-      },
-      handlelearnContent(v) {
-        this.learnContent = v;
-      },
-      handlelearnTip(v) {
-        this.learnTip = v;
-      },
-      hanleTime(v) {
-        console.log('time:', v);
-        this.setTime = v;
-      },
-      isValidTime() {
-        if (this.seLtime && this.seLdate) {
-          const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
-          return selDate.getTime() > new Date().getTime();
-        }
-
-        return false;
-
-      },
-      handleSetTime() {
-        this.timeShow = false;
-
-        if (this.isValidTime()) {
-          this.learnTip = `选择时间：${this.seLdate} ${this.seLtime}`;
-        }
-
-      }
-    },
-    onShow() {
-
-    },
-    created() {
-      this.iconText.src = getImgUrlEx(this.iconText.src);
+    timeTip() {
+      return '去设置';
     }
-  });
+  },
+  data: {
+    refreshKey1: new Date().getTime(),
+    refreshKey2: new Date().getTime(),
+    listtype1,
+    listtype2,
+    params1: {
+      planState: 0
+    },
+    params2: {
+      planState: 1
+    },
+    tabs: [{ text: '待完成' }, { text: '已完成' }],
+    selectedTab: 0,
+    iconText: {
+      text: '添加计划',
+      src: 'btn_add_plan@3x'
+    },
+    waitComp: [],
+    disabled: false,
+    planShow: false,
+
+    timeShow: false,
+    time: [],
+    setTime: [],
+
+    learnContent: 'sdf',
+    learnTip: '',
+
+    seLdate: '',
+    seLtime: '',
+    startDate: '',
+    startTime: ''
+  },
+  methods: {
+    onSwipeItemClick([{ id }, index]) {
+      learnPlanDel(id).then(res => {
+        showMsg('删除成功');
+        this.refreshKey1 = new Date().getTime();
+      });
+    },
+    onSwipeItemSumbitClick({ id }) {
+      //todo 学习计划的id 为 null
+      console.log('you lcick id', id);
+      learnPlanUpdate(id).then(res => {
+        if (res) {
+          showMsg('更新成功');
+          this.refreshKey1 = new Date().getTime();
+          this.refreshKey2 = new Date().getTime();
+        }
+      });
+    },
+    bindDateChange: function(e) {
+      this.seLdate = e.$wx.detail.value;
+
+      console.log('this.seLdate ', this.seLdate);
+    },
+    bindTimeChange: function(e) {
+      this.seLtime = e.$wx.detail.value;
+    },
+    handleTab({ tab, index }) {
+      this.selectedTab = index;
+      this.disabled = index != 0;
+    },
+    handleLearnTip() {
+      this.timeShow = true;
+
+      if (!this.learnTip) {
+        this.startDate = getDate();
+        this.seLdate = getDate();
+        const t = getTime()
+          .split(':')
+          .slice(0, 2)
+          .join(':');
+        this.startTime = t;
+        this.seLtime = t;
+      }
+    },
+    handleStartLearn() {
+      const verify = () => {
+        if (!isEmptyString(this.learnContent) && this.isValidTime()) {
+          return true;
+        }
+        return false;
+      };
+
+      if (verify()) {
+        const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+        const totalT = selDate.getTime();
+
+        learnPlanAdd(this.user.id, this.learnContent, totalT).then(res => {
+          if (res) {
+            showMsg('添加学习计划成功');
+            this.planShow = false;
+            this.refreshKey1 = new Date().getTime();
+          }
+        });
+      } else {
+        showMsg('内容不全');
+      }
+    },
+    onPlanShow() {
+      this.planShow = true;
+      this.learnTip = '';
+      this.learnContent = '';
+      this.setTime = [];
+      this.time = [];
+    },
+    handlelearnContent(v) {
+      this.learnContent = v;
+    },
+    handlelearnTip(v) {
+      this.learnTip = v;
+    },
+    hanleTime(v) {
+      console.log('time:', v);
+      this.setTime = v;
+    },
+    isValidTime() {
+      if (this.seLtime && this.seLdate) {
+        const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+        return selDate.getTime() > new Date().getTime();
+      }
+
+      return false;
+    },
+    handleSetTime() {
+      this.timeShow = false;
+
+      if (this.isValidTime()) {
+        this.learnTip = `选择时间：${this.seLdate} ${this.seLtime}`;
+      }
+    }
+  },
+  onShow() {},
+  created() {
+    this.iconText.src = getImgUrlEx(this.iconText.src);
+  }
+});
 </script>
 <style lang="scss">
-  @import "~newBase";
-  .learnPlan{
-    background-color: $pageBg;
-    overflow-y: auto;
-    .header{
-      padding: 0 30rpx;
-      height: 144rpx;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: $white;
-      .ctab{
-        width: 460rpx;
-      }
-      .titleIcon{
-        font-size:28rpx;
-        font-weight:400;
-        color:$primaryColor;
-        line-height:28rpx;
-        >image{
-          width: 44rpx;
-          height: 48rpx;
-          margin-bottom: 16rpx;
-        }
-      }
-      .titleImg{
-
-      }
-
-
-    }
-
-    .row1{
-      margin-top: 24rpx;
-    }
-
-    .learn{
-      height: auto;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-          margin-bottom: 42rpx;
-        }
-      }
-    }
-
-    .time{
-
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row1{
-          margin: 62rpx 0 64rpx 0;
-        }
-
-        .row2{
-          margin-bottom: 62rpx;
-        }
-      }
-
-    }
-
-  }
-
-  .picker{
-    height:100rpx;
+@import '~newBase';
+.learnPlan {
+  background-color: $pageBg;
+  overflow-y: auto;
+  .header {
+    padding: 0 30rpx;
+    height: 144rpx;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    color:$primaryColor;
+    background-color: $white;
+    .ctab {
+      width: 460rpx;
+    }
+    .titleIcon {
+      font-size: 28rpx;
+      font-weight: 400;
+      color: $primaryColor;
+      line-height: 28rpx;
+      > image {
+        width: 44rpx;
+        height: 48rpx;
+        margin-bottom: 16rpx;
+      }
+    }
+    .titleImg {
+    }
   }
+
+  .row1 {
+    margin-top: 24rpx;
+  }
+
+  .learn {
+    height: auto;
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row {
+        margin-top: 46rpx;
+        margin-bottom: 42rpx;
+      }
+    }
+  }
+
+  .time {
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row1 {
+        margin: 62rpx 0 64rpx 0;
+      }
+
+      .row2 {
+        margin-bottom: 62rpx;
+      }
+    }
+  }
+}
+
+.picker {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primaryColor;
+}
 </style>
 <config>
 {

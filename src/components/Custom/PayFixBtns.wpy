@@ -1,215 +1,197 @@
 <template>
-    <div class="PayFixBtns external-cls">
-      <div class="wrap">
-        <div class="col1">
-          <block v-if="opened">
-            <div class="row1">
-              已开通
-            </div>
-            <div class="row2">
-              {{date}}<span>到期</span>
-            </div>
-          </block>
-          <block v-else>
-            <div class="no-opend-row1">
-              <span class="row3">{{nowPrice}}/年</span>
-              <span class="row4">¥{{originPrice}}</span>
-            </div>
-
-          </block>
-
-        </div>
-        <div class="col2">
-          <block  v-if="opened">
-            <div class="row1">
-              续费
-            </div>
-            <div class="row2">
-              ¥{{continuePrice}}/年
-            </div>
-          </block>
-          <block v-else>
-            <span class="row3">立即开通</span>
-          </block>
-
-        </div>
+  <div class="PayFixBtns external-cls">
+    <div class="wrap">
+      <div class="col1">
+        <block v-if="opened">
+          <div class="row1">
+            已开通
+          </div>
+          <div class="row2">{{ date }}<span>到期</span></div>
+        </block>
+        <block v-else>
+          <div class="no-opend-row1">
+            <span class="row3">{{ nowPrice }}/年</span>
+            <span class="row4">¥{{ originPrice }}</span>
+          </div>
+        </block>
       </div>
-
+      <div class="col2">
+        <block v-if="opened">
+          <div class="row1">
+            续费
+          </div>
+          <div class="row2">¥{{ continuePrice }}/年</div>
+        </block>
+        <block v-else>
+          <span class="row3">立即开通</span>
+        </block>
+      </div>
     </div>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    opened: {
+      type: Boolean
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      opened:{
-        type:Boolean
-      },
-      nowPrice:Number,
-      originPrice:Number,
-      continuePrice:Number,
-      date:String
-    },
-    events: {
-
-    },
-    computed:{
-      
-    },
-    methods: {
-
-    },
-    onLoad () {
-
-    }
-  });
+    nowPrice: Number,
+    originPrice: Number,
+    continuePrice: Number,
+    date: String
+  },
+  events: {},
+  computed: {},
+  methods: {},
+  onLoad() {}
+});
 </script>
 <style lang="scss">
-  @import "~newBase";
+@import '~newBase';
 
-  $originColor:#FF6600;
-  .PayFixBtns{
-    width:750rpx;
-    height:96rpx;
-    background:$white;
+$originColor: #ff6600;
+.PayFixBtns {
+  width: 750rpx;
+  height: 96rpx;
+  background: $white;
 
-    .wrap{
-      position: fixed;
-      bottom:0;
-      left: 0;
-      right: 0;
-      width:750rpx;
-      height:96rpx;
-      background:$white;
-      box-shadow:0rpx -4rpx 16rpx 0rpx rgba(0,0,0,0.06);
-      display: flex;
+  .wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 750rpx;
+    height: 96rpx;
+    background: $white;
+    box-shadow: 0rpx -4rpx 16rpx 0rpx rgba(0, 0, 0, 0.06);
+    display: flex;
+  }
+  .col1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .row1 {
+      margin-left: 30rpx;
+      margin-top: 16rpx;
+      font-size: 28rpx;
+      font-family: PingFangSC-Regular, PingFangSC;
+      font-weight: 400;
+      color: rgba(45, 49, 51, 1);
+      line-height: 28rpx;
     }
-    .col1{
-      flex: 1;
+
+    .row2 {
+      margin-left: 30rpx;
+      margin-top: 8rpx;
+      font-size: 28rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: $originColor;
+      line-height: 28rpx;
+
       display: flex;
-      flex-direction: column;
 
-      .row1{
-        margin-left:30rpx;
-        margin-top: 16rpx;
-        font-size:28rpx;
-        font-family:PingFangSC-Regular,PingFangSC;
-        font-weight:400;
-        color:rgba(45,49,51,1);
-        line-height:28rpx;
-      }
-
-      .row2{
-        margin-left:30rpx;
-        margin-top: 8rpx;
-        font-size:28rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:$originColor;
-        line-height:28rpx;
-
-
-        display: flex;
-
-        >label{
-          margin-left: 8rpx;
-          color:rgba(170,175,179,1);
-        }
-
-      }
-      .no-opend-row1{
-        font-size:36rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:$originColor;
-        line-height:36rpx;
-        height:100%;
-
-        display: flex;
-        margin-left: 30rpx;
-        align-items: center;
-
-
-        .row4{
-          font-size:28rpx;
-          font-family:PingFangSC-Regular,PingFangSC;
-          font-weight:400;
-          color:#C2C8CC;
-          line-height:28rpx;
-          margin-left:16rpx;
-        }
-
-        .row3{
-          &::before{
-            content:'';
-            font-size:28rpx;
-            margin-right:8rpx;
-          }
-        }
-      }
-      .row1{
-        font-size:28rpx;
-        font-family:PingFangSC-Regular,PingFangSC;
-        font-weight:400;
-        color:rgba(45,49,51,1);
-        line-height:28rpx;
-      }
-
-      .row2{
-        font-size:28rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:$originColor;
-        line-height:28rpx;
-
-        >label{
-          font-size:28rpx;
-          font-family:PingFangSC-Regular,PingFangSC;
-          font-weight:400;
-          color:#AAAFB3;
-          line-height:28rpx;
-        }
+      > label {
+        margin-left: 8rpx;
+        color: rgba(170, 175, 179, 1);
       }
     }
-    .col2{
-      width:376rpx;
-      height:96rpx;
-      background:linear-gradient(135deg,rgba(249,187,112,1) 0%,rgba(255,88,69,1) 100%);
+    .no-opend-row1 {
+      font-size: 36rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: $originColor;
+      line-height: 36rpx;
+      height: 100%;
+
       display: flex;
-      flex-direction: column;
+      margin-left: 30rpx;
       align-items: center;
-      justify-content: center;
 
-      .row3{
-        font-size:36rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:$white;
-        line-height:36rpx;
+      .row4 {
+        font-size: 28rpx;
+        font-family: PingFangSC-Regular, PingFangSC;
+        font-weight: 400;
+        color: #c2c8cc;
+        line-height: 28rpx;
+        margin-left: 16rpx;
+        text-decoration-line: line-through;
       }
 
-      .row1{
-        font-size:36rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:$white;
-        line-height:36rpx;
+      .row3 {
+        &::before {
+          content: '';
+          font-size: 28rpx;
+          margin-right: 8rpx;
+        }
       }
+    }
+    .row1 {
+      font-size: 28rpx;
+      font-family: PingFangSC-Regular, PingFangSC;
+      font-weight: 400;
+      color: rgba(45, 49, 51, 1);
+      line-height: 28rpx;
+    }
 
-      .row2{
-        font-size:24rpx;
-        font-family:PingFangSC-Regular,PingFangSC;
-        font-weight:400;
-        color:$white;
-        line-height:24rpx;
-        margin-top: 8rpx;
+    .row2 {
+      font-size: 28rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: $originColor;
+      line-height: 28rpx;
+
+      > label {
+        font-size: 28rpx;
+        font-family: PingFangSC-Regular, PingFangSC;
+        font-weight: 400;
+        color: #aaafb3;
+        line-height: 28rpx;
       }
     }
   }
+  .col2 {
+    width: 376rpx;
+    height: 96rpx;
+    background: linear-gradient(
+      135deg,
+      rgba(249, 187, 112, 1) 0%,
+      rgba(255, 88, 69, 1) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .row3 {
+      font-size: 36rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: $white;
+      line-height: 36rpx;
+    }
+
+    .row1 {
+      font-size: 36rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: $white;
+      line-height: 36rpx;
+    }
+
+    .row2 {
+      font-size: 24rpx;
+      font-family: PingFangSC-Regular, PingFangSC;
+      font-weight: 400;
+      color: $white;
+      line-height: 24rpx;
+      margin-top: 8rpx;
+    }
+  }
+}
 </style>

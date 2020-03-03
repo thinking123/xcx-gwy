@@ -6,9 +6,12 @@ export function navToPage(toUrl, query = {}) {
     return;
   }
   const pages = getCurrentPages();
-  const curPage = pages[pages.length - 1];
-  const route = curPage.route;
-  query.referrer = route;
+  if (pages && pages.length > 0) {
+    const curPage = pages[pages.length - 1];
+    const route = curPage.route;
+    query.referrer = route;
+  }
+
   if (query) {
     toUrl = Object.keys(query).reduce((f, key, index) => {
       return `${f}${index == 0 ? '' : '&'}${key}=${query[key]}`;

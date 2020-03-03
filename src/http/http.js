@@ -35,6 +35,9 @@ function http(url, data, loadingText, header, method = 'GET') {
   ) {
     //授权token
     header.token = state.token;
+    if (!header.token) {
+      throw new Error('请登入');
+    }
   }
 
   // Content-Type: application/json

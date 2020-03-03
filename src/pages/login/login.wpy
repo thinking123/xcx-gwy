@@ -48,7 +48,7 @@ import { getImgUrl, showMsg } from '@/common/utils';
 import { navToPage, reLaunch } from '@/common/navUtils';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { loginByWx } from '@/http/http-business';
-import { _wxLogin } from '@/common/wx';
+import { _wxLogin, _wxGetUserInfo } from '@/common/wx';
 
 /*
  * mock phone: 15525976631
@@ -74,12 +74,13 @@ wepy.page({
     async wxLogin(userInfo) {
       try {
         const wx = this.wx;
-        userInfo = !!userInfo ? userInfo : wx.userInfo;
+        userInfo = !!userInfo ? userInfo : await _wxGetUserInfo();
+        const code = !!wx.code ? wx.code : await _wxLogin();
         console.log('userInfo', userInfo);
         // 刷新微信code
         await _wxLogin();
         const user = await loginByWx(
-          wx.code,
+          code,
           userInfo.avatarUrl,
           userInfo.nickName,
           userInfo.gender

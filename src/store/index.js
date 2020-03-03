@@ -55,7 +55,8 @@ export default new Vuex.Store({
       schoolName: '',
       userIntegral: 0,
       learnNum: 0
-    }
+    },
+    location: null
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -109,6 +110,9 @@ export default new Vuex.Store({
       state.user = user;
       state.activeTabIndex = 0;
       state.token = user ? user.token : null;
+    },
+    setLocation(state, location) {
+      state.location = location;
     }
   },
   getters: {

@@ -1,183 +1,185 @@
 <template>
-  <view class="CListWrap external-cls"
-        style="display: {{show ? 'block' : 'none'}}"
+  <view
+    class="CListWrap external-cls"
+    style="display: {{show ? 'block' : 'none'}}"
   >
-
     <view class="CListWrap-header">
-      <slot name="header"/>
+      <slot name="header" />
     </view>
     <view class="CListWrap-wrap">
-
-      <slot/>
-      <view wx:if="{{curItems.length == 0 && loaded && !isError}}" class="noData">
+      <slot />
+      <view
+        wx:if="{{curItems.length == 0 && loaded && !isError}}"
+        class="noData"
+      >
         没有数据
       </view>
     </view>
-    <view class="CListWrap-loading">
-
-    </view>
+    <view class="CListWrap-loading"> </view>
     <view class="CListWrap-dst">
       <view wx:if="{{isLoading}}">
-        <CLoading type="spinner"/>
+        <CLoading type="spinner" />
       </view>
       <view wx:if="{{isEnd && curItems.length > 0}}">
         没有更多了
       </view>
       <view wx:if="{{isError}}">
-        {{errorMsg || '加载失败'}}
+        {{ errorMsg || '加载失败' }}
       </view>
     </view>
-
   </view>
-
 </template>
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapMutations, mapGetters } from '@wepy/x';
-  import { get } from '@/http/http';
-  import { showMsg, urlParams } from '@/common/utils';
-  // import {parseRes} from '@/http/http-business';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapMutations, mapGetters } from '@wepy/x';
+import { get } from '@/http/http';
+import { showMsg, urlParams } from '@/common/utils';
+// import {parseRes} from '@/http/http-business';
 
-  const defFun = () => {
-    console.log('defFun');
-  };
-  wepy.component({
-    store,
-    data: {
-      isEnd: false,
-      isLoading: false,
-      pageNum: 0,
-      pages: 0,
-      total: 0,
-      isError: false,
-      errorMsg: '',
-      other: {},
-      mockPage: 1,
-      mockPages: 5,
-      mockTotal: 200,
-      curItems: [],
-      loaded: false
+const defFun = () => {
+  console.log('defFun');
+};
+wepy.component({
+  store,
+  data: {
+    isEnd: false,
+    isLoading: false,
+    pageNum: 0,
+    pages: 0,
+    total: 0,
+    isError: false,
+    errorMsg: '',
+    other: {},
+    mockPage: 1,
+    mockPages: 5,
+    mockTotal: 200,
+    curItems: [],
+    loaded: false
+  },
+  externalClasses: ['external-cls'],
+  computed: {
+    ...mapGetters(['items'])
+  },
+  props: {
+    threshold: {
+      type: Number,
+      default: 1000
     },
-    externalClasses: [
-      'external-cls'
-    ],
-    computed: {
-      ...mapGetters(['items'])
+    url: String,
+    params: {
+      type: Object,
+      default: {}
     },
-    props: {
-      threshold: {
-        type: Number,
-        default: 1000
-      },
-      url: String,
-      params: {
-        type: Object,
-        default: {}
-      },
-      eventName: {
-        type: String,
-        default: 'clistwrap'
-      },
+    eventName: {
       type: String,
-      show: {
-        type: Boolean,
-        default: true
-      },
-      cb: {
-        type: Object,
-        default: defFun
-      },
-      preHandle: {
-        type: Object,
-        default: defFun
-      },
-      funWrap: {
-        type: Object,
-        default: {}
-      },
-      reloadKey:{
-        type:String,
-        default:new Date().getTime(),
+      default: 'clistwrap'
+    },
+    type: {
+      type: String,
+      default: 'defaultCListWrap'
+    },
+    show: {
+      type: Boolean,
+      default: true
+    },
+    cb: {
+      type: Object,
+      default: defFun
+    },
+    preHandle: {
+      type: Object,
+      default: defFun
+    },
+    funWrap: {
+      type: Object,
+      default: {}
+    },
+    reloadKey: {
+      type: String,
+      default: new Date().getTime()
+    }
+  },
+  watch: {
+    url(nv, ov) {
+      this.reload();
+    },
+    params(nv, ov) {
+      this.reload();
+    },
+    reloadKey(nv, ov) {
+      console.log('reloadKey', nv, ov);
+      if (nv !== ov) {
+        // const { type } = this;
+        // this.isEnd = false;
+        // this.isError = false;
+        // this.isLoading = false;
+        // this.resetItems(type);
+
+        this.reload();
+        // this.init(true);
+      }
+    }
+  },
+  events: {},
+  methods: {
+    ...mapMutations(['resetItems', 'setItems']),
+    reload() {
+      const { type } = this;
+
+      this.resetItems(type);
+
+      this.isEnd = false;
+      this.isError = false;
+      this.isLoading = false;
+      this.pageNum = 0;
+      this.pages = 0;
+      this.total = 0;
+      this.init(true);
+    },
+    intersectionCb(res) {
+      const { isLoading, isEnd, threshold, show } = this;
+      if (!isLoading && !isEnd && show) {
+        this.getData();
       }
     },
-    watch: {
-      url(nv, ov) {
-        this.reload();
+    request() {
+      const { url, params = {}, pageNum } = this;
 
-      },
-      params(nv, ov) {
-        this.reload();
-      },
-      reloadKey(nv , ov){
-        console.log('reloadKey' , nv , ov);
-        if(nv !== ov){
-          // const { type } = this;
-          // this.isEnd = false;
-          // this.isError = false;
-          // this.isLoading = false;
-          // this.resetItems(type);
+      let obj = { ...params, pageNum: pageNum + 1 };
+      let _url = urlParams(url, obj);
+      console.log('requdser url', _url);
+      return get(_url);
+    },
 
-
-          this.reload();
-          // this.init(true);
-
+    parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
+      if (
+        (!!res && reg.test(res.status)) ||
+        resolveStatus.includes(res.status) ||
+        tipStatus.includes(res.status)
+      ) {
+        if (tipStatus.includes(res.status)) {
+          return showMsg(res.message);
         }
+        return res;
+      } else {
+        const msg = res && res.message ? res.message : errMsg;
+        // throw new Error(msg ? msg : 'error');
+        showMsg(msg);
+        return null;
       }
     },
-    events: {},
-    methods: {
-      ...mapMutations([
-        'resetItems',
-        'setItems'
-      ]),
-      reload(){
-        const { type } = this;
-
-        this.resetItems(type);
-
-        this.isEnd = false;
-        this.isError = false;
-        this.isLoading = false;
-        this.pageNum = 0;
-        this.pages = 0;
-        this.total = 0;
-        this.init(true);
-      },
-      intersectionCb(res) {
-        const { isLoading, isEnd, threshold ,show} = this;
-        if (!isLoading && !isEnd && show) {
-          this.getData();
-        }
-      },
-      request() {
-        const { url, params = {}, pageNum } = this;
-
-        let obj = { ...params, pageNum: pageNum + 1 };
-        let _url = urlParams(url, obj);
-        console.log('requdser url', _url);
-        return get(_url);
-      },
-
-      parseRes(res, errMsg = '请求失败', resolveStatus = [], tipStatus = []) {
-        if ((!!res && reg.test(res.status)) || resolveStatus.includes(res.status) || tipStatus.includes(res.status)) {
-          if (tipStatus.includes(res.status)) {
-            return showMsg(res.message);
-          }
-          return res;
-        } else {
-          const msg = res && res.message ? res.message : errMsg;
-          // throw new Error(msg ? msg : 'error');
-          showMsg(msg);
-          return null;
-        }
-      },
-      getData() {
-        this.isLoading = true;
-        const { eventName, url, pageNum, type, cb } = this;
-        const items = this.items[type] || [];
-        this.request().then((_res) => {
-          const { rows: { list: res, pageNum, pages, total, ...other } = {}, status, message } = _res;
+    getData() {
+      this.isLoading = true;
+      const { eventName, url, pageNum, type, cb } = this;
+      const items = this.items[type] || [];
+      this.request()
+        .then(_res => {
+          const {
+            rows: { list: res, pageNum, pages, total, ...other } = {},
+            status,
+            message
+          } = _res;
           this.isLoading = false;
           this.loaded = true;
 
@@ -208,87 +210,87 @@
               this.ob.disconnect();
             }
           }
-
-        }).catch(err => {
+        })
+        .catch(err => {
           console.log('err', err);
           this.isError = true;
           this.isLoading = false;
         });
-      },
-      init(refresh = false) {
-        const { threshold, type } = this;
+    },
+    init(refresh = false) {
+      const { threshold, type } = this;
 
-        if(refresh){
-          console.log('refresh')
-          this.ob = wx.createIntersectionObserver(this.$wx, {
-            thresholds: [0]
-          });
+      if (refresh) {
+        console.log('refresh');
+        this.ob = wx.createIntersectionObserver(this.$wx, {
+          thresholds: [0]
+        });
 
-          this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
-        }else{
-          // if (!this.ob) {
-          //   this.ob = wx.createIntersectionObserver(this.$wx, {
-          //     thresholds: [0]
-          //   });
-          // }
-          this.ob.relativeToViewport({ bottom: 0 }).observe('.CListWrap-dst', this.intersectionCb.bind(this));
-        }
-
+        this.ob
+          .relativeToViewport({ bottom: 0 })
+          .observe('.CListWrap-dst', this.intersectionCb.bind(this));
+      } else {
+        // if (!this.ob) {
+        //   this.ob = wx.createIntersectionObserver(this.$wx, {
+        //     thresholds: [0]
+        //   });
+        // }
+        this.ob
+          .relativeToViewport({ bottom: 0 })
+          .observe('.CListWrap-dst', this.intersectionCb.bind(this));
       }
-    },
-    detached() {
-      console.log('detached list wrap');
-      const { type } = this;
-      this.resetItems(type);
-      if (this.ob) {
-        this.ob.disconnect();
-      }
-    },
-    created() {
-      console.log('created');
-      this.ob = wx.createIntersectionObserver(this.$wx, {
-        thresholds: [0]
-      });
-    },
-    attached() {
-      this.init();
     }
-  });
+  },
+  detached() {
+    console.log('detached list wrap');
+    const { type } = this;
+    this.resetItems(type);
+    if (this.ob) {
+      this.ob.disconnect();
+    }
+  },
+  created() {
+    console.log('created');
+    this.ob = wx.createIntersectionObserver(this.$wx, {
+      thresholds: [0]
+    });
+  },
+  attached() {
+    this.init();
+  }
+});
 </script>
 <style lang="scss">
-  clistwrap1 {
-    display: block;
-    width: 100%;
+clistwrap1 {
+  display: block;
+  width: 100%;
+}
 
-  }
+.CListWrap {
+  display: block;
+}
 
-  .CListWrap {
-    display: block;
-  }
+.CListWrap-wrap {
+}
 
-  .CListWrap-wrap {
+.CListWrap-wrap-item {
+  flex: 1;
+}
 
-  }
+.CListWrap-dst {
+  height: 1px;
+  background-color: salmon;
+  font-size: 30rpx;
+  text-align: center;
+}
 
-  .CListWrap-wrap-item {
-    flex: 1;
-  }
+.noData {
+  text-align: center;
+}
 
-  .CListWrap-dst {
-    height: 1px;
-    background-color: salmon;
-    font-size: 30rpx;
-    text-align: center;
-  }
-
-  .noData {
-    text-align: center;
-  }
-
-
-  cloading {
-    margin: 10rpx;
-  }
+cloading {
+  margin: 10rpx;
+}
 </style>
 
 <config>

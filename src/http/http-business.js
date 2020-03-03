@@ -1,6 +1,7 @@
 import { get, post } from './http';
 import { showMsg, urlParams } from '@/common/utils';
-
+import { wx_getLocation } from '@/common/wx';
+import store from 'store';
 const reg = /^2/;
 
 export function parseRes(
@@ -991,4 +992,204 @@ export function getVipMsg() {
 
   url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ GET /api/near/getNear
+获取附近的人 --编号 002
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+id	
+id
+
+query	string
+token	
+(required)
+token
+
+header	string
+longitude	
+经度
+
+query	string
+latitude	
+纬度
+
+query	string
+
+ */
+export function getNear() {
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+  return wx_getLocation().then(({ longitude, latitude }) => {
+    let url = '/api/near/getNear';
+
+    store.commit('setLocation', { longitude, latitude });
+    url = urlParams(url, { id: store.state.user.id, longitude, latitude });
+    return get(url, {}, '').then(res => parseRes(res, ''));
+  });
+}
+
+/**
+GET /api/near/upPrivateMsg
+发送私信 --编号 003
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+发私信用户id
+
+query	string
+privateUserId	
+收私信用户id
+
+query	string
+privateContent	
+私信内容
+
+query	string
+
+ */
+export function upPrivateMsg(id, content) {
+  let url = '/api/near/upPrivateMsg';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id,
+    privateUserId: id,
+    privateContent: content
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+GET /api/near/collectUser
+关注用户 --编号 004
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+关注用户id
+
+query	string
+collectUserId	
+被关注用户id
+
+query	string
+
+ */
+export function collectUser(id) {
+  let url = '/api/near/collectUser';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id,
+    collectUserId: id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+GET /api/near/upjwd
+提交经纬度 --编号 001
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+id	
+id
+
+query	string
+token	
+(required)
+token
+
+header	string
+longitude	
+经度
+
+query	string
+latitude	
+纬度
+
+query	string
+ */
+export function refreshLocation() {
+  if (!!store.state.token) {
+    return wx_getLocation().then(({ longitude, latitude }) => {
+      let url = '/api/near/upjwd';
+      store.commit('setLocation', { longitude, latitude });
+      url = urlParams(url, { id: store.state.user.id, longitude, latitude });
+      return get(url, {}, '').then(res => parseRes(res, ''));
+    });
+  }
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
 }
