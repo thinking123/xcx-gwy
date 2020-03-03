@@ -346,7 +346,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      // navToPage('/pages/section1/nearPage');
+      navToPage('/pages/section1/luntan');
     }
   }
 });

@@ -120,8 +120,6 @@ wepy.app({
     "pages/section2/searchPage",
     "pages/section2/bwktDetail",
     "pages/homeSection2",
-    "pages/section1/luntanDetail",
-    "pages/section1/luntan",
     "pages/section1/question",
     "pages/section1/kaimingwutong",
     "pages/section1/timer",
@@ -142,6 +140,8 @@ wepy.app({
     "pages/home",
     "pages/section1/map",
 
+    "pages/section1/luntanDetail",
+    "pages/section1/luntan",
     "pages/section1/nearPage",
     "pages/section1/nearDetailPage",
   ],
