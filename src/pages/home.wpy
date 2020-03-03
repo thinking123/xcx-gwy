@@ -350,7 +350,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      // navToPage('/pages/section1/luntan');
+      navToPage('/pages/section1/MemberCenter');
     }
   }
 });

@@ -944,3 +944,51 @@ export function forumpost(categoryId, content, postLabel, title, userId) {
   };
   return post(url, data, loadingText).then(res => parseRes(res, errMsg));
 }
+
+/**
+ GET /api/vip/getVipMsg
+获取开通会员的信息 --编号 001
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "createBy": "string",
+    "createTime": "2020-03-03T02:51:43.000Z",
+    "id": 0,
+    "params": {},
+    "remark": "string",
+    "searchValue": "string",
+    "updateBy": "string",
+    "updateTime": "2020-03-03T02:51:43.000Z",
+    "vipNum": 0,
+    "vipOrginalPrice": 0,
+    "vipPrice": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+
+ */
+export function getVipMsg() {
+  let url = '/api/vip/getVipMsg';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}

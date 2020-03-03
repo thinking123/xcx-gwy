@@ -1,167 +1,186 @@
 <template>
   <div class="page MemberCenter">
-    <MemberCard external-cls="row1"/>
+    <MemberCard external-cls="row1" :total="vip.vipNum" />
     <div class="row2 text">VIP权益</div>
     <div class="row3">
-      <IconText v-for="(item , index) in titleIcons1"
-                @click.native="handleIconText(index)"
-                external-cls="titleIcon"
-                :text="item.text" :src="item.src"/>
+      <IconText
+        v-for="(item, index) in titleIcons1"
+        @click.native="handleIconText(index)"
+        :key="index"
+        external-cls="titleIcon"
+        :text="item.text"
+        :src="item.src"
+      />
     </div>
     <div class="row3">
-      <IconText v-for="(item , index) in titleIcons2"
-                @click.native="handleIconText(index)"
-                external-cls="titleIcon"
-                :text="item.text" :src="item.src"/>
+      <IconText
+        v-for="(item, index) in titleIcons2"
+        @click.native="handleIconText(index)"
+        external-cls="titleIcon"
+        :key="index"
+        :text="item.text"
+        :src="item.src"
+      />
     </div>
     <div class="row4 text">VIP特享</div>
     <ClassCard
       title="课程名称，如资料分析"
       info="考点：资料分析秒杀综述"
       :src="classImg"
-      external-cls="row5"/>
+      external-cls="row5"
+    />
 
     <ClassCard1
-    num1="2"
-    num2="2"
-    free="free"
-    title="真题讲课程名称课程名称课程名称课程名称"
-    good="good"
-    external-cls="row6"
+      num1="2"
+      num2="2"
+      free="free"
+      title="真题讲课程名称课程名称课程名称课程名称"
+      good="good"
+      external-cls="row6"
     />
 
     <PayFixBtns
-      nowPrice="999"
-      originPrice="1999"
-      continuePrice="888"
-      date="2019-12-12"
+      :opened="!!user.isVip"
+      :nowPrice="vip.vipPrice"
+      :originPrice="vip.vipOrginalPrice"
+      :continuePrice="vip.updateBy"
+      :date="vip.updateTime"
     />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx } from '@/common/utils';
+import { mapGetters } from '@wepy/x';
+import { getVipMsg } from '@/http/http-business';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-
-    },
-    data: {
-      titleIcons1:[
-        {
-          text:'真题解析',
-          src:'icon_rights01@3x'
-        },
-        {
-          text:'购买折扣',
-          src:'icon_rights02@3x'
-        },
-        {
-          text:'名师经典课堂',
-          src:'icon_rights03@3x'
-        },
-      ],
-      titleIcons2:[
-        {
-          text:'积分奖励',
-          src:'icon_rights04@3x'
-        },
-        {
-          text:'专属客服',
-          src:'icon_rights05@3x'
-        },
-        {
-          text:'免费考点分析',
-          src:'icon_rights06@3x'
-        },
-      ],
-      classImg:''
-    },
-    methods: {
-
-    },
-    onShow(){
-      
-    },
-    created () {
-      this.titleIcons1.forEach(f=>{
-        f.src = getImgUrlEx(f.src);
-      });
-      this.titleIcons2.forEach(f=>{
-        f.src = getImgUrlEx(f.src);
-      });
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  data: {
+    titleIcons1: [
+      {
+        text: '真题解析',
+        src: 'icon_rights01@3x'
+      },
+      {
+        text: '购买折扣',
+        src: 'icon_rights02@3x'
+      },
+      {
+        text: '名师经典课堂',
+        src: 'icon_rights03@3x'
+      }
+    ],
+    titleIcons2: [
+      {
+        text: '积分奖励',
+        src: 'icon_rights04@3x'
+      },
+      {
+        text: '专属客服',
+        src: 'icon_rights05@3x'
+      },
+      {
+        text: '免费考点分析',
+        src: 'icon_rights06@3x'
+      }
+    ],
+    classImg: '',
+    vip: {
+      searchValue: '',
+      updateBy: '',
+      updateTime: '',
+      vipNum: '',
+      vipOrginalPrice: '',
+      vipPrice: ''
     }
-  });
+  },
+  methods: {},
+  onShow() {},
+  onLoad() {
+    getVipMsg().then(vip => {
+      this.vip = vip;
+    });
+  },
+
+  created() {
+    this.titleIcons1.forEach(f => {
+      f.src = getImgUrlEx(f.src);
+    });
+    this.titleIcons2.forEach(f => {
+      f.src = getImgUrlEx(f.src);
+    });
+  }
+});
 </script>
 <style lang="scss">
-  @import "~newBase";
-  $textColor:#797D80;
-  page{
-    background:$pageBg;
-    height:auto !important;
+@import '~newBase';
+$textColor: #797d80;
+page {
+  background: $pageBg;
+  height: auto !important;
+}
+.MemberCenter {
+  background: $white;
+  padding-top: 32rpx;
+  height: auto !important;
+  margin-bottom: 44rpx;
+  .row1 {
+    margin: 0 auto 100rpx;
   }
-  .MemberCenter{
-    background:$white;
-    padding-top:32rpx;
-    height:auto !important;
-    margin-bottom:44rpx;
-    .row1{
-      margin: 0 auto 100rpx;
-    }
-    .row2{
+  .row2 {
+    margin-bottom: 64rpx;
+  }
 
-      margin-bottom: 64rpx;
-    }
+  .text {
+    font-size: 36rpx;
+    color: $textColor;
+    line-height: 36rpx;
+    text-align: center;
+  }
+  .row3 {
+    font-size: 28rpx;
+    color: #2d3133;
+    line-height: 36rpx;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 116rpx 64rpx;
 
-    .text{
-      font-size:36rpx;
-      color:$textColor;
-      line-height:36rpx;
-      text-align: center;
-    }
-    .row3 {
-      font-size:28rpx;
-      color:#2D3133;
-      line-height:36rpx;
-      display: flex;
-      justify-content: space-between;
-      margin: 0 116rpx 64rpx;
-
-      .titleIcon{
+    .titleIcon {
+      width: 100rpx;
+      font-size: 28rpx;
+      font-weight: 400;
+      color: $textColor;
+      line-height: 28rpx;
+      & > image {
         width: 100rpx;
-        font-size:28rpx;
-        font-weight:400;
-        color:$textColor;
-        line-height:28rpx;
-        &>image{
-          width:100rpx;
-          height:100rpx;
-          margin-bottom:12rpx;
-        }
-
-      }
-      &:last-child{
-        margin-bottom: 80rpx;
+        height: 100rpx;
+        margin-bottom: 12rpx;
       }
     }
-    .row4{
-      margin-bottom:34rpx;
-    }
-    .row5{
-      margin: 0 auto 32rpx;
-    }
-
-    .row6 {
-      margin: 0 auto;
-
+    &:last-child {
+      margin-bottom: 80rpx;
     }
   }
+  .row4 {
+    margin-bottom: 34rpx;
+  }
+  .row5 {
+    margin: 0 auto 32rpx;
+  }
+
+  .row6 {
+    margin: 0 auto;
+  }
+}
 </style>
 <config>
 {

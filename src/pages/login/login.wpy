@@ -111,7 +111,9 @@ wepy.page({
   onLoad() {
     if (DEV) {
       // this.handlegoto();
-      navToPage('/pages/section1/luntan');
+      this.wxLogin();
+
+      // navToPage('/pages/section1/luntan');
     }
   },
   onShow() {
