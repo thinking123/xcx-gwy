@@ -12,17 +12,16 @@
         <div style="display:{{selOrder==0?'block':'none'}}">
           <CListSelect
             :items="list1"
-            key="id"
             labelKey="name"
             external-cls="CListSelect1"
             :sel="list1Sel"
             @change="onCListSelect1"
+            toggle="{{false}}"
           />
         </div>
         <div style="display:{{selOrder==1?'block':'none'}}">
           <CListSelect
             :items="list2"
-            key="id"
             labelKey="cityCaption"
             external-cls="CListSelect1"
             :sel="list2Sel"
@@ -31,13 +30,20 @@
         </div>
       </div>
     </CDockerPoper>
-    <CListWrap1 :type="listtype" :params="params" :url="url">
+    <CListWrap1
+      :type="listtype"
+      :params="params"
+      :url="url"
+      @loaded="onListLoaded"
+      v-if="list1.length > 0"
+    >
       <block slot="header">
         <LunTanHeader
-          title="申论"
+          :title="header.name"
           tieziNum="2008"
           followNum="100"
           @btn="handleGz"
+          :isCollect="isCollect"
           v-if="header"
         />
       </block>
@@ -45,16 +51,19 @@
         v-for="(item, index) in topList"
         :key="item.id"
         :desc="item.content"
-        showLine="{{index < 2}}"
+        showLine="{{index < (topList.length - 1)}}"
         :type="index"
+        @click.native="handleMsgItem(item)"
       />
 
       <LunTanMsgItem
         v-for="item in otherList"
         :key="item.id"
+        :id="item.id"
         :title="item.title"
-        :name="item.userId"
+        :name="item.userName"
         :readerNum="item.scanNum"
+        :src="item.userHead"
         :publishDate="item.addTime"
         @click.native="handleMsgItem(item)"
       />
@@ -93,23 +102,24 @@ wepy.page({
     },
     topList() {
       const l = this.clist || [];
-      return l.slice(0, 3);
+      // return l.slice(0, 3);
+      return l.filter(f => f.isTop == 1);
     },
     otherList() {
       const l = this.clist || [];
-      return l.slice(3);
+      // return l.slice(3);
+      return l.filter(f => f.isTop != 1);
     },
     params() {
       const selV = (i, arr, key) =>
-        i && arr && i > -1 && i < arr.length ? arr[i][key] : '';
+        arr && i > -1 && i < arr.length ? arr[i][key] : '';
       let p = {
         labelId: selV(this.list1Sel, this.list1, 'id'),
-        cityCode: selV(this.list2Sel, this.list2, 'id'),
+        cityCode: selV(this.list2Sel, this.list2, 'adCode'),
         userId: this.user.id
       };
 
       p = delNullProperty(p);
-
       return p;
     },
     header() {
@@ -124,12 +134,12 @@ wepy.page({
     }
   },
   data: {
-    msgItems: [],
+    isCollect: false,
     showDocker: false,
     list: [{ text: '分类' }, { text: '地区' }, { text: '人气' }],
     selOrder: -1,
     list1: [],
-    list1Sel: '',
+    list1Sel: -1,
     list2: [],
     list2Sel: -1,
     list3Sel: -1,
@@ -142,17 +152,26 @@ wepy.page({
     listtype
   },
   methods: {
+    onListLoaded(data) {
+      console.log('loaded', data);
+      this.isCollect = data && data.isCollect == 1;
+    },
     onPubish() {
       navToPage('/pages/section1/luntanPublish');
     },
     handleGz() {
-      forumforumCollect();
+      forumforumCollect(this.header.id).then(() => {
+        this.isCollect = !this.isCollect;
+      });
     },
-    handleMsgItem(item) {},
+    handleMsgItem(item) {
+      navToPage('/pages/section1/luntanDetail', {
+        id: item.id,
+        userId: item.userId
+      });
+    },
     onCOrderList(index) {
       this.selOrder = index;
-      // console.log(' this.selOrder :',  this.selOrder );
-
       if (index == 2) {
         this.url = '/api/forum/getForumListByScan';
       } else {
@@ -160,7 +179,6 @@ wepy.page({
       }
 
       if (index > -1) {
-        // console.log('this.showDocker')
         if (index == 2) {
           this.showDocker = false;
         } else {
@@ -192,37 +210,16 @@ wepy.page({
     }
   },
   onShow() {},
-  created() {
-    const arr = [];
-    for (let i = 0; i < 10; i++) {
-      const v = {
-        title:
-          '[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
-        name: 'Smile',
-        readerNum: '123213',
-        publishDate: '2019-08-12',
-        id: i
-      };
-
-      arr.push(v);
-    }
-
-    this.msgItems = arr;
-  },
   onLoad() {
-    // forumgetCategory().then(res => {
-    //     this.list1 = res.map(m=>{
-    //       m.text = m.categoryName;
-    //       return m;
-    //     })
-    // });
-
     selectPro().then(res => {
       this.list2 = res;
     });
 
     getLabel().then(res => {
-      this.list1 = res;
+      if (res.length > 0) {
+        this.list1Sel = 0;
+        this.list1 = res;
+      }
     });
   }
 });
@@ -241,7 +238,7 @@ wepy.page({
     margin-bottom: 24rpx;
   }
 
-  luntantopitem:last-of-type {
+  luntantopitem:last-of-type > view {
     margin-bottom: 24rpx;
   }
 }

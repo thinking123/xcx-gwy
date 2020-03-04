@@ -224,13 +224,11 @@ export function registerByWx(openid, userHead, userName, userPhone) {
 export function getMsgById(userId) {
   let url = '/api/login/getMsgById';
 
-  const loadingText = '打卡...';
-  const errMsg = '打卡失败';
-
   url = urlParams(url, {
-    id: userId
+    id: store.state.user.id,
+    collectUserId: userId
   });
-  return get(url, {}, loadingText).then(res => parseRes(res, errMsg));
+  return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
 /**
@@ -819,6 +817,111 @@ export function forumaddScan(id) {
 
 /**
  *
+ GET /api/forum/forumEvaluate
+评论帖子 --编号 006
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+userId	
+(required)
+用户Id
+
+query	string
+postId	
+(required)
+帖子id
+
+query	string
+evaluateContent	
+(required)
+评论内容
+
+query	string
+
+ */
+export function forumEvaluate(postId, evaluateContent) {
+  let url = '/api/forum/forumEvaluate';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    id: store.state.user.id,
+    postId,
+    evaluateContent
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ GET /api/forum/getForumById
+根据帖子id获取帖子信息 --编号 010
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "id": 0,
+    "name": "string",
+    "sort": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+登录用户id
+
+query	string
+id	
+(required)
+帖子id
+
+query	string
+
+
+ */
+export function getForumById(userId, id) {
+  let url = '/api/forum/getForumById';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId,
+    id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ *
  * GET /api/forum/forumCollect
  关注一级分类 --编号 002
 
@@ -848,14 +951,14 @@ export function forumaddScan(id) {
 
 
  */
-export function forumforumCollect(userId, labelId) {
+export function forumforumCollect(labelId) {
   let url = '/api/forum/forumCollect';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
   url = urlParams(url, {
-    userId,
+    userId: store.state.user.id,
     labelId
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
@@ -891,14 +994,14 @@ export function forumforumCollect(userId, labelId) {
  被关注用户id
 
  */
-export function forumuserCollect(userId, collectUserId) {
+export function forumuserCollect(collectUserId) {
   let url = '/api/forum/userCollect';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
   url = urlParams(url, {
-    userId,
+    userId: store.state.user.id,
     collectUserId
   });
   return get(url, {}, '').then(res => parseRes(res, ''));

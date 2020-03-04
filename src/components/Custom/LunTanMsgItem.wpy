@@ -1,11 +1,11 @@
 <template>
-  <div class="LunTanMsgItem external-cls" @click="onNav">
+  <div class="LunTanMsgItem external-cls">
     <div class="title">
       {{ title }}
     </div>
     <div class="footer">
       <div class="footer-icon">
-        <CCircleImg external-cls="cirImg" :src="icon" v-if="type == 'user'" />
+        <CCircleImg external-cls="cirImg" :src="src" v-if="type == 'user'" />
         <span>{{ name }}</span>
       </div>
 
@@ -24,6 +24,7 @@ wepy.component({
   props: {
     title: String,
     src: String,
+    id: String,
     name: String,
     readerNum: Number,
     publishDate: String,
@@ -36,7 +37,7 @@ wepy.component({
   computed: {},
   methods: {
     onNav() {
-      navToPage('/pages/section1/luntanDetail');
+      // navToPage('/pages/section1/luntanDetail', { id: this.id });
     }
   },
   created() {}

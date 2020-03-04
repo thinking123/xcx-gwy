@@ -99,7 +99,7 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
-import { upPrivateMsg, collectUser } from '@/http/http-business';
+import { upPrivateMsg, collectUser, getMsgById } from '@/http/http-business';
 import { mapGetters } from '@wepy/x';
 
 const listtype1 = 'nearPageList';
@@ -154,7 +154,6 @@ wepy.page({
     heartSelIcon: 'btn_liked@3x',
     men: 'icon_men@3x',
     women: 'icon_women@3x',
-    msgItems: [],
     show: false,
     inputVal: ''
   },
@@ -172,8 +171,8 @@ wepy.page({
     },
     handleMsgItem(item) {},
     handleSubmit() {
-      if(isEmptyString(this.inputVal)){
-        return showMsg("输入内容");
+      if (isEmptyString(this.inputVal)) {
+        return showMsg('输入内容');
       }
       this.show = false;
       upPrivateMsg(this.nearUser.id, this.inputVal);
@@ -184,10 +183,11 @@ wepy.page({
     }
   },
   onLoad(query = {}) {
-    const { id, item } = query;
-    const nearUser = item ? JSON.parse(item) : {};
-    this.nearUser = nearUser;
-    wx.setNavigationBarTitle({ title: nearUser.userName });
+    const { id } = query;
+    getMsgById(id).then(res => {
+      this.nearUser = res;
+      wx.setNavigationBarTitle({ title: nearUser.userName });
+    });
   },
   onShow() {},
   created() {
@@ -195,25 +195,6 @@ wepy.page({
     this.heartSelIcon = getImgUrlEx(this.heartSelIcon);
     this.men = getImgUrlEx(this.men);
     this.women = getImgUrlEx(this.women);
-
-    if (DEV) {
-      const arr = [];
-      for (let i = 0; i < 2; i++) {
-        const v = {
-          title:
-            '[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
-          name: 'Smile',
-          readerNum: '123213',
-          publishDate: '2019-08-12',
-          id: i,
-          type: 'comment'
-        };
-
-        arr.push(v);
-      }
-
-      this.msgItems = arr;
-    }
   }
 });
 </script>

@@ -65,8 +65,7 @@ wepy.page({
     handleNearItem(index) {
       const item = this.clist1[index];
       navToPage('/pages/section1/nearDetailPage', {
-        id: item.id,
-        item: JSON.stringify(item)
+        id: item.id
       });
     }
   },

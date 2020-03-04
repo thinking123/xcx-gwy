@@ -1,108 +1,101 @@
 <template>
-    <div class="LunTanHeader external-cls">
-      <CCircleImg external-cls="cirImg" :src="icon"/>
-      <div class="body">
-        <div class="title">
-          {{title}}
-        </div>
-        <div class="tiezi">
-          帖子：<span>{{tieziNum}}</span> 关注：<span>{{followNum}}</span>
-        </div>
+  <div class="LunTanHeader external-cls">
+    <CCircleImg external-cls="cirImg" src="icon_cate@3x.png" />
+    <div class="body">
+      <div class="title">
+        {{ title }}
       </div>
-      <CButton text="关注"
-               @tap.native="handleBtn"
-               external-cls="btn"/>
+      <div class="tiezi">
+        帖子：<span>{{ tieziNum }}</span> 关注：<span>{{ followNum }}</span>
+      </div>
     </div>
+    <CButton
+      text="{{isCollect ? '已关注' : '关注'}}"
+      @tap.native="handleBtn"
+      :disabled="isCollect"
+      external-cls="btn"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import { getImgUrlEx } from '@/common/utils';
 
-  wepy.component({
-    data: {
-      icon:'icon_cate@3x.png',
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      title:String,
-      tieziNum:Number,
-      followNum:Number
-    },
-    events: {
-
-    },
-    computed:{
-      
-    },
-    methods: {
-      handleBtn(){
-        this.$emit('btn')
-      }
-    },
-    created () {
-      this.icon = getImgUrlEx(this.icon);
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    title: String,
+    tieziNum: Number,
+    followNum: Number,
+    isCollect: Boolean
+  },
+  events: {},
+  computed: {},
+  methods: {
+    handleBtn() {
+      !this.isCollect && this.$emit('btn');
     }
-  });
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .LunTanHeader{
-    width:750rpx;
-    height:184rpx;
-    background:rgba(255,255,255,1);
-    display: flex;
-    align-items: center;
-    position: relative;
+.LunTanHeader {
+  width: 750rpx;
+  height: 184rpx;
+  background: rgba(255, 255, 255, 1);
+  display: flex;
+  align-items: center;
+  position: relative;
 
-    &::after{
-      position: absolute;
-      width: 100%;
-      content: '';
-      bottom:0;
-      height: 1px;
-      left: 0;
-      transform: scaleY(0.5);
-      background:rgba(204,204,204,1);
-    }
-    .cirImg{
-      width:120rpx;
-      height:120rpx;
-      margin: 32rpx 24rpx 32rpx 30rpx;
+  &::after {
+    position: absolute;
+    width: 100%;
+    content: '';
+    bottom: 0;
+    height: 1px;
+    left: 0;
+    transform: scaleY(0.5);
+    background: rgba(204, 204, 204, 1);
+  }
+  .cirImg {
+    width: 120rpx;
+    height: 120rpx;
+    margin: 32rpx 24rpx 32rpx 30rpx;
+  }
+
+  .body {
+    flex: 1;
+    .title {
+      font-size: 36rpx;
+      font-family: PingFangSC-, PingFangSC;
+      font-weight: normal;
+      color: rgba(0, 0, 0, 1);
+      line-height: 36rpx;
+      margin-bottom: 24rpx;
     }
 
-    .body{
-      flex:1;
-      .title{
-        font-size:36rpx;
-        font-family:PingFangSC-,PingFangSC;
-        font-weight:normal;
-        color:rgba(0,0,0,1);
-        line-height:36rpx;
-        margin-bottom: 24rpx;
+    .tiezi {
+      font-size: 28rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(153, 153, 153, 1);
+      line-height: 28rpx;
+
+      > label:first-child {
+        margin-right: 8rpx;
       }
-
-      .tiezi{
-
-        font-size:28rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(153,153,153,1);
-        line-height:28rpx;
-
-        >label:first-child{
-          margin-right: 8rpx;
-        }
-      }
-    }
-
-    .btn{
-      width:144rpx;
-      height:72rpx;
-      font-size:32rpx;
-      margin: 0 30rpx;
     }
   }
+
+  .btn {
+    width: 144rpx;
+    height: 72rpx;
+    font-size: 32rpx;
+    margin: 0 30rpx;
+  }
+}
 </style>
 
 <config>

@@ -1,103 +1,95 @@
 <template>
-    <div class="LunTanDetailHeader external-cls">
-      <CCircleImg external-cls="cirImg" :src="icon"/>
-      <div class="body">
-        <div class="title">
-          {{name}}
-        </div>
-        <div class="tiezi">
-           <span>{{publishDate}}</span> 发布
-        </div>
+  <div class="LunTanDetailHeader external-cls">
+    <CCircleImg external-cls="cirImg" :src="icon" />
+    <div class="body">
+      <div class="title">
+        {{ name }}
       </div>
-      <CButton :text="btnText"
-               @tap.native="handleBtn"
-               :disabled="followed"
-               external-cls="btn"/>
+      <div class="tiezi">
+        <span>{{ publishDate }}</span> 发布
+      </div>
     </div>
+    <CButton
+      :text="btnText"
+      @tap.stop="handleBtn"
+      :disabled="followed"
+      external-cls="btn"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-      icon:'icon_cate@3x.png',
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      name:String,
-      publishDate:Number,
-      followed:{
-        type:Boolean,
-        default:false
-      }
-    },
-    events: {
-
-    },
-    computed:{
-      btnText(){
-        if(this.followed){
-          return '已关注';
-        }
-        return '关注';
-      }
-    },
-    methods: {
-      handleBtn(){
-        this.$emit('btn')
-      }
-    },
-    created () {
-      this.icon = getImgUrlEx(this.icon);
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    name: String,
+    icon: String,
+    publishDate: Number,
+    followed: {
+      type: Boolean,
+      default: false
     }
-  });
-</script>
-<style lang="scss">
-  .LunTanDetailHeader{
-    width:750rpx;
-    height:140rpx;
-    background:rgba(255,255,255,1);
-    box-shadow:0px 4rpx 12rx 4rpx rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    position: relative;
-
-
-    .cirImg{
-      width:80rpx;
-      height:80rpx;
-      margin: 30rpx 20rpx 30rpx 30rpx;
-    }
-
-    .body{
-      flex:1;
-      .title{
-        font-size:32rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:rgba(45,49,51,1);
-        margin-bottom: 20rpx;
+  },
+  events: {},
+  computed: {
+    btnText() {
+      if (this.followed) {
+        return '已关注';
       }
-
-      .tiezi{
-        font-size:24rpx;
-        font-family:PingFangSC-Regular,PingFangSC;
-        font-weight:400;
-        color:rgba(147,150,153,1);
-        line-height:24rpx;
-      }
+      return '关注';
     }
-
-    .btn{
-      width:144rpx;
-      height:72rpx;
-      font-size:32rpx;
-      margin: 0 30rpx;
+  },
+  methods: {
+    handleBtn() {
+      !this.followed && this.$emit('btn');
     }
   }
+});
+</script>
+<style lang="scss">
+.LunTanDetailHeader {
+  width: 750rpx;
+  height: 140rpx;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 4rpx 12rx 4rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .cirImg {
+    width: 80rpx;
+    height: 80rpx;
+    margin: 30rpx 20rpx 30rpx 30rpx;
+  }
+
+  .body {
+    flex: 1;
+    .title {
+      font-size: 32rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: rgba(45, 49, 51, 1);
+      margin-bottom: 20rpx;
+    }
+
+    .tiezi {
+      font-size: 24rpx;
+      font-family: PingFangSC-Regular, PingFangSC;
+      font-weight: 400;
+      color: rgba(147, 150, 153, 1);
+      line-height: 24rpx;
+    }
+  }
+
+  .btn {
+    width: 144rpx;
+    height: 72rpx;
+    font-size: 32rpx;
+    margin: 0 30rpx;
+  }
+}
 </style>
 
 <config>
