@@ -1,6 +1,6 @@
 <template>
   <div class="page MemberCenter">
-    <MemberCard external-cls="row1" :total="vip.vipNum" />
+    <MemberCard external-cls="row1" :total="vip.vipNum" :isVip="user.isVip" />
     <div class="row2 text">VIP权益</div>
     <div class="row3">
       <IconText
@@ -43,7 +43,7 @@
       :opened="!!user.isVip"
       :nowPrice="vip.vipPrice"
       :originPrice="vip.vipOrginalPrice"
-      :continuePrice="vip.updateBy"
+      :continuePrice="vip.renewPrice"
       :date="vip.updateTime"
     />
   </div>

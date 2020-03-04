@@ -41,6 +41,7 @@ export default new Vuex.Store({
     nickName: 'default Nickname',
     deviceId: 'deviceId',
     wx: {},
+    userInfo: {},
     systemInfo: {},
     showMediaPlay: false,
     isMediaPlaying: false,
@@ -109,6 +110,7 @@ export default new Vuex.Store({
     },
     setWxUserInfo(state, userInfo) {
       state.wx = { ...state.wx, userInfo: { ...userInfo } };
+      state.userInfo = userInfo;
     },
     setUser(state, user) {
       state.user = user;
@@ -143,6 +145,9 @@ export default new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    location(state) {
+      return state.location;
     },
     totalOnlineNum(state) {
       return state.totalOnlineNum;

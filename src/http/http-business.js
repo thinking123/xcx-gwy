@@ -1410,3 +1410,73 @@ export function selectPro() {
   url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+
+GET /api/login/updateMsgById
+通过id更新用户信息 --编号 008
+
+Response Class (Status 200)
+Successful — 请求已完成 rows 直接返回token
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+id	
+登录用户id或者关注用户id
+
+query	string
+userHead	
+头像
+
+query	string
+userName	
+名称
+
+query	string
+userPhone	
+手机号
+
+query	string
+userPwd	
+密码
+
+query	string
+schoolName	
+学校名称
+
+query	string
+userSex	
+性别
+
+query	string
+learnTarget	
+目标
+
+query	string
+
+
+
+ */
+export function updateMsgById(id, userInfo = {}) {
+  let url = '/api/login/updateMsgById';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { id, ...userInfo });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}

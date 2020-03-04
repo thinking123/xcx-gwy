@@ -154,13 +154,16 @@ import store from 'store';
 import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { navToPage, navBack } from '@/common/navUtils';
+import { _wxGetUserInfo } from '@/common/wx';
+
 import {
   getLearnTime,
   getMsgById,
   getupSleepClock,
   learnTimeAdd,
   refreshLocation,
-  getUserNum
+  getUserNum,
+  updateMsgById
 } from '@/http/http-business';
 
 wepy.page({
@@ -169,7 +172,7 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['isSigned', 'user', 'totalOnlineNum']),
+    ...mapGetters(['isSigned', 'user', 'totalOnlineNum', 'wx', 'userInfo']),
     timeTip() {
       if (this.time && this.time.length > 0) {
         const time = this.time;
@@ -336,6 +339,19 @@ wepy.page({
   onLoad(query = {}) {
     refreshLocation();
     getUserNum();
+    if (this.isSigned) {
+      new Promise((res, rej) => {
+        const userInfo = !!this.userInfo
+          ? res(this.userInfo)
+          : res(_wxGetUserInfo());
+      }).then(userInfo => {
+        const us = {
+          userHead: userInfo.avatarUrl,
+          userSex: userInfo.gender
+        };
+        updateMsgById(this.user.id, us);
+      });
+    }
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {

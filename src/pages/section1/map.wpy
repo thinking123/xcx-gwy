@@ -64,7 +64,7 @@ wepy.page({
     windowHeight: 0
   },
   methods: {
-    init() {
+    init(list) {
       const temp = {
         // content: 'this is lab',
         color: '#FFFFFF',
@@ -80,6 +80,8 @@ wepy.page({
       const markers = [];
       const img = getImgUrlEx('transprant_img');
       Object.keys(geoCoordMap).forEach((f, index) => {
+        const city = list.find(l => l.cityCaption.indexOf(f) > -1);
+        const cityNum = city ? city.userNum || 0 : 0;
         const ll = geoCoordMap[f];
         const marker = {
           id: index,
@@ -88,7 +90,7 @@ wepy.page({
           //   name: 'T.I.T 创意园',
           iconPath: img,
           label: {
-            content: `${f}:0`,
+            content: `${f}:${cityNum}`,
             color: '#FFFFFF',
             fontSize: '25rpx',
             textAlign: 'center',
@@ -109,8 +111,7 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     this.total = query.total || 0;
-    selectUserNumList().then(list => {});
-    this.init();
+    selectUserNumList().then(this.init.bind(this));
   },
   created() {
     const { windowHeight } = wx.getSystemInfoSync();

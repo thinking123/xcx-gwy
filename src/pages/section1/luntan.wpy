@@ -23,7 +23,7 @@
           <CListSelect
             :items="list2"
             key="id"
-            labelKey="cityName"
+            labelKey="cityCaption"
             external-cls="CListSelect1"
             :sel="list2Sel"
             @change="onCListSelect2"

@@ -1,18 +1,25 @@
 <template>
   <div class="page nearPage">
-    <NearItem
-      v-for="(item, index) in items"
-      :key="item.id"
-      :name="item.userName"
-      :school="item.schoolName"
-      :distance="item.distanceStr"
-      :desc="item.learnTarget"
-      :sex="item.userSex"
-      :tag="item.learnTitle"
-      :header="item.userHead"
-      external-cls="item"
-      @click="handleNearItem(index)"
-    />
+    <CListWrap1
+      :type="listtype1"
+      :params="params1"
+      url="/api/near/getNear"
+      v-if="longitude"
+    >
+      <NearItem
+        v-for="(item, index) in clist1"
+        :key="item.id"
+        :name="item.userName"
+        :school="item.schoolName"
+        :distance="item.distanceStr"
+        :desc="item.learnTarget"
+        :sex="item.userSex"
+        :tag="item.learnTitle"
+        :header="item.userHead"
+        external-cls="item"
+        @click="handleNearItem(index)"
+      />
+    </CListWrap1>
   </div>
 </template>
 
@@ -22,6 +29,9 @@ import store from 'store';
 import { navToPage } from '@/common/navUtils';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { getNear } from '@/http/http-business';
+import { wx_getLocation } from '@/common/wx';
+
+const listtype1 = 'nearPageList';
 
 wepy.page({
   store,
@@ -29,14 +39,31 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['location', 'user'])
+    ...mapGetters(['user', 'items']),
+    params1() {
+      if (!this.user.id) {
+        return {};
+      }
+      return {
+        id: this.user.id,
+        longitude: this.longitude,
+        latitude: this.latitude
+      };
+    },
+    clist1() {
+      const list = this.items[this.listtype1];
+      return list || [];
+    }
   },
   data: {
-    items: []
+    listtype1,
+    longitude: '',
+    latitude: ''
   },
   methods: {
+    ...mapMutations(['setLocation']),
     handleNearItem(index) {
-      const item = this.items[index];
+      const item = this.clist1[index];
       navToPage('/pages/section1/nearDetailPage', {
         id: item.id,
         item: JSON.stringify(item)
@@ -45,23 +72,10 @@ wepy.page({
   },
   onShow() {},
   onLoad() {
-    getNear().then(list => {
-      this.items = list;
-      console.log('list : ', list);
-      if (DEV && this.items.length === 0) {
-        const arr = [];
-        for (let i = 0; i < 10; i++) {
-          arr.push({
-            name: '追风筝的人',
-            school: '浙江理工大学',
-            distance: '300米以内',
-            desc: '目标：学习申论和行测和行测和行测',
-            sex: i % 2 ? 'men' : 'women',
-            tag: '学神'
-          });
-        }
-        this.items = arr;
-      }
+    wx_getLocation().then(({ longitude, latitude }) => {
+      this.longitude = longitude;
+      this.latitude = latitude;
+      this.setLocation({ longitude, latitude });
     });
   }
 });
@@ -86,7 +100,9 @@ wepy.page({
     navigationBarTitleText: '附近的人',
     usingComponents: {
 
-  'NearItem':'~Custom/NearItem'
+  'NearItem':'~Custom/NearItem',
+  CListWrap1:'~UI/CListWrap1',
+
     }
 }
 </config>
