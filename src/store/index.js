@@ -58,7 +58,8 @@ export default new Vuex.Store({
       learnNum: 0
     },
     location: null,
-    totalOnlineNum: 0
+    totalOnlineNum: 0,
+    learnTime: null
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -119,6 +120,12 @@ export default new Vuex.Store({
     },
     setLocation(state, location) {
       state.location = location;
+    },
+    setLearnTime(state, learnTime) {
+      if (learnTime) {
+        learnTime.lastTime = new Date().getTime();
+      }
+      state.learnTime = learnTime;
     }
   },
   getters: {
@@ -160,6 +167,9 @@ export default new Vuex.Store({
     },
     userInfo(state) {
       return state.userInfo;
+    },
+    learnTime(state) {
+      return state.learnTime;
     }
   },
   actions: {

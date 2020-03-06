@@ -315,6 +315,52 @@ export function learnTimeAdd(userId, learnContent, learnTime) {
 }
 
 /**
+ GET /api/learnTime/suspend
+修改状态 --编号 002
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+id	
+(required)
+学习计时id
+
+query	string
+remaindLearnTime	
+(required)
+已用时间
+
+query	string
+learnState	
+(required)
+状态（1 学习 2暂停 3 学完）
+
+query	string
+ */
+export function learnTimeSuspend(id, remaindLearnTime, learnState) {
+  let url = '/api/learnTime/suspend';
+
+  url = urlParams(url, {
+    id,
+    remaindLearnTime,
+    learnState
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
  * GET /api/learnTime/finish
  结束 --编号 003
 

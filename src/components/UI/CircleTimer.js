@@ -1,12 +1,10 @@
-const {windowWidth} = wx.getSystemInfoSync();
-
+const { windowWidth } = wx.getSystemInfoSync();
 
 export default class Circle {
-
   keyRunTime = 'local-circle-timer-run-time';
   isPause = false;
   isStop = false;
-  keyFrames = 1000/60;
+  keyFrames = 1000 / 60;
   constructor(options) {
     const def = {
       bgColor: '#FFF',
@@ -19,13 +17,13 @@ export default class Circle {
       endCb: () => {
         console.log('end');
       },
-      pauseCb:() => {
+      pauseCb: () => {
         console.log('pauseCb');
       },
-      stopCb:() => {
+      stopCb: () => {
         console.log('stopCb');
       },
-      resumeCb:() => {
+      resumeCb: () => {
         console.log('resumeCb');
       },
       startTime: new Date().getTime(),
@@ -33,27 +31,46 @@ export default class Circle {
       curTime: new Date().getTime(),
       countDown: '',
       down: true,
-      secRadius:0,
-      minRadius:0,
-      hourRadius:0,
-      ratio:1,
-      step:false,
-      canvasId:'canvas',
-      width:'',
-      height:'',
-      fontSize:'80',
-      fontColor:'#FFF',
-      attached:null,
-      lineWidth:4,
-      secLineWidth:4,
-      minLineWidth:4,
-      hourLineWidth:4,
+      secRadius: 0,
+      minRadius: 0,
+      hourRadius: 0,
+      ratio: 1,
+      step: false,
+      canvasId: 'canvas',
+      width: '',
+      height: '',
+      fontSize: '80',
+      fontColor: '#FFF',
+      attached: null,
+      lineWidth: 4,
+      secLineWidth: 4,
+      minLineWidth: 4,
+      hourLineWidth: 4,
+      isPause: false,
+      isStop: false
     };
 
     this.opts = { ...def, ...options };
 
-    let { secRadius, minRadius, hourRadius, width, height, fontSize, countDown ,lineWidth,secLineWidth,minLineWidth,hourLineWidth} = this.opts;
+    let {
+      secRadius,
+      minRadius,
+      hourRadius,
+      width,
+      height,
+      fontSize,
+      countDown,
+      lineWidth,
+      secLineWidth,
+      minLineWidth,
+      hourLineWidth,
+      isPause,
+      isStop
+    } = this.opts;
 
+    this.firstRender = false;
+    this.isPause = isPause;
+    this.isStop = isStop;
     if (!countDown) {
       const { startTime, endTime } = this.opts;
 
@@ -87,58 +104,77 @@ export default class Circle {
     };
 
     this.ctx = this.canvasContext;
+    this.isOperating = false;
 
     this.renderBg();
   }
 
-  rpxTopx(rpx){
-    return windowWidth/750 * rpx;
+  rpxTopx(rpx) {
+    return (windowWidth / 750) * rpx;
   }
-
 
   degreeToRadian(deg) {
     return (Math.PI / 180) * deg;
   }
 
-  get canvasContext(){
-    if(!this.ctx){
-      const {canvasId , attached} = this.opts;
-      this.ctx = wx.createCanvasContext(canvasId , attached);
+  get canvasContext() {
+    if (!this.ctx) {
+      const { canvasId, attached } = this.opts;
+      this.ctx = wx.createCanvasContext(canvasId, attached);
     }
     return this.ctx;
   }
 
-  get requestAnimationFrame(){
+  get requestAnimationFrame() {
     return this.fakeAnimationFrame;
-      if(this.ctx){
-          return this.ctx.requestAnimationFrame
-      }else{
-          return setTimeout
-      }
+    if (this.ctx) {
+      return this.ctx.requestAnimationFrame;
+    } else {
+      return setTimeout;
+    }
   }
 
-  fakeAnimationFrame(callback){
-    var start,
-      finish;
-    setTimeout(function(){
+  fakeAnimationFrame(callback) {
+    var start, finish;
+    setTimeout(function() {
       start = +new Date();
       callback(start);
       finish = +new Date();
 
       //   //console.log(finish - start);
-
-    },16);
+    }, 16);
   }
   renderBg() {
     const { x, y } = this.center;
     const c = this.ctx;
     const deg360 = this.degreeToRadian(360);
-    this.renderCircle(0, deg360, this.secRadius, this.opts.secColor , this.secLineWidth,0.2);
-    this.renderCircle(0, deg360, this.minRadius, this.opts.minColor, this.minLineWidth,0.3);
-    this.renderCircle(0, deg360, this.hourRadius, this.opts.hourColor, this.hourLineWidth,0.1);
+    this.renderCircle(
+      0,
+      deg360,
+      this.secRadius,
+      this.opts.secColor,
+      this.secLineWidth,
+      0.2
+    );
+    this.renderCircle(
+      0,
+      deg360,
+      this.minRadius,
+      this.opts.minColor,
+      this.minLineWidth,
+      0.3
+    );
+    this.renderCircle(
+      0,
+      deg360,
+      this.hourRadius,
+      this.opts.hourColor,
+      this.hourLineWidth,
+      0.1
+    );
   }
 
-  renderCircle(start, end, r, strokeStyle, lineWidth = 2 , opticy = 1) {
+  renderCircle(start, end, r, strokeStyle, lineWidth = 2, opticy = 1) {
     const { x, y } = this.center;
     const c = this.ctx;
     const offset = this.degreeToRadian(-90);
@@ -152,10 +188,7 @@ export default class Circle {
     c.arc(x, y, r, offset + start, offset + end);
     // c.closePath();
     c.stroke();
-
-
   }
-
 
   getId() {
     return 'canvas';
@@ -181,7 +214,7 @@ export default class Circle {
     return `${this.twoBits(h)}:${this.twoBits(m)}:${this.twoBits(s)}`;
   }
 
-  renderText([h, m, s]){
+  renderText([h, m, s]) {
     const strTime = this.formatTime([h, m, s]);
     this.ctx.setGlobalAlpha(1);
     this.ctx.textAlign = 'center';
@@ -194,11 +227,12 @@ export default class Circle {
   }
 
   renderTime() {
-    if(this.isPause || this.isStop){
+    if ((this.isPause || this.isStop) && this.firstRender) {
       return;
     }
+    this.firstRender = true;
     const { countDown } = this.opts;
-    let diff = (new Date().getTime()) - this.start;
+    let diff = new Date().getTime() - this.start;
     diff = diff * this.opts.ratio;
     if (this.opts.down) {
       diff = countDown - diff;
@@ -206,10 +240,9 @@ export default class Circle {
 
     const [h, m, s] = this.timeToDate(diff);
 
-
     if (this.opts.down) {
       if (diff <= 0) {
-        console.log(h, m , s)
+        console.log(h, m, s);
         this.end();
         return;
       }
@@ -224,7 +257,7 @@ export default class Circle {
 
     if (this.opts.down) {
       if (diff > 0) {
-        this.requestAnimationFrame(this.renderTime.bind(this) , this.keyFrames);
+        this.requestAnimationFrame(this.renderTime.bind(this), this.keyFrames);
       } else {
         this.end();
       }
@@ -235,103 +268,137 @@ export default class Circle {
         this.end();
       }
     }
-
   }
 
-  clear(){
+  clear() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   end() {
     if (this.opts.down) {
       // this.ctx.clearRect(0, 0, this.width, this.height);
-      this.renderTimeBg([0,0,0])
+      this.renderTimeBg([0, 0, 0]);
     }
-
 
     this.isStop = true;
 
     this.opts.endCb();
   }
 
-  stop(){
-    this.isStop = true;
+  stop() {
+    if (this.isOperating) {
+      return;
+    }
+    this.isOperating = true;
 
+    this.stopCb
+      .then(res => {
+        if (res) {
+          this.isStop = true;
+        }
+      })
+      .finally(() => {
+        this.isOperating = false;
+      });
   }
 
   pause() {
-    this.isPause = true;
-    let diff = (new Date().getTime()) - this.start;
-    wx.setStorage({
-      key: this.keyRunTime,
-      data:diff,
-      success:() => {
-        this.opts.pauseCb(diff);
-      }
-    });
-  }
-
-  resume(){
-    if(this.isStop){
+    if (this.isOperating) {
       return;
     }
-    wx.getStorage({
-      key:this.keyRunTime,
-      success: ({data:diff}) => {
-        if(this.opts.down){
-          // this.opts.countDown -= diff;
-          this.start = (new Date()).getTime() - diff;
-        }else{
-          this.start = diff;
-        }
+    this.isOperating = true;
+    let diff = new Date().getTime() - this.start;
+
+    this.opts
+      .pauseCb(diff / 1000)
+      .then(res => {
+        if (res) {
+          this.isPause = true;
+        //   let diff = new Date().getTime() - this.start;
+        //   wx.setStorage({
+        //     key: this.keyRunTime,
+        //     data: diff,
+        //     success: () => {
+        //       // this.opts.pauseCb(diff);
+        //     }
+        //   });
+        // }
+      })
+      .finally(() => {
+        this.isOperating = false;
+      });
+  }
+
+  resume() {
+    if (this.isStop || this.isOperating) {
+      return;
+    }
+    this.opts.resumeCb().then(res => {
+      if (res) {
+        const diff = res.remaindLearnTime * 1000;
+        this.countDown = diff;
+        this.start = new Date().getTime();
         this.isPause = false;
-        this.opts.resumeCb();
         this.renderTime();
+
+        // wx.getStorage({
+        //   key: this.keyRunTime,
+        //   success: ({ data: diff }) => {
+        //     if (this.opts.down) {
+        //       // this.opts.countDown -= diff;
+        //       this.start = new Date().getTime() - diff;
+        //     } else {
+        //       this.start = diff;
+        //     }
+        //     this.isPause = false;
+        //     // this.opts.resumeCb();
+        //     this.renderTime();
+        //   }
+        // });
       }
-    })
+    });
   }
 
   renderTimeToCircle(deg, r) {
     this.renderCircle(0, deg, r, this.opts.drawColor, this.lineWidth);
   }
 
-
   timeToDate(time) {
-    if(this.opts.step){
-      const t =Math.floor( time / 1000);
+    if (this.opts.step) {
+      const t = Math.floor(time / 1000);
       const h = Math.floor(t / (60 * 60));
       const m = Math.floor((t - h * 60 * 60) / 60);
       const s = (time - h * 60 * 60 * 1000 - m * 60 * 1000) / 1000;
-      
+
       return [h, m, s];
-    }else{
+    } else {
       const t = time / 1000;
       const h = t / (60 * 60);
       const m = (t - Math.floor(h) * 60 * 60) / 60;
-      const s = (time - Math.floor(h) * 60 * 60 * 1000 - Math.floor(m) * 60 * 1000) / 1000;
+      const s =
+        (time - Math.floor(h) * 60 * 60 * 1000 - Math.floor(m) * 60 * 1000) /
+        1000;
 
       return [h, m, s];
     }
   }
 
-  setTimeRange(startTime , endTime){
+  setTimeRange(startTime, endTime) {
     this.opts.startTime = startTime || this.opts.startTime;
     this.opts.endTime = endTime || this.opts.endTime;
 
-    this.opts.countDown = this.opts.endTime.getTime() - this.opts.startTime.getTime();
+    this.opts.countDown =
+      this.opts.endTime.getTime() - this.opts.startTime.getTime();
 
-
-    if(this.opts.down){
+    if (this.opts.down) {
       const [h, m, s] = this.timeToDate(this.opts.countDown);
       this.clear();
       // this.renderTimeBg([h, m, s]);
       this.render();
     }
-
   }
 
-
-  renderTimeBg([h, m, s]){
+  renderTimeBg([h, m, s]) {
     this.renderBg();
     this.renderText([h, m, s]);
     this.renderTimeToCircle(this.degreeToRadian(6 * s), this.secRadius);

@@ -5,46 +5,33 @@
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
+import wepy from '@wepy/core';
+import store from 'store';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-
-    },
-    data: {
-      startTime:new Date().getTime(),
-      endTime:new Date().getTime(),
-
-    },
-    methods: {
-
-    },
-    onShow(){
-
-
-    },
-    onLoad({startTime , endTime}){
-      this.startTime = startTime;
-      this.endTime = endTime;
-
-
-
-    },
-    created () {
-
-    }
-  });
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {},
+  data: {
+    startTime: new Date().getTime(),
+    endTime: new Date().getTime()
+  },
+  methods: {},
+  onShow() {},
+  onLoad({ startTime, endTime }) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .timer{
-      width: 100%;
-    height: 100%;
-  }
+.timer {
+  width: 100%;
+  height: 100%;
+}
 </style>
 <config>
 {

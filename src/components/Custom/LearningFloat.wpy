@@ -1,8 +1,8 @@
 <template>
-  <div class="LearningFloat external-cls" @click="onNav">
+  <div class="LearningFloat external-cls" @click="onNav" v-if="learnTime">
     <image src="icon_inlearning@3x" />
     <span class="text">
-      {{ text }}
+      {{ '正在学习' }}
     </span>
     <span class="time"> {{ time }}分钟 </span>
   </div>
@@ -11,28 +11,57 @@
 import wepy from '@wepy/core';
 import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
+import { mapGetters, mapState, mapMutations } from '@wepy/x';
+import { learnTimeSuspend } from '@/http/http-business';
 
 wepy.component({
-  data: {
-    icon: 'icon_inlearning@3x'
-  },
+  data: {},
   externalClasses: ['external-cls'],
   props: {
     text: String,
-    time: String
+    time: String,
+    learnTime: Object
   },
   events: {},
-  computed: {},
+  computed: {
+    time() {
+      if (this.learnTime) {
+      }
+    }
+  },
   methods: {
+    ...mapMutations(['setLearnTime']),
     onNav() {
+      const { remaindLearnTime, learnTime } = this.learnTime;
+
       navToPage('/pages/section1/timer', {
         startTime: new Date().getTime(),
-        endTime: new Date().getTime() + 1000 * 3600
+        endTime: new Date().getTime() + remaindLearnTime * 1000
       });
     }
   },
-  onLoad() {
-    this.icon = getImgUrlEx(this.icon);
+  attached() {
+    if (this.learnTime) {
+      const { remaindLearnTime, learnTime } = this.learnTime;
+      const start = Math.foor((learnTime - remaindLearnTime) / 60.0);
+      this.time = start;
+      this.timer = setInterval(() => {
+        const rd = this.remaindLearnTime - 1;
+        if (rd < 0) {
+          clearInterval(this.timer);
+          this.timer = null;
+          learnTimeSuspend(this.learnTime.id, '', 3).then(() => {});
+        }
+        this.setLearnTime({ ...this.learnTime, remaindLearnTime: rd });
+        this.time = Math.foor((learnTime - rd) / 60.0);
+      }, 1000);
+    }
+  },
+  detached() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
   }
 });
 </script>

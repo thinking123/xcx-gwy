@@ -1,6 +1,6 @@
 <template>
   <div class="page home">
-    <LearningFloat external-cls="LearningFloat" v-if="isSigned" />
+    <LearningFloat external-cls="LearningFloat" />
     <div class="signed" v-if="isSigned">
       <CCircleImg external-cls="cirImg">
         <open-data type="userAvatarUrl"></open-data>
@@ -226,7 +226,7 @@ wepy.page({
     learnTip: ''
   },
   methods: {
-    ...mapMutations(['setUser']),
+    ...mapMutations(['setUser', 'setLearnTime']),
     handleSign() {
       navBack();
     },
@@ -283,7 +283,7 @@ wepy.page({
       };
 
       if (verify()) {
-        let totalT = this.time[0] * 60 + this.time[1];
+        let totalT = (this.time[0] * 60 + this.time[1]) * 60; // seconds
         learnTimeAdd(this.user.id, this.learnContent, totalT).then(res => {
           this.learnShow = false;
           const t = this.time;
@@ -335,12 +335,29 @@ wepy.page({
       });
     }
   },
-  onShow() {},
+  onShow() {
+    if (this.isSigned && this.user.planTimeId) {
+      getLearnTime(this.user.planTimeId).then(res => {
+        if (res) {
+          this.setLearnTime(res);
+        }
+      });
+    }
+  },
   onLoad() {
     refreshLocation();
     getUserNum();
     if (this.isSigned) {
-      getMsgById(this.user.id);
+      const user = getMsgById(this.user.id)
+        .then(user => {
+          this.setUser(user);
+          return user.planTimeId && getLearnTime(this.user.planTimeId);
+        })
+        .then(res => {
+          if (res) {
+            this.setLearnTime(res);
+          }
+        });
     }
   },
   created() {
@@ -352,7 +369,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/section1/kaimingwutong');
+      // navToPage('/pages/section1/kaimingwutong');
     }
   }
 });
