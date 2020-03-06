@@ -28,22 +28,33 @@
         v-else
       />
     </div>
-
-    <CButton text="登录" @tap.native="handleSubmit" external-cls="submit" />
+    <CWXButton
+      text="登录"
+      v-if="showWxBtn"
+      @getuserinfo="handleGetUerInfo"
+      external-cls="submit"
+    />
+    <CButton
+      text="登录"
+      @tap.native="handleSubmit"
+      v-else
+      external-cls="submit"
+    />
   </div>
 </template>
 
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { mapState, mapMutations } from '@wepy/x';
+import { mapGetters, mapMutations } from '@wepy/x';
 import { isPhone, showMsg } from '@/common/utils';
 import {
   checkVCode,
   getPhoneCode,
   loginByPhone,
   loginByVcode,
-  checkPhone
+  checkPhone,
+  updateMsgById
 } from '@/http/http-business';
 import { reLaunch } from '@/common/navUtils';
 
@@ -53,7 +64,20 @@ wepy.page({
     navigationBarTitleText: '登入'
   },
   computed: {
-    ...mapState(['deviceId'])
+    ...mapGetters(['wx', 'deviceId', 'userInfo']),
+    showWxBtn() {
+      return !this.wx.userInfo;
+    },
+    disabled() {
+      let isOk = isPhone(this.phone);
+      if (this.selectedTab == 0) {
+        isOk = isOk && /\d{4}/.test(this.code);
+      } else {
+        isOk = isOk && !!this.pw;
+      }
+
+      return !isOk;
+    }
   },
   data: {
     tabs: [{ text: '验证码登录' }, { text: '密码登录' }],
@@ -81,22 +105,25 @@ wepy.page({
         } else {
           res = await loginByPhone(this.phone, this.pw, this.deviceId);
         }
-
+        res.userHead = this.userInfo.avatarUrl;
+        res.gender = this.userInfo.gender;
         this.setUser(res);
+        await updateMsgById(res.id, {
+          userHead: this.userInfo.avatarUrl,
+          userSex: this.userInfo.gender
+        });
         reLaunch('/pages/home');
       } catch (e) {
         showMsg(e);
       }
     },
     handlev(v) {
-      console.log('hv : ', v);
       this.phone = v;
     },
     handlePw(v) {
       this.pw = v;
     },
     handleCode(v) {
-      console.log('code', v);
       this.code = v;
     },
     async countCheck(v) {
@@ -116,7 +143,6 @@ wepy.page({
       }
     },
     handleTab({ tab, index }) {
-      console.log('tab', tab, index);
       this.selectedTab = index;
     },
     verify() {
@@ -128,6 +154,9 @@ wepy.page({
       }
 
       return isOk;
+    },
+    handleGetUerInfo(userInfo) {
+      this.handleSubmit();
     }
   },
   onShow() {},
@@ -163,6 +192,8 @@ wepy.page({
     CLabelInput:'~UI/CLabelInput',
     CButton:'~UI/CButton',
     CCountDownInput:'~UI/CCountDownInput',
+      CWXButton:'~UI/CWXButton'
+
     }
 }
 </config>

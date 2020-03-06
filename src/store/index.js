@@ -151,6 +151,15 @@ export default new Vuex.Store({
     },
     totalOnlineNum(state) {
       return state.totalOnlineNum;
+    },
+    wx(state) {
+      return state.wx;
+    },
+    deviceId(state) {
+      return state.deviceId;
+    },
+    userInfo(state) {
+      return state.userInfo;
     }
   },
   actions: {

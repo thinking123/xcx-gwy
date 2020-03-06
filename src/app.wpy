@@ -21,30 +21,15 @@ import {
   wx_getSystemInfo
 } from '@/common/wx';
 import { showMsg } from '@/common/utils';
-import { commit } from 'store';
+import store from 'store';
 
 wepy.app({
-  hooks: {
-    // App 级别 hook，对整个 App 生效
-    // 同时存在 Page hook 和 App hook 时，优先执行 Page hook，返回值再交由 App hook 处
-    'before-setData': function(dirty) {
-      // console.log('setData dirty: ', dirty);
-      return dirty;
-    }
-  },
   globalData: {
     systemInfo: {}
   },
 
   onLaunch() {
-    // debugConsole(true);
     this.init();
-
-    // this.testAsync();
-    // eventHub.$on('app-launch', (...args) => {
-    //   // console.log('app-launch event emitted, the params are:');
-    //   // console.log(args);
-    // });
   },
 
   methods: {
@@ -53,32 +38,21 @@ wepy.app({
     },
     async loginWx() {
       try {
+        store.commit('pushQueue', 'loginWx');
         await _wxLogin();
         const setting = await _wxGetSetting();
-        console.log('setting', setting);
         if (setting['scope.userInfo']) {
           //授权过用户信息
           await _wxGetUserInfo();
         }
-
         const systemInfo = await wx_getSystemInfo();
         console.log('systemInfo', systemInfo);
         this.$options.globalData.systemInfo = systemInfo;
       } catch (e) {
         showMsg(e);
+      } finally {
+        store.commit('popQueue', 'loginWx');
       }
-    },
-    sleep(s) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('promise resolved');
-        }, s * 1000);
-      });
-    },
-
-    async testAsync() {
-      let d = await this.sleep(3);
-      console.log(d);
     }
   }
 });
@@ -134,6 +108,7 @@ wepy.app({
 <config>{
   pages: [
     "pages/login/login",
+      "pages/login/loginInput",
     "pages/section1/luntanPublish",
     "pages/section1/MemberCenter",
     "pages/home",

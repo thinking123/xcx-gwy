@@ -340,6 +340,7 @@ wepy.page({
     refreshLocation();
     getUserNum();
     if (this.isSigned) {
+      getMsgById();
       new Promise((res, rej) => {
         const userInfo = !!this.userInfo
           ? res(this.userInfo)

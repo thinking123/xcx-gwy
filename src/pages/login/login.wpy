@@ -38,6 +38,7 @@
         @tap.native="handleRegister"
       />
     </div>
+    <CLoading type="spinner" v-if="isLoading" mask />
   </div>
 </template>
 
@@ -63,7 +64,7 @@ wepy.page({
   },
   // mixins:[utilMixin],
   computed: {
-    ...mapState(['wx']),
+    ...mapGetters(['wx', 'isLoading']),
     showWxBtn() {
       return !this.wx.userInfo;
     }
@@ -112,8 +113,7 @@ wepy.page({
   onLoad() {
     if (DEV) {
       // this.handlegoto();
-      this.wxLogin();
-
+      // this.wxLogin();
       // navToPage('/pages/section1/luntan');
     }
   },
@@ -181,7 +181,9 @@ wepy.page({
     usingComponents: {
       CButton:'~UI/CButton',
       CRightButtonIcon:'~UI/CRightButtonIcon',
-      CWXButton:'~UI/CWXButton'
+      CWXButton:'~UI/CWXButton',
+  'CLoading':'~UI/CLoading',
+      
     }
 }
 </config>

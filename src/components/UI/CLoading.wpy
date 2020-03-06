@@ -1,7 +1,6 @@
 <template>
-  <view
-    class="c-loading custom-class external-cls"
-  >
+  <view class="c-loading custom-class external-cls">
+    <view class="mask" wx:if="mask" @click.capture.stop="noop" />
     <view
       class="c-loading__spinner c-loading__spinner--{{ type }}"
       style="color: {{ color }};"
@@ -16,96 +15,101 @@
   </view>
 </template>
 <script>
-  import wepy from '@wepy/core';
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {},
-    externalClasses: [
-      'external-cls'
-    ],
-    props: {
-      type: {
-        type: 'String',
-        default: 'circular'
-      }
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    type: {
+      type: 'String',
+      default: 'circular'
     },
-    events: {},
-    computed: {},
-    methods: {},
-    created() {
-
+    mask: {
+      type: Boolean,
+      default: false
     }
-  });
+  },
+  events: {},
+  computed: {},
+  methods: {
+    noop() {}
+  },
+  created() {}
+});
 </script>
 <style lang="less">
+.c-loading {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  line-height: 0;
+  vertical-align: middle;
+  width: 50rpx;
+  height: 50rpx;
 
-  .c-loading {
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  &__spinner {
     position: relative;
-    z-index: 0;
+    z-index: -1;
     display: inline-block;
-    line-height: 0;
-    vertical-align: middle;
-    width: 50rpx;
-    height: 50rpx;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    animation: c-rotate 0.8s linear infinite;
 
-    &__spinner {
-      position: relative;
-      z-index: -1;
-      display: inline-block;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      animation: c-rotate 0.8s linear infinite;
-
-      &--spinner {
-        animation-timing-function: steps(12);
-      }
-
-      &--circular {
-        border: 1px solid;
-        border-color: transparent;
-        border-top-color: currentColor;
-        border-radius: 100%;
-      }
+    &--spinner {
+      animation-timing-function: steps(12);
     }
 
-    &__dot {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-
-      &::before {
-        display: block;
-        width: 2px;
-        height: 25%;
-        margin: 0 auto;
-        background-color: currentColor;
-        border-radius: 40%;
-        content: ' ';
-      }
+    &--circular {
+      border: 1px solid;
+      border-color: transparent;
+      border-top-color: currentColor;
+      border-radius: 100%;
     }
   }
 
-  .generate(@n, @i: 1) when (@i =< @n) {
-    .c-loading__dot:nth-of-type(@{i}) {
-      transform: rotate(@i * 30deg);
-      opacity: 1 - (0.75 / 12) * (@i - 1);
-    }
-    .generate(@n, (@i + 1));
-  }
+  &__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-
-  .generate(12);
-
-  @keyframes c-rotate {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
+    &::before {
+      display: block;
+      width: 2px;
+      height: 25%;
+      margin: 0 auto;
+      background-color: currentColor;
+      border-radius: 40%;
+      content: ' ';
     }
   }
+}
+
+.generate(@n, @i: 1) when (@i =< @n) {
+  .c-loading__dot:nth-of-type(@{i}) {
+    transform: rotate(@i * 30deg);
+    opacity: 1 - (0.75 / 12) * (@i - 1);
+  }
+  .generate(@n, (@i + 1));
+}
+
+.generate(12);
+
+@keyframes c-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

@@ -51,13 +51,13 @@ wepy.page({
     pw: ''
   },
   methods: {
-    ...mapMutations(['setUser']),
+    // ...mapMutations(['setUser']),
     async handleSubmit() {
       if (this.verify()) {
         try {
           await checkVCode(this.phone, this.code);
-          const res = await registerByPhone(this.phone, this.code, this.pw);
-          this.setUser(res);
+          await registerByPhone(this.phone, this.code, this.pw);
+          // this.setUser(res);
           redirectTo('/pages/login/login');
         } catch (e) {
           showMsg(e);

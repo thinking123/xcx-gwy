@@ -1,5 +1,5 @@
 import { get, post } from './http';
-import { showMsg, urlParams } from '@/common/utils';
+import { showMsg, urlParams, delNullProperty } from '@/common/utils';
 import { wx_getLocation } from '@/common/wx';
 import store from 'store';
 const reg = /^2/;
@@ -224,10 +224,11 @@ export function registerByWx(openid, userHead, userName, userPhone) {
 export function getMsgById(userId) {
   let url = '/api/login/getMsgById';
 
-  url = urlParams(url, {
+  const p = {
     id: store.state.user.id,
     collectUserId: userId
-  });
+  };
+  url = urlParams(url, delNullProperty(p));
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 
@@ -859,7 +860,7 @@ export function forumEvaluate(postId, evaluateContent) {
   // const errMsg = '打卡失败';
 
   url = urlParams(url, {
-    id: store.state.user.id,
+    userId: store.state.user.id,
     postId,
     evaluateContent
   });
