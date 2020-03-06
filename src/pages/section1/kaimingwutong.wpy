@@ -1,27 +1,111 @@
 <template>
-    <div class="kaimingwutong external-cls">
-      <div class="header">
-        <CTab type="radius" :tabs="tabs"
-              @changeTab="handleTab"
-              external-cls="ctab"/>
+  <div class="kaimingwutong external-cls">
+    <div class="header">
+      <CTab
+        type="radius"
+        :tabs="tabs"
+        @changeTab="handleTab"
+        external-cls="ctab"
+      />
 
-        <IconText @click.native="handleToQuestion"
-                  external-cls="titleIcon"
-                  external-img="titleImg"
-                  :text="iconText.text" :src="iconText.src"/>
+      <IconText
+        @click.native="handleToQuestion"
+        external-cls="titleIcon"
+        external-img="titleImg"
+        :text="iconText.text"
+        :src="iconText.src"
+        wx:if="{{false}}"
+      />
+    </div>
+    <CDockerPoper :show="showDocker" @close="onCloseDocker">
+      <COrderList
+        :items="dockerList"
+        @change="onCOrderList"
+        :sel="selOrder"
+        slot="header"
+      />
+      <div class="poper" slot="poper">
+        <div style="display:{{selOrder==0?'block':'none'}}">
+          <CListSelect
+            :items="gwyLevels"
+            labelKey="levelName"
+            external-cls="CListSelect1"
+            :sel="list1Sel1"
+            @change="onCListSelect1"
+            v-if="selectedTab == 0"
+          />
+          <CListSelect
+            :items="labs"
+            labelKey="name"
+            external-cls="CListSelect1"
+            :sel="list2Sel1"
+            @change="onCListSelect1"
+            v-else
+          />
+        </div>
+        <div style="display:{{selOrder==1?'block':'none'}}">
+          <CListSelect
+            :items="pros"
+            labelKey="cityCaption"
+            external-cls="CListSelect1"
+            :sel="list1Sel2"
+            @change="onCListSelect2"
+            v-if="selectedTab == 0"
+          />
+          <CListSelect
+            :items="pros"
+            labelKey="cityCaption"
+            external-cls="CListSelect1"
+            :sel="list2Sel2"
+            @change="onCListSelect2"
+            v-else
+          />
+        </div>
+        <div style="display:{{selOrder==2?'block':'none'}}">
+          <CListSelect
+            :items="deps"
+            labelKey="departmentName"
+            external-cls="CListSelect1"
+            :sel="list1Sel3"
+            @change="onCListSelect3"
+            v-if="selectedTab == 0"
+          />
+          <CListSelect
+            :items="frees"
+            labelKey="name"
+            external-cls="CListSelect1"
+            :sel="list2Sel3"
+            @change="onCListSelect3"
+            v-else
+          />
+        </div>
       </div>
-<!--      <CExpand :expanded="expanded">-->
-<!--        <div v-for="item in items" class="item">-->
-<!--          {{item}}-->
-<!--        </div>-->
-<!--      </CExpand>-->
+    </CDockerPoper>
 
-      <div class="gwyCard" v-if="selectedTab == 0">
-        <gwyCard v-for="item in items1" :obj="item"
-                 :key="item.id"
-                 external-cls="gwyCard-item"/>
+    <CListWrap1
+      :type="listtype1"
+      :params="params1"
+      url="/api/kmwt/getGwyList"
+      :show="selectedTab == 0"
+      v-if="loaded"
+    >
+      <div class="gwyCard">
+        <gwyCard
+          v-for="item in items1"
+          :obj="item"
+          :key="item.id"
+          external-cls="gwyCard-item"
+        />
       </div>
-      <div class="gwtRecord" v-if="selectedTab == 1">
+    </CListWrap1>
+    <CListWrap1
+      :type="listtype2"
+      :params="params2"
+      url="/api/kmwt/getSoundRecordList"
+      :show="selectedTab == 1"
+      v-if="loaded"
+    >
+      <div class="gwtRecord">
         <ClassCard1
           v-for="item in items2"
           :key="item.id"
@@ -34,142 +118,275 @@
           external-cls="gwtRecord-item"
         />
       </div>
-    </div>
+    </CListWrap1>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import { getImgUrlEx, selArrayVal, delNullProperty } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
+import {
+  getGwyLevel,
+  kmwtSelectPro,
+  getDepartment,
+  getLabel
+} from '@/http/http-business';
+const listtype1 = 'forum_getkmwtList1';
+const listtype2 = 'forum_getkmwtList2';
 
-  wepy.page({
-    data: {
-      expanded:false,
-      items1:[],
-      items2:[],
-
-      tabs:[
-        {text:'公务员'},
-        {text:'录播'},
-      ],
-      selectedTab:0,
-      iconText:{
-        text:'发表提问',
-        src:'btn_quiz@3x'
-      },
+wepy.page({
+  computed: {
+    dockerList() {
+      if (this.selectedTab == 1) {
+        return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
+      }
+      return [{ text: '等级' }, { text: '地区' }, { text: '部门' }];
     },
-    methods: {
-      handleTab({tab ,index}){
-        this.selectedTab = index;
-      },
-      handleToQuestion(){
-        navToPage('/pages/section1/question')
-      }
+    params1() {
+      let p = {
+        gwyLevel: selArrayVal(this.list1Sel1, this.gwyLevels, 'id'),
+        gwyCity: selArrayVal(this.list1Sel2, this.pros, 'adCode'),
+        gwyDepartment: selArrayVal(this.list1Sel3, this.deps, 'id')
+      };
+      p = delNullProperty(p);
+
+      return p;
     },
-    created () {
-      let arr = []
-      for(let i = 0 ; i < 20 ; i++){
-        arr.push({
-          header:'',
-          name:'name',
-          level:'省部',
-          bm:'湖南 | 行政部',
-          desc:'答疑解惑，我们的职责,答疑解惑，我们的职责',
-          id:i
-        });
-      }
+    params2() {
+      let p = {
+        labelId: selArrayVal(this.list2Sel1, this.labs, 'id'),
+        cityCodeProvince: selArrayVal(this.list2Sel2, this.pros, 'adCode'),
+        freeId: selArrayVal(this.list2Sel3, [], 'id')
+      };
+      p = delNullProperty(p);
 
-      this.items1 = arr;
-
-      arr = []
-      for(let i = 0 ; i < 20 ; i++){
-        arr.push({
-          num1:'2',
-          num2:'2',
-          free:i % 2,
-          price:i*6,
-          title:'真题讲课程名称课程名称课程名称课程名称',
-          good:'good',
-          id:i
-        });
-      }
-      this.items2 = arr;
-
-      this.iconText.src = getImgUrlEx(this.iconText.src);
+      return p;
     }
-  });
+  },
+  data: {
+    expanded: false,
+    items1: [],
+    items2: [],
+
+    tabs: [{ text: '公务员' }, { text: '录播' }],
+    selectedTab: 0,
+    iconText: {
+      text: '发表提问',
+      src: 'btn_quiz@3x'
+    },
+    gwyLevels: [],
+    pros: [],
+    deps: [],
+    labs: [],
+    frees: [{ name: '免费' }],
+    showDocker: false,
+    selOrder: -1,
+    list1Sel1: -1,
+    list2Sel1: -1,
+    list1Sel2: -1,
+    list2Sel2: -1,
+    list1Sel3: -1,
+    list2Sel3: -1,
+    listtype1,
+    listtype2,
+    loaded: false
+  },
+  methods: {
+    handleTab({ tab, index }) {
+      this.selectedTab = index;
+      this.showDocker = false;
+    },
+    handleToQuestion() {
+      navToPage('/pages/section1/question');
+    },
+    init() {
+      Promise.all([
+        getGwyLevel(),
+        kmwtSelectPro(),
+        getDepartment(),
+        getLabel()
+      ]).then(vs => {
+        this.gwyLevels = vs[0];
+        this.pros = vs[1];
+        this.deps = vs[2];
+        this.labs = vs[3];
+        this.loaded = true;
+      });
+    },
+    onCOrderList(index) {
+      this.selOrder = index;
+
+      if (index > -1) {
+        this.showDocker = true;
+      } else {
+        this.showDocker = false;
+      }
+    },
+    onCloseDocker() {
+      this.selOrder = -1;
+      this.showDocker = false;
+    },
+    onCListSelect1(index) {
+      if (this.selectedTab == 0) {
+        this.list1Sel1 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else {
+        this.list2Sel1 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      }
+    },
+    onCListSelect2(index) {
+      if (this.selectedTab == 0) {
+        this.list1Sel2 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else {
+        this.list2Sel2 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      }
+    },
+    onCListSelect3(index) {
+      if (this.selectedTab == 0) {
+        this.list1Sel3 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else {
+        this.list2Sel3 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      }
+    }
+  },
+  onLoad() {
+    this.init();
+  },
+  created() {
+    // let arr = [];
+    // for (let i = 0; i < 20; i++) {
+    //   arr.push({
+    //     header: '',
+    //     name: 'name',
+    //     level: '省部',
+    //     bm: '湖南 | 行政部',
+    //     desc: '答疑解惑，我们的职责,答疑解惑，我们的职责',
+    //     id: i
+    //   });
+    // }
+
+    // this.items1 = arr;
+
+    // arr = [];
+    // for (let i = 0; i < 20; i++) {
+    //   arr.push({
+    //     num1: '2',
+    //     num2: '2',
+    //     free: i % 2,
+    //     price: i * 6,
+    //     title: '真题讲课程名称课程名称课程名称课程名称',
+    //     good: 'good',
+    //     id: i
+    //   });
+    // }
+    // this.items2 = arr;
+
+    this.iconText.src = getImgUrlEx(this.iconText.src);
+  }
+});
 </script>
 <style lang="scss">
-  .kaimingwutong{
-
-    .header{
-      padding: 0 30rpx;
-      height: 144rpx;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #FFFFFF;
-      .ctab{
-        width: 460rpx;
-      }
-      .titleIcon{
-        font-size:28rpx;
-        font-weight:400;
-        color:#4FAC1B;
-        line-height:28rpx;
-        >image{
-          width: 44rpx;
-          height: 48rpx;
-          margin-bottom: 16rpx;
-        }
-      }
-      .titleImg{
-
+.kaimingwutong {
+  .header {
+    padding: 0 30rpx;
+    height: 144rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    .ctab {
+      width: 460rpx;
+    }
+    .titleIcon {
+      font-size: 28rpx;
+      font-weight: 400;
+      color: #4fac1b;
+      line-height: 28rpx;
+      > image {
+        width: 44rpx;
+        height: 48rpx;
+        margin-bottom: 16rpx;
       }
     }
-
-    button{
-      margin: 20rpx;
+    .titleImg {
     }
-    .item{
-      height: 100rpx;
-      background-color: #07c160;
-
-      &:nth-child(odd){
-        background-color: #1989fa;
-      }
-
-    }
-
-    .gwyCard{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      background:rgba(242,242,242,1);
-      padding: 32rpx 30rpx;
-      justify-content: space-between;
-
-      .gwyCard-item{
-        margin-bottom: 32rpx;
-        &:nth-child(odd){
-          /*margin-right: 30rpx;*/
-        }
-
-
-      }
-    }
-
-    .gwtRecord{
-      display: flex;
-      flex-direction: column;
-      background:rgba(242,242,242,1);
-      padding: 32rpx 30rpx;
-      .gwtRecord-item{
-        margin-bottom:32rpx;
-
-      }
-    }
-
   }
+
+  button {
+    margin: 20rpx;
+  }
+  .item {
+    height: 100rpx;
+    background-color: #07c160;
+
+    &:nth-child(odd) {
+      background-color: #1989fa;
+    }
+  }
+
+  .gwyCard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background: rgba(242, 242, 242, 1);
+    padding: 32rpx 30rpx;
+    justify-content: space-between;
+
+    .gwyCard-item {
+      margin-bottom: 32rpx;
+      &:nth-child(odd) {
+        /*margin-right: 30rpx;*/
+      }
+    }
+  }
+
+  .gwtRecord {
+    display: flex;
+    flex-direction: column;
+    background: rgba(242, 242, 242, 1);
+    padding: 32rpx 30rpx;
+    .gwtRecord-item {
+      margin-bottom: 32rpx;
+    }
+  }
+}
+.poper {
+  width: 750rpx;
+  .c1 {
+    width: 750rpx;
+    height: 200rpx;
+    background-color: #07c160;
+  }
+
+  .c2 {
+    width: 750rpx;
+    height: 800rpx;
+    background-color: chartreuse;
+  }
+
+  .CListSelect1 {
+    background: rgba(242, 242, 242, 1);
+    padding: 32rpx 30rpx;
+    box-sizing: border-box;
+    .CListSelect-item {
+      margin-bottom: 20rpx;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 </style>
 
 <config>
@@ -180,8 +397,12 @@
   CTab:'~UI/CTab',
   IconText:'~Custom/IconText',
   gwyCard:'~Custom/gwyCard',
-  ClassCard1:'~Custom/ClassCard1'
+  ClassCard1:'~Custom/ClassCard1',
+  CDockerPoper:'~UI/CDockerPoper',
+  COrderList:'~UI/COrderList',
+  CListSelect:'~UI/CListSelect',
+  CListWrap1:'~UI/CListWrap1',
+
   }
   }
 </config>
-

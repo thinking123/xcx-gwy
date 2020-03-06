@@ -244,6 +244,9 @@ export function delNullProperty(obj) {
   return obj || {};
 }
 
+export function selArrayVal(i, arr, key) {
+  return arr && i > -1 && i < arr.length ? arr[i][key] : '';
+}
 // export function isObj(obj) {
 //   return typeof obj === 'object' && obj !== null;
 // }

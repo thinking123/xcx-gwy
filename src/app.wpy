@@ -42,7 +42,6 @@ wepy.app({
         await _wxLogin();
         const setting = await _wxGetSetting();
         if (setting['scope.userInfo']) {
-          //授权过用户信息
           await _wxGetUserInfo();
         }
         const systemInfo = await wx_getSystemInfo();

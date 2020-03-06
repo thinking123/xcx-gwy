@@ -336,22 +336,11 @@ wepy.page({
     }
   },
   onShow() {},
-  onLoad(query = {}) {
+  onLoad() {
     refreshLocation();
     getUserNum();
     if (this.isSigned) {
-      getMsgById();
-      new Promise((res, rej) => {
-        const userInfo = !!this.userInfo
-          ? res(this.userInfo)
-          : res(_wxGetUserInfo());
-      }).then(userInfo => {
-        const us = {
-          userHead: userInfo.avatarUrl,
-          userSex: userInfo.gender
-        };
-        updateMsgById(this.user.id, us);
-      });
+      getMsgById(this.user.id);
     }
   },
   created() {
@@ -363,7 +352,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/section1/luntan');
+      navToPage('/pages/section1/kaimingwutong');
     }
   }
 });

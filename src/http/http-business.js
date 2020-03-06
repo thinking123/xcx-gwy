@@ -1584,3 +1584,152 @@ export function updateMsgById(id, userInfo = {}) {
   url = urlParams(url, { id, ...userInfo });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+GET /api/kmwt/getDepartment
+获取部门接口 --编号 004
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "createTime": "string",
+    "departmentName": "string",
+    "departmentSort": 0,
+    "id": 0,
+    "isDel": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+
+
+
+ */
+export function getDepartment() {
+  let url = '/api/kmwt/getDepartment';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/kmwt/getGwyLevel
+获取公务员等级接口 --编号 001
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "createTime": "string",
+    "id": 0,
+    "isDel": 0,
+    "levelName": "string",
+    "levelSort": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+
+
+ */
+export function getGwyLevel() {
+  let url = '/api/kmwt/getGwyLevel';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/kmwt/selectCity
+获取下一级地区 --编号 003
+
+Response Class (Status 200)
+Successful — 请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "adCode": "string",
+    "cityCaption": "string",
+    "cityOrder": 0,
+    "cityState": 0,
+    "createBy": "string",
+    "createTime": "2020-03-06T03:26:39.793Z",
+    "params": {},
+    "parentCode": "string",
+    "parentLevel": 0,
+    "remark": "string",
+    "searchValue": "string",
+    "updateBy": "string",
+    "updateTime": "2020-03-06T03:26:39.793Z",
+    "userNum": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+cityCode	
+cityCode
+
+query	string
+
+ */
+export function smwtSelectCity(cityCode) {
+  let url = '/api/kmwt/selectCity';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { cityCode });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/kmwt/selectPro
+获取省级地区 --编号002
+
+Response Class (Status 200)
+ */
+export function kmwtSelectPro() {
+  let url = '/api/kmwt/selectPro';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {});
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
