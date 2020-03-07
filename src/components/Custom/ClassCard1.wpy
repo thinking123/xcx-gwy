@@ -15,12 +15,12 @@
         <block v-if="liked">
           <image :src="icon2" class="icon2" />
         </block>
-        <block v-else>
+        <!-- <block v-else>
           <span v-if="free" class="text2">
             免费
           </span>
           <span v-else class="text3"> ¥{{ price }} </span>
-        </block>
+        </block> -->
       </div>
     </div>
   </div>

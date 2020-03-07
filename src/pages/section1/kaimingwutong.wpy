@@ -109,8 +109,8 @@
         <ClassCard1
           v-for="item in clist2"
           :key="item.id"
-          :num1="item.num1"
-          :num2="item.num2"
+          :num1="item.recordChapter"
+          :num2="item.recordSection"
           :free="item.free"
           :title="item.recordTitle"
           :good="item.good"
@@ -151,7 +151,8 @@ wepy.page({
     },
     dockerList() {
       if (this.selectedTab == 1) {
-        return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
+        // return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
+        return [{ text: '分类' }, { text: '地区' }];
       }
       return [{ text: '等级' }, { text: '地区' }, { text: '部门' }];
     },
