@@ -450,18 +450,18 @@ export function learnTimeFinish(id, finishTime) {
  2001
  用户已打卡
  */
-export function learnTimeSuspend(id, remaindLearnTime) {
-  let url = ' /api/learnTime/suspend';
+// export function learnTimeSuspend(id, remaindLearnTime) {
+//   let url = ' /api/learnTime/suspend';
 
-  // const loadingText = '打卡...';
-  // const errMsg = '打卡失败';
+//   // const loadingText = '打卡...';
+//   // const errMsg = '打卡失败';
 
-  url = urlParams(url, {
-    id,
-    remaindLearnTime
-  });
-  return get(url, {}, '').then(res => parseRes(res, '', [], [2001]));
-}
+//   url = urlParams(url, {
+//     id,
+//     remaindLearnTime
+//   });
+//   return get(url, {}, '').then(res => parseRes(res, '', [], [2001]));
+// }
 
 //todo 继续学习的接口没有
 
@@ -1778,4 +1778,66 @@ export function kmwtSelectPro() {
 
   url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+export function getLocalLearnTime(learnTime) {
+  const key = `${store.state.user.id}-learnTime`;
+  wx.getStorage({
+    key,
+    success: ({ data }) => {
+      if (data) {
+        let _learnTime = JSON.parse(data);
+        if (
+          learnTime.id === _learnTime.id &&
+          learnTime.learnState === _learnTime.learnState &&
+          learnTime.remaindLearnTime < _learnTime.remaindLearnTime
+        ) {
+          // 用本地时间
+          store.commit('setLearnTime', _learnTime);
+          return;
+        }
+      }
+      store.commit('setLearnTime', learnTime);
+    },
+    fail: () => {
+      store.commit('setLearnTime', learnTime);
+    }
+  });
+}
+
+export function updateLocalLearnTime(learnTime) {
+  // 多少时间更新
+  const updateStep = 10;
+  const key = `${store.state.user.id}-learnTime`;
+  let pos = Promise.resolve();
+  // 1分钟更新一次时间，或者从暂停状态恢复更新时间
+  if (
+    (store.state.learnTime.lastTime - learnTime.remaindLearnTime >=
+      updateStep &&
+      learnTime.learnState == 1) ||
+    store.state.learnTime.learnState == 2
+  ) {
+    learnTime.lastTime = learnTime.remaindLearnTime;
+    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 1);
+  }
+
+  if (learnTime.learnState == 2) {
+    //暂停
+    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 2);
+  }
+
+  if (learnTime.learnState == 3) {
+    //结束
+    learnTime.remaindLearnTime = 0;
+    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 3);
+  }
+
+  store.commit('setLearnTime', learnTime);
+
+  wx.setStorage({
+    key,
+    data: JSON.stringify(learnTime)
+  });
+
+  return pos;
 }

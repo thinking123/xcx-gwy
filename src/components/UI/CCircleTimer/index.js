@@ -1,128 +1,172 @@
-import Circle from '../CircleTimer'
-import {isEmptyObject} from '@/common/utils';
+import Circle from '../CircleTimer';
+import { isEmptyObject } from '@/common/utils';
+import { mapGetters, mapState, mapMutations, mapActions } from '@wepy/x';
+import store from 'store';
+import { updateLocalLearnTime } from '@/http/http-business';
 
 Component({
   properties: {
     // 这里定义了innerText属性，属性值可以在组件使用时指定
     innerText: {
       type: String,
-      value: 'value value',
+      value: 'value value'
     },
-    width:{
-      type:Number,
-      value:750
+    width: {
+      type: Number,
+      value: 750
     },
-    height:{
-      type:Number,
-      value:750
+    height: {
+      type: Number,
+      value: 750
     },
-    startTime:{
-      type:Number,
-      value:new Date().getTime()
+    startTime: {
+      type: Number,
+      value: new Date().getTime()
     },
-    endTime:{
-      type:Number,
-      value:new Date().getTime()
+    endTime: {
+      type: Number,
+      value: new Date().getTime()
     },
-    secRadius:{
-      type:Number,
-      value:215
+    secRadius: {
+      type: Number,
+      value: 215
     },
-    minRadius:{
-      type:Number,
-      value:255
+    minRadius: {
+      type: Number,
+      value: 255
     },
-    hourRadius:{
-      type:Number,
-      value:315
-    },
+    hourRadius: {
+      type: Number,
+      value: 315
+    }
   },
   observers: {
     startTime() {
-      this.updateTime()
+      this.updateTime();
     },
     endTime() {
-      this.updateTime()
-    },
+      this.updateTime();
+    }
   },
-  attached(){
-    // const ctx = wx.createCanvasContext('canvas' , this)
-    // ctx.rect(10, 10, 150, 75)
-    // ctx.setFillStyle('yellow')
-    // ctx.fill()
-    // ctx.draw()
-
-
-    // const sel = this.createSelectorQuery().select('.canvas');
-    // console.log('sel:' , sel);
-    // sel.node(function(res){
-    //   console.log('res.node' , res) // 节点对应的 Canvas 实例。
-    // }).exec()
-    //
-
-    //
+  attached() {
+    const learnTime = store.state.learnTime;
+    const startTime = new Date();
+    const endTime = startTime + learnTime.remaindLearnTime * 1000;
+    const isStop = learnTime.learnState == 3;
+    const isPause = learnTime.learnState == 2;
     this.circle = new Circle({
-      startTime: new Date(),
-      endTime:  new Date(),
+      startTime,
+      endTime,
       width: this.data.width,
       height: this.data.height,
       secRadius: this.data.secRadius,
       minRadius: this.data.minRadius,
       hourRadius: this.data.hourRadius,
-      attached:this,
-      ratio:1
+      attached: this,
+      ratio: 1,
+      isStop,
+      isPause,
+      endCb: this.endCb.bind(this),
+      secondCb: this.secondCb.bind(this)
     });
-    //
-    // const offset = 1000 * (26 + 2 * 60 + 0 * 3600);
-    // const t = new Date(new Date().setTime(new Date().getTime() + offset));
-    // this.circle.setTimeRange(new Date() , t);
-    //
-
-
-
-
-
+    this.setData({
+      isStop,
+      isPause
+    });
   },
+  detached() {
+    if (this.circle) {
+      this.circle.dispose();
+      this.circle = null;
+    }
+  },
+
   data: {
-    isStop:false,
-    isPause:false
+    isStop: false,
+    isPause: false,
+    isOperating: false
   },
   methods: {
-    updateTime(){
-      // if(isEmptyObject(this.data.startTime) ||
-      //   isEmptyObject(this.data.endTime)
-      // ){
-      //   return;
-      // }
-      if(this.circle){
+    endCb() {
+      updateLocalLearnTime({
+        ...store.state.learnTime,
+        remaindLearnTime: 0,
+        learnState: 3
+      }).then(() => {
+        return this._setData({
+          isStop: true
+        });
+      });
+    },
+    _setData(d) {
+      return new Promise((res, rej) => {
+        this.setData(d, res);
+      });
+    },
+    secondCb(hs, remaindLearnTime) {
+      updateLocalLearnTime({
+        ...store.state.learnTime,
+        remaindLearnTime
+      });
+    },
+    updateTime() {
+      if (this.circle) {
         this.circle.setTimeRange(
-          new Date(this.data.startTime) ,
-          new Date(this.data.endTime));
+          new Date(this.data.startTime),
+          new Date(this.data.endTime)
+        );
       }
     },
     handleStop: function() {
-      if(this.data.isStop){
+      const learnTime = store.state.learnTime;
+
+      const isStop = learnTime.learnState == 3;
+
+      if (isStop || this.data.isOperating) {
         return;
       }
-      if(this.circle){
-        this.circle.stop();
-        this.setData({
-          isStop:true
+      this._setData({ isOperating: true })
+        .then(() => {
+          return updateLocalLearnTime({
+            ...learnTime,
+            learnState: 3
+          });
         })
-      }
+        .then(res => {
+          if (res) {
+            this.circle.stop();
+            return this._setData({
+              isStop,
+              isOperating: false
+            });
+          }
+        });
     },
     handlePause: function() {
-      if(this.data.isPause){
-        this.circle.resume();
-        this.setData({
-          isPause:false
-        })
-      }else{
-        this.circle.pause();
-        this.setData({
-          isPause:true
-        })
+      const learnTime = store.state.learnTime;
+
+      const isPause = learnTime.learnState == 2;
+      const isStop = learnTime.learnState == 3;
+
+      if (isStop || this.data.isOperating) {
+        return;
       }
+      this._setData({ isOperating: true })
+        .then(() => {
+          return updateLocalLearnTime({
+            ...learnTime,
+            learnState: isPause ? 1 : 2
+          });
+        })
+        .then(res => {
+          if (res) {
+            this.circle[isPause ? 'resume' : 'pause']();
+            return this._setData({
+              isPause: !isPause,
+              isOperating: false
+            });
+          }
+        });
     }
   }
-})
+});

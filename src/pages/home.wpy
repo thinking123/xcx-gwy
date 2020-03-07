@@ -152,7 +152,7 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
-import { mapGetters, mapState, mapMutations } from '@wepy/x';
+import { mapGetters, mapState, mapMutations, mapActions } from '@wepy/x';
 import { navToPage, navBack } from '@/common/navUtils';
 import { _wxGetUserInfo } from '@/common/wx';
 
@@ -163,7 +163,8 @@ import {
   learnTimeAdd,
   refreshLocation,
   getUserNum,
-  updateMsgById
+  updateMsgById,
+  getLocalLearnTime
 } from '@/http/http-business';
 
 wepy.page({
@@ -172,7 +173,14 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['isSigned', 'user', 'totalOnlineNum', 'wx', 'userInfo']),
+    ...mapGetters([
+      'isSigned',
+      'user',
+      'totalOnlineNum',
+      'wx',
+      'userInfo',
+      'learnTime'
+    ]),
     timeTip() {
       if (this.time && this.time.length > 0) {
         const time = this.time;
@@ -285,6 +293,7 @@ wepy.page({
       if (verify()) {
         let totalT = (this.time[0] * 60 + this.time[1]) * 60; // seconds
         learnTimeAdd(this.user.id, this.learnContent, totalT).then(res => {
+          this.setLearnTime(res);
           this.learnShow = false;
           const t = this.time;
           if (t && t.length == 2) {
@@ -333,32 +342,36 @@ wepy.page({
           this.getupShow = false;
         }
       });
+    },
+    init() {
+      refreshLocation();
+      getUserNum();
+      if (this.isSigned) {
+        const user = getMsgById(this.user.id)
+          .then(user => {
+            this.setUser(user);
+            return user.planTimeId && getLearnTime(user.planTimeId);
+          })
+          .then(res => {
+            if (res) {
+              getLocalLearnTime(res);
+            } else {
+              this.setLearnTime(null);
+            }
+          });
+      }
     }
+  },
+  onHide() {
+    console.log('onHide');
   },
   onShow() {
-    if (this.isSigned && this.user.planTimeId) {
-      getLearnTime(this.user.planTimeId).then(res => {
-        if (res) {
-          this.setLearnTime(res);
-        }
-      });
-    }
+    console.log('onShow');
+
+    this.init();
   },
   onLoad() {
-    refreshLocation();
-    getUserNum();
-    if (this.isSigned) {
-      const user = getMsgById(this.user.id)
-        .then(user => {
-          this.setUser(user);
-          return user.planTimeId && getLearnTime(this.user.planTimeId);
-        })
-        .then(res => {
-          if (res) {
-            this.setLearnTime(res);
-          }
-        });
-    }
+    console.log('onLoad');
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {

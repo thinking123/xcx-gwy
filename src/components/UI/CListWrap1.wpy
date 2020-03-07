@@ -280,7 +280,6 @@ clistwrap1 {
 
 .CListWrap-dst {
   height: 1px;
-  background-color: salmon;
   font-size: 30rpx;
   text-align: center;
 }

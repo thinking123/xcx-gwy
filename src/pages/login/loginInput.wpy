@@ -82,10 +82,10 @@ wepy.page({
   data: {
     tabs: [{ text: '验证码登录' }, { text: '密码登录' }],
     bottomLine: 32.0 / 375,
-    phone: '15525976631',
+    phone: '',
     code: '',
     selectedTab: 0,
-    pw: '123456'
+    pw: ''
   },
   methods: {
     ...mapMutations(['setToken', 'setUser']),

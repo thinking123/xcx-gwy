@@ -4,7 +4,9 @@ export default class Circle {
   keyRunTime = 'local-circle-timer-run-time';
   isPause = false;
   isStop = false;
+  isDispose = false;
   keyFrames = 1000 / 60;
+  currentSecond = 0;
   constructor(options) {
     const def = {
       bgColor: '#FFF',
@@ -25,6 +27,9 @@ export default class Circle {
       },
       resumeCb: () => {
         console.log('resumeCb');
+      },
+      secondCb: () => {
+        console.log('secondCb');
       },
       startTime: new Date().getTime(),
       endTime: new Date().getTime(),
@@ -230,6 +235,10 @@ export default class Circle {
     if ((this.isPause || this.isStop) && this.firstRender) {
       return;
     }
+
+    if (this.isDispose) {
+      return;
+    }
     this.firstRender = true;
     const { countDown } = this.opts;
     let diff = new Date().getTime() - this.start;
@@ -240,6 +249,11 @@ export default class Circle {
 
     const [h, m, s] = this.timeToDate(diff);
 
+    if (Math.abs(this.currentSecond - s) >= 1) {
+      // 当前时间，剩余时间
+      this.opts.secondCb([h, m, s], Math.floor(diff / 1000));
+      this.currentSecond = s;
+    }
     if (this.opts.down) {
       if (diff <= 0) {
         console.log(h, m, s);
@@ -270,6 +284,12 @@ export default class Circle {
     }
   }
 
+  dispose() {
+    this.isOperating = true;
+    this.isStop = true;
+    this.isDispose = true;
+  }
+
   clear() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
@@ -286,77 +306,82 @@ export default class Circle {
   }
 
   stop() {
-    if (this.isOperating) {
-      return;
-    }
-    this.isOperating = true;
+    this.isStop = true;
 
-    this.stopCb
-      .then(res => {
-        if (res) {
-          this.isStop = true;
-        }
-      })
-      .finally(() => {
-        this.isOperating = false;
-      });
+    // if (this.isOperating) {
+    //   return;
+    // }
+    // this.isOperating = true;
+
+    // this.stopCb
+    //   .then(res => {
+    //     if (res) {
+    //       this.isStop = true;
+    //     }
+    //   })
+    //   .finally(() => {
+    //     this.isOperating = false;
+    //   });
   }
 
   pause() {
-    if (this.isOperating) {
-      return;
-    }
-    this.isOperating = true;
-    let diff = new Date().getTime() - this.start;
+    this.isPause = true;
 
-    this.opts
-      .pauseCb(diff / 1000)
-      .then(res => {
-        if (res) {
-          this.isPause = true;
-        //   let diff = new Date().getTime() - this.start;
-        //   wx.setStorage({
-        //     key: this.keyRunTime,
-        //     data: diff,
-        //     success: () => {
-        //       // this.opts.pauseCb(diff);
-        //     }
-        //   });
-        // }
-      })
-      .finally(() => {
-        this.isOperating = false;
-      });
+    // if (this.isOperating) {
+    //   return;
+    // }
+    // this.isOperating = true;
+    // let diff = new Date().getTime() - this.start;
+
+    // this.opts
+    //   .pauseCb(diff / 1000)
+    //   .then(res => {
+    //     if (res) {
+    //       this.isPause = true;
+    //     //   let diff = new Date().getTime() - this.start;
+    //     //   wx.setStorage({
+    //     //     key: this.keyRunTime,
+    //     //     data: diff,
+    //     //     success: () => {
+    //     //       // this.opts.pauseCb(diff);
+    //     //     }
+    //     //   });
+    //     // }
+    //   })
+    //   .finally(() => {
+    //     this.isOperating = false;
+    //   });
   }
 
   resume() {
-    if (this.isStop || this.isOperating) {
-      return;
-    }
-    this.opts.resumeCb().then(res => {
-      if (res) {
-        const diff = res.remaindLearnTime * 1000;
-        this.countDown = diff;
-        this.start = new Date().getTime();
-        this.isPause = false;
-        this.renderTime();
+    this.isPause = false;
+    // if (this.isStop || this.isOperating) {
+    //   return;
+    // }
+    // this.opts.resumeCb().then(res => {
+    //   if (res) {
+    //     const diff = res.remaindLearnTime * 1000;
+    //     this.countDown = diff;
+    //     this.start = new Date().getTime();
+    //     this.isPause = false;
+    //     this.renderTime();
 
-        // wx.getStorage({
-        //   key: this.keyRunTime,
-        //   success: ({ data: diff }) => {
-        //     if (this.opts.down) {
-        //       // this.opts.countDown -= diff;
-        //       this.start = new Date().getTime() - diff;
-        //     } else {
-        //       this.start = diff;
-        //     }
-        //     this.isPause = false;
-        //     // this.opts.resumeCb();
-        //     this.renderTime();
-        //   }
-        // });
-      }
-    });
+    //     // wx.getStorage({
+    //     //   key: this.keyRunTime,
+    //     //   success: ({ data: diff }) => {
+    //     //     if (this.opts.down) {
+    //     //       // this.opts.countDown -= diff;
+    //     //       this.start = new Date().getTime() - diff;
+    //     //     } else {
+    //     //       this.start = diff;
+    //     //     }
+    //     //     this.isPause = false;
+    //     //     // this.opts.resumeCb();
+    //     //     this.renderTime();
+    //     //   }
+    //     // });
+    //   }
+    // });
   }
 
   renderTimeToCircle(deg, r) {

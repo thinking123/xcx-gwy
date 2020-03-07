@@ -1,8 +1,8 @@
 <template>
-  <div class="LearningFloat external-cls" @click="onNav" v-if="learnTime">
+  <div class="LearningFloat external-cls" @click="onNav" v-show="!!learnTime">
     <image src="icon_inlearning@3x" />
     <span class="text">
-      {{ '正在学习' }}
+      {{ text }}
     </span>
     <span class="time"> {{ time }}分钟 </span>
   </div>
@@ -11,57 +11,87 @@
 import wepy from '@wepy/core';
 import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
-import { mapGetters, mapState, mapMutations } from '@wepy/x';
-import { learnTimeSuspend } from '@/http/http-business';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { updateLocalLearnTime } from '@/http/http-business';
+import store from 'store';
 
 wepy.component({
-  data: {},
-  externalClasses: ['external-cls'],
-  props: {
-    text: String,
-    time: String,
-    learnTime: Object
+  store,
+  data: {
+    time: 0
   },
+  externalClasses: ['external-cls'],
+  props: {},
   events: {},
-  computed: {
-    time() {
-      if (this.learnTime) {
+  watch: {
+    learnTime(l, ol) {
+      if (!this.timer && l && !ol) {
+        this.init(l);
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['learnTime']),
+    text() {
+      if (this.learnTime) {
+        const state = this.learnTime.learnState;
+        return state == 1 ? '正在学习' : state == 2 ? '暂停学习' : '学习结束';
+      }
+      return '';
     }
   },
   methods: {
     ...mapMutations(['setLearnTime']),
     onNav() {
-      const { remaindLearnTime, learnTime } = this.learnTime;
+      navToPage('/pages/section1/timer');
+    },
+    init(l) {
+      if (l) {
+        const { remaindLearnTime, learnTime } = l;
+        // 分钟 start
+        const start = Math.floor((learnTime - remaindLearnTime) / 60.0);
+        this.time = start;
+        this.timer = setInterval(() => {
+          const { remaindLearnTime } = this.learnTime;
+          const rd = remaindLearnTime - 1;
+          this.time = Math.floor((learnTime - rd) / 60.0);
 
-      navToPage('/pages/section1/timer', {
-        startTime: new Date().getTime(),
-        endTime: new Date().getTime() + remaindLearnTime * 1000
-      });
+          let lt = null;
+          if (rd < 0) {
+            clearInterval(this.timer);
+            this.timer = null;
+            lt = { ...this.learnTime, remaindLearnTime: 0, learnState: 3 };
+          } else {
+            lt = { ...this.learnTime, remaindLearnTime: rd };
+          }
+
+          updateLocalLearnTime(lt);
+        }, 1000);
+      }
+    },
+    clear() {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+    }
+  },
+  pageLifetimes: {
+    show: function() {
+      this.init(this.learnTime);
+    },
+    hide: function() {
+      this.clear();
+    },
+    resize: function(size) {
+      // 页面尺寸变化
     }
   },
   attached() {
-    if (this.learnTime) {
-      const { remaindLearnTime, learnTime } = this.learnTime;
-      const start = Math.foor((learnTime - remaindLearnTime) / 60.0);
-      this.time = start;
-      this.timer = setInterval(() => {
-        const rd = this.remaindLearnTime - 1;
-        if (rd < 0) {
-          clearInterval(this.timer);
-          this.timer = null;
-          learnTimeSuspend(this.learnTime.id, '', 3).then(() => {});
-        }
-        this.setLearnTime({ ...this.learnTime, remaindLearnTime: rd });
-        this.time = Math.foor((learnTime - rd) / 60.0);
-      }, 1000);
-    }
+    // this.init(this.learnTime);
   },
   detached() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
+    this.clear();
   }
 });
 </script>

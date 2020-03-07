@@ -1,6 +1,5 @@
 import Vuex from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
-
 const tabbar = [
   {
     icon: 'tabbar01@3x',
@@ -122,8 +121,8 @@ export default new Vuex.Store({
       state.location = location;
     },
     setLearnTime(state, learnTime) {
-      if (learnTime) {
-        learnTime.lastTime = new Date().getTime();
+      if (!state.learnTime && learnTime) {
+        learnTime.lastTime = learnTime.remaindLearnTime;
       }
       state.learnTime = learnTime;
     }
@@ -172,17 +171,5 @@ export default new Vuex.Store({
       return state.learnTime;
     }
   },
-  actions: {
-    increment({ commit }) {
-      commit('increment');
-    },
-    decrement({ commit }) {
-      commit('decrement');
-    },
-    incrementAsync({ commit }) {
-      setTimeout(() => {
-        commit('increment');
-      }, 1000);
-    }
-  }
+  actions: {}
 });

@@ -5,6 +5,9 @@ let delay = {};
 const state = store.state;
 const { commit } = store;
 function showLoading(loadingText = '', url) {
+  if (loadingText === null) {
+    return;
+  }
   delay[url] = setTimeout(() => {
     console.log('loading');
     wx.showLoading({
@@ -16,7 +19,6 @@ function showLoading(loadingText = '', url) {
 
 function hideLoading(loadingText = '', url) {
   wx.hideLoading();
-  console.log('del loading', delay);
 
   clearTimeout(delay[url]);
   delete delay[url];
