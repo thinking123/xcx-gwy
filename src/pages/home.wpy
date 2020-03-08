@@ -155,6 +155,7 @@ import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
 import { mapGetters, mapState, mapMutations, mapActions } from '@wepy/x';
 import { navToPage, navBack } from '@/common/navUtils';
 import { _wxGetUserInfo } from '@/common/wx';
+import pageHook from '@/mixins/pageHook';
 
 import {
   getLearnTime,
@@ -172,6 +173,7 @@ wepy.page({
   config: {
     navigationBarTitleText: ''
   },
+  mixins: [pageHook],
   computed: {
     ...mapGetters([
       'isSigned',
@@ -344,8 +346,6 @@ wepy.page({
       });
     },
     init() {
-      refreshLocation();
-      getUserNum();
       if (this.isSigned) {
         const user = getMsgById(this.user.id)
           .then(user => {
@@ -362,16 +362,12 @@ wepy.page({
       }
     }
   },
-  onHide() {
-    console.log('onHide');
-  },
   onShow() {
-    console.log('onShow');
-
     this.init();
   },
   onLoad() {
-    console.log('onLoad');
+    refreshLocation();
+    getUserNum();
   },
   created() {
     this.titleIcons = this.titleIcons.map(m => {

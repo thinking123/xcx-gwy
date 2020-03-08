@@ -121,7 +121,7 @@ export default new Vuex.Store({
       state.location = location;
     },
     setLearnTime(state, learnTime) {
-      if (!state.learnTime && learnTime) {
+      if (learnTime && !learnTime.lastTime) {
         learnTime.lastTime = learnTime.remaindLearnTime;
       }
       state.learnTime = learnTime;

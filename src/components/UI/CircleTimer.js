@@ -355,35 +355,13 @@ export default class Circle {
     //   });
   }
 
-  resume() {
-    this.isPause = false;
-    // if (this.isStop || this.isOperating) {
-    //   return;
-    // }
-    // this.opts.resumeCb().then(res => {
-    //   if (res) {
-    //     const diff = res.remaindLearnTime * 1000;
-    //     this.countDown = diff;
-    //     this.start = new Date().getTime();
-    //     this.isPause = false;
-    //     this.renderTime();
+  resume(countDown) {
+    // startTime = typeof startTime === 'string' ? new Date(startTime) : startTime;
+    // endTime = typeof endTime === 'string' ? new Date(endTime) : endTime;
+    this.opts.countDown = countDown;
 
-    //     // wx.getStorage({
-    //     //   key: this.keyRunTime,
-    //     //   success: ({ data: diff }) => {
-    //     //     if (this.opts.down) {
-    //     //       // this.opts.countDown -= diff;
-    //     //       this.start = new Date().getTime() - diff;
-    //     //     } else {
-    //     //       this.start = diff;
-    //     //     }
-    //     //     this.isPause = false;
-    //     //     // this.opts.resumeCb();
-    //     //     this.renderTime();
-    //     //   }
-    //     // });
-    //   }
-    // });
+    this.isPause = false;
+    this.render();
   }
 
   renderTimeToCircle(deg, r) {
@@ -411,6 +389,9 @@ export default class Circle {
   }
 
   setTimeRange(startTime, endTime) {
+    startTime = typeof startTime === 'string' ? new Date(startTime) : startTime;
+    endTime = typeof endTime === 'string' ? new Date(endTime) : endTime;
+
     this.opts.startTime = startTime || this.opts.startTime;
     this.opts.endTime = endTime || this.opts.endTime;
 

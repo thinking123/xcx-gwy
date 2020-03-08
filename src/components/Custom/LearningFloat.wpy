@@ -51,22 +51,25 @@ wepy.component({
         // 分钟 start
         const start = Math.floor((learnTime - remaindLearnTime) / 60.0);
         this.time = start;
-        this.timer = setInterval(() => {
-          const { remaindLearnTime } = this.learnTime;
-          const rd = remaindLearnTime - 1;
-          this.time = Math.floor((learnTime - rd) / 60.0);
+        this.clear();
+        if (l.learnState == 1) {
+          this.timer = setInterval(() => {
+            const { remaindLearnTime } = this.learnTime;
+            const rd = remaindLearnTime - 1;
+            this.time = Math.floor((learnTime - rd) / 60.0);
 
-          let lt = null;
-          if (rd < 0) {
-            clearInterval(this.timer);
-            this.timer = null;
-            lt = { ...this.learnTime, remaindLearnTime: 0, learnState: 3 };
-          } else {
-            lt = { ...this.learnTime, remaindLearnTime: rd };
-          }
+            let lt = null;
+            if (rd < 0) {
+              clearInterval(this.timer);
+              this.timer = null;
+              lt = { ...this.learnTime, remaindLearnTime: 0, learnState: 3 };
+            } else {
+              lt = { ...this.learnTime, remaindLearnTime: rd };
+            }
 
-          updateLocalLearnTime(lt);
-        }, 1000);
+            updateLocalLearnTime(lt);
+          }, 1000);
+        }
       }
     },
     clear() {
@@ -76,18 +79,13 @@ wepy.component({
       }
     }
   },
-  pageLifetimes: {
-    show() {
+  pageHook: {
+    onShow() {
       this.init(this.learnTime);
-      console.log('show');
     },
-    hide() {
+    onHide() {
       this.clear();
-      console.log('hide');
     }
-  },
-  attached() {
-    // this.init(this.learnTime);
   },
   detached() {
     this.clear();

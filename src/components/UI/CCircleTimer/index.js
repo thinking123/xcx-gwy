@@ -2,7 +2,7 @@ import Circle from '../CircleTimer';
 import { isEmptyObject } from '@/common/utils';
 import { mapGetters, mapState, mapMutations, mapActions } from '@wepy/x';
 import store from 'store';
-import { updateLocalLearnTime } from '@/http/http-business';
+import { updateLocalLearnTime, getLearnTime } from '@/http/http-business';
 
 Component({
   properties: {
@@ -107,10 +107,12 @@ Component({
       });
     },
     secondCb(hs, remaindLearnTime) {
-      updateLocalLearnTime({
-        ...store.state.learnTime,
-        remaindLearnTime
-      });
+      if (store.state.learnTime.learnState == 1) {
+        updateLocalLearnTime({
+          ...store.state.learnTime,
+          remaindLearnTime
+        });
+      }
     },
     updateTime() {
       if (this.circle) {
@@ -156,14 +158,23 @@ Component({
       }
       this._setData({ isOperating: true })
         .then(() => {
+          return isPause ? getLearnTime(learnTime.id) : Promise.resolve();
+        })
+        .then(res => {
+          let l = learnTime;
+          if (res) {
+            l = { ...learnTime, remaindLearnTime: res.remaindLearnTime };
+          }
           return updateLocalLearnTime({
-            ...learnTime,
+            ...l,
             learnState: isPause ? 1 : 2
           });
         })
         .then(res => {
           if (res) {
-            this.circle[isPause ? 'resume' : 'pause']();
+            this.circle[isPause ? 'resume' : 'pause'](
+              store.state.learnTime.remaindLearnTime * 1000
+            );
             return this._setData({
               isPause: !isPause,
               isOperating: false
