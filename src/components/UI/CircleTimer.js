@@ -77,8 +77,10 @@ export default class Circle {
     this.isPause = isPause;
     this.isStop = isStop;
     if (!countDown) {
-      const { startTime, endTime } = this.opts;
-
+      let { startTime, endTime } = this.opts;
+      startTime =
+        typeof startTime === 'string' ? new Date(startTime) : startTime;
+      endTime = typeof endTime === 'string' ? new Date(endTime) : endTime;
       this.opts.countDown = endTime.getTime() - startTime.getTime();
     }
     secRadius = this.rpxTopx(secRadius);

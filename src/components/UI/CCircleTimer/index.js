@@ -51,7 +51,9 @@ Component({
   attached() {
     const learnTime = store.state.learnTime;
     const startTime = new Date();
-    const endTime = startTime + learnTime.remaindLearnTime * 1000;
+    const endTime = new Date(
+      startTime.getTime() + learnTime.remaindLearnTime * 1000
+    );
     const isStop = learnTime.learnState == 3;
     const isPause = learnTime.learnState == 2;
     this.circle = new Circle({
@@ -69,6 +71,7 @@ Component({
       endCb: this.endCb.bind(this),
       secondCb: this.secondCb.bind(this)
     });
+    this.circle.render();
     this.setData({
       isStop,
       isPause

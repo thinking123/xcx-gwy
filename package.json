@@ -7,7 +7,7 @@
     "d": "sudo ./node_modules/.bin/wepy build --watch --log trace ",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache",
     "c": "sudo rm -rf weapp",
-    "pred": "sudo rm -rf weapp",
+    "pred": "clear && sudo rm -rf weapp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "wepy": {

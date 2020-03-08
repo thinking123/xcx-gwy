@@ -97,6 +97,8 @@ wepy.app({
    
     "pages/section1/map",
     "pages/login/loginInput",
+    "pages/login/register",
+    "pages/login/loginInput",
    
  */
 </script>
@@ -104,10 +106,8 @@ wepy.app({
 <config>{
   pages: [
     "pages/login/login",
-    "pages/login/register",
     "pages/section1/learnPlan",
     "pages/section1/learnLog",
-    "pages/login/loginInput",
     "pages/section1/luntanPublish",
     "pages/section1/MemberCenter",
     "pages/home",
