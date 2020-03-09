@@ -312,6 +312,9 @@ wepy.page({
 </script>
 <style lang="scss">
 .kaimingwutong {
+  min-height: 100%;
+  background-color: #f2f2f2;
+
   .header {
     padding: 0 30rpx;
     height: 144rpx;
@@ -353,7 +356,7 @@ wepy.page({
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background: rgba(242, 242, 242, 1);
+    // background: rgba(242, 242, 242, 1);
     padding: 32rpx 30rpx;
     justify-content: space-between;
 
@@ -368,7 +371,7 @@ wepy.page({
   .gwtRecord {
     display: flex;
     flex-direction: column;
-    background: rgba(242, 242, 242, 1);
+    // background: rgba(242, 242, 242, 1);
     padding: 32rpx 30rpx;
     .gwtRecord-item {
       margin-bottom: 32rpx;

@@ -67,16 +67,19 @@ wepy.page({
       navToPage('/pages/section1/nearDetailPage', {
         id: item.id
       });
+    },
+    init() {
+      wx_getLocation().then(({ longitude, latitude }) => {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.setLocation({ longitude, latitude });
+      });
     }
   },
-  onShow() {},
-  onLoad() {
-    wx_getLocation().then(({ longitude, latitude }) => {
-      this.longitude = longitude;
-      this.latitude = latitude;
-      this.setLocation({ longitude, latitude });
-    });
-  }
+  onShow() {
+    this.init();
+  },
+  onLoad() {}
 });
 </script>
 <style lang="scss">
@@ -90,7 +93,7 @@ wepy.page({
   min-height: 100%;
 
   .item {
-    margin-bottom: 20rpx;
+    margin: 0 auto 20rpx;
   }
 }
 </style>
