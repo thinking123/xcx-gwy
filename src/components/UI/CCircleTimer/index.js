@@ -141,7 +141,7 @@ Component({
           if (res) {
             this.circle.stop();
             return this._setData({
-              isStop,
+              isStop: true,
               isOperating: false
             });
           }

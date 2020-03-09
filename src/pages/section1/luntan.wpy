@@ -12,17 +12,16 @@
         <div style="display:{{selOrder==0?'block':'none'}}">
           <CListSelect
             :items="list1"
-            key="id"
             labelKey="name"
             external-cls="CListSelect1"
             :sel="list1Sel"
+            toggle="{{false}}"
             @change="onCListSelect1"
           />
         </div>
         <div style="display:{{selOrder==1?'block':'none'}}">
           <CListSelect
             :items="list2"
-            key="id"
             labelKey="cityCaption"
             external-cls="CListSelect1"
             :sel="list2Sel"
@@ -31,7 +30,12 @@
         </div>
       </div>
     </CDockerPoper>
-    <CListWrap1 :type="listtype" :params="params" :url="url">
+    <CListWrap1
+      :type="listtype"
+      :params="params"
+      :url="url"
+      v-if="list1Sel > -1"
+    >
       <block slot="header">
         <LunTanHeader
           title="申论"
@@ -76,7 +80,7 @@ import {
 } from '@/http/http-business';
 import { mapGetters } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
-import { delNullProperty } from '@/common/utils';
+import { delNullProperty, selArrayVal } from '@/common/utils';
 
 const listtype = 'forum_getForumList';
 wepy.page({
@@ -101,7 +105,7 @@ wepy.page({
     },
     params() {
       const selV = (i, arr, key) =>
-        i && arr && i > -1 && i < arr.length ? arr[i][key] : '';
+        arr && i > -1 && i < arr.length ? arr[i][key] : '';
       let p = {
         labelId: selV(this.list1Sel, this.list1, 'id'),
         cityCode: selV(this.list2Sel, this.list2, 'id'),
@@ -121,15 +125,23 @@ wepy.page({
         return this.list1[this.list1Sel];
       }
       return '';
+    },
+    list() {
+      const t1 = selArrayVal(this.list1Sel, this.list1, 'name') || '分类';
+      const t2 =
+        selArrayVal(this.list2Sel, this.list2, 'cityCaption') || '地区';
+      return [t1, t2, '人气'].map(t => ({
+        text: t
+      }));
     }
   },
   data: {
     msgItems: [],
     showDocker: false,
-    list: [{ text: '分类' }, { text: '地区' }, { text: '人气' }],
+    // list: [{ text: '分类' }, { text: '地区' }, { text: '人气' }],
     selOrder: -1,
     list1: [],
-    list1Sel: '',
+    list1Sel: -1,
     list2: [],
     list2Sel: -1,
     list3Sel: -1,
@@ -223,6 +235,7 @@ wepy.page({
 
     getLabel().then(res => {
       this.list1 = res;
+      this.list1Sel = 0;
     });
   }
 });

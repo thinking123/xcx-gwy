@@ -150,11 +150,12 @@ wepy.page({
       return list || [];
     },
     dockerList() {
-      if (this.selectedTab == 1) {
-        // return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
-        return [{ text: '分类' }, { text: '地区' }];
-      }
-      return [{ text: '等级' }, { text: '地区' }, { text: '部门' }];
+      // if (this.selectedTab == 1) {
+      //   // return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
+      //   return [{ text: '分类' }, { text: '地区' }];
+      // }
+      // return [{ text: '等级' }, { text: '地区' }, { text: '部门' }];
+      return this.getSelLabel();
     },
     params1() {
       let p = {
@@ -206,6 +207,26 @@ wepy.page({
     loaded: false
   },
   methods: {
+    getSelLabel() {
+      let arr = [];
+      if (this.selectedTab == 0) {
+        const t1 =
+          selArrayVal(this.list1Sel1, this.gwyLevels, 'levelName') || '等级';
+        const t2 =
+          selArrayVal(this.list1Sel2, this.pros, 'cityCaption') || '地区';
+        const t3 =
+          selArrayVal(this.list1Sel3, this.deps, 'departmentName') || '部门';
+        arr = [t1, t2, t3];
+      } else {
+        const t1 = selArrayVal(this.list2Sel1, this.labs, 'name') || '分类';
+        const t2 =
+          selArrayVal(this.list2Sel2, this.pros, 'cityCaption') || '地区';
+        arr = [t1, t2];
+      }
+      return arr.map(t => ({
+        text: t
+      }));
+    },
     handleTab({ tab, index }) {
       this.selectedTab = index;
       this.showDocker = false;
