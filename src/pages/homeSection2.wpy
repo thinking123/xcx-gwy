@@ -21,14 +21,14 @@
       :type="type1"
       :params="params"
       :show="selectedTab == 0"
-      url="/api/subjecAudio/getSubjecAudioHomeList"
+      url="/api/subjecAudio/getSubjecListByType"
     >
       <ClassCard
         v-for="item in clist1"
         :key="item.id"
         :title="item.title"
         :info="item.viceTitle"
-        :header="item.header"
+        :header="item.cover"
         external-cls="classCard"
       />
     </CListWrap1>
@@ -37,7 +37,7 @@
       :type="type2"
       :params="params1"
       :show="selectedTab == 1"
-      url="/api/classroom/getClassroomHome"
+      url="/api/subjecAudio/getSubjecListByType"
     >
       <ClassCard1
         v-for="item in clist2"
@@ -141,15 +141,17 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['items']),
+    ...mapGetters(['items', 'user']),
     params() {
       return {
-        labelId: ''
+        userId: this.user.id,
+        type: '1'
       };
     },
     params1() {
       return {
-        labelId: ''
+        userId: this.user.id,
+        type: '2'
       };
     },
     clist1() {

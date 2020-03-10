@@ -378,7 +378,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      // navToPage('/pages/section1/kaimingwutong');
+      navToPage('/pages/homeSection2');
     }
   }
 });

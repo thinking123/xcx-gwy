@@ -20,7 +20,7 @@
       <view wx:if="{{isLoading}}">
         <CLoading type="spinner" />
       </view>
-      <view wx:if="{{isEnd && curItems.length > 0}}">
+      <view wx:if="{{isEnd && curItems.length > 0 && isPage}}">
         没有更多了
       </view>
       <view wx:if="{{isError}}">
@@ -55,7 +55,8 @@ wepy.component({
     mockPages: 5,
     mockTotal: 200,
     curItems: [],
-    loaded: false
+    loaded: false,
+    isPage: true
   },
   externalClasses: ['external-cls'],
   computed: {
@@ -203,6 +204,15 @@ wepy.component({
             this.curItems = _items;
             this.setItems({ items: _items, type });
             this.items = _items;
+          } else if (Array.isArray(_res.rows)) {
+            // 不是分页的
+            const _items = _res.rows;
+            this.setItems({ items: _items, type });
+            this.isEnd = true;
+            this.isPage = false;
+            if (this.ob) {
+              this.ob.disconnect();
+            }
           }
 
           if (pages == pageNum) {
