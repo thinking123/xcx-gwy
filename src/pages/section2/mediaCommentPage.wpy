@@ -1,51 +1,55 @@
 <template>
-    <div class="mediaCommentPage external-cls">
-      <MediaCommentItem v-for="item in items"
-                        :key="item.id"
-                        :user="item"
-                        />
-    </div>
+  <div class="mediaCommentPage external-cls">
+    <CListWrap1
+      :type="type"
+      :params="params"
+      url="/api/subjecAudio/getSubjectScore"
+      v-if="subjectId"
+    >
+      <MediaCommentItem v-for="item in clist" :key="item.id" :user="item" />
+    </CListWrap1>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
+import { mapGetters } from '@wepy/x';
 
-  wepy.page({
-    data: {
-      items:[]
-    },
-    computed:{
-      
-    },
-    methods: {
+const type = 'subjecAudio_getSubjecAudioHomeList_getSubjectScore';
 
+wepy.page({
+  data: {
+    subjectId: '',
+    type
+  },
+  computed: {
+    ...mapGetters(['items']),
+    params() {
+      return {
+        subjectListId: this.subjectId
+      };
     },
-    created () {
-      const arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
-          header:'',
-          name:'李小萌smile',
-          rate:'3',
-          comment:'哈哈，确实不错，讲的很有逻辑呀！',
-          publishDate:'09-07 12:00',
-          id:i
-        })
-      }
-      this.items = arr;
+    clist() {
+      const list = this.items[type];
+      return list || [];
     }
-  });
+  },
+  methods: {},
+  onLoad(query = {}) {
+    this.subjectId = query.subjectId;
+  }
+});
 </script>
 <style lang="scss">
-  .mediaCommentPage{
-
-
-  }
+.mediaCommentPage {
+}
 </style>
 <config>
   {
   navigationBarTitleText: '评论留言',
   usingComponents: {
-  MediaCommentItem:'~Custom/MediaCommentItem'
+  MediaCommentItem:'~Custom/MediaCommentItem',
+  CListWrap1:'~UI/CListWrap1',
+
   }
   }
 </config>

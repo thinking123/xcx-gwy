@@ -26,6 +26,8 @@
       <ClassCard
         v-for="item in clist1"
         :key="item.id"
+        :id="item.id"
+        :item="item"
         :title="item.title"
         :info="item.viceTitle"
         :header="item.cover"

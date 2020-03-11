@@ -1779,6 +1779,110 @@ export function kmwtSelectPro() {
   url = urlParams(url, {});
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+/api/subjecAudio/teacherdetails
+讲师详情 --编号 A005
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "brightSpot": "string",
+    "header": "string",
+    "id": 0,
+    "introduce": "string",
+    "motto": "string",
+    "teacherName": "string",
+    "teacherQualifications": "string",
+    "upperBody": "string"
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+audioTimeSize	
+audioTimeSize
+
+query	string
+token	
+(required)
+token
+
+header	string
+id	
+(required)
+讲师id 主键
+
+query	string
+ */
+export function teacherDetails(id, audioTimeSize) {
+  let url = '/api/subjecAudio/teacherdetails';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { id, audioTimeSize });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ POST /api/subjecAudio/singscore
+发布评论 --编号 A007
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+scoreAdd	
+(required)
+
+Parameter content type: 
+scoreAdd
+
+body	
+ModelExample Value
+留言列表 {
+content (string, optional): 内容 ,
+head (string, optional): 头像 ,
+name (string, optional): 昵称 ,
+score (integer, optional): 评分 五颗星 2分一颗星星 共10分 评分 ,
+subjectListId (string, optional): 课程id ,
+time (string, optional): 时间
+}
+ */
+
+export function singscore(score, content, subjectListId, time) {
+  let url = '/api/login/wxlogin';
+  // const loadingText = '正在登入...';
+  // const errMsg = '登入失败';
+  const data = {
+    content,
+    head: store.state.user.userHead,
+    name: store.state.user.userName,
+    score,
+    subjectListId,
+    time: new Date().toString()
+  };
+  return post(url, data, '').then(res => parseRes(res, ''));
+}
 
 export function getLocalLearnTime(learnTime) {
   const key = `${store.state.user.id}-learnTime`;

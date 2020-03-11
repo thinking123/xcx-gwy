@@ -7,146 +7,167 @@
       @click.native="onCard"
     />
     <div class="row1">
-      <CSelector :items="selItems" @change="onChange" :sel="sel"/>
-      <span class="col1">
-        已更新{{user.updateNum}}讲
-      </span>
-      <OrderItems :order="order" @change="onOrder"/>
+      <CSelector :items="selItems" @change="onChange" :sel="sel" />
+      <span class="col1"> 已更新{{ user.updateNum }}讲 </span>
+      <OrderItems :order="order" @change="onOrder" />
     </div>
     <div class="row2">
       第一章：言语理解与表达
     </div>
 
-    <MediaItem  v-for="item in mediaItems"
-                :media="item"
-                :key="item.id"
-                @change="onPlay"
-    />
+    <CListWrap1
+      :type="type"
+      :params="params"
+      url="/api/subjecAudio/getSubjectChapterHomeList"
+      v-if="subjectId"
+    >
+      <MediaItem
+        v-for="item in list"
+        :media="item"
+        :key="item.id"
+        @change="onPlay"
+      />
+    </CListWrap1>
 
-    <MediaPlayBar :user="user"/>
+    <MediaPlayBar :user="user" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapGetters , mapMutations} from '@wepy/x';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
+const type = 'subjecAudio_getSubjecAudioHomeList_detail';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['isMediaPlaying', 'playMedia', 'items']),
+    params() {
+      return {
+        subjectId: this.subjectId,
+        sortType: this.order,
+        type: '1'
+      };
     },
-    computed: {
-      ...mapGetters(['isMediaPlaying' , 'playMedia']),
-    },
-    data: {
-      user:{
-        header:'',
-        title:'课程名称，如资料分析',
-        desc:'大雷-资深公考讲师',
-        updateNum:646,
-        date:'12:00'
-      },
-      selItems:['全部' , '好评'],
-      sel:-1,
-      order:0,
-      rate:0,
-      mediaItems:[]
-    },
-    methods: {
-      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
-      onChange(index){
-        this.sel = index;
-      },
-      onOrder(order){
-        this.order = order;
-      },
-      onRate(rate){
-        console.log(rate)
-        this.rate = rate;
-      },
-      onPlay(media){
-        console.log('media' , media);
-        let isMediaPlaying = false;
-        if(this.playMedia == media){
-          isMediaPlaying = !this.isMediaPlaying;
-        }else{
-          isMediaPlaying = true;
-        }
-        this.setPlayMedia(media);
-        this.setMediaPlaying(isMediaPlaying);
-        this.setShowMediaPlay(true);
-      },
-      onCard(){
-        navToPage('/pages/section2/mediaIntro');
-      }
-    },
-    onShow(){
-
-    },
-    created () {
-      let arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
-          title:'课程名称，如资料分析',
-          publishDate:'2019-07-15',
-          learnNum:'10006',
-          learned:'0.6',
-          isLearning:false,
-          rate:i%6,
-          id:i
-        });
-      }
-      this.mediaItems = arr;
-
-      //
-      // this.setPlayMedia(arr[0]);
-      // this.setMediaPlaying(true);
-      // this.setShowMediaPlay(true);
+    clist() {
+      const list = this.items[type];
+      return list || [];
     }
-  });
+  },
+  data: {
+    user: {
+      header: '',
+      title: '课程名称，如资料分析',
+      desc: '大雷-资深公考讲师',
+      updateNum: 646,
+      date: '12:00'
+    },
+    selItems: ['全部', '好评'],
+    sel: -1,
+    order: 1,
+    rate: 0,
+    mediaItems: [],
+    type,
+    subjectId: ''
+  },
+  methods: {
+    ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
+    onChange(index) {
+      this.sel = index;
+    },
+    onOrder(order) {
+      this.order = order;
+    },
+    onRate(rate) {
+      console.log(rate);
+      this.rate = rate;
+    },
+    onPlay(media) {
+      console.log('media', media);
+      let isMediaPlaying = false;
+      if (this.playMedia == media) {
+        isMediaPlaying = !this.isMediaPlaying;
+      } else {
+        isMediaPlaying = true;
+      }
+      this.setPlayMedia(media);
+      this.setMediaPlaying(isMediaPlaying);
+      this.setShowMediaPlay(true);
+    },
+    onCard() {
+      navToPage('/pages/section2/mediaIntro');
+    }
+  },
+  onShow() {},
+  onLoad(query = {}) {
+    this.subjectId = query.subjectId;
+  }
+  // created() {
+  //   let arr = [];
+  //   for (let i = 0; i < 10; i++) {
+  //     arr.push({
+  //       title: '课程名称，如资料分析',
+  //       publishDate: '2019-07-15',
+  //       learnNum: '10006',
+  //       learned: '0.6',
+  //       isLearning: false,
+  //       rate: i % 6,
+  //       id: i
+  //     });
+  //   }
+  //   this.mediaItems = arr;
+
+  //   //
+  //   // this.setPlayMedia(arr[0]);
+  //   // this.setMediaPlaying(true);
+  //   // this.setShowMediaPlay(true);
+  // }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
-  }
-  .mediaDetail{
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.mediaDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .row1 {
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    .row1{
-      width: 100%;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      padding: 24rpx 30rpx;
-      background:rgba(255,255,255,1);
-      justify-content: space-between;
-      .col1{
-        font-size:24rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(147,150,153,1);
-        line-height:32rpx;
-        margin-left: 20rpx;
-        flex: 1;
-      }
-    }
-
-    .row2{
-      font-size:32rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(51,51,51,1);
-      line-height:40rpx;
-      margin: 40rpx 30rpx;
-      display: flex;
-      align-items: flex-start;
-      align-self: flex-start;
+    padding: 24rpx 30rpx;
+    background: rgba(255, 255, 255, 1);
+    justify-content: space-between;
+    .col1 {
+      font-size: 24rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(147, 150, 153, 1);
+      line-height: 32rpx;
+      margin-left: 20rpx;
+      flex: 1;
     }
   }
+
+  .row2 {
+    font-size: 32rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(51, 51, 51, 1);
+    line-height: 40rpx;
+    margin: 40rpx 30rpx;
+    display: flex;
+    align-items: flex-start;
+    align-self: flex-start;
+  }
+}
 </style>
 <config>
   {

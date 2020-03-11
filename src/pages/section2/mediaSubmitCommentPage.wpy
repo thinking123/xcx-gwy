@@ -1,100 +1,101 @@
 <template>
   <div class="page mediaSubmitCommentPage">
-    <LineText text="课程打分" external-cls="lineText"/>
-    <CRate :rate="rate" external-cls="cRate" @change="onRate"/>
-    <CTextarea :val="val" @change="onChange"/>
-    <CButton text="确认评价"
-             @tap.native="handleSubmit"
-             external-cls="col3"/>
+    <LineText text="课程打分" external-cls="lineText" />
+    <CRate :rate="rate" external-cls="cRate" @change="onRate" />
+    <CTextarea :val="val" @change="onChange" />
+    <CButton text="确认评价" @tap.native="handleSubmit" external-cls="col3" />
 
     <CDialog :show="show">
-      <MediaCommentSuc :count="count" :sec="sec"/>
+      <MediaCommentSuc :count="count" :sec="sec" />
     </CDialog>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {navToPage} from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { navToPage, navBack } from '@/common/navUtils';
+import { isEmptyString } from '@/common/utils';
+import { singscore } from '@/http/http-business';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {},
+  data: {
+    rate: 0,
+    val: '',
+    show: false,
+    count: 5,
+    sec: 3
+  },
+  methods: {
+    onRate(v) {
+      this.rate = v;
     },
-    computed: {
-
+    onChange(v) {
+      this.val = v;
     },
-    data: {
-      rate:0,
-      val:'',
-      show:false,
-      count:5,
-      sec:3
+    verify() {
+      // if(this.rate >= 0 && isEmptyString(this.val))
+      return this.rate >= 0 && isEmptyString(this.val);
     },
-    methods: {
-      onRate(v){
-        this.rate = v;
-      },
-      onChange(v){
-        this.val = v;
-      },
-      handleSubmit(){
-        this.show = true;
-        clearInterval(this.time);
-        this.time = setInterval(()=>{
-          if(this.sec > 0){
-            this.sec -= 1;
-          }else{
-            this.show = false;
-            clearInterval(this.time);
-            this.sec = 3;
-            navToPage('/pages/section2/mediaPlayDetail');
-          }
-
-        } , 1000);
-
+    handleSubmit() {
+      if (this.verify()) {
+        singscore(this.rate, this.val).then(() => {
+          this.show = true;
+          clearInterval(this.time);
+          this.time = setInterval(() => {
+            if (this.sec > 0) {
+              this.sec -= 1;
+            } else {
+              this.show = false;
+              clearInterval(this.time);
+              this.sec = 3;
+              // navToPage('/pages/section2/mediaPlayDetail');
+              navBack();
+            }
+          }, 1000);
+        });
       }
-    },
-    onShow(){
-      
-    },
-    onHide(){
-      clearInterval(this.time);
-    },
-    created () {
-
     }
-  });
+  },
+  onShow() {},
+  onHide() {
+    clearInterval(this.time);
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .mediaSubmitCommentPage{
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    .lineText{
-      margin-top: 92rpx;
-    }
-  .cRate{
+.mediaSubmitCommentPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .lineText {
+    margin-top: 92rpx;
+  }
+  .cRate {
     margin-top: 64rpx;
     margin-bottom: 120rpx;
   }
 
-    .col3{
-      font-size:36rpx;
-      font-family:PingFangSC-Semibold,PingFangSC;
-      font-weight:600;
-      color:rgba(255,255,255,1);
-      line-height:36rpx;
-      width:690rpx;
-      height:96rpx;
-      position: fixed;
-      bottom:40rpx;
-      left:50%;
-      transform:translateX(-50%);
-    }
+  .col3 {
+    font-size: 36rpx;
+    font-family: PingFangSC-Semibold, PingFangSC;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    line-height: 36rpx;
+    width: 690rpx;
+    height: 96rpx;
+    position: fixed;
+    bottom: 40rpx;
+    left: 50%;
+    transform: translateX(-50%);
   }
+}
 </style>
 <config>
 {

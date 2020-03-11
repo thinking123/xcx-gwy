@@ -97,12 +97,15 @@ wepy.page({
     icon2: 'btn_bottom_share@3x',
     items1: [],
     items2: [],
-    show: true
+    show: true,
+    subjectId: ''
   },
   methods: {
     ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
     onInput(v) {
-      navToPage('/pages/section2/mediaSubmitCommentPage');
+      navToPage('/pages/section2/mediaSubmitCommentPage', {
+        subjectId: this.subjectId
+      });
     },
     onComment(v) {
       navToPage('/pages/section2/mediaCommentPage');
@@ -119,6 +122,9 @@ wepy.page({
     }
   },
   onShow() {},
+  onLoad(query = {}) {
+    this.subjectId = query.subjectId;
+  },
   created() {
     this.icon1 = getImgUrlEx(this.icon1);
     this.icon2 = getImgUrlEx(this.icon2);
