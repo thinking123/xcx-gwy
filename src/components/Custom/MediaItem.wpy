@@ -17,16 +17,16 @@
 
     <div class="wrap">
       <div class="row1">
-        {{ media.title }}
+        {{ media.titel }}
       </div>
       <div class="row2">
-        <span>{{ media.publishDate }}</span> | <span>{{ media.learnNum }}</span
+        <span>{{ media.time }}</span> | <span>{{ media.numStudents }}</span
         >人学过 | 已学 <span>{{ media.learned * 100 }}</span
         >%
       </div>
       <div class="row3" v-if="type != 'text'">
         <span>学友评价</span>
-        <CRate :rate="media.rate" external-cls="cRate" />
+        <CRate :rate="media.score" external-cls="cRate" />
       </div>
 
       <block v-if="typeItem != 'text'">
@@ -90,13 +90,15 @@ wepy.component({
   },
   methods: {
     onNav() {
-      navToPage('/pages/section2/mediaPlayDetail');
+      navToPage('/pages/section2/mediaPlayDetail', {
+        media: JSON.stringify(this.media)
+      });
     },
     onClick() {
-      this.$emit('change', this.media);
+      // this.$emit('change', this.media);
     },
     onPlay() {
-      this.$emit('change', this.media);
+      // this.$emit('change', this.media);
     }
   },
   created() {

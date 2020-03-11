@@ -37,7 +37,11 @@ wepy.component({
   computed: {},
   methods: {
     onNav() {
-      navToPage('/pages/section2/mediaDetail', { subjectId: this.item.id });
+      navToPage('/pages/section2/mediaDetail', {
+        subjectId: this.item.id,
+        teacherId: this.item.teacherId,
+        subjectTitle: this.title
+      });
     }
   },
   created() {},

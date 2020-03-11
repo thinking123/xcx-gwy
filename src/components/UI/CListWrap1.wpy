@@ -207,6 +207,7 @@ wepy.component({
           } else if (Array.isArray(_res.rows)) {
             // 不是分页的
             const _items = _res.rows;
+            this.curItems = _items;
             this.setItems({ items: _items, type });
             this.isEnd = true;
             this.isPage = false;

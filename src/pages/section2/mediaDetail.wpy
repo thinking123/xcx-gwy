@@ -1,18 +1,13 @@
 <template>
   <div class="page mediaDetail">
-    <MediaHeaderCard
-      :title="user.title"
-      :desc="user.desc"
-      :header="user.header"
-      @click.native="onCard"
-    />
+    <MediaHeaderCard />
     <div class="row1">
       <CSelector :items="selItems" @change="onChange" :sel="sel" />
       <span class="col1"> 已更新{{ user.updateNum }}讲 </span>
       <OrderItems :order="order" @change="onOrder" />
     </div>
     <div class="row2">
-      第一章：言语理解与表达
+      {{ subjectTitle }}
     </div>
 
     <CListWrap1
@@ -22,7 +17,7 @@
       v-if="subjectId"
     >
       <MediaItem
-        v-for="item in list"
+        v-for="item in clist"
         :media="item"
         :key="item.id"
         @change="onPlay"
@@ -38,15 +33,33 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
-const type = 'subjecAudio_getSubjecAudioHomeList_detail';
-
+import { teacherDetails } from '@/http/http-business';
+import { mediaPlayListType } from '@/common/constant';
+const type = mediaPlayListType;
 wepy.page({
   store,
   config: {
     navigationBarTitleText: ''
   },
+  watch: {
+    // playMedia(v, ov) {
+    //   let p = null;
+    //   if (v) {
+    //     if (ov && ov.teacherId !== v.teacherId) {
+    //       p = teacherDetails(v.id);
+    //     } else if (!ov) {
+    //       p = teacherDetails(v.id);
+    //     }
+    //     if (p) {
+    //       p.then(res => {
+    //         this.setTeacher(res);
+    //       });
+    //     }
+    //   }
+    // }
+  },
   computed: {
-    ...mapGetters(['isMediaPlaying', 'playMedia', 'items']),
+    ...mapGetters(['isMediaPlaying', 'playMedia', 'items', 'teacher']),
     params() {
       return {
         subjectId: this.subjectId,
@@ -73,10 +86,16 @@ wepy.page({
     rate: 0,
     mediaItems: [],
     type,
-    subjectId: ''
+    subjectId: '',
+    subjectTitle: ''
   },
   methods: {
-    ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
+    ...mapMutations([
+      'setShowMediaPlay',
+      'setPlayMedia',
+      'setMediaPlaying',
+      'setTeacher'
+    ]),
     onChange(index) {
       this.sel = index;
     },
@@ -98,14 +117,16 @@ wepy.page({
       this.setPlayMedia(media);
       this.setMediaPlaying(isMediaPlaying);
       this.setShowMediaPlay(true);
-    },
-    onCard() {
-      navToPage('/pages/section2/mediaIntro');
     }
   },
   onShow() {},
   onLoad(query = {}) {
     this.subjectId = query.subjectId;
+    this.subjectTitle = query.subjectTitle;
+    this.teacherId = query.teacherId;
+    teacherDetails(query.teacherId).then(res => {
+      this.setTeacher(res);
+    });
   }
   // created() {
   //   let arr = [];

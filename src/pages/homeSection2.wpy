@@ -22,6 +22,7 @@
       :params="params"
       :show="selectedTab == 0"
       url="/api/subjecAudio/getSubjecListByType"
+      isPage
     >
       <ClassCard
         v-for="item in clist1"
@@ -40,11 +41,13 @@
       :params="params1"
       :show="selectedTab == 1"
       url="/api/subjecAudio/getSubjecListByType"
+      isPage
     >
       <ClassCard1
         v-for="item in clist2"
         :key="item.id"
-        :num1="item.totalChapter"
+        :num1="item.chapter"
+        :num2="item.section"
         :src="item.cover"
         free="{{item.price == 0}}"
         :title="item.title"

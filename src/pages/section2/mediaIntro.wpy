@@ -1,14 +1,19 @@
 <template>
   <div class="page mediaIntro">
     <div class="header">
-      <image class="headerImg" mode="center" :src="user.header"/>
-      <image :src="icon"  class="icon" mode="aspectFit" @click="onShare"/>
+      <image class="headerImg" mode="center" :src="teacher.upperBody" />
+      <image
+        src="btn_bottom_share@3x"
+        class="icon"
+        mode="aspectFit"
+        @click="onShare"
+      />
       <div class="content">
         <div class="row1">
-          {{user.title}}
+          {{ teacher.title }}
         </div>
         <div class="row2">
-          {{user.desc}}
+          {{ teacher.motto }}
         </div>
       </div>
     </div>
@@ -18,127 +23,114 @@
         导师简介
       </div>
       <div class="text">
-        {{user.introduce}}
+        {{ teacher.teacherQualifications }}
       </div>
       <div class="title">
         课程亮点
       </div>
       <div class="text">
-        {{user.tip}}
+        {{ teacher.brightSpot }}
       </div>
     </div>
 
-
-    <MediaPlayBar :user="user"/>
+    <MediaPlayBar :user="teacher" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapGetters , mapMutations} from '@wepy/x';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { getImgUrlEx } from '@/common/utils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      ...mapGetters(['isMediaPlaying' , 'playMedia']),
-    },
-    data: {
-      icon:'btn_bottom_share@3x',
-      user:{
-        header:'',
-        title:'课程名称，如资料分析',
-        desc:'让您通透未来',
-        introduce:'张天丰，又称“张公”，本白课堂主讲人。',
-        tip:'亮点一：二十年大神讲解，就是这么专业 亮点二： 2020省考公务员笔试预测课。 亮点三：解决你行测做题慢、申论不会写的问题。'
-      }
-    },
-    methods: {
-      onShare(){
-
-      }
-    },
-    onShow(){
-      
-    },
-    created () {
-      this.icon = getImgUrlEx(this.icon);
-    }
-  });
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['isMediaPlaying', 'playMedia', 'teacher'])
+  },
+  data: {
+    title: ''
+  },
+  methods: {
+    onShare() {}
+  },
+  onLoad(query = {}) {
+    this.title = query.title;
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .mediaIntro{
-    background:rgba(255,255,255,1);
+.mediaIntro {
+  background: rgba(255, 255, 255, 1);
 
-    .header{
-      width:750rpx;
-      height:376rpx;
-      background:rgba(0,0,0,0.6);
-      position: relative;
+  .header {
+    width: 750rpx;
+    height: 376rpx;
+    background: rgba(0, 0, 0, 0.6);
+    position: relative;
 
-      .headerImg{
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
-      }
-
-      .icon{
-        width:44rpx;
-        height:44rpx;
-        position: absolute;
-        right: 40rpx;
-        top: 40rpx;
-      }
-      .content{
-        position: absolute;
-        left: 40rpx;
-        bottom: 40rpx;
-
-        .row1{
-          font-size:36rpx;
-          font-family:PingFangSCSemibold-,PingFangSCSemibold;
-          font-weight:normal;
-          color:rgba(255,255,255,1);
-          line-height:44rpx;
-          margin-bottom: 16rpx;
-        }
-        .row2{
-          font-size:28rpx;
-          font-family:PingFang-SC-Regular,PingFang-SC;
-          font-weight:400;
-          color:rgba(255,255,255,0.6);
-          line-height:36rpx;
-        }
-      }
+    .headerImg {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
     }
 
+    .icon {
+      width: 44rpx;
+      height: 44rpx;
+      position: absolute;
+      right: 40rpx;
+      top: 40rpx;
+    }
+    .content {
+      position: absolute;
+      left: 40rpx;
+      bottom: 40rpx;
 
-    .body{
-      padding: 0 30rpx;
-      box-sizing: border-box;
-      .title{
-        font-size:40rpx;
-        font-family:PingFangSCSemibold-,PingFangSCSemibold;
-        font-weight:normal;
-        color:rgba(51,51,51,1);
-        line-height:48rpx;
-        margin-top: 64rpx;
+      .row1 {
+        font-size: 36rpx;
+        font-family: PingFangSCSemibold-, PingFangSCSemibold;
+        font-weight: normal;
+        color: rgba(255, 255, 255, 1);
+        line-height: 44rpx;
+        margin-bottom: 16rpx;
       }
-
-      .text{
-        font-size:32rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(51,51,51,1);
-        line-height:40rpx;
-        margin-top: 32rpx;
+      .row2 {
+        font-size: 28rpx;
+        font-family: PingFang-SC-Regular, PingFang-SC;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 36rpx;
       }
     }
   }
+
+  .body {
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    .title {
+      font-size: 40rpx;
+      font-family: PingFangSCSemibold-, PingFangSCSemibold;
+      font-weight: normal;
+      color: rgba(51, 51, 51, 1);
+      line-height: 48rpx;
+      margin-top: 64rpx;
+    }
+
+    .text {
+      font-size: 32rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(51, 51, 51, 1);
+      line-height: 40rpx;
+      margin-top: 32rpx;
+    }
+  }
+}
 </style>
 <config>
 {

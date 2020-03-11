@@ -73,6 +73,9 @@ import { mapGetters, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
 
+import { mediaPlayListType } from '@/common/constant';
+const type = mediaPlayListType;
+
 wepy.page({
   store,
   config: {
@@ -98,7 +101,8 @@ wepy.page({
     items1: [],
     items2: [],
     show: true,
-    subjectId: ''
+    subjectId: '',
+    media: {}
   },
   methods: {
     ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
@@ -124,6 +128,7 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     this.subjectId = query.subjectId;
+    this.media = JSON.parse(query.media);
   },
   created() {
     this.icon1 = getImgUrlEx(this.icon1);

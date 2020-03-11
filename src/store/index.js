@@ -58,7 +58,8 @@ export default new Vuex.Store({
     },
     location: null,
     totalOnlineNum: 0,
-    learnTime: null
+    learnTime: null,
+    teacher: {}
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -120,6 +121,9 @@ export default new Vuex.Store({
     setLocation(state, location) {
       state.location = location;
     },
+    setTeacher(state, teacher) {
+      state.teacher = teacher;
+    },
     setLearnTime(state, learnTime) {
       if (learnTime && !learnTime.lastTime) {
         learnTime.lastTime = learnTime.remaindLearnTime;
@@ -151,6 +155,9 @@ export default new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    teacher(state) {
+      return state.teacher;
     },
     location(state) {
       return state.location;
