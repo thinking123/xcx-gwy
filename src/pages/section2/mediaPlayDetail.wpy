@@ -1,10 +1,14 @@
 <template>
   <div class="page mediaPlayDetail">
     <div class="row1">
-      {{ detail.title }}
+      {{ media.titel }}
     </div>
-    <image :src="detail.header" class="row2" mode="aspectFit" />
-    <CSlider :max="media.total" :val="media.val" />
+    <image :src="teacher.header" class="row2" mode="aspectFit" />
+    <CSlider
+      :max="audioInfo.totalTime"
+      :val="audioInfo.currentTime"
+      @change="onDragSlider"
+    />
     <div class="row3">
       <IconText
         @click.native="handleIconText"
@@ -32,9 +36,9 @@
     />
 
     <FixedBottomComment
-      :commentNum="detail.commentNum"
-      :likeNum="detail.likeNum"
-      :liked="detail.liked"
+      :commentNum="media.commentNum"
+      :likeNum="media.likeNum"
+      :liked="media.liked"
       @change="onInput"
       @comment="onComment"
       @like="onLike"
@@ -71,6 +75,7 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
+import AudioHelper from '@/common/audio';
 import { navToPage } from '@/common/navUtils';
 
 import { mediaPlayListType } from '@/common/constant';
@@ -82,25 +87,14 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['isMediaPlaying', 'playMedia'])
+    ...mapGetters(['isMediaPlaying', 'playMedia', 'audio', 'audioInfo'])
   },
   data: {
-    detail: {
-      title: '第一期 | 课程名称，如方法综述',
-      header: '',
-      commentNum: 20,
-      likeNum: 9992,
-      liked: true
-    },
-    media: {
-      total: 530,
-      val: 99
-    },
     icon1: 'btn_list@3x',
     icon2: 'btn_bottom_share@3x',
     items1: [],
     items2: [],
-    show: true,
+    show: false,
     subjectId: '',
     media: {}
   },
@@ -123,38 +117,32 @@ wepy.page({
         this.show = true;
       } else {
       }
+    },
+    onPlay({ isPlaying, totalTime }) {},
+    onPause() {},
+    onStop() {},
+    onEnded() {},
+    onTimeUpdate() {},
+    onError() {},
+    onWaiting() {},
+    onDragSlider(v) {
+      this.audio.seek(v);
     }
   },
   onShow() {},
   onLoad(query = {}) {
     this.subjectId = query.subjectId;
     this.media = JSON.parse(query.media);
-  },
-  created() {
-    this.icon1 = getImgUrlEx(this.icon1);
-    this.icon2 = getImgUrlEx(this.icon2);
-    let arr = [];
-    for (let i = 0; i < 1; i++) {
-      arr.push({
-        title: '课程名称，如资料分析',
-        info: '考点：资料分析秒杀综述',
-        id: i
-      });
-    }
-
-    this.items1 = arr;
-
-    arr = [];
-    for (let i = 0; i < 10; i++) {
-      arr.push({
-        title: '第一期 | 课程名称，如方法综述',
-        time: '12 : 00',
-        desc: '2020年公考',
-        id: i
-      });
-    }
-
-    this.items2 = arr;
+    this.audio.addEvents({
+      onPlay: this.onPlay.bind(this),
+      onPause: this.onPause.bind(this),
+      onStop: this.onStop.bind(this),
+      onEnded: this.onEnded.bind(this),
+      onTimeUpdate: this.onTimeUpdate.bind(this),
+      onError: this.onError.bind(this),
+      onWaiting: this.onWaiting.bind(this)
+    });
+    this.audio.setSrc(this.media.url, false);
   }
 });
 </script>

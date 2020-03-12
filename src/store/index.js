@@ -59,7 +59,16 @@ export default new Vuex.Store({
     location: null,
     totalOnlineNum: 0,
     learnTime: null,
-    teacher: {}
+    teacher: {},
+    audio: null,
+    audioInfo: {
+      isPlaying: false,
+      isSeeking: false,
+      canDraging: false,
+      totalTime: 0,
+      currentTime: 0,
+      curProgress: 0
+    }
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -124,6 +133,12 @@ export default new Vuex.Store({
     setTeacher(state, teacher) {
       state.teacher = teacher;
     },
+    setAudio(state, audio) {
+      state.audio = audio;
+    },
+    setAudioInfo(state, audioInfo) {
+      state.audioInfo = audioInfo;
+    },
     setLearnTime(state, learnTime) {
       if (learnTime && !learnTime.lastTime) {
         learnTime.lastTime = learnTime.remaindLearnTime;
@@ -176,6 +191,12 @@ export default new Vuex.Store({
     },
     learnTime(state) {
       return state.learnTime;
+    },
+    audio(state) {
+      return state.audio;
+    },
+    audioInfo(state) {
+      return state.audioInfo;
     }
   },
   actions: {}

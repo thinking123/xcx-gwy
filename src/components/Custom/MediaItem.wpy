@@ -21,8 +21,7 @@
       </div>
       <div class="row2">
         <span>{{ media.time }}</span> | <span>{{ media.numStudents }}</span
-        >人学过 | 已学 <span>{{ media.learned * 100 }}</span
-        >%
+        >人学过 | 已学 <span>{{ media.studyRate }}</span>
       </div>
       <div class="row3" v-if="type != 'text'">
         <span>学友评价</span>
@@ -116,6 +115,7 @@ wepy.component({
   position: relative;
   padding: 40rpx 30rpx;
   background: rgba(255, 255, 255, 1);
+  margin: 0 auto;
 
   position: relative;
 

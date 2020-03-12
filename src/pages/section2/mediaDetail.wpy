@@ -59,12 +59,13 @@ wepy.page({
     // }
   },
   computed: {
-    ...mapGetters(['isMediaPlaying', 'playMedia', 'items', 'teacher']),
+    ...mapGetters(['isMediaPlaying', 'playMedia', 'items', 'teacher', 'user']),
     params() {
       return {
         subjectId: this.subjectId,
         sortType: this.order,
-        type: '1'
+        type: '1',
+        userId: this.user.id
       };
     },
     clist() {
