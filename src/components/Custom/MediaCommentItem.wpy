@@ -1,133 +1,116 @@
 <template>
-    <div class="MediaCommentItem external-cls">
-      <div class="row1">
-        <div class="col1">
-          <CCircleImg :src="user.header" external-cls="cCircleImg"/>
-          <span>{{user.name}}</span>
-        </div>
-
-        <div v-show="showRate">
-          <CRate :rate="user.rate" external-cls="cRate" />
-        </div>
-
+  <div class="MediaCommentItem external-cls">
+    <div class="row1">
+      <div class="col1">
+        <CCircleImg :src="user.head" external-cls="cCircleImg" />
+        <span>{{ user.name }}</span>
       </div>
-      <div class="row2">
-        {{user.comment}}
-      </div>
-      <div class="row3">
-        {{user.publishDate}}
+
+      <div v-show="showRate">
+        <CRate :rate="user.score" external-cls="cRate" />
       </div>
     </div>
+    <div class="row2">
+      {{ user.content }}
+    </div>
+    <div class="row3">
+      {{ user.time }}
+    </div>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      user:{
-        type:Object,
-        default:{
-          header:'',
-          name:'',
-          rate:'',
-          comment:'',
-          publishDate:'',
-          hiddenRate:true
-        }
-      },
-      showRate:{
-        type:Boolean,
-        default: true,
-
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    user: {
+      type: Object,
+      default: {
+        header: '',
+        name: '',
+        rate: '',
+        comment: '',
+        publishDate: '',
+        hiddenRate: true
       }
     },
-    events: {
-
-    },
-    computed:{
-
-    },
-    methods: {
-
-    },
-    created () {
-
+    showRate: {
+      type: Boolean,
+      default: true
     }
-  });
+  },
+  events: {},
+  computed: {},
+  methods: {},
+  created() {}
+});
 </script>
 <style lang="scss">
-  .MediaCommentItem{
-    padding: 30rpx;
-    box-sizing: border-box;
+.MediaCommentItem {
+  padding: 30rpx;
+  box-sizing: border-box;
 
-    position: relative;
+  position: relative;
 
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 610rpx;
+    height: 1px;
+    background: rgba(230, 230, 230, 1);
+    content: '';
+  }
 
-    &::after{
-      position: absolute;
-      bottom: 0;
-      left:50%;
-      transform: translateX(-50%);
-      width: 610rpx;
-      height: 1px;
-      background:rgba(230,230,230,1);
-      content: '';
-    }
-
-
-    .row1{
-      font-size:28rpx;
-      font-family:PingFang-SC-Regular,PingFang-SC;
-      font-weight:400;
-      color:rgba(98,100,102,1);
-      line-height:36rpx;
+  .row1 {
+    font-size: 28rpx;
+    font-family: PingFang-SC-Regular, PingFang-SC;
+    font-weight: 400;
+    color: rgba(98, 100, 102, 1);
+    line-height: 36rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20rpx;
+    .col1 {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20rpx;
-      .col1{
-        display: flex;
-        align-items: center;
-      }
-      .cCircleImg{
-        width:64rpx;
-        height:64rpx;
-        margin-right: 16rpx;
-      }
-
-      .cRate{
-        transform: scale(0.5);
-        transform-origin: left center;
-        width: 300rpx;
-      }
+    }
+    .cCircleImg {
+      width: 64rpx;
+      height: 64rpx;
+      margin-right: 16rpx;
     }
 
-
-    .row2{
-      font-size:32rpx;
-      font-family:PingFangSC-Regular,PingFangSC;
-      font-weight:400;
-      color:rgba(0,0,0,1);
-      line-height:40rpx;
-      margin-left: 80rpx;
-      margin: 20rpx 0 24rpx 80rpx;
-    }
-
-    .row3{
-      font-size:24rpx;
-      font-family:PingFangSC-Regular,PingFangSC;
-      font-weight:400;
-      color:rgba(147,150,153,1);
-      line-height:24rpx;
-      margin-left: 80rpx;
+    .cRate {
+      transform: scale(0.5);
+      transform-origin: left center;
+      width: 300rpx;
     }
   }
+
+  .row2 {
+    font-size: 32rpx;
+    font-family: PingFangSC-Regular, PingFangSC;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 1);
+    line-height: 40rpx;
+    margin-left: 80rpx;
+    margin: 20rpx 0 24rpx 80rpx;
+  }
+
+  .row3 {
+    font-size: 24rpx;
+    font-family: PingFangSC-Regular, PingFangSC;
+    font-weight: 400;
+    color: rgba(147, 150, 153, 1);
+    line-height: 24rpx;
+    margin-left: 80rpx;
+  }
+}
 </style>
 
 <config>

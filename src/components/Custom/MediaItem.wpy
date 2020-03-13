@@ -34,14 +34,14 @@
           v-if="isLearning"
           class="icon"
           mode="aspectFit"
-          @click="onClick.stop"
+          @click.stop="onClick"
         />
         <image
           src="icon_video_play@3x"
           v-else
           class="icon"
           mode="aspectFit"
-          @click="onClick.stop"
+          @click.stop="onClick"
         />
       </block>
     </div>
@@ -68,7 +68,8 @@ wepy.component({
       type: String,
       default: 'play'
     },
-    subject: Object
+    subject: Object,
+    totalChaper:Number
   },
   events: {},
   computed: {
@@ -90,7 +91,8 @@ wepy.component({
   methods: {
     onNav() {
       navToPage('/pages/section2/mediaPlayDetail', {
-        media: JSON.stringify(this.media)
+        media: JSON.stringify(this.media),
+        totalChaper:this.totalChaper
       });
     },
     onClick() {

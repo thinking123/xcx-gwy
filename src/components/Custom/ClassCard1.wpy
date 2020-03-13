@@ -54,13 +54,16 @@ wepy.component({
     },
     src: {
       type: String
-    }
+    },
+    item: Object
   },
   events: {},
   computed: {},
   methods: {
     onNav() {
-      navToPage('/pages/section2/bwktDetail');
+      navToPage('/pages/section2/bwktDetail', {
+        subjectId: this.item.id
+      });
     }
   },
   created() {

@@ -1,44 +1,31 @@
 <template>
-    <div class="JinLianItemTree external-cls">
-      <JinLianItemNode v-for="(item,index) in items" :key="index" :node="item"/>
-    </div>
+  <div class="JinLianItemTree external-cls">
+    <JinLianItemNode v-for="(item, index) in items" :key="index" :node="item" />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      items:Array
-    },
-    events: {
-
-    },
-    watch:{
-      node(){
-        console.log('items' , this.items);
-      }
-    },
-    computed:{
-
-    },
-    methods: {
-
-    },
-    onLoad () {
-
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    items: Array
+  },
+  events: {},
+  watch: {
+    node() {
+      console.log('items', this.items);
     }
-  });
+  },
+  computed: {},
+  methods: {},
+  onLoad() {}
+});
 </script>
 <style lang="scss">
-  .JinLianItemTree{
-
-  }
+.JinLianItemTree {
+}
 </style>
 
 <config>

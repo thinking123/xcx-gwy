@@ -4,12 +4,7 @@
       <CCircleImg external-cls="col1" :src="header" />
       <span>{{ title }}</span>
 
-      <CButton
-        text="播放全部"
-        icon="icon_playon@3x"
-        @tap.native="handleSetTime"
-        external-cls="col2"
-      />
+      <CButton text="播放全部" icon="icon_playon@3x" external-cls="col2" />
     </div>
     <div class="row2">
       <image src="icon_play_gray@3x" />
@@ -33,10 +28,10 @@ wepy.component({
     id: String,
     item: Object,
     selfNav: Boolean,
-    text:{
-      type:String,
-      default:'播放全部'
-    }
+    text: {
+      type: String,
+      default: '播放全部'
+    },
   },
   events: {},
   computed: {},
@@ -47,7 +42,7 @@ wepy.component({
           subjectId: this.item.id,
           teacherId: this.item.teacherId,
           subjectTitle: this.title,
-          subject:JSON.stringify(this.item)
+          subject: JSON.stringify(this.item)
         });
       }
     }
@@ -97,6 +92,8 @@ $textColorGray1: #666666;
       font-size: 32rpx;
       font-weight: normal;
       color: $textBlack;
+      flex: 1;
+      margin-left: 16rpx;
     }
 
     .col2 {

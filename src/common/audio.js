@@ -95,7 +95,6 @@ class AudioHelper {
 
       this._totalTime = duration;
 
-      console.log('onTimeUpdate');
       this.emitEvent('onTimeUpdate', {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking,
@@ -184,7 +183,7 @@ class AudioHelper {
       let i = cbs.length;
 
       while (i-- > 0) {
-        cb = cbs[i];
+        let cb = cbs[i];
         if (cb === fn) {
           cbs.splice(i, 1);
           break;
@@ -254,21 +253,24 @@ class AudioHelper {
 }
 
 class AudioConnect {
-  curTime = new Date().getTime;
+  curTime = new Date().getTime();
   constructor(audio) {
     this.audio = audio;
     this.init();
   }
 
   init() {
-    this.audio.addEvents({
-      onPlay: this.onAudio.bind(this),
-      onPause: this.onAudio.bind(this),
-      onStop: this.onAudio.bind(this),
-      onEnded: this.onAudio.bind(this, 'onEnded'),
-      onTimeUpdate: this.onAudio.bind(this, 'onTimeUpdate'),
-      onError: this.onAudio.bind(this),
-      onWaiting: this.onAudio.bind(this)
+    const evts = [
+      'onPlay',
+      'onPause',
+      'onStop',
+      'onEnded',
+      'onTimeUpdate',
+      'onWaiting',
+      'onError',
+      'onSeeking'
+    ].forEach(evt => {
+      this.audio.addEvent(evt, this.onAudio.bind(this, evt));
     });
   }
 
@@ -281,7 +283,7 @@ class AudioConnect {
       const clist = state.items[type] || [];
       const cur = clist.findIndex(c => c.id === state.playAudioInfo.id);
       if (cur < clist.length - 1 && cur > -1) {
-        const media = clist[i];
+        const media = clist[cur + 1];
         this.play(media);
       }
     }
@@ -289,6 +291,15 @@ class AudioConnect {
     if (evt === 'onTimeUpdate') {
       console.log('onTimeUpdate http');
       this.updateLearn(options);
+    }
+
+    if (['onWaiting', 'onSeeking'].includes(evt)) {
+      // wx.showLoading({
+      //   title: '',
+      //   mask: false
+      // });
+    } else {
+      // wx.hideLoading();
     }
   }
 
@@ -317,12 +328,11 @@ class AudioConnect {
   updateLearn({ currentTime }) {
     const state = store.state;
     const playAudioInfo = state.playAudioInfo;
-    const diff = (new Date().getTime - this.curTime) / 1000;
+    const diff = (new Date().getTime() - this.curTime) / 1000;
 
-    if (playAudioInfo && playAudioInfo.id && diff > 5000) {
-      rateLearning(playAudioInfo.id, currentTime).finally(() => {
-        this.curTime = new Date().getTime;
-      });
+    if (playAudioInfo && playAudioInfo.id && diff > 10) {
+      this.curTime = new Date().getTime();
+      rateLearning(playAudioInfo.id, currentTime);
     }
   }
 }

@@ -3,7 +3,7 @@
     <MediaHeaderCard :title="subject.viceTitle" />
     <div class="row1">
       <CSelector :items="selItems" @change="onChange" :sel="sel" />
-      <span class="col1"> 已更新{{ user.updateNum }}讲 </span>
+      <span class="col1"> 已更新{{ totalChaper}}讲 </span>
       <OrderItems :order="order" @change="onOrder" />
     </div>
     <div class="row2">
@@ -15,12 +15,14 @@
       :params="params"
       url="/api/subjecAudio/getSubjectChapterHomeList"
       v-if="subjectId"
+      @loaded="onLoaded"
     >
       <MediaItem
         v-for="item in clist"
         :media="item"
         :subject="subject"
         :key="item.id"
+        :totalChaper="totalChaper"
       />
     </CListWrap1>
 
@@ -82,7 +84,8 @@ wepy.page({
     mediaItems: [],
     type,
     subjectId: '',
-    subjectTitle: ''
+    subjectTitle: '',
+    totalChaper: 0
   },
   methods: {
     ...mapMutations([
@@ -101,6 +104,9 @@ wepy.page({
     onRate(rate) {
       console.log(rate);
       this.rate = rate;
+    },
+    onLoaded(res) {
+      this.totalChaper = res.totalChaper;
     }
   },
   onShow() {},
@@ -126,7 +132,7 @@ wepy.page({
     });
   },
   onUnload() {
-    this.audio.stop();
+    audio.stop();
   }
 });
 </script>

@@ -55,6 +55,7 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { audioConnect } from '@/common/audio';
+import { navToPage } from '@/common/navUtils';
 
 wepy.component({
   store,

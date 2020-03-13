@@ -45,7 +45,7 @@
     <FixedBottomComment
       :commentNum="media.scoreNum"
       :likeNum="media.collectNum"
-      :liked="media.liked"
+      :liked="media.isCollect == 1"
       @change="onInput"
       @comment="onComment"
       @like="onLike"
@@ -88,6 +88,7 @@ import { audioConnect, audio } from '@/common/audio';
 import { navToPage, navBack } from '@/common/navUtils';
 
 import { mediaPlayListType } from '@/common/constant';
+import { subjectCollect } from '@/http/http-business';
 const type = mediaPlayListType;
 
 wepy.page({
@@ -134,7 +135,7 @@ wepy.page({
       return false;
     },
     classCardInfo() {
-      return `已更新 ${this.audioSubject.userAnswerNum} 讲`;
+      return `已更新 ${this.totalChaper} 讲`;
     },
     totalTime() {
       return this.isCur ? this.audioInfo.totalTime : 0;
@@ -151,7 +152,8 @@ wepy.page({
     items2: [],
     show: false,
     media: {},
-    type
+    type,
+    totalChaper: 0
   },
   methods: {
     ...mapMutations([
@@ -174,7 +176,9 @@ wepy.page({
       });
     },
     onLike(v) {
-      this.detail.liked = v;
+      subjectCollect(this.media.id, 2).then(() => {
+        this.media.isCollect = this.media.isCollect == 1 ? 0 : 1;
+      });
     },
     handleIconText(e) {
       const type = e.$wx.target.dataset.set;
@@ -208,11 +212,20 @@ wepy.page({
     },
     onDragSlider(v) {
       this.isCur && audioConnect.seek(v);
+    },
+    onEnd() {
+      this.media = this.playAudioInfo;
     }
   },
   onShow() {},
   onLoad(query = {}) {
     this.media = JSON.parse(query.media);
+    this.totalChaper = query.totalChaper;
+    this.onEnd = this.onEnd.bind(this);
+    audio.addEvent('onEnded', this.onEnd);
+  },
+  onUnload() {
+    audio.removeEvent('onEnded', this.onEnd);
   }
 });
 </script>

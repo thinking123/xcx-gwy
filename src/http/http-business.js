@@ -1881,6 +1881,51 @@ export function rateLearning(subjectListId, studyLength) {
   url = urlParams(url, { subjectListId, studyLength });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+GET /api/subjecAudio/subjectCollect
+关注音频或者视频 --编号 008
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+userId	
+(required)
+用户Id
+
+query	string
+labelId	
+(required)
+一级分类id
+
+query	string
+type	
+(required)
+2 音频 3 视频
+
+query	string
+
+ */
+export function subjectCollect(labelId, type) {
+  let url = '/api/subjecAudio/subjectCollect';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { labelId, type, userId: store.state.user.id });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 
 /**
  POST /api/subjecAudio/singscore

@@ -1,245 +1,249 @@
 <template>
   <div class="page bwktDetail">
-    <video :src="src"  controls autoplay/>
-    <CTab :tabs="tabs" :bottomLine="bottomLine"
-          external-cls="cTab"
-          bottom-cls="bottomLine"
-          @changeTab="handleTab"/>
+    <video :src="src" controls autoplay />
+    <CTab
+      :tabs="tabs"
+      :bottomLine="bottomLine"
+      external-cls="cTab"
+      bottom-cls="bottomLine"
+      @changeTab="handleTab"
+    />
     <block v-if="selectedTab == 0">
-      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
+      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy" />
 
-      <CircleIconButton :src="icon1" @click.native="handleIconBtn($event)"
-                        external-cls="circleIconButton1"
-                        data-set="edit"/>
-      <CircleIconButton :src="icon2" @click.native="handleIconBtn($event)"
-                        external-cls="circleIconButton2"
-                        data-set="like"/>
+      <CircleIconButton
+        src="btn_video_edit@3x"
+        @click.native="handleIconBtn($event)"
+        external-cls="circleIconButton1"
+        data-set="edit"
+      />
+      <CircleIconButton
+        src="btn_like@3x"
+        @click.native="handleIconBtn($event)"
+        external-cls="circleIconButton2"
+        data-set="like"
+      />
     </block>
 
-    <block v-if="selectedTab == 1">
-      <CCollapse :value="expandItems" @change="onExpand">
-        <CCollapseItem v-for="item in items1" :key="item.id"
-                       collapse-item="collapse-item"
-                       :title="item.text" :name="item.id">
-          <MediaItem v-for="m in item.items" :key="m.id" :media="m"
-                     typeItem="text"
-                     external-cls="mediaItem"/>
-        </CCollapseItem>
-      </CCollapse>
-      <CircleIconButton :src="icon1" @click.native="handleIconBtn($event)"
-                        external-cls="circleIconButton3"
-                        data-set="edit"/>
+    <view style="display:{{selectedTab == 1?'block':'none'}}">
+      <CListWrap1
+        :type="type"
+        :params="params"
+        url="/api/subjecAudio/getSubjectChapterHomeList"
+        v-if="subjectId"
+      >
+        <CCollapse :value="expandItems" @change="onExpand">
+          <CCollapseItem
+            v-for="item in clist"
+            :key="item.id"
+            collapse-item="collapse-item"
+            :title="item.text"
+            :name="item.id"
+          >
+            <MediaItem
+              v-for="m in item.items"
+              :key="m.id"
+              :media="m"
+              typeItem="text"
+              external-cls="mediaItem"
+            />
+          </CCollapseItem>
+        </CCollapse>
+      </CListWrap1>
 
-      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy"/>
-    </block>
+      <CircleIconButton
+        src="btn_video_edit@3x"
+        @click.native="handleIconBtn($event)"
+        external-cls="circleIconButton3"
+        data-set="edit"
+      />
 
+      <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy" />
+    </view>
 
     <block v-if="selectedTab == 2">
-      <MediaCommentItem v-for="item in items2"
-                        :key="item.id"
-                        :user="item"
+      <MediaCommentItem v-for="item in items2" :key="item.id" :user="item" />
+      <FixedBottomInputTag
+        placeholder="留言评价"
+        external-cls="FixedBottomInputTag"
+        external-cls-InputTag="InputTag"
+        @click.native="onShowPoper"
       />
-      <FixedBottomInputTag placeholder="留言评价"  external-cls="FixedBottomInputTag" external-cls-InputTag="InputTag" @click.native="onShowPoper"/>
     </block>
 
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="show = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="填写核心知识点"  external-cls="header" @click="show=false"/>
+        <HeaderClose
+          text="填写核心知识点"
+          external-cls="header"
+          @click="show = false"
+        />
         <div class="body">
-          <CTextarea :val="commentVal" @change="onChange" placeholder="请填写" total="{{200}}" showLine="{{false}}"/>
-          <CButton text="确认"  @tap.native="onSubmit" external-cls="row"/>
+          <CTextarea
+            :val="commentVal"
+            @change="onChange"
+            placeholder="请填写"
+            total="{{200}}"
+            showLine="{{false}}"
+          />
+          <CButton text="确认" @tap.native="onSubmit" external-cls="row" />
         </div>
       </div>
     </CPopup>
-
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {getImgUrlEx} from '@/common/utils';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { getImgUrlEx } from '@/common/utils';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
+const type = 'video-list';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user', 'items']),
+    params() {
+      return {
+        subjectId: this.subjectId,
+        sortType: '1',
+        type: '2',
+        userId: this.user.id
+      };
     },
-    computed: {
-
-    },
-    data: {
-      src:'https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm',
-      tabs:[
-        {text:'课程介绍'},
-        {text:'课时列表'},
-        {text:'学友评论'},
-      ],
-      bottomLine:1,
-      selectedTab:2,
-      price:200,
-      buyed:false,
-      icon1:'btn_video_edit@3x',
-      icon2:'btn_like@3x',
-      items1:[],
-      expandItems:[],
-      items2:[],
-      show:false,
-      commentVal:''
-    },
-    methods: {
-
-      handleTab({tab ,index}){
-        console.log('tab' , tab , index)
-        this.selectedTab = index
-        if(index != 2){
-          this.show = false;
-        }
-      },
-      onBuy(){
-        this.buyed = !this.buyed;
-      },
-      handleIconBtn(e){
-        const type = e.$wx.target.dataset.set;
-        if(type == 'edit'){
-          navToPage('/pages/section2/mediaSubmitCommentPage')
-        }else{
-
-        }
-      },
-      onExpand(exp){
-        this.expandItems = exp;
-      },
-      onChange(v){
-        this.commentVal = v;
-      },
-      onShowPoper(){
-        this.show = true;
-      },
-      onSubmit(){
+    clist() {
+      const list = this.items[type];
+      return list || [];
+    }
+  },
+  data: {
+    src:
+      'https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm',
+    tabs: [{ text: '课程介绍' }, { text: '课时列表' }, { text: '学友评论' }],
+    bottomLine: 1,
+    selectedTab: 2,
+    price: 200,
+    buyed: false,
+    items1: [],
+    expandItems: [],
+    items2: [],
+    show: false,
+    commentVal: '',
+    subjectId: '',
+    type
+  },
+  methods: {
+    handleTab({ tab, index }) {
+      console.log('tab', tab, index);
+      this.selectedTab = index;
+      if (index != 2) {
         this.show = false;
       }
     },
-    onShow(){
-
+    onBuy() {
+      this.buyed = !this.buyed;
     },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-
-      let arr = [];
-      for (let i = 0; i < 10; i++) {
-        let obj = [];
-        for (let j = 0; j < 5; j++) {
-          const v = {
-            title:'课程名称，如资料分析',
-            publishDate:'2019-07-15',
-            learnNum:'10006',
-            learned:'0.6',
-            isLearning:false,
-            rate:j%6,
-            id: j
-          };
-
-          obj.push(v);
-        }
-
-        arr.push({
-          items:obj,
-          text:'第一期 | 课程名称，如方法综述',
-          id:i
-        })
-
+    handleIconBtn(e) {
+      const type = e.$wx.target.dataset.set;
+      if (type == 'edit') {
+        navToPage('/pages/section2/mediaSubmitCommentPage');
+      } else {
       }
-
-      this.items1 = arr;
-
-
-      arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
-          header:'',
-          name:'李小萌smile',
-          rate:'3',
-          comment:'哈哈，确实不错，讲的很有逻辑呀！',
-          publishDate:'09-07 12:00',
-          id:i
-        })
-      }
-      this.items2 = arr;
+    },
+    onExpand(exp) {
+      this.expandItems = exp;
+    },
+    onChange(v) {
+      this.commentVal = v;
+    },
+    onShowPoper() {
+      this.show = true;
+    },
+    onSubmit() {
+      this.show = false;
     }
-  });
+  },
+  onShow() {},
+  onLoad(query = {}) {
+    this.subjectId = query.subjectId;
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.bwktDetail {
+  video {
+    width: 750rpx;
+    height: 400rpx;
   }
-  .bwktDetail{
-
-    video{
-      width:750rpx;
-      height:400rpx;
-    }
 
   .cTab {
     height: 112rpx;
   }
-    .bottomLine{
-      height:6rpx !important;
-      border-radius: 0 !important;
-    }
+  .bottomLine {
+    height: 6rpx !important;
+    border-radius: 0 !important;
+  }
 
-    .circleIconButton1{
-      right:20rpx;
-      bottom:320rpx;
-      position:fixed;
-    }
-    .circleIconButton2{
-      right:20rpx;
-      bottom:180rpx;
-      position:fixed;
-    }
+  .circleIconButton1 {
+    right: 20rpx;
+    bottom: 320rpx;
+    position: fixed;
+  }
+  .circleIconButton2 {
+    right: 20rpx;
+    bottom: 180rpx;
+    position: fixed;
+  }
 
-    .circleIconButton3{
-      right:20rpx;
-      bottom:180rpx;
-      position:fixed;
-    }
+  .circleIconButton3 {
+    right: 20rpx;
+    bottom: 180rpx;
+    position: fixed;
+  }
 
-    .collapse-item{
-      font-size:32rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(51,51,51,1);
-      line-height:40rpx;
-    }
+  .collapse-item {
+    font-size: 32rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(51, 51, 51, 1);
+    line-height: 40rpx;
+  }
 
-    .mediaItem{
-      margin: 0 auto;
-    }
+  .mediaItem {
+    margin: 0 auto;
+  }
 
-    .FixedBottomInputTag{
-    width:718rpx;
-    height:80rpx;
-    }
+  .FixedBottomInputTag {
+    width: 718rpx;
+    height: 80rpx;
+  }
 
-    .learn{
-      height: 712rpx;
-      .body{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .row{
-          margin-top: 46rpx;
-        }
+  .learn {
+    height: 712rpx;
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .row {
+        margin-top: 46rpx;
       }
     }
   }
+}
 </style>
 <config>
 {
@@ -257,6 +261,8 @@
   CButton:'~UI/CButton',
   CPopup:'~UI/CPopup',
   CCollapseItem:'~UI/CCollapseItem',
+  CListWrap1:'~UI/CListWrap1',
+
     }
 }
 </config>
