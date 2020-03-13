@@ -86,11 +86,15 @@ class AudioHelper {
 
       this.curProgress = curProgress;
 
+      this._totalTime = duration;
+
+      console.log('onTimeUpdate');
       this.emitEvent('onTimeUpdate', {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking,
         curProgress: this.curProgress,
-        currentTime: this._currentTime
+        currentTime: this._currentTime,
+        totalTime: this._totalTime
       });
     });
     ctx.onError(() => {
@@ -167,10 +171,10 @@ class AudioHelper {
       this.listens = Object.create(null);
     }
 
-    if (evt) {
+    if (typeof evt === 'string') {
       const cbs = this.listens[evt];
       if (!cbs) return;
-      const i = cbs.length;
+      let i = cbs.length;
 
       while (i-- > 0) {
         cb = cbs[i];
@@ -180,6 +184,13 @@ class AudioHelper {
         }
       }
     }
+
+    if (typeof evt === 'object') {
+      Object.keys(evt).forEach(k => {
+        const fun = evt[k];
+        this.removeEvent(k, fun);
+      });
+    }
   }
 
   pause() {
@@ -187,13 +198,19 @@ class AudioHelper {
   }
 
   setSrc(src, playing = true) {
-    this.ctx.src = src;
-    playing && this.ctx.play();
-  }
-  play() {
-    if (this.ctx) {
-      this.isPlaying ? this.ctx.pause() : this.ctx.play();
+    if (this.ctx.src != src) {
+      this.ctx.src = src;
+      if (this.isPlaying) {
+        this.stop();
+      }
+      playing && this.ctx.play();
     }
+  }
+  play(src) {
+    if (src) {
+      this.ctx.src = src;
+    }
+    this.ctx.play();
   }
   stop() {
     if (this.ctx) {
@@ -214,12 +231,6 @@ class AudioHelper {
       this.canDraging &&
       !this.isSeeking
     ) {
-      //   if (!this.data.isPlaying) {
-      //     const curProgress = seek * 100 + '%';
-      //     this.setData({
-      //       curProgress: curProgress
-      //     });
-      //   }
       seek = seek * this.ctx.duration;
       this.ctx.seek(seek);
     } else {
@@ -254,13 +265,35 @@ class AudioConnect {
   }
 
   onAudio(options) {
-    store.commit('audioInfo', options);
+    store.commit('setAudioInfo', options);
+  }
+
+  play(media) {
+    const playAudioInfo = store.state.playAudioInfo || {};
+    const audioInfo = store.state.audioInfo;
+    const { commit } = store;
+
+    if (media.id === playAudioInfo.id) {
+      this.audio[audioInfo.isPlaying ? 'pause' : 'play'];
+    } else {
+      if (playAudioInfo.id) {
+        this.audio.stop();
+      }
+      this.audio.play(media.url);
+      commit('setPlayAudioInfo', media);
+    }
+
+    if (this.audio.isPlaying) {
+      commit('setUserHideMediaPlayBar', false);
+    }
   }
 }
 let audioConnect = null;
+let audio = null;
 if (!store.state.audio) {
-  store.commit('setAudio', new AudioHelper());
+  audio = new AudioHelper();
   audioConnect = new AudioConnect();
 }
 
-export default AudioHelper;
+// export  ;
+export { audioConnect, audio };

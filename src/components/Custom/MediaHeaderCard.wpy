@@ -3,7 +3,7 @@
     <image :src="teacher.header" class="headerImg" mode="aspectFit" />
     <div class="content">
       <div class="title">
-        {{ teacher.teacherName }}
+        {{ teacher.title }}
       </div>
       <div class="desc">
         {{ teacher.teacherQualifications }}
@@ -34,7 +34,9 @@ wepy.component({
   methods: {
     onNav() {
       if (this.teacher.id) {
-        navToPage('/pages/section2/mediaIntro');
+        navToPage('/pages/section2/mediaIntro' , {
+          title:this.title
+        });
       }
     }
   },

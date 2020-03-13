@@ -1,63 +1,41 @@
 <template>
   <div class="PlayController external-cls">
-    <image :src="icon1" class="icon1" mode="aspectFill" @click="onPre" />
+    <image src="btn_last@3x" class="icon1" mode="aspectFill" @click="onPre" />
     <image
-      :src="icon2"
+      src="btn_audio_on_big@3x"
       class="icon2"
       mode="aspectFill"
       @click="onPlay"
-      v-if="audioInfo.isPlaying"
+      v-if="isPlaying"
     />
     <image
-      :src="icon3"
+      src="btn_audio_off_big@3x"
       class="icon3"
       mode="aspectFill"
       @click="onPlay"
       v-else
     />
-    <image :src="icon4" class="icon4" mode="aspectFill" @click="onNext" />
+    <image src="btn_next@3x" class="icon4" mode="aspectFill" @click="onNext" />
   </div>
 </template>
 <script>
 import wepy from '@wepy/core';
-import { getImgUrlEx } from '@/common/utils';
-import store from 'store';
-import { mapGetters, mapMutations } from '@wepy/x';
 
 wepy.component({
-  store,
-  data: {
-    icon1: 'btn_last@3x',
-    icon2: 'btn_audio_on_big@3x',
-    icon3: 'btn_audio_off_big@3x',
-    icon4: 'btn_next@3x'
-  },
   externalClasses: ['external-cls'],
-  props: {},
-  events: {},
-  computed: {
-    ...mapGetters(['playMedia', 'isMediaPlaying', 'audio', 'audioInfo'])
+  props: {
+    isPlaying: Boolean
   },
   methods: {
-    ...mapMutations(['setShowMediaPlay', 'setPlayMedia', 'setMediaPlaying']),
     onPre() {
-      this.$emit('pre');
+      this.$emit('onPre');
     },
     onPlay() {
-      const play = !this.isMediaPlaying;
-      this.setMediaPlaying(play);
-      play && this.setShowMediaPlay(true);
-      this.$emit('play', play);
+      this.$emit('onPlay');
     },
     onNext() {
-      this.$emit('next');
+      this.$emit('onNext');
     }
-  },
-  created() {
-    this.icon1 = getImgUrlEx(this.icon1);
-    this.icon2 = getImgUrlEx(this.icon2);
-    this.icon3 = getImgUrlEx(this.icon3);
-    this.icon4 = getImgUrlEx(this.icon4);
   }
 });
 </script>

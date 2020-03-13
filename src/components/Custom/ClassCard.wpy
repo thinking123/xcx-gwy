@@ -31,17 +31,25 @@ wepy.component({
     info: String,
     header: String,
     id: String,
-    item: Object
+    item: Object,
+    selfNav: Boolean,
+    text:{
+      type:String,
+      default:'播放全部'
+    }
   },
   events: {},
   computed: {},
   methods: {
     onNav() {
-      navToPage('/pages/section2/mediaDetail', {
-        subjectId: this.item.id,
-        teacherId: this.item.teacherId,
-        subjectTitle: this.title
-      });
+      if (!this.selfNav) {
+        navToPage('/pages/section2/mediaDetail', {
+          subjectId: this.item.id,
+          teacherId: this.item.teacherId,
+          subjectTitle: this.title,
+          subject:JSON.stringify(this.item)
+        });
+      }
     }
   },
   created() {},

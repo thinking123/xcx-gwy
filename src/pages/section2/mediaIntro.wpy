@@ -10,7 +10,7 @@
       />
       <div class="content">
         <div class="row1">
-          {{ teacher.title }}
+          {{ title }}
         </div>
         <div class="row2">
           {{ teacher.motto }}

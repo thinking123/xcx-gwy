@@ -1,6 +1,6 @@
 <template>
   <div class="page mediaDetail">
-    <MediaHeaderCard />
+    <MediaHeaderCard :title="subject.viceTitle" />
     <div class="row1">
       <CSelector :items="selItems" @change="onChange" :sel="sel" />
       <span class="col1"> 已更新{{ user.updateNum }}讲 </span>
@@ -19,6 +19,7 @@
       <MediaItem
         v-for="item in clist"
         :media="item"
+        :subject="subject"
         :key="item.id"
         @change="onPlay"
       />
@@ -59,7 +60,14 @@ wepy.page({
     // }
   },
   computed: {
-    ...mapGetters(['isMediaPlaying', 'playMedia', 'items', 'teacher', 'user']),
+    ...mapGetters([
+      'isMediaPlaying',
+      'playMedia',
+      'items',
+      'teacher',
+      'user',
+      'audioSubject'
+    ]),
     params() {
       return {
         subjectId: this.subjectId,
@@ -74,6 +82,7 @@ wepy.page({
     }
   },
   data: {
+    subject: {},
     user: {
       header: '',
       title: '课程名称，如资料分析',
@@ -95,7 +104,8 @@ wepy.page({
       'setShowMediaPlay',
       'setPlayMedia',
       'setMediaPlaying',
-      'setTeacher'
+      'setTeacher',
+      'setAudioSubject'
     ]),
     onChange(index) {
       this.sel = index;
@@ -125,30 +135,12 @@ wepy.page({
     this.subjectId = query.subjectId;
     this.subjectTitle = query.subjectTitle;
     this.teacherId = query.teacherId;
+    this.subject = JSON.parse(query.subject);
+    this.setAudioSubject(SON.parse(query.subject));
     teacherDetails(query.teacherId).then(res => {
       this.setTeacher(res);
     });
   }
-  // created() {
-  //   let arr = [];
-  //   for (let i = 0; i < 10; i++) {
-  //     arr.push({
-  //       title: '课程名称，如资料分析',
-  //       publishDate: '2019-07-15',
-  //       learnNum: '10006',
-  //       learned: '0.6',
-  //       isLearning: false,
-  //       rate: i % 6,
-  //       id: i
-  //     });
-  //   }
-  //   this.mediaItems = arr;
-
-  //   //
-  //   // this.setPlayMedia(arr[0]);
-  //   // this.setMediaPlaying(true);
-  //   // this.setShowMediaPlay(true);
-  // }
 });
 </script>
 <style lang="scss">

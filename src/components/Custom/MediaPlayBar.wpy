@@ -1,165 +1,180 @@
 <template>
-    <div class="MediaPlayBar external-cls" v-show="showMediaPlay">
-      <image :src="icon1"  class="icon1" mode="aspectFit" @click="onClose" v-if="showClose"/>
-      <image :src="user.header"  class="header" mode="aspectFill" @click="onUser"/>
-      <div class="content">
-        <div class="row1">
-          {{user.title}}
-        </div>
-        <div class="row2">
-          <span class="col1">
-            {{user.date}}
-          </span>
-          -
-          <span class="col2">
-            {{user.desc}}
-          </span>
-        </div>
+  <div class="MediaPlayBar external-cls" v-show="showMediaPlay">
+    <image
+      src="btn_bottom_close@3x"
+      class="icon1"
+      mode="aspectFit"
+      @click="onClose"
+      v-if="showClose"
+    />
+    <image
+      :src="teacher.header"
+      class="header"
+      mode="aspectFill"
+      @click="onUser"
+    />
+    <div class="content">
+      <div class="row1">
+        {{ playAudioInfo.titel }}
       </div>
-      <image :src="icon2"  class="icon2" mode="aspectFit"/>
-      <image :src="icon4"  class="icon3" mode="aspectFit" v-if="isMediaPlaying" @click="onPlay"/>
-      <image :src="icon3"  class="icon3" mode="aspectFit" v-else @click="onPlay"/>
+      <div class="row2">
+        <span class="col1">
+          {{ user.audioTimeSize }}
+        </span>
+        -
+        <span class="col2">
+          {{ audioSubject.viceTitle }}
+        </span>
+      </div>
     </div>
+    <image src="btn_arrowup@3x" class="icon2" mode="aspectFit" />
+    <image
+      src="btn_audio_playon@3x"
+      class="icon3"
+      mode="aspectFit"
+      v-if="isMediaPlaying"
+      @click="onPlay"
+    />
+    <image
+      src="btn_audio_playoff@3x"
+      class="icon3"
+      mode="aspectFit"
+      v-else
+      @click="onPlay"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import store from 'store';
-  import { mapGetters , mapMutations} from '@wepy/x';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { audioConnect } from '@/common/audio';
 
-  wepy.component({
-    store,
-    data: {
-      icon1:'btn_bottom_close@3x',
-      icon2:'btn_arrowup@3x',
-      icon3:'btn_audio_playoff@3x',
-      icon4:'btn_audio_playon@3x',
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      user:{
-        type:Object,
-        default:{
-          header:'',
-          title:'',
-          desc:'',
-          date:''
-        }
-      },
-      showClose:{
-        type:Boolean,
-        default: true
+wepy.component({
+  store,
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    user: {
+      type: Object,
+      default: {
+        header: '',
+        title: '',
+        desc: '',
+        date: ''
       }
     },
-    events: {
-
-    },
-    computed:{
-      ...mapGetters(['showMediaPlay' , 'isMediaPlaying', 'playMedia']),
-    },
-    methods: {
-      ...mapMutations(['setShowMediaPlay' ,'setPlayMedia' , 'setMediaPlaying']),
-      onPlay(){
-        const play = !this.isMediaPlaying;
-        this.setMediaPlaying(play);
-        play && this.setShowMediaPlay(true);
-        this.$emit('play' , play);
-        console.log('play' , play);
-      },
-      onUser(){
-
-      },
-      onClose(){
-        this.setShowMediaPlay(false);
-        this.setMediaPlaying(false);
-      },
-
-    },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-      this.icon3 = getImgUrlEx(this.icon3);
-      this.icon4 = getImgUrlEx(this.icon4);
+    showClose: {
+      type: Boolean,
+      default: true
     }
-  });
+  },
+  events: {},
+  computed: {
+    ...mapGetters([
+      'audioInfo',
+      'playAudioInfo',
+      'teacher',
+      'userHideMediaPlayBar',
+      'audioSubject'
+    ]),
+    showMediaPlay() {
+      return (
+        this.playAudioInfo && this.playAudioInfo.id && !this.userHideMediaPlayBar
+      );
+    },
+    isMediaPlaying() {
+      if (this.playAudioInfo && this.audioInfo && this.audioInfo.isPlaying) {
+        return true;
+      }
+
+      return false;
+    }
+  },
+  methods: {
+    ...mapMutations(['setUserHideMediaPlayBar']),
+    onPlay() {
+      audioConnect.play(this.playAudioInfo);
+    },
+    onUser() {},
+    onClose() {
+      this.setUserHideMediaPlayBar(true);
+    }
+  }
+});
 </script>
 <style lang="scss">
-  .MediaPlayBar{
-    width:690rpx;
-    height:140rpx;
-    background:rgba(49,50,51,0.9);
-    border-radius:16rpx;
-    position: fixed;
-    bottom: 30rpx;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 20rpx;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
+.MediaPlayBar {
+  width: 690rpx;
+  height: 140rpx;
+  background: rgba(49, 50, 51, 0.9);
+  border-radius: 16rpx;
+  position: fixed;
+  bottom: 30rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 
-
-    .icon1{
-      width:48rpx;
-      height:48rpx;
-      margin-right: 20rpx;
-    }
-
-    .header{
-      width:100rpx;
-      height:100rpx;
-      border-radius:4rpx;
-      background-color: #EEE;
-    }
-    .icon2{
-      width:48rpx;
-      height:20rpx;
-      border-radius:4rpx;
-      background-color: #EEE;
-      margin-left: 40rpx;
-      margin-right: 64rpx;
-    }
-
-    .content{
-      flex: 1;
-
-      margin-left: 16rpx;
-      .row1{
-        width:220rpx;
-        font-size:28rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(255,255,255,1);
-        line-height:36rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-bottom: 16rpx;
-      }
-      .row2{
-        display: flex;
-        align-items: center;
-        font-size:24rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:#EEE;
-        line-height:32rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        >label{
-          margin: 0 8rpx;
-        }
-      }
-    }
-
-    .icon3{
-      width:80rpx;
-      height:80rpx;
-    }
-
-
+  .icon1 {
+    width: 48rpx;
+    height: 48rpx;
+    margin-right: 20rpx;
   }
+
+  .header {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 4rpx;
+    background-color: #eee;
+  }
+  .icon2 {
+    width: 48rpx;
+    height: 20rpx;
+    border-radius: 4rpx;
+    background-color: #eee;
+    margin-left: 40rpx;
+    margin-right: 64rpx;
+  }
+
+  .content {
+    flex: 1;
+
+    margin-left: 16rpx;
+    .row1 {
+      width: 220rpx;
+      font-size: 28rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+      line-height: 36rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 16rpx;
+    }
+    .row2 {
+      display: flex;
+      align-items: center;
+      font-size: 24rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: #eee;
+      line-height: 32rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      > label {
+        margin: 0 8rpx;
+      }
+    }
+  }
+
+  .icon3 {
+    width: 80rpx;
+    height: 80rpx;
+  }
+}
 </style>

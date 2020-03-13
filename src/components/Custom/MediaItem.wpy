@@ -71,7 +71,8 @@ wepy.component({
     typeItem: {
       type: String,
       default: 'play'
-    }
+    },
+    subject: Object
   },
   events: {},
   computed: {
@@ -90,7 +91,8 @@ wepy.component({
   methods: {
     onNav() {
       navToPage('/pages/section2/mediaPlayDetail', {
-        media: JSON.stringify(this.media)
+        media: JSON.stringify(this.media),
+        subject: JSON.stringify(this.subject)
       });
     },
     onClick() {

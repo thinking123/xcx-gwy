@@ -68,7 +68,10 @@ export default new Vuex.Store({
       totalTime: 0,
       currentTime: 0,
       curProgress: 0
-    }
+    },
+    playAudioInfo: null,
+    userHideMediaPlayBar: false,
+    audioSubject: null
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -137,7 +140,17 @@ export default new Vuex.Store({
       state.audio = audio;
     },
     setAudioInfo(state, audioInfo) {
-      state.audioInfo = audioInfo;
+      state.audioInfo = { ...state.audioInfo, ...audioInfo };
+      console.log('state.audioInfo', state.audioInfo);
+    },
+    setPlayAudioInfo(state, playAudioInfo) {
+      state.playAudioInfo = playAudioInfo;
+    },
+    setUserHideMediaPlayBar(state, userHideMediaPlayBar) {
+      state.userHideMediaPlayBar = userHideMediaPlayBar;
+    },
+    setAudioSubject(state, audioSubject) {
+      state.audioSubject = audioSubject;
     },
     setLearnTime(state, learnTime) {
       if (learnTime && !learnTime.lastTime) {
@@ -197,6 +210,15 @@ export default new Vuex.Store({
     },
     audioInfo(state) {
       return state.audioInfo;
+    },
+    playAudioInfo(state) {
+      return state.playAudioInfo;
+    },
+    userHideMediaPlayBar(state) {
+      return state.userHideMediaPlayBar;
+    },
+    audioSubject(state) {
+      return state.audioSubject;
     }
   },
   actions: {}
