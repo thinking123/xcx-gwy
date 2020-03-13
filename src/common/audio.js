@@ -1,5 +1,9 @@
 import store from 'store';
-
+import { mediaPlayListType } from '@/common/constant';
+// import { TaskTimer } from '@/common/task';
+import { rateLearning } from '@/http/http-business';
+// const task = new TaskTimer();
+const type = mediaPlayListType;
 function secondToMinus(s) {
   return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
 }
@@ -44,6 +48,7 @@ class AudioHelper {
         isSeeking: this.isSeeking,
         totalTime: this._totalTime
       });
+      console.log('onPlay');
     });
 
     ctx.onPause(() => {
@@ -53,15 +58,17 @@ class AudioHelper {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking
       });
+      console.log('onPause');
     });
     ctx.onStop(() => {
       console.log('onStop');
       this.isPlaying = false;
       this.isSeeking = false;
-      this.emitEvent('onPause', {
+      this.emitEvent('onStop', {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking
       });
+      console.log('onStop');
     });
     ctx.onEnded(() => {
       this.isPlaying = false;
@@ -70,12 +77,12 @@ class AudioHelper {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking
       });
+
+      console.log('onEnded');
     });
     ctx.onTimeUpdate(() => {
       const currentTime = Math.round(ctx.currentTime);
       this._currentTime = currentTime;
-
-      const curTime = secondToMinus(currentTime);
 
       const duration = Math.round(ctx.duration);
 
@@ -102,7 +109,7 @@ class AudioHelper {
       this.isSeeking = false;
       this.canDraging = false;
 
-      this.emitEvent('onEnded', {
+      this.emitEvent('onError', {
         isPlaying: this.isPlaying,
         isSeeking: this.isSeeking,
         canDraging: this.canDraging
@@ -113,27 +120,27 @@ class AudioHelper {
       console.log('onWaiting');
 
       this.isSeeking = false;
-      this.emitEvent('onEnded', {
+      this.emitEvent('onWaiting', {
         isSeeking: this.isSeeking
       });
     });
     ctx.onSeeking(e => {
-      console.log('onSeeking', e);
+      console.log('onSeeking');
       this.isSeeking = true;
       this.canDraging = false;
 
-      this.emitEvent('onEnded', {
+      this.emitEvent('onSeeking', {
         isSeeking: this.isSeeking,
         canDraging: this.canDraging
       });
     });
     ctx.onSeeked(e => {
-      console.log('onSeeked', e);
+      console.log('onSeeked');
       this.canDraging = true;
       this.isSeeking = false;
       const currentTime = Math.round(ctx.currentTime);
 
-      this.emitEvent('onEnded', {
+      this.emitEvent('onSeeked', {
         isSeeking: this.isSeeking,
         canDraging: this.canDraging,
         currentTime: currentTime
@@ -247,8 +254,9 @@ class AudioHelper {
 }
 
 class AudioConnect {
-  constructor() {
-    this.audio = store.state.audio;
+  curTime = new Date().getTime;
+  constructor(audio) {
+    this.audio = audio;
     this.init();
   }
 
@@ -257,15 +265,31 @@ class AudioConnect {
       onPlay: this.onAudio.bind(this),
       onPause: this.onAudio.bind(this),
       onStop: this.onAudio.bind(this),
-      onEnded: this.onAudio.bind(this),
-      onTimeUpdate: this.onAudio.bind(this),
+      onEnded: this.onAudio.bind(this, 'onEnded'),
+      onTimeUpdate: this.onAudio.bind(this, 'onTimeUpdate'),
       onError: this.onAudio.bind(this),
       onWaiting: this.onAudio.bind(this)
     });
   }
 
-  onAudio(options) {
+  onAudio(evt, options) {
+    console.log('options', options);
     store.commit('setAudioInfo', options);
+    if (evt === 'onEnded') {
+      console.log('next ');
+      const state = store.state;
+      const clist = state.items[type] || [];
+      const cur = clist.findIndex(c => c.id === state.playAudioInfo.id);
+      if (cur < clist.length - 1 && cur > -1) {
+        const media = clist[i];
+        this.play(media);
+      }
+    }
+
+    if (evt === 'onTimeUpdate') {
+      console.log('onTimeUpdate http');
+      this.updateLearn(options);
+    }
   }
 
   play(media) {
@@ -274,17 +298,31 @@ class AudioConnect {
     const { commit } = store;
 
     if (media.id === playAudioInfo.id) {
-      this.audio[audioInfo.isPlaying ? 'pause' : 'play'];
+      this.audio[audioInfo.isPlaying ? 'pause' : 'play']();
+      !audioInfo.isPlaying && commit('setUserHideMediaPlayBar', false);
     } else {
       if (playAudioInfo.id) {
         this.audio.stop();
       }
       this.audio.play(media.url);
       commit('setPlayAudioInfo', media);
-    }
-
-    if (this.audio.isPlaying) {
       commit('setUserHideMediaPlayBar', false);
+    }
+  }
+
+  seek(v) {
+    this.audio.seek(v);
+  }
+
+  updateLearn({ currentTime }) {
+    const state = store.state;
+    const playAudioInfo = state.playAudioInfo;
+    const diff = (new Date().getTime - this.curTime) / 1000;
+
+    if (playAudioInfo && playAudioInfo.id && diff > 5000) {
+      rateLearning(playAudioInfo.id, currentTime).finally(() => {
+        this.curTime = new Date().getTime;
+      });
     }
   }
 }
@@ -292,8 +330,7 @@ let audioConnect = null;
 let audio = null;
 if (!store.state.audio) {
   audio = new AudioHelper();
-  audioConnect = new AudioConnect();
+  audioConnect = new AudioConnect(audio);
 }
 
-// export  ;
 export { audioConnect, audio };

@@ -21,11 +21,10 @@
         :media="item"
         :subject="subject"
         :key="item.id"
-        @change="onPlay"
       />
     </CListWrap1>
 
-    <MediaPlayBar :user="user" />
+    <MediaPlayBar :user="user" padding="{{150}}" />
   </div>
 </template>
 
@@ -36,28 +35,13 @@ import { mapGetters, mapMutations } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
 import { teacherDetails } from '@/http/http-business';
 import { mediaPlayListType } from '@/common/constant';
+import { audio, audioConnect } from '@/common/audio';
+
 const type = mediaPlayListType;
 wepy.page({
   store,
   config: {
     navigationBarTitleText: ''
-  },
-  watch: {
-    // playMedia(v, ov) {
-    //   let p = null;
-    //   if (v) {
-    //     if (ov && ov.teacherId !== v.teacherId) {
-    //       p = teacherDetails(v.id);
-    //     } else if (!ov) {
-    //       p = teacherDetails(v.id);
-    //     }
-    //     if (p) {
-    //       p.then(res => {
-    //         this.setTeacher(res);
-    //       });
-    //     }
-    //   }
-    // }
   },
   computed: {
     ...mapGetters([
@@ -66,7 +50,8 @@ wepy.page({
       'items',
       'teacher',
       'user',
-      'audioSubject'
+      'audioSubject',
+      'playAudioInfo'
     ]),
     params() {
       return {
@@ -116,30 +101,32 @@ wepy.page({
     onRate(rate) {
       console.log(rate);
       this.rate = rate;
-    },
-    onPlay(media) {
-      console.log('media', media);
-      let isMediaPlaying = false;
-      if (this.playMedia == media) {
-        isMediaPlaying = !this.isMediaPlaying;
-      } else {
-        isMediaPlaying = true;
-      }
-      this.setPlayMedia(media);
-      this.setMediaPlaying(isMediaPlaying);
-      this.setShowMediaPlay(true);
     }
   },
   onShow() {},
+  onNext() {
+    const cur = this.clist.findIndex(c => c.id === this.playAudioInfo.id);
+    if (cur < this.clist.length - 1 && cur > -1) {
+      this.play(cur + 1);
+    }
+  },
+  play(i) {
+    const media = this.clist[i];
+    this.media = media;
+    audioConnect.play(media);
+  },
   onLoad(query = {}) {
     this.subjectId = query.subjectId;
     this.subjectTitle = query.subjectTitle;
     this.teacherId = query.teacherId;
     this.subject = JSON.parse(query.subject);
-    this.setAudioSubject(SON.parse(query.subject));
+    this.setAudioSubject(JSON.parse(query.subject));
     teacherDetails(query.teacherId).then(res => {
       this.setTeacher(res);
     });
+  },
+  onUnload() {
+    this.audio.stop();
   }
 });
 </script>

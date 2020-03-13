@@ -13,10 +13,12 @@
 <script>
 import wepy from '@wepy/core';
 import { mapGetters } from '@wepy/x';
+import store from 'store';
 
 const type = 'subjecAudio_getSubjecAudioHomeList_getSubjectScore';
 
 wepy.page({
+  store,
   data: {
     subjectId: '',
     type

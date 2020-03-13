@@ -242,6 +242,7 @@ wepy.page({
   },
   onShow() {},
   created() {
+    return;
     eventHub.$on('jinlianopened', jinlian => {
       jinlian.opened = !jinlian.opened;
       console.log('jinlianopened', jinlian.opened);

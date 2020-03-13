@@ -1,47 +1,53 @@
 <template>
-  <div class="MediaPlayBar external-cls" v-show="showMediaPlay">
-    <image
-      src="btn_bottom_close@3x"
-      class="icon1"
-      mode="aspectFit"
-      @click="onClose"
-      v-if="showClose"
-    />
-    <image
-      :src="teacher.header"
-      class="header"
-      mode="aspectFill"
-      @click="onUser"
-    />
-    <div class="content">
-      <div class="row1">
-        {{ playAudioInfo.titel }}
+  <div
+    class="MediaPlayBar__wrap"
+    v-show="showMediaPlay"
+    style="padding-top:{{padding}}rpx"
+  >
+    <div class="MediaPlayBar external-cls">
+      <image
+        src="btn_bottom_close@3x"
+        class="icon1"
+        mode="aspectFit"
+        @click="onClose"
+        v-if="showClose"
+      />
+      <image :src="teacher.header" class="header" mode="aspectFill" />
+      <div class="content">
+        <div class="row1">
+          {{ playAudioInfo.titel }}
+        </div>
+        <div class="row2">
+          <span class="col1">
+            {{ user.audioTimeSize }}
+          </span>
+          -
+          <span class="col2">
+            {{ audioSubject.viceTitle }}
+          </span>
+        </div>
       </div>
-      <div class="row2">
-        <span class="col1">
-          {{ user.audioTimeSize }}
-        </span>
-        -
-        <span class="col2">
-          {{ audioSubject.viceTitle }}
-        </span>
-      </div>
+      <image
+        src="btn_arrowup@3x"
+        class="icon2"
+        mode="aspectFit"
+        @click.stop="onNav"
+      />
+      <image
+        src="btn_audio_playon@3x"
+        class="icon3"
+        mode="aspectFit"
+        v-if="isMediaPlaying"
+        @click.stop="onPlay"
+      />
+      <image
+        src="btn_audio_playoff@3x"
+        class="icon3"
+        mode="aspectFit"
+        v-else
+        @click.stop="onPlay"
+      />
     </div>
-    <image src="btn_arrowup@3x" class="icon2" mode="aspectFit" />
-    <image
-      src="btn_audio_playon@3x"
-      class="icon3"
-      mode="aspectFit"
-      v-if="isMediaPlaying"
-      @click="onPlay"
-    />
-    <image
-      src="btn_audio_playoff@3x"
-      class="icon3"
-      mode="aspectFit"
-      v-else
-      @click="onPlay"
-    />
   </div>
 </template>
 <script>
@@ -67,7 +73,8 @@ wepy.component({
     showClose: {
       type: Boolean,
       default: true
-    }
+    },
+    padding: Number
   },
   events: {},
   computed: {
@@ -78,9 +85,12 @@ wepy.component({
       'userHideMediaPlayBar',
       'audioSubject'
     ]),
+
     showMediaPlay() {
       return (
-        this.playAudioInfo && this.playAudioInfo.id && !this.userHideMediaPlayBar
+        this.playAudioInfo &&
+        this.playAudioInfo.id &&
+        !this.userHideMediaPlayBar
       );
     },
     isMediaPlaying() {
@@ -96,7 +106,12 @@ wepy.component({
     onPlay() {
       audioConnect.play(this.playAudioInfo);
     },
-    onUser() {},
+    onNav() {
+      navToPage('/pages/section2/mediaPlayDetail', {
+        media: JSON.stringify(this.playAudioInfo)
+      });
+    },
+
     onClose() {
       this.setUserHideMediaPlayBar(true);
     }
@@ -104,6 +119,10 @@ wepy.component({
 });
 </script>
 <style lang="scss">
+.MediaPlayBar__wrap {
+  height: 140rpx;
+  width: 100rpx;
+}
 .MediaPlayBar {
   width: 690rpx;
   height: 140rpx;
@@ -132,7 +151,7 @@ wepy.component({
   }
   .icon2 {
     width: 48rpx;
-    height: 20rpx;
+    height: 48rpx;
     border-radius: 4rpx;
     background-color: #eee;
     margin-left: 40rpx;

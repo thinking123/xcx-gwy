@@ -60,7 +60,6 @@ export default new Vuex.Store({
     totalOnlineNum: 0,
     learnTime: null,
     teacher: {},
-    audio: null,
     audioInfo: {
       isPlaying: false,
       isSeeking: false,
@@ -136,9 +135,7 @@ export default new Vuex.Store({
     setTeacher(state, teacher) {
       state.teacher = teacher;
     },
-    setAudio(state, audio) {
-      state.audio = audio;
-    },
+
     setAudioInfo(state, audioInfo) {
       state.audioInfo = { ...state.audioInfo, ...audioInfo };
       console.log('state.audioInfo', state.audioInfo);
@@ -204,9 +201,6 @@ export default new Vuex.Store({
     },
     learnTime(state) {
       return state.learnTime;
-    },
-    audio(state) {
-      return state.audio;
     },
     audioInfo(state) {
       return state.audioInfo;

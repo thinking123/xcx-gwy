@@ -188,6 +188,8 @@ export function numberToDate(date) {
 
   if (s > 0) {
     res += `${twoBits(s)}`;
+  }else{
+    res += '00'
   }
 
   return res || '0:00';

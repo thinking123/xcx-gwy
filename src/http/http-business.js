@@ -1831,6 +1831,56 @@ export function teacherDetails(id, audioTimeSize) {
   url = urlParams(url, { id, audioTimeSize });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+GET /api/subjecAudio/rateLearning
+随听音频/部委课堂 更新学习进度 --编号 A004
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+subjectListId	
+(required)
+部委课堂主键/随听音频主键
+
+query	string
+studyLength	
+(required)
+已学习时间
+
+query	string
+
+ */
+export function rateLearning(subjectListId, studyLength) {
+  let url = '/api/subjecAudio/rateLearning';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { subjectListId, studyLength });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 
 /**
  POST /api/subjecAudio/singscore
@@ -1869,8 +1919,8 @@ time (string, optional): 时间
 }
  */
 
-export function singscore(score, content, subjectListId, time) {
-  let url = '/api/login/wxlogin';
+export function singscore(score, content, subjectListId) {
+  let url = '/api/subjecAudio/singscore';
   // const loadingText = '正在登入...';
   // const errMsg = '登入失败';
   const data = {

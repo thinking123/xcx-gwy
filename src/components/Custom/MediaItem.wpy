@@ -8,7 +8,7 @@
     @click="onNav"
   >
     <image
-      :src="icon3"
+      src="icon_video_play@3x"
       class="icon3"
       mode="aspectFit"
       @click="onPlay"
@@ -30,18 +30,18 @@
 
       <block v-if="typeItem != 'text'">
         <image
-          :src="icon1"
+          src="btn_audio_on@3x"
           v-if="isLearning"
           class="icon"
           mode="aspectFit"
-          @click="onClick"
+          @click="onClick.stop"
         />
         <image
-          :src="icon2"
+          src="icon_video_play@3x"
           v-else
           class="icon"
           mode="aspectFit"
-          @click="onClick"
+          @click="onClick.stop"
         />
       </block>
     </div>
@@ -49,18 +49,14 @@
 </template>
 <script>
 import wepy from '@wepy/core';
-import { getImgUrlEx } from '@/common/utils';
 import store from 'store';
 import { mapGetters } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
+import { audioConnect } from '@/common/audio';
 
 wepy.component({
   store,
-  data: {
-    icon2: 'icon_video_play@3x',
-    icon1: 'btn_audio_on@3x',
-    icon3: 'icon_video_play@3x'
-  },
+  data: {},
   externalClasses: ['external-cls'],
   props: {
     media: {
@@ -76,37 +72,35 @@ wepy.component({
   },
   events: {},
   computed: {
-    ...mapGetters(['playMedia', 'isMediaPlaying']),
+    ...mapGetters(['audioInfo', 'playAudioInfo']),
     isLearning() {
       if (this.typeItem == 'text') {
         return false;
       }
-      return (
-        this.playMedia &&
-        this.media.id == this.playMedia.id &&
-        this.isMediaPlaying
-      );
+      if (
+        this.audioInfo.isPlaying &&
+        this.playAudioInfo &&
+        this.playAudioInfo.id === this.media.id
+      ) {
+        return true;
+      }
+      return false;
     }
   },
   methods: {
     onNav() {
       navToPage('/pages/section2/mediaPlayDetail', {
-        media: JSON.stringify(this.media),
-        subject: JSON.stringify(this.subject)
+        media: JSON.stringify(this.media)
       });
     },
     onClick() {
-      // this.$emit('change', this.media);
+      audioConnect.play(this.media);
     },
     onPlay() {
       // this.$emit('change', this.media);
     }
   },
-  created() {
-    this.icon2 = getImgUrlEx(this.icon2);
-    this.icon1 = getImgUrlEx(this.icon1);
-    this.icon3 = getImgUrlEx(this.icon3);
-  }
+  created() {}
 });
 </script>
 <style lang="scss">

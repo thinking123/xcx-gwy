@@ -5,9 +5,10 @@
     </div>
     <image :src="teacher.header" class="row2" mode="aspectFit" />
     <CSlider
-      :max="audioInfo.totalTime"
-      :val="audioInfo.currentTime"
+      :max="totalTime"
+      :val="currentTime"
       @change="onDragSlider"
+      :draggable="isCur"
     />
     <div class="row3">
       <IconText
@@ -33,7 +34,7 @@
     </div>
 
     <ClassCard
-      :title="subject.viceTitle"
+      :title="audioSubject.viceTitle"
       :info="classCardInfo"
       selfNav
       text="进入课程"
@@ -42,8 +43,8 @@
     />
 
     <FixedBottomComment
-      :commentNum="media.commentNum"
-      :likeNum="media.likeNum"
+      :commentNum="media.scoreNum"
+      :likeNum="media.collectNum"
       :liked="media.liked"
       @change="onInput"
       @comment="onComment"
@@ -70,7 +71,7 @@
           :title="item.titel"
           :time="item.audioTimeSize"
           :desc="item.desc"
-          :sel="playIndex === i"
+          sel="{{playIndex == i}}"
           @click="onList(i)"
         />
       </div>
@@ -83,7 +84,7 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
-import { audioConnect } from '@/common/audio';
+import { audioConnect, audio } from '@/common/audio';
 import { navToPage, navBack } from '@/common/navUtils';
 
 import { mediaPlayListType } from '@/common/constant';
@@ -100,14 +101,20 @@ wepy.page({
     }
   },
   computed: {
-    ...mapGetters(['audioInfo', 'items', 'teacher', 'playAudioInfo']),
+    ...mapGetters([
+      'audioInfo',
+      'items',
+      'teacher',
+      'playAudioInfo',
+      'audioSubject'
+    ]),
     clist() {
       const list = this.items[type];
       return list || [];
     },
     playIndex() {
       if (this.playAudioInfo && this.clist.length > 0) {
-        const cur = this.clist.indexOf(c => c.id === this.playAudioInfo.id);
+        const cur = this.clist.findIndex(c => c.id === this.playAudioInfo.id);
         return cur;
       }
 
@@ -127,15 +134,22 @@ wepy.page({
       return false;
     },
     classCardInfo() {
-      return `已更新 ${subject.userAnswerNum} 讲`;
+      return `已更新 ${this.audioSubject.userAnswerNum} 讲`;
+    },
+    totalTime() {
+      return this.isCur ? this.audioInfo.totalTime : 0;
+    },
+    currentTime() {
+      return this.isCur ? this.audioInfo.currentTime : 0;
+    },
+    isCur() {
+      return this.playAudioInfo && this.playAudioInfo.id === this.media.id;
     }
   },
   data: {
     items1: [],
     items2: [],
     show: false,
-    subjectId: '',
-    subject: {},
     media: {},
     type
   },
@@ -151,11 +165,13 @@ wepy.page({
     },
     onInput(v) {
       navToPage('/pages/section2/mediaSubmitCommentPage', {
-        subjectId: this.subjectId
+        subjectId: this.audioSubject.id
       });
     },
     onComment(v) {
-      navToPage('/pages/section2/mediaCommentPage');
+      navToPage('/pages/section2/mediaCommentPage', {
+        subjectId: this.audioSubject.id
+      });
     },
     onLike(v) {
       this.detail.liked = v;
@@ -176,71 +192,27 @@ wepy.page({
       audioConnect.play(media);
     },
     onPre() {
-      const cur = this.clist.indexOf(c => c.id === this.media.id);
+      const cur = this.clist.findIndex(c => c.id === this.media.id);
       if (cur > 0) {
         this.play(cur - 1);
       }
     },
     onNext() {
-      const cur = this.clist.indexOf(c => c.id === this.media.id);
+      const cur = this.clist.findIndex(c => c.id === this.media.id);
       if (cur < this.clist.length - 1 && cur > -1) {
         this.play(cur + 1);
       }
     },
     onPlayControllerPlay() {
       audioConnect.play(this.media);
+    },
+    onDragSlider(v) {
+      this.isCur && audioConnect.seek(v);
     }
-
-    // onPlay() {
-    //   this.setPlayAudioInfo(this.media);
-    //   this.audio.setSrc(this.media.url);
-    // },
-    // onPause() {},
-    // onStop() {},
-    // onEnded() {
-    //   this.onNext();
-    // },
-    // onTimeUpdate() {},
-    // onError() {},
-    // onWaiting() {},
-    // onDragSlider(v) {
-    //   this.audio.seek(v);
-    // }
   },
   onShow() {},
   onLoad(query = {}) {
-    this.subjectId = query.subjectId;
-    this.subject = JSON.parse(query.subject);
     this.media = JSON.parse(query.media);
-
-    // this.onPlay = this.onPlay.bind(this);
-    // this.onPause = this.onPause.bind(this);
-    // this.onStop = this.onStop.bind(this);
-    // this.onEnded = this.onEnded.bind(this);
-    // this.onTimeUpdate = this.onTimeUpdate.bind(this);
-    // this.onError = this.onError.bind(this);
-    // this.onWaiting = this.onWaiting.bind(this);
-
-    // this.audio.addEvents({
-    //   onPlay: this.onPlay,
-    //   onPause: this.onPause,
-    //   onStop: this.onStop,
-    //   onEnded: this.onEnded,
-    //   onTimeUpdate: this.onTimeUpdate,
-    //   onError: this.onError,
-    //   onWaiting: this.onWaiting
-    // });
-  },
-  onUnload() {
-    // this.audio.removeEvent({
-    //   onPlay: this.onPlay,
-    //   onPause: this.onPause,
-    //   onStop: this.onStop,
-    //   onEnded: this.onEnded,
-    //   onTimeUpdate: this.onTimeUpdate,
-    //   onError: this.onError,
-    //   onWaiting: this.onWaiting
-    // });
   }
 });
 </script>

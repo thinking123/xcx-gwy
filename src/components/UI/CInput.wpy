@@ -1,114 +1,108 @@
 <template>
-    <input class="CInput external-cls" @input="handleInput" :value="val"
-           :class="{'CInput__radius':theme == 'radius'}"
-           :type="type"
-           :placeholder="placeholder"/>
+  <input
+    class="CInput external-cls"
+    @input="handleInput"
+    :value="val"
+    :disabled="disabled"
+    :class="{ CInput__radius: theme == 'radius' }"
+    :type="type"
+    :placeholder="placeholder"
+  />
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    val: {
+      type: String
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      val:{
-        type:String
-      },
-      placeholder:{
-        type:String,
-        default:"请输入"
-      },
-      showLine:{
-        type:Boolean,
-        default: true
-      },
-      type:{
-        type:String,
-        default:'text'
-      },
-      theme:{
-        type:String,
-        //normal , radius
-        defualt:'normal'
-      }
+    placeholder: {
+      type: String,
+      default: '请输入'
     },
-    events: {
-
+    showLine: {
+      type: Boolean,
+      default: true
     },
-    computed:{
-      
+    disabled: {
+      type: Boolean,
+      default: false
     },
-    methods: {
-      handleInput(e){
-        const v = e.$wx.detail.value
-        console.log('v' ,   v)
-        this.$emit('update:val' , v)
-      },
-      handleClear(){
-        this.$emit('update:val' , '')
-      }
+    type: {
+      type: String,
+      default: 'text'
     },
-    created () {
-
+    theme: {
+      type: String,
+      //normal , radius
+      defualt: 'normal'
     }
-  });
+  },
+  events: {},
+  computed: {},
+  methods: {
+    handleInput(e) {
+      const v = e.$wx.detail.value;
+      console.log('v', v);
+      this.$emit('update:val', v);
+    },
+    handleClear() {
+      this.$emit('update:val', '');
+    }
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  @import "~baseUI";
-  .CInput{
-    width: 690rpx;
-    height: 120rpx;
-    position: relative;
+@import '~baseUI';
+.CInput {
+  width: 690rpx;
+  height: 120rpx;
+  position: relative;
 
+  font-size: 36rpx;
+  font-family: PingFangSC-Regular, PingFangSC;
+  font-weight: 400;
 
-    font-size:36rpx;
-    font-family:PingFangSC-Regular,PingFangSC;
-    font-weight:400;
+  line-height: 44rpx;
 
-    line-height:44rpx;
+  color: #000000;
+  caret-color: $primaryColor;
 
-    color:#000000;
+  &.CInput__radius {
+    background: rgba(242, 242, 242, 1);
+    border-radius: 999px;
+    font-size: 28rpx;
+    font-family: PingFangSC-Regular, PingFangSC;
+    font-weight: 400;
+    line-height: 28rpx;
+    padding-left: 30rpx;
     caret-color: $primaryColor;
-
-
-    &.CInput__radius{
-      background:rgba(242,242,242,1);
-      border-radius:999px;
-      font-size:28rpx;
-      font-family:PingFangSC-Regular,PingFangSC;
-      font-weight:400;
-      line-height:28rpx;
-      padding-left: 30rpx;
-      caret-color: $primaryColor;
-      &::after{
-        background-color: transparent;
-      }
-
-      &::placeholder {
-        color:rgba(147,150,153,1);
-      }
-    }
-
-    &::after{
-      position: absolute;
-      width: 100%;
-      content: '';
-      bottom:0;
-      height: 1px;
-      left: 0;
-      transform: scaleY(0.5);
-      background:rgba(204,204,204,1);
+    &::after {
+      background-color: transparent;
     }
 
     &::placeholder {
-      color:rgba(204,204,204,1);
+      color: rgba(147, 150, 153, 1);
     }
-
   }
 
+  &::after {
+    position: absolute;
+    width: 100%;
+    content: '';
+    bottom: 0;
+    height: 1px;
+    left: 0;
+    transform: scaleY(0.5);
+    background: rgba(204, 204, 204, 1);
+  }
 
+  &::placeholder {
+    color: rgba(204, 204, 204, 1);
+  }
+}
 </style>

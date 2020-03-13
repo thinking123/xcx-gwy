@@ -45,7 +45,7 @@ wepy.component({
   position: relative;
   display: flex;
   align-items: center;
-  color: rgba(147, 150, 153, 1);
+  color: rgba(0, 0, 0, 1);
 
   &.sel {
     color: #4fac1b;
@@ -76,13 +76,13 @@ wepy.component({
       font-size: 36rpx;
       font-family: PingFang-SC-Regular, PingFang-SC;
       font-weight: 400;
-      color: rgba(0, 0, 0, 1);
       line-height: 36rpx;
       margin-bottom: 18rpx;
     }
 
     .row2 {
       display: flex;
+      color: rgba(147, 150, 153, 1);
     }
   }
 }

@@ -17,13 +17,16 @@ import store from 'store';
 import { navToPage, navBack } from '@/common/navUtils';
 import { isEmptyString } from '@/common/utils';
 import { singscore } from '@/http/http-business';
+import { mapGetters, mapMutations } from '@wepy/x';
 
 wepy.page({
   store,
   config: {
     navigationBarTitleText: ''
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['audioSubject'])
+  },
   data: {
     rate: 0,
     val: '',
@@ -39,12 +42,11 @@ wepy.page({
       this.val = v;
     },
     verify() {
-      // if(this.rate >= 0 && isEmptyString(this.val))
-      return this.rate >= 0 && isEmptyString(this.val);
+      return this.rate >= 0 && !isEmptyString(this.val);
     },
     handleSubmit() {
       if (this.verify()) {
-        singscore(this.rate, this.val).then(() => {
+        singscore(this.rate, this.val, this.audioSubject.id).then(() => {
           this.show = true;
           clearInterval(this.time);
           this.time = setInterval(() => {
@@ -54,7 +56,6 @@ wepy.page({
               this.show = false;
               clearInterval(this.time);
               this.sec = 3;
-              // navToPage('/pages/section2/mediaPlayDetail');
               navBack();
             }
           }, 1000);
