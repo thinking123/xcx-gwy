@@ -1013,6 +1013,83 @@ export function forumforumCollect(labelId) {
 
 /**
  *
+ GET /api/subjecAudio/getSubjecListByType
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "chapter": 0,
+    "cover": "string",
+    "createBy": "string",
+    "createTime": "2020-03-17T02:28:08.643Z",
+    "id": 0,
+    "isDel": 0,
+    "params": {},
+    "parentId": 0,
+    "price": "string",
+    "questionNum": 0,
+    "questionType": 0,
+    "remark": "string",
+    "rightRate": "string",
+    "searchValue": "string",
+    "section": 0,
+    "teacherId": 0,
+    "time": "string",
+    "title": "string",
+    "type": 0,
+    "updateBy": "string",
+    "updateTime": "2020-03-17T02:28:08.643Z",
+    "userAnswerNum": 0,
+    "viceTitle": "string",
+    "videoIntroduce": "string"
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+type	
+(required)
+类型 1 随听音频 2部委课堂 3精炼题目
+
+query	string
+userId	
+(required)
+用户id
+
+query	string
+questionType	
+精炼题目中切换题库（1 行测 2 申论）,不传默认行测
+
+query	string
+
+ */
+export function getSubjecListByType(type) {
+  let url = '/api/subjecAudio/getSubjecListByType';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id,
+    type
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ *
  * GET /api/forum/userCollect
  关注用户 --编号 005
 
@@ -1878,7 +1955,11 @@ export function rateLearning(subjectListId, studyLength) {
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, { subjectListId, studyLength });
+  url = urlParams(url, {
+    subjectListId,
+    studyLength,
+    userId: store.state.user.id
+  });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 /**

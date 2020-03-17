@@ -2,12 +2,10 @@
   <div class="page mediaIntro">
     <div class="header">
       <image class="headerImg" mode="center" :src="teacher.upperBody" />
-      <image
-        src="btn_bottom_share@3x"
-        class="icon"
-        mode="aspectFit"
-        @click="onShare"
-      />
+      <button class="icon">
+        <image src="btn_bottom_share@3x" mode="aspectFit" open-type="share" />
+      </button>
+
       <div class="content">
         <div class="row1">
           {{ title }}
@@ -42,9 +40,15 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
+import share from '@/mixins/share';
 
 wepy.page({
   store,
+  mixins: [
+    share({
+      title: '分享音频'
+    })
+  ],
   config: {
     navigationBarTitleText: ''
   },
@@ -55,7 +59,10 @@ wepy.page({
     title: ''
   },
   methods: {
-    onShare() {}
+    onShare() {},
+    getShareOptions() {
+      return {};
+    }
   },
   onLoad(query = {}) {
     this.title = query.title;

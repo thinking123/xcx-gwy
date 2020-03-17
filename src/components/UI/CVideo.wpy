@@ -1,0 +1,79 @@
+<template>
+  <video
+    id="vd"
+    :src="playSrc"
+    :initial-time="initialTime"
+    controls
+    autoplay
+    bindtimeupdate="bindtimeupdate"
+    bindpause="bindpause"
+    bindplay="bindplay"
+    binderror="binderror"
+    bindended="bindended"
+    bindfullscreenchange="bindfullscreenchange"
+    bindwaiting="bindwaiting"
+    bindprogress="bindprogress"
+    bindloadedmetadata="bindloadedmetadata"
+    bindcontrolstoggle="bindcontrolstoggle"
+  />
+</template>
+<script>
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+
+wepy.page({
+  store,
+  props: {
+    initialTime: Number
+  },
+  computed: {
+    ...mapGetters(['user', 'items', 'playVideoInfo']),
+    playSrc() {
+      if (this.playVideoInfo && this.playVideoInfo.url) {
+        this.vd.stop();
+        return this.playVideoInfo.url;
+      }
+      return '';
+    }
+  },
+  //   watch: {
+  //     playVideoInfo(ov, nv) {
+
+  //     }
+  //   },
+  data: {},
+  methods: {
+    ...mapMutations(['setPlayVideoInfo']),
+    bindtimeupdate() {},
+    bindpause() {},
+    bindplay() {},
+    binderror() {},
+    bindended() {},
+    bindfullscreenchange() {},
+    bindwaiting() {},
+    bindprogress() {},
+    bindloadedmetadata() {},
+    bindcontrolstoggle() {}
+  },
+  attached() {
+    this.vd = wx.createVideoContext('vd', this.$wx);
+  }
+});
+</script>
+
+<style lang="scss">
+.mediaItem {
+  margin: 0 auto;
+}
+</style>
+
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+
+
+    }
+}
+</config>

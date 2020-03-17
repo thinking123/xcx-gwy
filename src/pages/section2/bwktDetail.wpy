@@ -1,14 +1,18 @@
 <template>
   <div class="page bwktDetail">
-    <video :src="src" controls autoplay />
+    <CVideo />
     <CTab
       :tabs="tabs"
       :bottomLine="bottomLine"
       external-cls="cTab"
       bottom-cls="bottomLine"
       @changeTab="handleTab"
+      initSelected="1"
     />
     <block v-if="selectedTab == 0">
+      <div>
+        {{ teacher && teacher.teacherName }}
+      </div>
       <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy" />
 
       <CircleIconButton
@@ -16,53 +20,55 @@
         @click.native="handleIconBtn($event)"
         external-cls="circleIconButton1"
         data-set="edit"
+        v-if="!!playVideoInfo"
       />
       <CircleIconButton
-        src="btn_like@3x"
+        :src="likeIcon"
         @click.native="handleIconBtn($event)"
         external-cls="circleIconButton2"
         data-set="like"
+        v-if="!!playVideoInfo"
       />
     </block>
 
     <view style="display:{{selectedTab == 1?'block':'none'}}">
-      <CListWrap1
-        :type="type"
-        :params="params"
-        url="/api/subjecAudio/getSubjectChapterHomeList"
-        v-if="subjectId"
-      >
-        <CCollapse :value="expandItems" @change="onExpand">
-          <CCollapseItem
-            v-for="item in clist"
-            :key="item.id"
-            collapse-item="collapse-item"
-            :title="item.text"
-            :name="item.id"
-          >
-            <MediaItem
-              v-for="m in item.items"
-              :key="m.id"
-              :media="m"
-              typeItem="text"
-              external-cls="mediaItem"
-            />
-          </CCollapseItem>
-        </CCollapse>
-      </CListWrap1>
+      <CCollapse :value="expandItems" @change="onExpand">
+        <CCollapseItem
+          v-for="item in items1"
+          :key="item.id"
+          collapse-item="collapse-item"
+          :title="item.title"
+          :name="item.id"
+        >
+          <bwktDetailCollapseItem
+            itemKey="{{type+index}}"
+            :index="index"
+            :subjectId="item.id"
+          />
+        </CCollapseItem>
+      </CCollapse>
 
       <CircleIconButton
         src="btn_video_edit@3x"
         @click.native="handleIconBtn($event)"
         external-cls="circleIconButton3"
         data-set="edit"
+        v-if="!!playVideoInfo"
       />
 
       <FixedBottomBuyBtn :price="price" :buyed="buyed" @buy="onBuy" />
     </view>
 
     <block v-if="selectedTab == 2">
-      <MediaCommentItem v-for="item in items2" :key="item.id" :user="item" />
+      <CListWrap1
+        :type="type"
+        :params="params"
+        url="/api/subjecAudio/getSubjectScore"
+        v-if="playVideoInfo"
+      >
+        <MediaCommentItem v-for="item in clist" :key="item.id" :user="item" />
+      </CListWrap1>
+
       <FixedBottomInputTag
         placeholder="留言评价"
         external-cls="FixedBottomInputTag"
@@ -105,6 +111,12 @@ import store from 'store';
 import { getImgUrlEx } from '@/common/utils';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
+import {
+  getSubjecListByType,
+  subjectCollect,
+  teacherDetails
+} from '@/http/http-business';
+
 const type = 'video-list';
 
 wepy.page({
@@ -113,13 +125,17 @@ wepy.page({
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['user', 'items']),
+    ...mapGetters(['playVideoInfo', 'items']),
+    likeIcon() {
+      if (this.playVideoInfo && this.playVideoInfo.isCollect == 1) {
+        return this.heartSelIcon;
+      }
+
+      return this.heartIcon;
+    },
     params() {
       return {
-        subjectId: this.subjectId,
-        sortType: '1',
-        type: '2',
-        userId: this.user.id
+        subjectListId: this.subjectId
       };
     },
     clist() {
@@ -127,12 +143,23 @@ wepy.page({
       return list || [];
     }
   },
+  watch: {
+    playVideoInfo(nv, ov) {
+      if (!ov || nv.id !== ov.id) {
+        teacherDetails(nv.id).then(res => {
+          if (res) {
+            this.teacher = res;
+          }
+        });
+      }
+    }
+  },
   data: {
     src:
       'https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm',
     tabs: [{ text: '课程介绍' }, { text: '课时列表' }, { text: '学友评论' }],
     bottomLine: 1,
-    selectedTab: 2,
+    selectedTab: 1,
     price: 200,
     buyed: false,
     items1: [],
@@ -141,9 +168,13 @@ wepy.page({
     show: false,
     commentVal: '',
     subjectId: '',
-    type
+    type,
+    heartIcon: 'btn_like@3x',
+    heartSelIcon: 'btn_liked@3x',
+    teacher: null
   },
   methods: {
+    ...mapMutations(['setPlayVideoInfo']),
     handleTab({ tab, index }) {
       console.log('tab', tab, index);
       this.selectedTab = index;
@@ -157,8 +188,19 @@ wepy.page({
     handleIconBtn(e) {
       const type = e.$wx.target.dataset.set;
       if (type == 'edit') {
-        navToPage('/pages/section2/mediaSubmitCommentPage');
+        this.show = true;
       } else {
+        // like
+        if (this.playVideoInfo) {
+          subjectCollect(this.playVideoInfo.id, 3).then(res => {
+            if (res) {
+              this.setPlayVideoInfo({
+                ...this.playVideoInfo,
+                isCollect: this.playVideoInfo.isCollect == 0 ? 1 : 0
+              });
+            }
+          });
+        }
       }
     },
     onExpand(exp) {
@@ -168,7 +210,9 @@ wepy.page({
       this.commentVal = v;
     },
     onShowPoper() {
-      this.show = true;
+      navToPage('/pages/section2/mediaSubmitCommentPage', {
+        subjectId: this.playVideoInfo.id
+      });
     },
     onSubmit() {
       this.show = false;
@@ -177,6 +221,11 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     this.subjectId = query.subjectId;
+    getSubjecListByType(2).then(res => {
+      this.items1 = res;
+    });
+    this.heartIcon = getImgUrlEx(this.heartIcon);
+    this.heartSelIcon = getImgUrlEx(this.heartSelIcon);
   }
 });
 </script>
@@ -256,12 +305,14 @@ page {
   MediaCommentItem:'~Custom/MediaCommentItem',
   HeaderClose:'~Custom/HeaderClose',
   MediaItem:'~Custom/MediaItem',
+  bwktDetailCollapseItem:'~Custom/bwktDetailCollapseItem',
   CCollapse:'~UI/CCollapse',
   CTextarea:'~UI/CTextarea',
   CButton:'~UI/CButton',
   CPopup:'~UI/CPopup',
   CCollapseItem:'~UI/CCollapseItem',
   CListWrap1:'~UI/CListWrap1',
+  CVideo:'~UI/CVideo'
 
     }
 }

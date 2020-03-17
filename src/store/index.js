@@ -70,7 +70,8 @@ export default new Vuex.Store({
     },
     playAudioInfo: null,
     userHideMediaPlayBar: false,
-    audioSubject: null
+    audioSubject: null,
+    playVideoInfo: null
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -149,6 +150,9 @@ export default new Vuex.Store({
     setAudioSubject(state, audioSubject) {
       state.audioSubject = audioSubject;
     },
+    setPlayVideoInfo(state, playVideoInfo) {
+      state.playVideoInfo = playVideoInfo;
+    },
     setLearnTime(state, learnTime) {
       if (learnTime && !learnTime.lastTime) {
         learnTime.lastTime = learnTime.remaindLearnTime;
@@ -210,6 +214,9 @@ export default new Vuex.Store({
     },
     userHideMediaPlayBar(state) {
       return state.userHideMediaPlayBar;
+    },
+    playVideoInfo(state) {
+      return state.playVideoInfo;
     },
     audioSubject(state) {
       return state.audioSubject;

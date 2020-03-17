@@ -3,7 +3,8 @@
     class="MediaItem external-cls"
     :class="{
       MediaItem__isLearning: isLearning,
-      MediaItem__text: typeItem == 'text'
+      MediaItem__text: typeItem == 'text',
+      MediaItem__sel: sel
     }"
     @click="onNav"
   >
@@ -69,7 +70,9 @@ wepy.component({
       default: 'play'
     },
     subject: Object,
-    totalChaper:Number
+    totalChaper: Number,
+    selfNav: Boolean,
+    sel: Boolean
   },
   events: {},
   computed: {
@@ -90,10 +93,12 @@ wepy.component({
   },
   methods: {
     onNav() {
-      navToPage('/pages/section2/mediaPlayDetail', {
-        media: JSON.stringify(this.media),
-        totalChaper:this.totalChaper
-      });
+      if (!this.selfNav) {
+        navToPage('/pages/section2/mediaPlayDetail', {
+          media: JSON.stringify(this.media),
+          totalChaper: this.totalChaper
+        });
+      }
     },
     onClick() {
       audioConnect.play(this.media);
@@ -117,6 +122,11 @@ wepy.component({
 
   position: relative;
 
+  &.MediaItem__sel {
+    .row1 {
+      color: #4fac1b !important;
+    }
+  }
   .wrap {
     width: 100%;
     height: 100%;

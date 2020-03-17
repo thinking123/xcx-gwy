@@ -32,7 +32,8 @@ wepy.page({
     val: '',
     show: false,
     count: 5,
-    sec: 3
+    sec: 3,
+    subjectId: ''
   },
   methods: {
     onRate(v) {
@@ -46,7 +47,11 @@ wepy.page({
     },
     handleSubmit() {
       if (this.verify()) {
-        singscore(this.rate, this.val, this.audioSubject.id).then(() => {
+        singscore(
+          this.rate,
+          this.val,
+          this.subjectId ? this.subjectId : this.audioSubject.id
+        ).then(() => {
           this.show = true;
           clearInterval(this.time);
           this.time = setInterval(() => {
@@ -67,7 +72,10 @@ wepy.page({
   onHide() {
     clearInterval(this.time);
   },
-  created() {}
+  created() {},
+  onLoad(query = {}) {
+    this.subjectId = query.subjectId;
+  }
 });
 </script>
 <style lang="scss">

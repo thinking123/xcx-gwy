@@ -1,241 +1,241 @@
 <template>
-    <div class="CTab  external-cls" :class="{'CTab--radius':type == 'radius'}">
-      <div class="tabItemWrap">
-        <div v-for="(tab , index) in tabs"
-             class="tabItem external-cls__tabItem"
-             :class="{'selected external-cls__selected':index==selectedIndex}"
-             @click="handleSelect(tab,index)">
-          <image :src="selectedIndex== index ? tab.iconSel : tab.icon"
-                 v-if="!!tab.icon"
-                 mode="aspectFit"
-                 bindload="{{onLoadImage}}"
-                 class="icon"/>
-          <span class="text">{{tab.text}}</span>
-        </div>
+  <div class="CTab  external-cls" :class="{ 'CTab--radius': type == 'radius' }">
+    <div class="tabItemWrap">
+      <div
+        v-for="(tab, index) in tabs"
+        :key="index"
+        class="tabItem external-cls__tabItem"
+        :class="{ 'selected external-cls__selected': index == selectedIndex }"
+        @click="handleSelect(tab, index)"
+      >
+        <image
+          :src="selectedIndex == index ? tab.iconSel : tab.icon"
+          v-if="!!tab.icon"
+          mode="aspectFit"
+          bindload="{{onLoadImage}}"
+          class="icon"
+        />
+        <span class="text">{{ tab.text }}</span>
       </div>
-
-      <div class="bottomLine bottom-cls" v-if="!!bottomLine && type != 'radius'"
-           :style="{width:bLineW,transform: bLineTr}"/>
     </div>
+
+    <div
+      class="bottomLine bottom-cls"
+      v-if="!!bottomLine && type != 'radius'"
+      :style="{ width: bLineW, transform: bLineTr }"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {basic} from '@/mixins/basic';
+import wepy from '@wepy/core';
+import { basic } from '@/mixins/basic';
 
-  wepy.component({
-    data: {
-      selectedIndex:0
-    },
-    externalClasses:[
-      'external-cls',
-      'external-cls__selected',
-      'external-cls__tabItem',
-      'bottom-cls'
-    ],
-    mixins:[basic],
-    props:{
-      tabs:{
-        type:Array,
-        default:function () {
-          const obj = {
-            icon:'',
-            iconSel:'',
-            text:''
-          }
-          return [obj]
-        }
-      },
-      bottomLine:{
-        type:Number,
-        default:0
-      },
-      bottomLineOffset:{
-        type:Number,
-        default:0
-      },
-      initSelected:{
-        type:Number,
-        default:0
-      },
-      type:{
-        type:String,
-        default:'normal',
-        validator: function (value) {
-          // 这个值必须匹配下列字符串中的一个
-          return ['normal', 'radius'].indexOf(value) !== -1
-        }
+wepy.component({
+  data: {
+    selectedIndex: 0
+  },
+  externalClasses: [
+    'external-cls',
+    'external-cls__selected',
+    'external-cls__tabItem',
+    'bottom-cls'
+  ],
+  mixins: [basic],
+  props: {
+    tabs: {
+      type: Array,
+      default: function() {
+        const obj = {
+          icon: '',
+          iconSel: '',
+          text: ''
+        };
+        return [obj];
       }
     },
-    events: {
-
+    bottomLine: {
+      type: Number,
+      default: 0
     },
-    computed:{
-      bLineW(){
-        if(this.bottomLine > 1){
-          const bl = this.rpxTopx(this.bottomLine);
-          return `${bl}px`;
-        }
-        const l = this.tabs.length;
-        const w = (1.0/l)*this.bottomLine;
-        const tf = (1.0/l/2)-w/2 + (1.0/l)*this.selectedIndex;
-
-        const width = `${w*100}%`;
-
-        console.log('width' , width)
-        return width;
-      },
-      bLineTr(){
-        const l = this.tabs.length;
-        if(this.bottomLine > 1){
-          if(!this.width){
-            this.width = 0;
-          }
-          const w = l > 0 ? this.width/l : 0;
-          const sel = this.selectedIndex >=0 ? this.selectedIndex : 0;
-          const init = this.rpxTopx(this.bottomLineOffset);
-          const t= `translateX(${init + w*this.selectedIndex}px)`;
-          console.log('t' , t);
-          return t;
-        }
-
-        const w = (1.0/l)*this.bottomLine;
-        const tf = ((1.0/l/2)-w/2)/w + (1.0/l)*this.selectedIndex/w;
-        const trfs = `translateX(${tf*100}%)`;
-
-        console.log('translate : ' , trfs)
-        return trfs;
-      },
+    bottomLineOffset: {
+      type: Number,
+      default: 0
     },
-    methods: {
-      handleSelect(tab,index){
-        console.log('tab' , tab ,index)
-        this.selectedIndex = index;
-        this.$emit("changeTab" , {tab,index})
-      },
-      rpxTopx(rpx){
-        return this.windowWidth/750 * rpx;
-      },
-      onLoadImage(e){
-        console.log('load')
-//event.detail = {height, width}
-        const {height, width} = e.detail;
-        console.log('onload',{height, width});
+    initSelected: {
+      type: Number,
+      default: 0
+    },
+    type: {
+      type: String,
+      default: 'normal',
+      validator: function(value) {
+        // 这个值必须匹配下列字符串中的一个
+        return ['normal', 'radius'].indexOf(value) !== -1;
       }
-    },
-    attached(){
-      this.selectedIndex = this.initSelected;
-      this.getRect('.CTab').then(rect=>{
-        this.width = rect.width;
-        console.log('this.width' , this.width)
-      })
-      // this.width = ;
-    },
-    created(){
-      const {windowWidth} = wx.getSystemInfoSync();
-      this.windowWidth = windowWidth;
-    },
-    onLoad () {
-
     }
-  });
+  },
+  events: {},
+  computed: {
+    bLineW() {
+      if (this.bottomLine > 1) {
+        const bl = this.rpxTopx(this.bottomLine);
+        return `${bl}px`;
+      }
+      const l = this.tabs.length;
+      const w = (1.0 / l) * this.bottomLine;
+      const tf = 1.0 / l / 2 - w / 2 + (1.0 / l) * this.selectedIndex;
+
+      const width = `${w * 100}%`;
+
+      console.log('width', width);
+      return width;
+    },
+    bLineTr() {
+      const l = this.tabs.length;
+      if (this.bottomLine > 1) {
+        if (!this.width) {
+          this.width = 0;
+        }
+        const w = l > 0 ? this.width / l : 0;
+        const sel = this.selectedIndex >= 0 ? this.selectedIndex : 0;
+        const init = this.rpxTopx(this.bottomLineOffset);
+        const t = `translateX(${init + w * this.selectedIndex}px)`;
+        console.log('t', t);
+        return t;
+      }
+
+      const w = (1.0 / l) * this.bottomLine;
+      const tf =
+        (1.0 / l / 2 - w / 2) / w + ((1.0 / l) * this.selectedIndex) / w;
+      const trfs = `translateX(${tf * 100}%)`;
+
+      console.log('translate : ', trfs);
+      return trfs;
+    }
+  },
+  methods: {
+    handleSelect(tab, index) {
+      console.log('tab', tab, index);
+      this.selectedIndex = index;
+      this.$emit('changeTab', { tab, index });
+    },
+    rpxTopx(rpx) {
+      return (this.windowWidth / 750) * rpx;
+    },
+    onLoadImage(e) {
+      console.log('load');
+      //event.detail = {height, width}
+      const { height, width } = e.detail;
+      console.log('onload', { height, width });
+    }
+  },
+  attached() {
+    this.selectedIndex = this.initSelected;
+    this.getRect('.CTab').then(rect => {
+      this.width = rect.width;
+      console.log('this.width', this.width);
+    });
+    // this.width = ;
+  },
+  created() {
+    const { windowWidth } = wx.getSystemInfoSync();
+    this.windowWidth = windowWidth;
+  },
+  onLoad() {}
+});
 </script>
 <style lang="scss">
-  $white:#FFFFFF;
-  $lineColor:#CCCCCC;
-  $textBlack:#000000;
-  $textBlack1:#333333;
-  $disabledColor:lightgray;
-  $zIndexTop:900;
-  $zIndexMiddle:50;
+$white: #ffffff;
+$lineColor: #cccccc;
+$textBlack: #000000;
+$textBlack1: #333333;
+$disabledColor: lightgray;
+$zIndexTop: 900;
+$zIndexMiddle: 50;
 
-  $pageBg:#F2F2F2;
-  $pageBgGray:#F5F5F5;
+$pageBg: #f2f2f2;
+$pageBgGray: #f5f5f5;
 
+$primaryColor: #4fac1b;
+$redColor: #ee4138;
+$infoColor: #ffffff;
+$textColor: #333333;
+$textColorGray: #999999;
+$textColorGray1: #666666;
 
-  $primaryColor:#4FAC1B;
-  $redColor:#EE4138;
-  $infoColor:#FFFFFF;
-  $textColor:#333333;
-  $textColorGray:#999999;
-  $textColorGray1:#666666;
+.CTab {
+  height: 100rpx;
+  width: 750rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $white;
+  position: relative;
+  color: $textBlack;
 
-  .CTab{
-    height: 100rpx;
-    width: 750rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 32rpx;
+
+  .tabItemWrap {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: $white;
-    position: relative;
-    color:$textBlack;
+    .tabItem {
+      flex: 1;
 
-    font-size:32rpx;
-    font-weight:500;
-    line-height:32rpx;
-
-    .tabItemWrap{
       display: flex;
-      .tabItem{
-        flex:1;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-
-
-        &.selected{
-          color: $primaryColor;
-        }
-
-        .icon{
-          width: 45rpx;
-          height:45rpx;
-          margin-bottom: 20rpx;
-        }
-      }
-    }
-
-
-    &.CTab--radius{
-      border: 1px solid $primaryColor;
-      border-radius: 9999rpx;
-      height: 80rpx;
-      background-color: $white;
-      color: $primaryColor;
-      overflow: hidden;
-      .tabItemWrap{
-        height: 100%;
-        .tabItem{
-
-          &:not(:last-child){
-            border-right: 1px solid $primaryColor;
-          }
-          &.selected{
-            background-color: $primaryColor;
-            color:$white;
-          }
-        }
+      &.selected {
+        color: $primaryColor;
       }
 
+      .icon {
+        width: 45rpx;
+        height: 45rpx;
+        margin-bottom: 20rpx;
+      }
     }
+  }
 
-    .bottomLine{
-      height: 10rpx;
-      background-color: $primaryColor;
-      /*margin-top: 24rpx;*/
-      transition: 0.3s ease-in-out transform;
-      border-radius:5rpx;
-      position: absolute;
-      bottom: 0;
-    }
-
-    &.radius{
-      .tabItemWrap{
-        .tabItem{
-          border-right: 1px solid;
+  &.CTab--radius {
+    border: 1px solid $primaryColor;
+    border-radius: 9999rpx;
+    height: 80rpx;
+    background-color: $white;
+    color: $primaryColor;
+    overflow: hidden;
+    .tabItemWrap {
+      height: 100%;
+      .tabItem {
+        &:not(:last-child) {
+          border-right: 1px solid $primaryColor;
+        }
+        &.selected {
+          background-color: $primaryColor;
+          color: $white;
         }
       }
     }
   }
+
+  .bottomLine {
+    height: 10rpx;
+    background-color: $primaryColor;
+    /*margin-top: 24rpx;*/
+    transition: 0.3s ease-in-out transform;
+    border-radius: 5rpx;
+    position: absolute;
+    bottom: 0;
+  }
+
+  &.radius {
+    .tabItemWrap {
+      .tabItem {
+        border-right: 1px solid;
+      }
+    }
+  }
+}
 </style>

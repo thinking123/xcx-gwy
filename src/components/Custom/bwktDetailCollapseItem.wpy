@@ -1,0 +1,84 @@
+<template>
+  <CListWrap1
+    :type="itemKey"
+    :params="params"
+    url="/api/subjecAudio/getSubjectChapterHomeList"
+    v-if="subjectId"
+    @loaded="onLoaded"
+  >
+    <MediaItem
+      v-for="(m, index) in clist"
+      :key="m.id"
+      :media="m"
+      typeItem="text"
+      external-cls="mediaItem"
+      sel="{{playVideoInfo&&playVideoInfo.id===m.id}}"
+      selfNav
+      @click="onNav(index)"
+    />
+  </CListWrap1>
+</template>
+<script>
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+
+wepy.page({
+  store,
+  props: {
+    itemKey: String,
+    subjectId: String,
+    index: Number
+  },
+  computed: {
+    ...mapGetters(['user', 'items', 'playVideoInfo']),
+    params() {
+      return {
+        subjectId: this.subjectId,
+        sortType: '1',
+        type: '2',
+        userId: this.user.id
+      };
+    },
+    clist() {
+      const list = this.items[this.itemKey];
+      return list || [];
+    }
+  },
+  data: {},
+  methods: {
+    ...mapMutations(['setPlayVideoInfo']),
+    onNav(index) {
+      const video = this.clist[index];
+      this.setPlayVideoInfo(video);
+    },
+    onLoaded(res) {
+      if (this.index == 0 && !this.playVideoInfo) {
+        const { list = [] } = res;
+        if (list.length > 0) {
+          this.setPlayVideoInfo(list[0]);
+        }
+      }
+    }
+  }
+});
+</script>
+
+<style lang="scss">
+.mediaItem {
+  margin: 0 auto;
+}
+</style>
+
+<config>
+{
+    navigationBarTitleText: '',
+    usingComponents: {
+
+  MediaItem:'~Custom/MediaItem',
+
+  CListWrap1:'~UI/CListWrap1',
+
+    }
+}
+</config>
