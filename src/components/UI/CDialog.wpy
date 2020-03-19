@@ -12,174 +12,163 @@
     <view
       v-if="title"
       class="c-dialog__header"
-      :class="{'c-dialog--isolated':message || useSlot}"
+      :class="{ 'c-dialog--isolated': message || useSlot }"
     >
       {{ title }}
     </view>
 
-    <slot/>
+    <slot />
   </CPopup>
-
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    show: {
+      type: Boolean,
+      default: false,
+      twoWay: true
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      show: {
-        type:Boolean,
-        default:false,
-        twoWay: true
-      },
-      title: String,
-      message: String,
-      useSlot: {
-        type:Boolean,
-        default:true
-      },
-      className: String,
-      customStyle: String,
-      asyncClose: Boolean,
-      messageAlign: String,
-      showCancelButton: Boolean,
-      closeOnClickOverlay: {
-        type:Boolean,
-        default:true
-      },
-      confirmButtonOpenType: String,
-      zIndex: {
-        type: Number,
-        default: 2000
-      },
-      overlay: {
-        type: Boolean,
-        default: true
-      },
-      transition: {
-        type: String,
-        default: 'scale'
-      }
+    title: String,
+    message: String,
+    useSlot: {
+      type: Boolean,
+      default: true
     },
-
-    watch: {
-      show(show) {
-        // !show && this.stopLoading();
-      }
+    className: String,
+    customStyle: String,
+    asyncClose: Boolean,
+    messageAlign: String,
+    showCancelButton: Boolean,
+    closeOnClickOverlay: {
+      type: Boolean,
+      default: true
     },
-    events: {
-
+    confirmButtonOpenType: String,
+    zIndex: {
+      type: Number,
+      default: 2000
     },
-    computed:{
-      ccs(){
-        return `c-dialog ${this.className}`
-      }
+    overlay: {
+      type: Boolean,
+      default: true
     },
-    methods: {
-      onClickOverlay() {
-        this.onClose('overlay');
-      },
-
-      handleAction(action) {
-        this.onClose(action);
-      },
-
-      close() {
-        this.show = false;
-
-        // this.$emit('@update:show', false)
-        // this.$apply()
-      },
-
-
-      onClose(action) {
-        this.close();
-      }
-    },
-    onLoad () {
-
+    transition: {
+      type: String,
+      default: 'scale'
     }
-  });
+  },
+
+  watch: {
+    show(show) {
+      // !show && this.stopLoading();
+    }
+  },
+  events: {},
+  computed: {
+    ccs() {
+      return `c-dialog ${this.className}`;
+    }
+  },
+  methods: {
+    onClickOverlay() {
+      this.onClose('overlay');
+    },
+
+    handleAction(action) {
+      this.onClose(action);
+    },
+
+    close() {
+      // this.show = false;
+
+      this.$emit('close');
+      // this.$emit('@update:show', false)
+      // this.$apply()
+    },
+
+    onClose(action) {
+      this.close();
+    }
+  },
+  onLoad() {}
+});
 </script>
 <style lang="less">
+@import '~lessUI';
 
-  @import "~lessUI";
+.c-dialog {
+  top: 45% !important;
+  width: 85%;
+  overflow: hidden;
+  font-size: 16px;
+  background-color: @white;
+  border-radius: 4px;
 
-  .c-dialog {
-    top: 45% !important;
-    width: 85%;
-    overflow: hidden;
-    font-size: 16px;
-    background-color: @white;
-    border-radius: 4px;
+  &__header {
+    padding-top: 25px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
 
-    &__header {
-      padding-top: 25px;
-      font-weight: 500;
-      line-height: 24px;
-      text-align: center;
-
-      &--isolated {
-        padding: 25px 0;
-      }
-    }
-
-    &__message {
-      max-height: 60vh;
-      padding: 25px;
-      overflow-y: auto;
-      font-size: 14px;
-      line-height: 20px;
-      text-align: center;
-      -webkit-overflow-scrolling: touch;
-
-      &--has-title {
-        padding-top: 12px;
-        color: @gray-darker;
-      }
-
-      &--left {
-        text-align: left;
-      }
-
-      &--right {
-        text-align: right;
-      }
-    }
-
-    &__footer {
-      display: flex;
-    }
-
-    &__button {
-      flex: 1;
-    }
-
-    &__confirm,
-    &__cancel {
-      border: 0 !important;
-    }
-
-    &__confirm {
-      color: @blue !important;
-    }
-
-    &-bounce-enter {
-      transform: translate3d(-50%, -50%, 0) scale(0.7);
-      opacity: 0;
-    }
-
-    &-bounce-leave-active {
-      transform: translate3d(-50%, -50%, 0) scale(0.9);
-      opacity: 0;
+    &--isolated {
+      padding: 25px 0;
     }
   }
 
+  &__message {
+    max-height: 60vh;
+    padding: 25px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    -webkit-overflow-scrolling: touch;
+
+    &--has-title {
+      padding-top: 12px;
+      color: @gray-darker;
+    }
+
+    &--left {
+      text-align: left;
+    }
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__footer {
+    display: flex;
+  }
+
+  &__button {
+    flex: 1;
+  }
+
+  &__confirm,
+  &__cancel {
+    border: 0 !important;
+  }
+
+  &__confirm {
+    color: @blue !important;
+  }
+
+  &-bounce-enter {
+    transform: translate3d(-50%, -50%, 0) scale(0.7);
+    opacity: 0;
+  }
+
+  &-bounce-leave-active {
+    transform: translate3d(-50%, -50%, 0) scale(0.9);
+    opacity: 0;
+  }
+}
 </style>
 
 <config>

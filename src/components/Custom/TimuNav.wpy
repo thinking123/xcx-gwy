@@ -1,200 +1,210 @@
 <template>
-    <div class="TimuNav external-cls">
-      <div class="wrap" :class="{'night':night}">
-
-        <div class="row1" :class="{'disabled':preDisable,'night':night}" @click="onPre">
-          <block v-if="preDisable">
-            <image :src="icon2"  class="icon1 pre-icon" mode="aspectFit"/>
-          </block>
-          <block v-else>
-            <image :src="icon3"  class="icon3 pre-icon" mode="aspectFit" v-if="night"/>
-            <image :src="icon1"  class="icon1 pre-icon" mode="aspectFit" v-else/>
-          </block>
-          <span>
+  <div class="TimuNav external-cls">
+    <div class="wrap" :class="{ night: night }">
+      <div
+        class="row1"
+        :class="{ disabled: preDisable, night: night }"
+        @click="onPre"
+      >
+        <block v-if="preDisable">
+          <image
+            src="btn_last_disable@3x"
+            class="icon1 pre-icon"
+            mode="aspectFit"
+          />
+        </block>
+        <block v-else>
+          <image
+            src="btn_last_white@3x"
+            class="icon3 pre-icon"
+            mode="aspectFit"
+            v-if="night"
+          />
+          <image
+            src="btn_last_enable@3x"
+            class="icon1 pre-icon"
+            mode="aspectFit"
+            v-else
+          />
+        </block>
+        <span>
           上一题
         </span>
-        </div>
-        <div class="row2" :class="{'night':night}" >
-          <span>
-            {{curIndex + 1}}
-          </span>
-          <span>
-          /{{total}}
+      </div>
+      <div class="row2" :class="{ night: night }">
+        <span>
+          {{ curIndex + 1 }}
         </span>
-        </div>
-        <div class="row3" :class="{'disabled':nextDisable,'night':night}" @click="onNext">
-             <span>
+        <span> /{{ total }} </span>
+      </div>
+      <div
+        class="row3"
+        :class="{ disabled: nextDisable, night: night }"
+        @click="onNext"
+      >
+        <span>
           下一题
         </span>
-          <block v-if="nextDisable">
-            <image :src="icon5"  class="icon1 pre-icon" mode="aspectFit"/>
-          </block>
-          <block v-else>
-            <image :src="icon6"  class="icon3 pre-icon" mode="aspectFit" v-if="night"/>
-            <image :src="icon4"  class="icon1 pre-icon" mode="aspectFit" v-else/>
-          </block>
-
-        </div>
+        <block v-if="nextDisable">
+          <image
+            src="btn_next_disable@3x"
+            class="icon1 pre-icon"
+            mode="aspectFit"
+          />
+        </block>
+        <block v-else>
+          <image
+            src="btn_next_white@3x"
+            class="icon3 pre-icon"
+            mode="aspectFit"
+            v-if="night"
+          />
+          <image
+            src="btn_next_enable@3x"
+            class="icon1 pre-icon"
+            mode="aspectFit"
+            v-else
+          />
+        </block>
       </div>
-
     </div>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import store from 'store';
-  import { mapGetters} from '@wepy/x';
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters } from '@wepy/x';
+import { getImgUrlEx } from '@/common/utils';
 
-  wepy.component({
-    store,
-    data: {
-      icon1:'btn_last_enable@3x',
-      icon2:'btn_last_disable@3x',
-      icon3:'btn_last_white@3x',
-
-      icon4:'btn_next_enable@3x',
-      icon5:'btn_next_disable@3x',
-      icon6:'btn_next_white@3x',
+wepy.component({
+  store,
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    total: Number,
+    curIndex: Number
+  },
+  events: {},
+  computed: {
+    ...mapGetters(['night']),
+    preDisable() {
+      return this.curIndex <= 0;
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      total:Number,
-      curIndex:Number,
-    },
-    events: {
-
-    },
-    computed:{
-      ...mapGetters(['night']),
-      preDisable(){
-        return this.curIndex <= 0;
-      },
-      nextDisable(){
-        return this.curIndex >= this.total - 1;
+    nextDisable() {
+      return this.curIndex >= this.total - 1;
+    }
+  },
+  methods: {
+    onPre() {
+      if (!this.preDisable) {
+        this.$emit('change', this.curIndex - 1);
       }
     },
-    methods: {
-      onPre(){
-        if(!this.preDisable){
-            this.$emit('change' , this.curIndex - 1);
-        }
-      },
-      onNext(){
-        if(!this.nextDisable){
-          this.$emit('change' , this.curIndex + 1);
-        }
-      },
-    },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-      this.icon3 = getImgUrlEx(this.icon3);
-      this.icon4 = getImgUrlEx(this.icon4);
-      this.icon5 = getImgUrlEx(this.icon6);
-      this.icon6 = getImgUrlEx(this.icon6);
+    onNext() {
+      if (!this.nextDisable) {
+        this.$emit('change', this.curIndex + 1);
+      }
     }
-  });
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .TimuNav{
-    width:750rpx;
-    height:120rpx;
+.TimuNav {
+  width: 750rpx;
+  height: 120rpx;
+}
+
+.wrap {
+  &.night {
+    background: rgba(98, 100, 102, 1);
   }
 
+  width: 750rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rpx -4rpx 12rpx 0rpx rgba(0, 0, 0, 0.06);
+  border-radius: 16rpx 16rpx 0rpx 0rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 0 40rpx;
+  image {
+    width: 36rpx;
+    height: 48rpx;
+  }
 
-  .wrap{
-    &.night{
-      background:rgba(98,100,102,1);
-    }
-
-    width:750rpx;
-    height:120rpx;
-    background:rgba(255,255,255,1);
-    box-shadow:0rpx -4rpx 12rpx 0rpx rgba(0,0,0,0.06);
-    border-radius:16rpx 16rpx 0rpx 0rpx;
-    box-sizing: border-box;
+  .row1 {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    bottom: 0;
-    left:0;
-    padding: 0 40rpx;
-    image{
-      width:36rpx;
-      height:48rpx;
+    font-size: 28rpx;
+    font-family: PingFangSC-Semibold, PingFangSC;
+    font-weight: 600;
+    color: rgba(51, 51, 51, 1);
+
+    &.disabled {
+      color: rgba(204, 204, 204, 1);
     }
-
-    .row1{
-      display: flex;
-      align-items: center;
-      font-size:28rpx;
-      font-family:PingFangSC-Semibold,PingFangSC;
-      font-weight:600;
-      color:rgba(51,51,51,1);
-
-      &.disabled{
-        color:rgba(204,204,204,1);
-      }
-      &.night{
-        color:#FFF;
-      }
-      &.disabled.night{
-        color:rgba(204,204,204,1)
-      }
-      >image{
-        margin-right: 16rpx;
-      }
+    &.night {
+      color: #fff;
     }
-    .row2{
-      display: flex;
-      align-items: center;
-      
-      >label:first-child{
-        font-size:48rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:rgba(79,172,27,1);
-        line-height:66rpx;
-        margin-right: 12rpx;
-      }
-      >label:last-child{
-        font-size:32rpx;
-        font-family:PingFangSC-Semibold,PingFangSC;
-        font-weight:600;
-        color:rgba(153,153,153,1);
-        line-height:44rpx;
-      }
-
-      &.night{
-        >label:last-child{
-          color:#FFF;
-        }
-      }
+    &.disabled.night {
+      color: rgba(204, 204, 204, 1);
     }
-    .row3{
-      display: flex;
-      align-items: center;
-      font-size:28rpx;
-      font-family:PingFangSC-Semibold,PingFangSC;
-      font-weight:600;
-      color:rgba(51,51,51,1);
-
-      &.disabled{
-        color:rgba(204,204,204,1);
-      }
-      &.night{
-        color:#FFF;
-      }
-      &.disabled.night{
-        color:rgba(204,204,204,1)
-      }
-      >image{
-        margin-left: 16rpx;
-      }
+    > image {
+      margin-right: 16rpx;
     }
-
   }
+  .row2 {
+    display: flex;
+    align-items: center;
+
+    > label:first-child {
+      font-size: 48rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: rgba(79, 172, 27, 1);
+      line-height: 66rpx;
+      margin-right: 12rpx;
+    }
+    > label:last-child {
+      font-size: 32rpx;
+      font-family: PingFangSC-Semibold, PingFangSC;
+      font-weight: 600;
+      color: rgba(153, 153, 153, 1);
+      line-height: 44rpx;
+    }
+
+    &.night {
+      > label:last-child {
+        color: #fff;
+      }
+    }
+  }
+  .row3 {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    font-family: PingFangSC-Semibold, PingFangSC;
+    font-weight: 600;
+    color: rgba(51, 51, 51, 1);
+
+    &.disabled {
+      color: rgba(204, 204, 204, 1);
+    }
+    &.night {
+      color: #fff;
+    }
+    &.disabled.night {
+      color: rgba(204, 204, 204, 1);
+    }
+    > image {
+      margin-left: 16rpx;
+    }
+  }
+}
 </style>

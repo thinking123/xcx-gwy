@@ -1,260 +1,255 @@
 <template>
-  <div class="page timu" :class="{'timu--night':night}">
-    <timuHeader showSwitch="{{cuoti}}"
-                @edit="onEdit"
-                @change="ontimuHeader" :isOpen="isNight" day="{{50}}"/>
-    <CSwipeList total="{{items.length}}" :curIndex="curIndex"
-                external-cls="CSwipeList"
-                @swipe="onSwipe">
-      <TimuItem :timuItem="preItem"
-                v-if="preItem"
-                :total="items.length"
-                slot="pre"
-                @select="onSelect"
-                :hadSelected="preItem.hadSelected"
-                external-cls="TimuItem"
-                :index="preIndex"
-                :curIndex="curIndex"/>
-      <TimuItem :timuItem="curItem"
-                :total="items.length"
-                slot="cur"
-                v-if="curItem"
-                @select="onSelect"
-                :hadSelected="curItem.hadSelected"
-                external-cls="TimuItem"
-                :index="curIndex"
-                :curIndex="curIndex"/>
-      <TimuItem :timuItem="nextItem"
-                :total="items.length"
-                slot="next"
-                v-if="nextItem"
-                @select="onSelect"
-                :hadSelected="nextItem.hadSelected"
-                external-cls="TimuItem"
-                :index="nextIndex"
-                :curIndex="curIndex"/>
-    </CSwipeList>
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="999"
-             overlay="{{ true }}">
+  <div class="page timu" :class="{ 'timu--night': night }">
+    <timuHeader
+      showSwitch="{{cuoti}}"
+      @edit="onEdit"
+      @change="ontimuHeader"
+      :isOpen="isNight"
+      day="{{50}}"
+    />
+
+    <swiper bindchange="onSwiperChange" circular :current="curIndex">
+      <swiper-item v-for="(item, index) in citems" :key="index">
+        <TimuItem
+          :timuItem="item"
+          v-if="item"
+          :total="item.questionNum"
+          @select="onSelect"
+          :hadSelected="preItem.hadSelected"
+          external-cls="TimuItem"
+          :index="preIndex"
+          :curIndex="curIndex"
+        />
+        <div v-else class="empty-no"></div>
+      </swiper-item>
+    </swiper>
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="show = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="learn">
-        <HeaderClose text="记笔记"  external-cls="header" @click="show=false"/>
+        <HeaderClose
+          text="记笔记"
+          external-cls="header"
+          @click="show = false"
+        />
         <div class="body">
-          <CTextarea :val="editText" @change="onChange" placeholder="请填写您想记录的内容" total="{{200}}" showLine="{{false}}"/>
-          <CButton text="确认"  @tap.native="onSubmit" external-cls="row"/>
+          <CTextarea
+            :val="editText"
+            @change="onChange"
+            placeholder="请填写您想记录的内容"
+            total="{{200}}"
+            showLine="{{false}}"
+          />
+          <CButton text="确认" @tap.native="onSubmit" external-cls="row" />
         </div>
       </div>
     </CPopup>
-    <CPopup  :show="showCompleted"
-             position="bottom"
-             @close="showCompleted=false"
-             zIndex="999"
-             overlay="{{ true }}">
+    <CPopup
+      :show="showCompleted"
+      position="bottom"
+      @close="showCompleted = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
       <div class="TimuCompletedTip">
-        <TimuCompletedTip rightRate="{{0.5}}" rightNum="{{80}}" wrongNum="{{20}}"/>
+        <TimuCompletedTip
+          rightRate="{{0.5}}"
+          rightNum="{{80}}"
+          wrongNum="{{20}}"
+        />
       </div>
     </CPopup>
 
-    <TimuTip/>
-    <TimuNav v-if="cuoti" @change="onNav" :total="items.length" :curIndex="curIndex"/>
+    <TimuTip />
+    <TimuNav
+      v-if="cuoti"
+      @change="onNav"
+      :total="item.questionNum"
+      :curIndex="curIndex"
+    />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { mapGetters} from '@wepy/x';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters } from '@wepy/x';
+import { getQuestionList } from '@/http/http-business';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      ...mapGetters(['night']),
-      preItem(){
-        if(this.curIndex > 0){
-          return this.items[this.curIndex];
-        }
+wepy.page({
+  store,
 
-        return null;
-      },
-      curItem(){
-        if(this.curIndex >=0 && this.curIndex < this.items.length){
-          console.log('cur' , this.items[this.curIndex])
-          return this.items[this.curIndex];
-        }
-
-        return null;
-      },
-      nextItem(){
-        if(this.curIndex < this.items.length - 1){
-          return this.items[this.curIndex + 1];
-        }
-
-        return null;
-      },
-      preIndex(){
-        return this.curIndex - 1;
-      },
-      nextIndex(){
-        return this.curIndex + 1;
-      }
-    },
-    watch:{
-      night(v){
-        console.log(' night(v) ' , v)
-
-      }
-    },
-    data: {
-      cuoti:true,
-      isNight:false,
-      curIndex:0,
-      show:false,
-      showCompleted:false,
-      showNav:true,
-      editText:'',
-      items:[]
-    },
-    methods: {
-      ontimuHeader(v){
-        if(v){
-          wx.setNavigationBarColor({
-            backgroundColor: '#222324',
-            frontColor:'#ffffff'
-          });
-        }else{
-          wx.setNavigationBarColor({
-            backgroundColor: '#F2F2F2',
-            frontColor:'#000000'
-          });
-        }
-      },
-      onEdit(){
-        this.show = true;
-      },
-      onSwipe(index){
-        this.curIndex = index.$wx.detail;
-      },
-      onNav(index){
-        this.curIndex = index;
-      },
-      onChange(v){
-        this.editText = v;
-      },
-      onSubmit(){
-        this.show = false;
-      },
-      getTag(index){
-        const arr = ['A' , 'B' , 'C' , 'D']
-        return arr[index];
-      },
-      onSelect({curIndex,index:contentIndex,item:contentItem}){
-        const item = this.items[curIndex];
-        item.hadSelected = true;
-        item.timu.items[contentIndex] = contentItem;
-        this.items[curIndex] = item;
-        this.items = [...this.items];
-      }
-    },
-    onShow(){
-
-    },
-    onLoad(query = {}){
-      const {referrer} = query;
-
-      if(referrer && referrer.indexOf('timuCuoti')){
-        this.cuoti = true;
+  computed: {
+    ...mapGetters(['night']),
+    preItem() {
+      if (this.curIndex > 0) {
+        return this.items[this.curIndex];
       }
 
+      return null;
     },
-    created () {
-      let arr = [];
-      for(let i = 0 ; i < 200 ; i++){
-        const obj = {};
-
-        const comments = [];
-        for(let j = 0 ; j < 10 ; j++){
-          comments.push({
-            header:'',
-            name:'李小萌smile',
-            rate:'3',
-            comment:'哈哈，确实不错，讲的很有逻辑呀！',
-            publishDate:'09-07 12:00',
-            id:j
-          });
-        }
-
-        const items = [];
-        for(let j = 0 ; j < 4 ; j++){
-          items.push({
-            text:'选项内容XXX',
-            status:0,
-            tag:this.getTag(j),
-            error:false,
-          });
-        }
-        const timu = {
-          title:`${i+1}、人际题，领导安排任务，你与小王有矛盾`,
-          items,
-          hadSelected:false
-        }
-
-        const answer = {
-          wrongRate:0.99,
-          wrongreason:'原因内容，后台控制内容',
-          rightRag:'C'
-        }
-
-        arr.push({
-          comments,
-          timu,
-          answer
-        })
+    curItem() {
+      if (this.curIndex >= 0 && this.curIndex < this.items.length) {
+        console.log('cur', this.items[this.curIndex]);
+        return this.items[this.curIndex];
       }
 
-      this.items = arr;
+      return null;
+    },
+    nextItem() {
+      if (this.curIndex < this.items.length - 1) {
+        return this.items[this.curIndex + 1];
+      }
+
+      return null;
+    },
+    preIndex() {
+      return this.curIndex - 1;
+    },
+    nextIndex() {
+      return this.curIndex + 1;
+    },
+    citems() {
+      const i = this.curIndex;
+      const cs = this.items.slice(
+        i - 1 < 0 ? 0 : i - 1,
+        i + 2 > this.items.length ? this.items.length : i + 2
+      );
+      const arr = new Array(this.items.length);
+      arr.splice(i, i == 0 || i == this.items.length - 1 ? 2 : 3, ...cs);
+      return arr;
     }
-  });
+  },
+  watch: {
+    night(v) {
+      console.log(' night(v) ', v);
+    }
+  },
+  data: {
+    cuoti: true,
+    isNight: false,
+    curIndex: 0,
+    show: false,
+    showCompleted: false,
+    showNav: true,
+    editText: '',
+    items: [],
+    subjectId: '',
+    item: null
+  },
+  methods: {
+    onSwiperChange(e) {
+      const { current, source } = e.$wx.detail;
+      if (source == 'touch') {
+        this.curIndex = current;
+        if (current > this.items.length - 2) {
+          this.getItems({});
+        }
+      }
+    },
+    ontimuHeader(v) {
+      if (v) {
+        wx.setNavigationBarColor({
+          backgroundColor: '#222324',
+          frontColor: '#ffffff'
+        });
+      } else {
+        wx.setNavigationBarColor({
+          backgroundColor: '#F2F2F2',
+          frontColor: '#000000'
+        });
+      }
+    },
+    onEdit() {
+      this.show = true;
+    },
+    onSwipe(index) {
+      this.curIndex = index.$wx.detail;
+    },
+    onNav(index) {
+      this.curIndex = index;
+    },
+    onChange(v) {
+      this.editText = v;
+    },
+    onSubmit() {
+      this.show = false;
+    },
+    getTag(index) {
+      const arr = ['A', 'B', 'C', 'D'];
+      return arr[index];
+    },
+    onSelect({ curIndex, index: contentIndex, item: contentItem }) {
+      const item = this.items[curIndex];
+      item.hadSelected = true;
+      item.timu.items[contentIndex] = contentItem;
+      this.items[curIndex] = item;
+      this.items = [...this.items];
+    },
+    getItems(p) {
+      getQuestionList(this.subjectId).then(res => {
+        if (p) {
+          this.items = [...this.items, ...res];
+        } else {
+          this.items = res;
+        }
+      });
+    }
+  },
+  onShow() {},
+  onLoad(query = {}) {
+    const { referrer, subjectId, item } = query;
+    this.subjectId = subjectId;
+    this.item = JSON.parse(item);
+    if (referrer && referrer.indexOf('timuCuoti')) {
+      this.cuoti = true;
+    }
+    this.getItems();
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
-  }
+page {
+  background: rgba(242, 242, 242, 1);
+}
 
+.empty-no {
+  width: 690rpx;
+  height: 100px;
+}
 
-  .timu{
-      height:auto;
-  }
+.timu {
+  height: auto;
+}
 
-  .timu--night{
-    background:rgba(34,35,36,1) !important;
-  }
-  .CSwipeList{
+.timu--night {
+  background: rgba(34, 35, 36, 1) !important;
+}
+.CSwipeList {
+}
 
-  }
+.TimuItem {
+  margin: 32rpx 30rpx;
+}
 
-  .TimuItem{
-    margin: 32rpx 30rpx;
-  }
-
-  .learn{
-    height: 712rpx;
-    .body{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      .row{
-        margin-top: 46rpx;
-      }
+.learn {
+  height: 712rpx;
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .row {
+      margin-top: 46rpx;
     }
   }
-  .TimuCompletedTip{
-    height:712rpx;
-  }
+}
+.TimuCompletedTip {
+  height: 712rpx;
+}
 </style>
 <config>
   {
@@ -273,4 +268,3 @@
   }
   }
 </config>
-

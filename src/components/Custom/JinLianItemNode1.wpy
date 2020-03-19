@@ -1,52 +1,82 @@
 <template>
-    <div class="JinLianItemNode external-cls">
-        <JinLianItem :jinlian="node" :notLastItem="notLastItem"/>
-      <div style="display:{{show?'block':'none'}}">
-        <JinLianItemNode2
-
-          :notLastItem="index >= node.items.length - 1"
-          v-for="(item,index) in node.items" :key="index" :node="item"/>
-
-      </div>
-    </div>
+  <div class="JinLianItemNode">
+    <CListWrap1
+      type="{{type+ index}}"
+      :params="params"
+      url="/api/subjectQuestion/getSubjecListByParentId"
+      :show="show"
+      noTip
+      :reloadKey="refreshKey1"
+    >
+      <JinLianItem
+        :jinlian="item"
+        v-for="(item, index) in clist"
+        :key="item.id"
+        :index="index"
+        :total="clist.length"
+        notLastItem="{{index != (clist.length - 1)}}"
+      />
+    </CListWrap1>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-
-  import eventHub from '@/common/eventHub';
-  wepy.component({
-    data: {
-      show:false
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      node:Object,
-      notLastItem:Boolean
-    },
-    events: {
-
-    },
-    computed:{
-
-    },
-    methods: {
-
-    },
-    created () {
-      eventHub.$on('jinlianopenedEnd', (jinlian) => {
-        if(jinlian.id == this.node.id){
-          this.show = jinlian.opened;
-        }
-      });
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import eventHub from '@/common/eventHub';
+const type = 'jinlianitem-list';
+wepy.component({
+  store,
+  data: {
+    type,
+    refreshKey1: new Date().getTime()
+  },
+  externalClasses: ['external-cls'],
+  props: {
+    node: String,
+    notLastItem: Boolean,
+    show: Boolean,
+    tiku: Number,
+    index: Number
+  },
+  events: {},
+  watch: {
+    tiku(v) {
+      if (v) {
+        this.refreshKey1 = new Date().getTime();
+      }
     }
-  });
+  },
+  computed: {
+    ...mapGetters(['items', 'user']),
+    params() {
+      return {
+        subjectId: this.node,
+        questionType: this.tiku,
+        userId: this.user.id
+      };
+    },
+    clist() {
+      const list = (this.items[this.type + this.index] || []).map(m => {
+        m.level = 2;
+        return m;
+      });
+      return list || [];
+    }
+  },
+  methods: {},
+  created() {
+    // eventHub.$on('jinlianopenedEnd', jinlian => {
+    //   if (jinlian.id == this.node) {
+    //     this.show = jinlian.opened;
+    //   }
+    // });
+  }
+});
 </script>
 <style lang="scss">
-  .JinLianItemNode{
-
-  }
+.JinLianItemNode {
+}
 </style>
 
 <config>
@@ -54,7 +84,7 @@
   navigationBarTitleText: '',
   usingComponents: {
   JinLianItem:'~Custom/JinLianItem',
-  JinLianItemNode2:'~Custom/JinLianItemNode2',
+  CListWrap1:'~UI/CListWrap1',
 
   }
   }

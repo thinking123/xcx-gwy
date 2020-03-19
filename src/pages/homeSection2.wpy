@@ -46,14 +46,12 @@
       <ClassCard1
         v-for="item in clist2"
         :key="item.id"
-        :num1="item.chapter"
-        :num2="item.section"
+        :num1="item.totalChapter"
         :src="item.cover"
         free="{{item.price == 0}}"
         :title="item.title"
         :price="item.price"
         :good="item.good"
-        :item="item"
         external-cls="classCard1"
       />
     </CListWrap1>
@@ -78,8 +76,13 @@
         external-cls="cLabelRightButton"
       />
 
-      <JinLianItemTree :items="items3" />
-      <FixedContinueBtn @click.native="handleCBtn" />
+      <JinLianItemNode
+        v-for="(item, index) in _items3"
+        :key="index"
+        :node="item"
+        :tiku="curSelItem"
+      />
+      <FixedContinueBtn @click.native="handleCBtn" v-if="false" />
     </div>
     <CPopup
       :show="show"
@@ -91,38 +94,23 @@
       <div class="learn">
         <HeaderClose text="切换题库" @click="show = false" />
         <div class="body">
-          <CCollapse
-            :value="expandItems"
-            @change="onExpand"
-            external-cls="CCollapse"
-          >
-            <CCollapseItem
-              v-for="item in items4"
-              :key="item.id"
-              external-cls="collapse-item"
-              collapse-item="collapse-item-header"
-              :title="item.text"
-              :name="item.id"
-            >
-              <div
-                v-for="m in item.items"
-                :key="m.id"
-                :class="{ selected: curSelItem == m.id }"
-                @click="onClickCCollapseItem(m)"
-                class="collapseItem"
-              >
-                {{ m.text }}
-              </div>
-            </CCollapseItem>
-          </CCollapse>
+          <CListSelect
+            :items="items4"
+            labelKey="text"
+            external-cls="CListSelect1"
+            :sel="curSelItem"
+            key="id"
+            toggle="{{false}}"
+            @change="onClickCCollapseItem"
+          />
         </div>
       </div>
     </CPopup>
-    <CDialog :show="showCDialog">
+    <CDialog :show="showCDialog" @close="onClose">
       <LogicDialog
-        rightRate="{{0.99}}"
-        completedNum="{{100}}"
-        total="{{200}}"
+        rightRate="{{cDialog.rightRate}}"
+        completedNum="{{cDialog.userAnswerNum}}"
+        total="{{cDialog.questionNum}}"
         @btn="onClickLogicDialog"
       />
     </CDialog>
@@ -137,6 +125,7 @@ import { getImgUrlEx } from '@/common/utils';
 import eventHub from '@/common/eventHub';
 import { mapGetters } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
+import { getSubjecListByType } from '@/http/http-business';
 
 const type1 = 'subjecAudio_getSubjecAudioHomeList_1';
 const type2 = 'subjecAudio_getSubjecAudioHomeList_2';
@@ -167,6 +156,12 @@ wepy.page({
     clist2() {
       const list = this.items[type2];
       return list || [];
+    },
+    _items3() {
+      return this.items3.map(m => {
+        m.level = 1;
+        return m;
+      });
     }
   },
   data: {
@@ -192,13 +187,17 @@ wepy.page({
     ],
 
     expandItems: [],
-    items4: [],
-    curSelItem: '',
+    items4: [
+      { id: 1, text: '行测' },
+      { id: 2, text: '申论' }
+    ],
     show: false,
     showCDialog: false,
     type1,
     type2,
-    type3
+    type3,
+    curSelItem: 1,
+    cDialog: {}
   },
   methods: {
     inputChange(v) {
@@ -227,117 +226,48 @@ wepy.page({
     onExpand(exp) {
       this.expandItems = exp;
     },
-    onClickCCollapseItem({ id }) {
+    onClickCCollapseItem(id) {
       this.curSelItem = id;
       this.show = false;
     },
     onClickLogicDialog() {
-      navToPage('/pages/section2/timu');
+      this.showCDialog = false;
+      navToPage('/pages/section2/timu', {
+        subjectId: this.cDialog.id,
+        item: JSON.stringify(this.cDialog)
+      });
     },
     handleIconText(index) {
       const routes = ['timu', 'timu?p=cuoti', 'timuCuoti'].map(
         r => `/pages/section2/${r}`
       );
       navToPage(routes[index]);
+    },
+    onClose() {
+      this.showCDialog = false;
     }
   },
   onShow() {},
+  onLoad() {
+    getSubjecListByType(3).then(res => {
+      this.items3 = res;
+    });
+  },
   created() {
-    return;
     eventHub.$on('jinlianopened', jinlian => {
-      jinlian.opened = !jinlian.opened;
       console.log('jinlianopened', jinlian.opened);
       eventHub.$emit('jinlianopenedEnd', jinlian);
     });
     eventHub.$on('jinlianedit', jinlian => {
       console.log('jinlianedit', jinlian);
     });
-    let arr = [];
-    for (let i = 0; i < 2; i++) {
-      arr.push({
-        title: '课程名称，如资料分析',
-        info: '考点：资料分析秒杀综述',
-        id: i
-      });
-    }
-
-    this.items1 = arr;
-
-    arr = [];
-    for (let i = 0; i < 2; i++) {
-      arr.push({
-        num1: '2',
-        num2: '2',
-        free: i % 2,
-        price: '123.12',
-        title: '真题讲课程名称课程名称课程名称课程名称',
-        good: 'good',
-        id: i
-      });
-    }
-
-    this.items2 = arr;
-
-    arr = [];
-    for (let i = 0; i < 5; i++) {
-      let obj1 = {
-        total: '2123',
-        wrong: '232',
-        title: '言语理解与表达',
-        id: i,
-        items: [],
-        level: 1
-        // opened:true,
-      };
-      for (let j = 0; j < 6; j++) {
-        let obj2 = {
-          total: '2123',
-          wrong: '232',
-          title: '言语理解与表达',
-          id: `${i}-${j}`,
-          items: [],
-          level: 2
-        };
-        for (let k = 0; k < 6; k++) {
-          let obj3 = {
-            total: '2123',
-            wrong: '232',
-            title: '言语理解与表达',
-            id: `${i}-${j}-${k}`,
-            items: [],
-            level: 3
-          };
-
-          obj2.items.push(obj3);
-        }
-
-        obj1.items.push(obj2);
+    eventHub.$on('jinlianClick', jinlian => {
+      console.log('jinlianClick', jinlian);
+      if (jinlian && jinlian.level == 2) {
+        this.cDialog = jinlian;
+        this.showCDialog = true;
       }
-      arr.push(obj1);
-    }
-
-    this.items3 = arr;
-
-    arr = [];
-    for (let i = 0; i < 10; i++) {
-      let obj = [];
-      for (let j = 0; j < 5; j++) {
-        const v = {
-          text: '公务员行测',
-          id: `${i}-${j}`
-        };
-
-        obj.push(v);
-      }
-
-      arr.push({
-        items: obj,
-        text: '公务员考试',
-        id: i
-      });
-    }
-
-    this.items4 = arr;
+    });
 
     this.titleIcons = this.titleIcons.map(m => {
       m.src = getImgUrlEx(m.src);
@@ -477,6 +407,17 @@ page {
     width: 100% !important;
   }
 }
+.CListSelect1 {
+  background: rgba(242, 242, 242, 1);
+  padding: 32rpx 30rpx;
+  box-sizing: border-box;
+  .CListSelect-item {
+    margin-bottom: 20rpx;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>
 <config>
 {
@@ -498,6 +439,8 @@ page {
   CDialog:'~UI/CDialog',
   CCollapseItem:'~UI/CCollapseItem',
   CListWrap1:'~UI/CListWrap1',
+  JinLianItemNode:'~Custom/JinLianItemNode',
+  CListSelect:'~UI/CListSelect',
 
     }
 }

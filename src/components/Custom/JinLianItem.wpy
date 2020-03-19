@@ -4,11 +4,11 @@
     :class="{
       level1: jinlian.level == 1,
       level2: jinlian.level == 2,
-      level3: jinlian.level == 3,
       opened: showLine
     }"
+    @click="onNav"
   >
-    <block v-if="jinlian.level <= 2">
+    <block v-if="jinlian.level <= 1">
       <div class="vertLine icon1">
         <image
           mode="aspectFit"
@@ -28,8 +28,8 @@
         {{ jinlian.title }}
       </div>
       <div class="row2">
-        <span>正确率：{{ rightRatio }}</span>
-        <span>已答错：{{ jinlian.wrong }}/{{ jinlian.total }}</span>
+        <span>正确率：{{ jinlian.rightRate || '0%' }}</span>
+        <span>已答：{{ jinlian.userAnswerNum }}/{{ jinlian.questionNum }}</span>
       </div>
     </div>
     <image
@@ -37,6 +37,7 @@
       class=" icon2"
       src="btn_edit@3x"
       @click="onClick2"
+      v-if="jinlian.level == 2"
     />
   </div>
 </template>
@@ -67,9 +68,16 @@ wepy.component({
       }
     },
 
-    notLastItem: Boolean
+    notLastItem: Boolean,
+    index: Number,
+    total: Number
   },
   events: {},
+  watch: {
+    index(d) {
+      this.jinlian.level == 2 && console.log('d : ', d, this.notLastItem);
+    }
+  },
   computed: {
     rightRatio() {
       if (this.jinlian && this.jinlian.total && this.jinlian.wrong) {
@@ -85,13 +93,14 @@ wepy.component({
         if (this.jinlian.level == 1 && this.isOpened) {
           res = true;
         }
-        if (this.jinlian.level == 2) {
-          if ((this.jinlian.level == 2 && this.isOpened) || !this.notLastItem) {
-            res = true;
-          }
-        }
+        // if (this.jinlian.level == 2) {
+        //   if ((this.jinlian.level == 2 && this.isOpened) || !this.notLastItem) {
+        //     res = true;
+        //   }
+        // }
 
-        if (this.jinlian.level == 3 && !this.notLastItem) {
+        // if (this.jinlian.level == 2 && !this.notLastItem) {
+        if (this.jinlian.level == 2 && this.index < this.total - 1) {
           res = true;
         }
       }
@@ -100,14 +109,14 @@ wepy.component({
     }
   },
   methods: {
+    onNav() {
+      eventHub.$emit('jinlianClick', this.jinlian);
+    },
     onClick1() {
       // this.$emit('opened' , this.jinlian);
-      if (
-        this.jinlian &&
-        this.jinlian.level <= 2 &&
-        this.jinlian.items.length > 0
-      ) {
-        this.isOpened = !this.jinlian.opened;
+      if (this.jinlian && this.jinlian.level <= 1) {
+        this.jinlian.opened = !this.jinlian.opened;
+        this.isOpened = this.jinlian.opened;
         eventHub.$emit('jinlianopened', this.jinlian);
       }
     },
@@ -173,17 +182,6 @@ wepy.component({
   }
 
   &.level2 {
-    padding-left: 40rpx;
-    .icon1 {
-      width: 40rpx;
-      height: 40rpx;
-      margin-right: 34rpx;
-
-      position: relative;
-    }
-  }
-
-  &.level3 {
     padding-left: 48rpx;
 
     .icon3 {
@@ -212,11 +210,25 @@ wepy.component({
     &.level2 {
       .vertLine::after {
         height: 100rpx;
+        content: '';
+        width: 8rpx;
+        background: rgba(237, 237, 237, 1);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
     &.level3 {
       .vertLine::after {
         height: 126rpx;
+        content: '';
+        width: 8rpx;
+        background: rgba(237, 237, 237, 1);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
   }

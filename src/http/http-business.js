@@ -2007,6 +2007,61 @@ export function subjectCollect(labelId, type) {
   url = urlParams(url, { labelId, type, userId: store.state.user.id });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+GET /api/subjectQuestion/getQuestionList
+获取题目列表 --编号 A004
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "createTime": "string",
+    "id": 0,
+    "materialContent": "string",
+    "questAnwser": "string",
+    "questContent": "string",
+    "questExplain": "string",
+    "questImage": "string",
+    "questReadyA": "string",
+    "questReadyB": "string",
+    "questReadyC": "string",
+    "questReadyD": "string",
+    "questSort": 0,
+    "questType": 0,
+    "subjectId": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+subjectId	
+(required)
+分类id
+
+query	string
+
+ */
+export function getQuestionList(subjectId) {
+  let url = '/api/subjectQuestion/getQuestionList';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { subjectId });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 
 /**
  POST /api/subjecAudio/singscore

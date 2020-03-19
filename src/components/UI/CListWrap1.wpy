@@ -9,7 +9,7 @@
     <view class="CListWrap-wrap">
       <slot />
       <view
-        wx:if="{{curItems.length == 0 && loaded && !isError}}"
+        wx:if="{{curItems.length == 0 && loaded && !isError && !noTip}}"
         class="noData"
       >
         没有数据
@@ -20,7 +20,7 @@
       <view wx:if="{{isLoading}}">
         <CLoading type="spinner" />
       </view>
-      <view wx:if="{{isEnd && curItems.length > 0 && isPage}}">
+      <view wx:if="{{isEnd && curItems.length > 0 && isPage && !noTip}}">
         没有更多了
       </view>
       <view wx:if="{{isError}}">
@@ -99,6 +99,10 @@ wepy.component({
     reloadKey: {
       type: String,
       default: new Date().getTime()
+    },
+    noTip: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {

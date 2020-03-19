@@ -1,6 +1,18 @@
 <template>
   <div class="JinLianItemTree external-cls">
-    <JinLianItemNode v-for="(item, index) in items" :key="index" :node="item" />
+    <CListWrap1
+      :type="type"
+      :params="params"
+      url="/api/subjectQuestion/getSubjecListByParentId"
+      v-if="subjectId"
+      @loaded="onLoaded"
+    >
+      <JinLianItemNode
+        v-for="(item, index) in items"
+        :key="index"
+        :node="item"
+      />
+    </CListWrap1>
   </div>
 </template>
 <script>
@@ -18,7 +30,7 @@ wepy.component({
       console.log('items', this.items);
     }
   },
-  computed: {},
+
   methods: {},
   onLoad() {}
 });
@@ -33,7 +45,6 @@ wepy.component({
   navigationBarTitleText: '',
   usingComponents: {
   JinLianItemNode:'~Custom/JinLianItemNode',
-
   }
   }
 </config>
