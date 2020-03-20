@@ -1,26 +1,40 @@
 <template>
-  <div class="page timu" :class="{ 'timu--night': night }">
+  <div class="page timu" :class="{ 'timu--night': timuConfig.night }">
     <timuHeader
-      showSwitch="{{cuoti}}"
+      showSwitch="{{timuConfig.cuoti}}"
       @edit="onEdit"
       @change="ontimuHeader"
-      :isOpen="isNight"
+      :isOpen="timuConfig.night"
       day="{{50}}"
     />
 
-    <swiper bindchange="onSwiperChange" circular :current="curIndex">
-      <swiper-item v-for="(item, index) in citems" :key="index">
+    <swiper bindchange="onSwiperChange" :current="timuConfig.index">
+      <swiper-item v-for="(item, index) in timuItems" :key="item.id">
         <TimuItem
           :timuItem="item"
           v-if="item"
-          :total="item.questionNum"
-          @select="onSelect"
-          :hadSelected="preItem.hadSelected"
           external-cls="TimuItem"
-          :index="preIndex"
-          :curIndex="curIndex"
+          :subjectId="subjectId"
+          :index="index"
         />
         <div v-else class="empty-no"></div>
+        <view v-if="item.hadSelected">
+          <TimuAnswer external-cls="TimuAnswer" :timu="item" />
+          <CommentHeader @comment="onComment" external-cls="CommentHeader" />
+
+          <CListWrap1
+            :type="typeId"
+            :params="params"
+            url="/api/subjecAudio/getSubjectScore"
+          >
+            <MediaCommentItem
+              v-for="item1 in clist"
+              :key="item1.id"
+              :user="item1"
+              external-cls="MediaCommentItem"
+            />
+          </CListWrap1>
+        </view>
       </swiper-item>
     </swiper>
     <CPopup
@@ -57,98 +71,94 @@
     >
       <div class="TimuCompletedTip">
         <TimuCompletedTip
-          rightRate="{{0.5}}"
-          rightNum="{{80}}"
-          wrongNum="{{20}}"
+          rightRate="{{timuConfig.rightRate}}"
+          rightNum="{{timuConfig.rightNum}}"
+          wrongNum="{{timuConfig.wrongNum}}"
+          :showCompleted="showCompleted"
         />
       </div>
     </CPopup>
 
     <TimuTip />
-    <TimuNav
-      v-if="cuoti"
-      @change="onNav"
-      :total="item.questionNum"
-      :curIndex="curIndex"
-    />
+    <TimuNav @change="nextPreTimu" />
   </div>
 </template>
 
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { mapGetters } from '@wepy/x';
+import { mapGetters, mapMutations } from '@wepy/x';
 import { getQuestionList } from '@/http/http-business';
+import { navToPage } from '@/common/navUtils';
+import eventHub from '@/common/eventHub';
 
+const type = 'timu-list';
 wepy.page({
   store,
-
   computed: {
-    ...mapGetters(['night']),
-    preItem() {
-      if (this.curIndex > 0) {
-        return this.items[this.curIndex];
-      }
+    ...mapGetters(['items', 'curTimu', 'timuConfig', 'timuItems']),
+    params() {
+      return {
+        subjectListId: this.curTimu ? this.curTimu.subjectId : ''
+      };
+    },
+    typeId() {
+      const id = `${type}__${this.curTimu ? this.curTimu.id : ''}`;
+      return id;
+    },
+    clist() {
+      const list = this.items[this.typeId];
+      return list || [];
+    },
+    curIndex() {
+      return this.timuConfig.index;
+    },
 
-      return null;
-    },
-    curItem() {
-      if (this.curIndex >= 0 && this.curIndex < this.items.length) {
-        console.log('cur', this.items[this.curIndex]);
-        return this.items[this.curIndex];
-      }
-
-      return null;
-    },
-    nextItem() {
-      if (this.curIndex < this.items.length - 1) {
-        return this.items[this.curIndex + 1];
-      }
-
-      return null;
-    },
-    preIndex() {
-      return this.curIndex - 1;
-    },
-    nextIndex() {
-      return this.curIndex + 1;
-    },
     citems() {
+      /**
+       *      const inThree = d => {
+        const i = this.curIndex;
+        return (
+          d >= (i - 1 < 0 ? 0 : i - 1) &&
+          d < (i + 2 > this.items.length ? this.items.length : i + 2)
+        );
+      };
+      const res = new Array(this.items.length);
+      for (let j = 0; j < this.items.length; j++) {
+        const r = this.items[j];
+        if (r.hadSelected || inThree(j)) {
+          res[j] = r;
+        }
+      }
+
+      return res;
+       */
       const i = this.curIndex;
-      const cs = this.items.slice(
+      const cs = this.timuItems.slice(
         i - 1 < 0 ? 0 : i - 1,
-        i + 2 > this.items.length ? this.items.length : i + 2
+        i + 2 > this.timuItems.length ? this.timuItems.length : i + 2
       );
-      const arr = new Array(this.items.length);
-      arr.splice(i, i == 0 || i == this.items.length - 1 ? 2 : 3, ...cs);
+
+      const arr = new Array(this.timuItems.length);
+      arr.splice(i, i == 0 || i == this.timuItems.length - 1 ? 2 : 3, ...cs);
       return arr;
-    }
-  },
-  watch: {
-    night(v) {
-      console.log(' night(v) ', v);
+      // return this.timuItems;
     }
   },
   data: {
     cuoti: true,
-    isNight: false,
-    curIndex: 0,
     show: false,
     showCompleted: false,
     showNav: true,
     editText: '',
-    items: [],
-    subjectId: '',
-    item: null
+    subjectId: ''
   },
   methods: {
+    ...mapMutations(['setTimuItems', 'setTimuConfig']),
     onSwiperChange(e) {
       const { current, source } = e.$wx.detail;
       if (source == 'touch') {
-        this.curIndex = current;
-        if (current > this.items.length - 2) {
-          this.getItems({});
-        }
+        this.nextPreTimu(current);
       }
     },
     ontimuHeader(v) {
@@ -167,11 +177,19 @@ wepy.page({
     onEdit() {
       this.show = true;
     },
-    onSwipe(index) {
-      this.curIndex = index.$wx.detail;
-    },
-    onNav(index) {
-      this.curIndex = index;
+    nextPreTimu(index) {
+      if (this.curTimu.hadSelected || index < this.timuConfig.index) {
+        this.setTimuConfig({
+          index
+        });
+        if (index > this.timuItems.length - 2) {
+          // this.getItems({});
+        }
+      } else {
+        this.setTimuConfig({
+          index: this.timuConfig.index
+        });
+      }
     },
     onChange(v) {
       this.editText = v;
@@ -179,36 +197,57 @@ wepy.page({
     onSubmit() {
       this.show = false;
     },
-    getTag(index) {
-      const arr = ['A', 'B', 'C', 'D'];
-      return arr[index];
-    },
-    onSelect({ curIndex, index: contentIndex, item: contentItem }) {
-      const item = this.items[curIndex];
-      item.hadSelected = true;
-      item.timu.items[contentIndex] = contentItem;
-      this.items[curIndex] = item;
-      this.items = [...this.items];
-    },
     getItems(p) {
       getQuestionList(this.subjectId).then(res => {
+        res = res.map(m => {
+          // 还没有答题过
+          m.hadSelected = false;
+          return m;
+        });
+        let arr = [];
         if (p) {
-          this.items = [...this.items, ...res];
+          arr = [...this.timuItems, ...res];
         } else {
-          this.items = res;
+          arr = res;
         }
+
+        this.setTimuConfig({
+          total: arr.length
+        });
+        this.setTimuItems(arr);
+      });
+    },
+    onComment(v) {
+      navToPage('/pages/section2/mediaCommentPage', {
+        subjectId: this.curTimu.subjectId
       });
     }
   },
   onShow() {},
   onLoad(query = {}) {
-    const { referrer, subjectId, item } = query;
+    let { referrer, subjectId, item } = query;
     this.subjectId = subjectId;
-    this.item = JSON.parse(item);
+    item = JSON.parse(item);
+    this.setTimuConfig({
+      total: item.questionNum || 5,
+      title: item.title
+    });
     if (referrer && referrer.indexOf('timuCuoti')) {
-      this.cuoti = true;
+      this.setTimuConfig({
+        cuoti: true
+      });
     }
     this.getItems();
+    eventHub.$on('showCompleted', showCompleted => {
+      this.showCompleted = true;
+    });
+  },
+  onUnload() {
+    this.setTimuItems([]);
+    this.setTimuConfig({
+      index: 0
+    });
+    eventHub.$off('showCompleted');
   }
 });
 </script>
@@ -217,6 +256,9 @@ page {
   background: rgba(242, 242, 242, 1);
 }
 
+.answer-wrap {
+  padding: 40rpx 30rpx;
+}
 .empty-no {
   width: 690rpx;
   height: 100px;
@@ -250,6 +292,26 @@ page {
 .TimuCompletedTip {
   height: 712rpx;
 }
+.TimuAnswer {
+  margin-bottom: 32rpx;
+  padding: 40rpx 30rpx;
+}
+
+.CommentHeader {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 750rpx;
+}
+.MediaCommentItem {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 750rpx;
+  background-color: #fff;
+}
+
+swiper {
+  height: 750px;
+}
 </style>
 <config>
   {
@@ -265,6 +327,11 @@ page {
   CTextarea:'~UI/CTextarea',
   CButton:'~UI/CButton',
   CPopup:'~UI/CPopup',
+
+  TimuAnswer:'~Custom/TimuAnswer',
+  CommentHeader:'~Custom/CommentHeader',
+  MediaCommentItem:'~Custom/MediaCommentItem',
+  CListWrap1:'~UI/CListWrap1',
   }
   }
 </config>

@@ -34,7 +34,7 @@ import wepy from '@wepy/core';
 import store from 'store';
 import { mapMutations, mapGetters } from '@wepy/x';
 import { get } from '@/http/http';
-import { showMsg, urlParams } from '@/common/utils';
+import { showMsg, urlParams, isEqual } from '@/common/utils';
 // import {parseRes} from '@/http/http-business';
 
 const defFun = () => {
@@ -103,14 +103,22 @@ wepy.component({
     noTip: {
       type: Boolean,
       default: false
+    },
+    cached: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
     url(nv, ov) {
-      this.reload();
+      if (nv != ov) {
+        this.reload();
+      }
     },
     params(nv, ov) {
-      this.reload();
+      if (!isEqual(nv, ov)) {
+        this.reload();
+      }
     },
     reloadKey(nv, ov) {
       console.log('reloadKey', nv, ov);

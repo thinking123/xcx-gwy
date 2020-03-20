@@ -1,137 +1,192 @@
 <template>
-    <div class="TimuContent external-cls"  :class="{'TimuContent--night':night}">
-      <div class="TimuContent-title">
-        {{timu.title}}
-      </div>
-      <TimuSelector v-for="(item,index) in items"
-                    :onlyShowTimu="onlyShowTimu"
-                    :key="index"
-                    :item="item"
-                    :hadSelected="hadSelected"
-                    external-cls="TimuSelector"
-                    data-index="{{index}}"
-                    catchtouchstart="{{catchMove ? noop : ''}}"
-                    catchtouchmove="{{catchMove ? noop : ''}}"
-                    catchtouchend="{{catchMove ? noop : ''}}"
-                    capture-bind:touchstart="onClickTimuSelector"
-      />
+  <div
+    class="TimuContent external-cls"
+    :class="{ 'TimuContent--night': timuConfig.night }"
+  >
+    <div class="TimuContent-title">
+      {{ timu.title }}
     </div>
+    <TimuSelector
+      v-for="(item, index) in items"
+      :onlyShowTimu="onlyShowTimu"
+      :key="index"
+      :item="item"
+      :disabled="timu.hadSelected"
+      external-cls="TimuSelector"
+      @click="onClickTimuSelector(item)"
+    />
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { recordAnswerResult } from '@/http/http-business';
+import { isEmptyObject } from '@/common/utils';
+import eventHub from '@/common/eventHub';
 
-  import store from 'store';
-  import { mapGetters} from '@wepy/x';
-  wepy.component({
-    store,
-    data: {
-      catchMove:false
+wepy.component({
+  store,
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    timu: {
+      type: Object,
+      default: {}
     },
-    externalClasses:[
-      'external-cls',
-    ],
-    props:{
-      timu:{
-        type:Object,
-        default:{
-          title:'',
-          items:[
-            {
+    subjectId: String
+  },
+  computed: {
+    ...mapGetters(['timuConfig', 'timuItems']),
+    answer() {
+      if (isEmptyObject(this.timu)) return {};
+      const curTimu = this.timu;
+      const c = 65; // A
+      const rs = curTimu.questAnwser.charCodeAt(0);
+      return {
+        wrongRate: curTimu.errorRate,
+        wrongreason: curTimu.questExplain,
+        // A - A/B/C/D = 0 , 1, 2, 3
+        rightRag: rs - c,
+        myTag: curTimu.myTag
+      };
+    },
+    items() {
+      if (this.timu) {
+        const t = 'questReady';
+        const arr = [];
+        const obj = {};
+        Object.keys(this.timu).forEach(k => {
+          if (k.indexOf(t) > -1) {
+            obj[k] = this.timu[k];
+          }
+        });
+        const c = 65;
+        Object.keys(obj).forEach(k => {});
 
+        const keys = Object.keys(obj);
+
+        for (let i = 0; i < keys.length; i++) {
+          const k = t + String.fromCharCode(c + i);
+          const item = {
+            text: obj[k],
+            index: i,
+            status: 0,
+            error: false,
+            tag: String.fromCharCode(c + i),
+            originTag: k
+          };
+          if (this.timu.hadSelected) {
+            const { rightRag: rightIndex, myTag } = this.answer;
+
+            const isAnswerRight = rightIndex === myTag;
+
+            if (isAnswerRight) {
+              i == rightIndex && (item.status = 1);
+            } else {
+              i == myTag && (item.status = 2);
+              if (i == rightIndex) {
+                item.status = 1;
+                item.error = true;
+              }
             }
-          ],
-          rightIndex:-1
-        }
-      },
-      hadSelected:Boolean,
-      answer:{
-        type:Object,
-        default:{
-          wrongRate:0,
-          wrongreason:'',
-          rightRag:'',
-        }
-      },
-      onlyShowTimu:{
-        type:Boolean,
-        default: false
-      },
-    },
-    events: {
 
-    },
-    computed:{
-      ...mapGetters(['night']),
-      items(){
-        if(this.timu && this.timu.items){
-          return this.timu.items;
-        }
-
-        return  [];
-      }
-    },
-    methods: {
-      noop(){
-        console.log('noop iin timucomtnet')
-      },
-      onClickTimuSelector(e){
-
-        const index = e.$wx.target.dataset.index;
-        console.log('click')
-        if(!this.hadSelected){
-          this.catchMove = true;
-          const item = this.timu.items[index];
-          const rightIndex = this.timu.items.findIndex(f=>{
-            return f.tag == this.answer.rightRag;
-          });
-          const rightItem = this.timu.items[rightIndex];
-
-          if(index == rightIndex){
-            item.status = 1;
-          }else{
-            rightItem.status = 1;
-            rightItem.error = true;
-            item.status = 2;
+            if (this.onlyShowTimu) {
+              item.status = 1;
+            }
           }
-          if(this.onlyShowTimu){
-            item.status = 1;
-          }
-          this.$emit('select' , {index , item});
-          this.catchMove = false;
-        }
-      }
-    },
-    created () {
 
+          arr[i] = item;
+        }
+
+        return arr;
+      }
+
+      return [];
     }
-  });
+  },
+  methods: {
+    ...mapMutations(['setTimuConfig', 'setTimuItems']),
+    onClickTimuSelector(item) {
+      if (!this.timu.hadSelected) {
+        const { index } = item;
+        const { rightRag: rightIndex } = this.answer;
+
+        const isAnswerRight = rightIndex === index;
+
+        const timu = {
+          ...this.timu,
+          hadSelected: true,
+          myTag: index
+        };
+        this.timuItems.splice(this.timuConfig.index, 1, timu);
+        this.setTimuItems(this.timuItems.slice());
+        if (this.timuConfig.index + 1 == this.timuConfig.total) {
+          eventHub.$emit('showCompleted', {});
+        }
+        // this.setTimuConfig({
+        //   showCompleted:this.timuConfig.index == this.index
+        // });
+
+        // recordAnswerResult(
+        //   this.curTimu.id,
+        //   item.originTag,
+        //   isAnswerRight,
+        //   this.subjectId
+        // ).then(res => {
+        //   this.setCurTimu({
+        //     ...this.curTimu,
+        //     hadSelected: true,
+        //     myTag: index
+        //   });
+        // });
+
+        // const item = this.timu.items[index];
+        // const rightIndex = this.answer.rightRag;
+        // const rightItem = this.timu.items[rightIndex];
+
+        // if (index == rightIndex) {
+        //   item.status = 1;
+        // } else {
+        //   rightItem.status = 1;
+        //   rightItem.error = true;
+        //   item.status = 2;
+        // }
+        // if (this.onlyShowTimu) {
+        //   item.status = 1;
+        // }
+      }
+    }
+  },
+  created() {}
+});
 </script>
 <style lang="scss">
-  .TimuContent--night{
-    color: #FFF !important;
+.TimuContent--night {
+  color: #fff !important;
 
-    background-color: rgba(49,50,51,1) !important;
+  background-color: rgba(49, 50, 51, 1) !important;
+}
+.TimuContent {
+  width: 100%;
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+  font-size: 36rpx;
+  font-family: PingFangSC-Semibold, PingFangSC;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1);
+  line-height: 50rpx;
+  background: rgba(255, 255, 255, 1);
+  &-title {
+    margin-bottom: 80rpx;
   }
-  .TimuContent{
-    width:100%;
-    padding: 40rpx 30rpx;
-    box-sizing: border-box;
-    font-size:36rpx;
-    font-family:PingFangSC-Semibold,PingFangSC;
-    font-weight:600;
-    color:rgba(0,0,0,1);
-    line-height:50rpx;
-    background:rgba(255,255,255,1);
-    &-title{
-      margin-bottom:80rpx;
-    }
-    &--night{
-      color: #FFF;
-    }
-    .TimuSelector{
-      margin-top: 80rpx;
-    }
+  &--night {
+    color: #fff;
   }
+  .TimuSelector {
+    margin-top: 80rpx;
+  }
+}
 </style>
 
 <config>

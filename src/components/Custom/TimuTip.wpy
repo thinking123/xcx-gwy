@@ -1,76 +1,63 @@
 <template>
-    <COverlay :show="show" @click="onClick" duration="{{300}}">
-      <div class="TimuTip">
-        <div class="row1">
-          <image :src="icon1" class="icon1" mode="aspectFill"/>
-<!--          <span>上一题</span>-->
-        </div>
-        <div class="row2">
-          <image :src="icon2" class="icon2" mode="aspectFill"/>
-<!--          <span>下一题</span>-->
-        </div>
+  <COverlay :show="show" @click="onClick" duration="{{300}}">
+    <div class="TimuTip">
+      <div class="row1">
+        <image src="icon_bl_last@3x" class="icon1" mode="aspectFill" />
+        <!--          <span>上一题</span>-->
       </div>
-    </COverlay>
+      <div class="row2">
+        <image src="icon_bl_next@3x" class="icon2" mode="aspectFill" />
+        <!--          <span>下一题</span>-->
+      </div>
+    </div>
+  </COverlay>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
-  const key = "ti-mu-tip";
-  wepy.component({
-    data: {
-      show:true,
-      icon1:'icon_bl_last@3x',
-      icon2:'icon_bl_next@3x',
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-
-
-    },
-    events: {
-
-    },
-    computed:{
-      
-    },
-    methods: {
-      onClick(){
-        this.show = false;
-        wx.setStorage({
-          key,
-          data:"show"
-        });
-      }
-    },
-    created () {
-      this.icon1 = getImgUrlEx(this.icon1);
-      this.icon2 = getImgUrlEx(this.icon2);
-      const show = wx.getStorageSync(key);
-      if(show){
-        this.show = false;
-      }
+import wepy from '@wepy/core';
+const key = 'ti-mu-tip';
+wepy.component({
+  data: {
+    show: true
+  },
+  externalClasses: ['external-cls'],
+  props: {},
+  events: {},
+  computed: {},
+  methods: {
+    onClick() {
+      this.show = false;
+      wx.setStorage({
+        key,
+        data: 'show'
+      });
     }
-  });
-</script>
-<style lang="scss">
-  .TimuTip{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    position: absolute;
-    bottom: 94rpx;
-    left: 50%;
-    transform: translateX(-50%);
-    .row1, .row2{
-      >image{
-        width:200rpx;
-        height:132rpx;
-      }
+  },
+  created() {
+    const show = wx.getStorageSync(key);
+    if (show) {
+      this.show = false;
     }
   }
+});
+</script>
+<style lang="scss">
+.TimuTip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 94rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  .row1,
+  .row2 {
+    > image {
+      width: 200rpx;
+      height: 132rpx;
+    }
+  }
+}
 </style>
 
 <config>

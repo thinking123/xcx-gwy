@@ -45,7 +45,6 @@ export default new Vuex.Store({
     showMediaPlay: false,
     isMediaPlaying: false,
     playMedia: {},
-    night: false,
     items: {},
     user: {
       id: 3,
@@ -71,7 +70,16 @@ export default new Vuex.Store({
     playAudioInfo: null,
     userHideMediaPlayBar: false,
     audioSubject: null,
-    playVideoInfo: null
+    playVideoInfo: null,
+    curTimu: null,
+    timuConfig: {
+      index: 0,
+      total: 0,
+      title: '',
+      night: false,
+      cuoti: false
+    },
+    timuItems: []
   },
   mutations: {
     setSystemInfo(state, systemInfo) {
@@ -107,7 +115,7 @@ export default new Vuex.Store({
       state.token = token;
     },
     setNight(state, night) {
-      state.night = night;
+      state.timuConfig = { ...state.timuConfig, night };
     },
     pushQueue(state, url) {
       state.queue.push(url);
@@ -153,6 +161,12 @@ export default new Vuex.Store({
     setPlayVideoInfo(state, playVideoInfo) {
       state.playVideoInfo = playVideoInfo;
     },
+    setTimuItems(state, timuItems) {
+      state.timuItems = timuItems;
+    },
+    setTimuConfig(state, timuConfig) {
+      state.timuConfig = { ...state.timuConfig, ...timuConfig };
+    },
     setLearnTime(state, learnTime) {
       if (learnTime && !learnTime.lastTime) {
         learnTime.lastTime = learnTime.remaindLearnTime;
@@ -177,10 +191,13 @@ export default new Vuex.Store({
       return state.playMedia;
     },
     night(state) {
-      return state.night;
+      return state.timuConfig.night;
     },
     items(state) {
       return state.items;
+    },
+    timuItems(state) {
+      return state.timuItems;
     },
     user(state) {
       return state.user;
@@ -217,6 +234,60 @@ export default new Vuex.Store({
     },
     playVideoInfo(state) {
       return state.playVideoInfo;
+    },
+    curTimu(state) {
+      const {
+        timuConfig: { index },
+        timuItems
+      } = state;
+      return timuItems[index];
+    },
+    timuConfig(state) {
+      const { timuItems } = state;
+      let rightNum = 0,
+        wrongNum = 0,
+        answerTotal = 0;
+
+      timuItems.forEach(t => {
+        if (t.hadSelected) {
+          const rs = t.questAnwser.charCodeAt(0);
+          const c = 65; // A
+          const rightRag = rs - c;
+          rightRag == t.myTag ? rightNum++ : wrongNum++;
+          answerTotal++;
+        }
+      });
+      return {
+        ...state.timuConfig,
+        rightNum,
+        wrongNum,
+        rightRate:
+          answerTotal == 0
+            ? 0
+            : // : `${((rightNum / answerTotal) * 100).toFixed(2)}%`
+              rightNum / answerTotal
+      };
+    },
+    answer(state) {
+      const {
+        timuConfig: { index },
+        timuItems
+      } = state;
+      const curTimu = timuItems[index];
+
+      if (!curTimu) {
+        return {};
+      } else {
+        const c = 65; // A
+        const rs = curTimu.questAnwser.charCodeAt(0);
+        return {
+          wrongRate: curTimu.errorRate,
+          wrongreason: curTimu.questExplain,
+          // A - A/B/C/D = 0 , 1, 2, 3
+          rightRag: rs - c,
+          myTag: curTimu.myTag
+        };
+      }
     },
     audioSubject(state) {
       return state.audioSubject;

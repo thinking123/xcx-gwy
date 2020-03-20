@@ -1348,6 +1348,72 @@ export function forumpost(categoryId, content, postLabel, title, userId) {
   return post(url, data, loadingText).then(res => parseRes(res, errMsg));
 }
 
+//todo 获取城市列表
+
+/**
+ *
+ POST /api/subjectQuestion/recordAnswerResult
+记录答题结果 --编号 A002
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+questionId	
+(required)
+试题id
+
+query	string
+userAnswer	
+(required)
+用户答案
+
+query	string
+isRight	
+(required)
+是否正确
+
+query	string
+subjectId	
+(required)
+分类id
+
+query	string
+ */
+export function recordAnswerResult(questionId, userAnswer, isRight, subjectId) {
+  let url = '/api/subjectQuestion/recordAnswerResult';
+
+  const data = {
+    questionId,
+    userAnswer,
+    isRight,
+    subjectId,
+    userId: store.state.user.id
+  };
+  return post(url, data, '').then(res => parseRes(res, ''));
+}
+
 /**
  GET /api/vip/getVipMsg
 获取开通会员的信息 --编号 001

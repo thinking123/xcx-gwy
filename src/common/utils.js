@@ -114,6 +114,28 @@ export function isEmptyString(str) {
   return !(!!str && typeof str === 'string' && str.trim().length > 0);
 }
 
+export function isEqual(obj1, obj2) {
+  if (obj1 == obj2 || (obj1 == null && obj2 == null)) {
+    return true;
+  }
+
+  if (typeof obj1 == typeof obj2) {
+    if (typeof obj1 === 'object') {
+      if (Object.keys(obj1).length === Object.keys(obj2).length) {
+        let res = false;
+        const k1 = Object.keys(obj1);
+        const k2 = Object.keys(obj2);
+        for (let i = 0; i < Object.keys(obj1).length; i++) {
+          if (obj1[k1[i]] != obj2[k2[i]] || k1[i] != k2[i]) {
+            return false;
+          }
+        }
+        return true;
+      }
+    }
+  }
+  return false;
+}
 export function isNumber(value) {
   return /^\d+$/.test(value);
 }
@@ -188,8 +210,8 @@ export function numberToDate(date) {
 
   if (s > 0) {
     res += `${twoBits(s)}`;
-  }else{
-    res += '00'
+  } else {
+    res += '00';
   }
 
   return res || '0:00';

@@ -1,9 +1,9 @@
 <template>
-  <div class="TimuNav external-cls">
-    <div class="wrap" :class="{ night: night }">
+  <div class="TimuNav external-cls" v-if="timuConfig.cuoti">
+    <div class="wrap" :class="{ night: timuConfig.night }">
       <div
         class="row1"
-        :class="{ disabled: preDisable, night: night }"
+        :class="{ disabled: preDisable, night: timuConfig.night }"
         @click="onPre"
       >
         <block v-if="preDisable">
@@ -18,7 +18,7 @@
             src="btn_last_white@3x"
             class="icon3 pre-icon"
             mode="aspectFit"
-            v-if="night"
+            v-if="timuConfig.night"
           />
           <image
             src="btn_last_enable@3x"
@@ -31,15 +31,15 @@
           上一题
         </span>
       </div>
-      <div class="row2" :class="{ night: night }">
+      <div class="row2" :class="{ night: timuConfig.night }">
         <span>
-          {{ curIndex + 1 }}
+          {{ timuConfig.index + 1 }}
         </span>
-        <span> /{{ total }} </span>
+        <span> /{{ timuConfig.total }} </span>
       </div>
       <div
         class="row3"
-        :class="{ disabled: nextDisable, night: night }"
+        :class="{ disabled: nextDisable, night: timuConfig.night }"
         @click="onNext"
       >
         <span>
@@ -57,7 +57,7 @@
             src="btn_next_white@3x"
             class="icon3 pre-icon"
             mode="aspectFit"
-            v-if="night"
+            v-if="timuConfig.night"
           />
           <image
             src="btn_next_enable@3x"
@@ -73,40 +73,35 @@
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { mapGetters } from '@wepy/x';
-import { getImgUrlEx } from '@/common/utils';
+import { mapGetters, mapMutations } from '@wepy/x';
 
 wepy.component({
   store,
   data: {},
   externalClasses: ['external-cls'],
-  props: {
-    total: Number,
-    curIndex: Number
-  },
-  events: {},
+  props: {},
   computed: {
-    ...mapGetters(['night']),
+    ...mapGetters(['curTimu', 'timuConfig']),
     preDisable() {
-      return this.curIndex <= 0;
+      return this.timuConfig.index <= 0;
     },
     nextDisable() {
-      return this.curIndex >= this.total - 1;
+      return this.timuConfig.index >= this.timuConfig.total - 1;
     }
   },
   methods: {
+    ...mapMutations(['setTimuConfig']),
     onPre() {
       if (!this.preDisable) {
-        this.$emit('change', this.curIndex - 1);
+        this.$emit('change', this.timuConfig.index - 1);
       }
     },
     onNext() {
       if (!this.nextDisable) {
-        this.$emit('change', this.curIndex + 1);
+        this.$emit('change', this.timuConfig.index + 1);
       }
     }
-  },
-  created() {}
+  }
 });
 </script>
 <style lang="scss">

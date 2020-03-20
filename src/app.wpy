@@ -101,7 +101,8 @@ wepy.app({
     "pages/section2/bwktDetail",
     "pages/homeSection2",
 
-   
+    "pages/login/loginInput",
+    "pages/login/register",
    
  */
 </script>
@@ -110,8 +111,7 @@ wepy.app({
   pages: [
     "pages/login/login",
     
-     "pages/login/loginInput",
-    "pages/login/register",
+    
     "pages/home",
     "pages/section1/learnPlan",
     "pages/section1/learnLog",

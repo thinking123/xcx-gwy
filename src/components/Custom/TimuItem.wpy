@@ -1,7 +1,10 @@
 <template>
-  <div class="TimuItem external-cls" :class="{ 'TimuItem--night': night }">
+  <div
+    class="TimuItem external-cls"
+    :class="{ 'TimuItem--night': timuConfig.night }"
+  >
     <HeaderClose
-      :text="title"
+      :text="timuConfig.title"
       external-cls="header"
       external-cls-VerticalTextBar="header-VerticalTextBar"
       showClose="{{false}}"
@@ -10,39 +13,20 @@
         <span>
           {{ index + 1 }}
         </span>
-        <span>/{{ total }}</span>
+        <span>/{{ timuConfig.total }}</span>
       </div>
     </HeaderClose>
     <TimuContent
-      :timu="timu"
-      @select="onSelect"
-      :onlyShowTimu="onlyShowTimu"
+      :timu="timuItem"
       external-cls="TimuContent"
-      :answer="timuItem.answer"
-      :hadSelected="hadSelected"
+      :subjectId="subjectId"
     />
-    <block v-if="hadSelected && !onlyShowTimu">
-      <TimuAnswer
-        :answer="timuItem.answer"
-        :myTag="myTag"
-        external-cls="TimuAnswer"
-        :hadSelected="hadSelected"
-      />
-      <CommentHeader @comment="onComment" external-cls="CommentHeader" />
-      <MediaCommentItem
-        v-for="item in timuItem.comments"
-        :key="item.id"
-        external-cls="MediaCommentItem"
-        :user="item"
-      />
-    </block>
   </div>
 </template>
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters } from '@wepy/x';
-import { navToPage } from '@/common/navUtils';
 
 wepy.component({
   store,
@@ -51,92 +35,20 @@ wepy.component({
   },
   externalClasses: ['external-cls'],
   props: {
-    title: {
-      type: String,
-      default: '选择题'
-    },
-    curIndex: Number,
-    total: Number,
     showHeaderText: {
       type: Boolean,
       default: true
     },
-    onlyShowTimu: {
-      type: Boolean,
-      default: false
-    },
     timuItem: {
       type: Object,
-      default: {
-        comments: [],
-        timu: {},
-        answer: {},
-        hadSelected: false
-      }
+      default: {}
     },
-    hadSelected: false,
+    subjectId: String,
     index: Number
   },
-  watch: {
-    curIndex(v) {
-      // this.hadSelected = false;
-    },
-    hadSelected(v) {
-      console.log('hadSelected : ', v);
-    }
-  },
-  events: {},
   computed: {
-    ...mapGetters(['night']),
-    timu() {
-      if (this.timuItem) {
-        const t = this.timuItem;
-        return {
-          title: t.questContent,
-          items: [
-            {
-              text: t['questReadyA'],
-              status: 0,
-              error: false,
-              tag: ''
-            },
-            {
-              text: t['questReadyB'],
-              status: 0,
-              error: false,
-              tag: ''
-            },
-            {
-              text: t['questReadyC'],
-              status: 0,
-              error: false,
-              tag: ''
-            },
-            {
-              text: t['questReadyD'],
-              status: 0,
-              error: false,
-              tag: ''
-            }
-          ]
-        };
-      }
-      return {};
-    }
-  },
-  methods: {
-    onComment() {
-      navToPage('/pages/section2/mediaSubmitCommentPage');
-    },
-
-    onSelect({ index, item }) {
-      // const item = this.timuItem.timu.items[index];
-      this.myTag = item.tag;
-      const isRight = item.tag == this.timuItem.answer.rightRag;
-      this.$emit('select', { curIndex: this.curIndex, index, item });
-    }
-  },
-  created() {}
+    ...mapGetters(['curTimu', 'timuConfig'])
+  }
 });
 </script>
 <style lang="scss">
@@ -213,12 +125,11 @@ wepy.component({
   usingComponents: {
   HeaderClose:'~Custom/HeaderClose',
   TimuContent:'~Custom/TimuContent',
-  TimuAnswer:'~Custom/TimuAnswer',
   CommentHeader:'~Custom/CommentHeader',
-  MediaCommentItem:'~Custom/MediaCommentItem',
   CTextarea:'~UI/CTextarea',
   CButton:'~UI/CButton',
   CPopup:'~UI/CPopup',
+
   }
   }
 </config>
