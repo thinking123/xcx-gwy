@@ -1413,6 +1413,63 @@ export function recordAnswerResult(questionId, userAnswer, isRight, subjectId) {
   };
   return post(url, data, '').then(res => parseRes(res, ''));
 }
+/**
+ *
+ POST /api/subjectQuestion/recordSubjectNote
+记笔记 --编号 A003
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+questionId	
+(required)
+试题id
+
+query	string
+noteContent	
+(required)
+笔记内容
+
+query	string
+type	
+(required)
+类型 1 随听音频 2部委课堂 3 精炼题目
+
+query	string
+ */
+export function recordSubjectNote(questionId, noteContent, type) {
+  let url = '/api/subjectQuestion/recordSubjectNote';
+
+  const data = {
+    questionId,
+    noteContent,
+    type,
+    userId: store.state.user.id
+  };
+  return post(url, data, '').then(res => parseRes(res, ''));
+}
 
 /**
  GET /api/vip/getVipMsg

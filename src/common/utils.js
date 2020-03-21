@@ -114,27 +114,52 @@ export function isEmptyString(str) {
   return !(!!str && typeof str === 'string' && str.trim().length > 0);
 }
 
-export function isEqual(obj1, obj2) {
-  if (obj1 == obj2 || (obj1 == null && obj2 == null)) {
+export function isEqual(x, y) {
+  if (x === null || x === undefined || y === null || y === undefined) {
+    return x === y;
+  }
+  // after this just checking type of one would be enough
+  if (x.constructor !== y.constructor) {
+    return false;
+  }
+  // if they are functions, they should exactly refer to same one (because of closures)
+  if (x instanceof Function) {
+    return x === y;
+  }
+  // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
+  if (x instanceof RegExp) {
+    return x === y;
+  }
+  if (x === y || x.valueOf() === y.valueOf()) {
     return true;
   }
-
-  if (typeof obj1 == typeof obj2) {
-    if (typeof obj1 === 'object') {
-      if (Object.keys(obj1).length === Object.keys(obj2).length) {
-        let res = false;
-        const k1 = Object.keys(obj1);
-        const k2 = Object.keys(obj2);
-        for (let i = 0; i < Object.keys(obj1).length; i++) {
-          if (obj1[k1[i]] != obj2[k2[i]] || k1[i] != k2[i]) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
+  if (Array.isArray(x) && x.length !== y.length) {
+    return false;
   }
-  return false;
+
+  // if they are dates, they must had equal valueOf
+  if (x instanceof Date) {
+    return false;
+  }
+
+  // if they are strictly equal, they both need to be object at least
+  if (!(x instanceof Object)) {
+    return false;
+  }
+  if (!(y instanceof Object)) {
+    return false;
+  }
+
+  // recursive object equality check
+  var p = Object.keys(x);
+  return (
+    Object.keys(y).every(function(i) {
+      return p.indexOf(i) !== -1;
+    }) &&
+    p.every(function(i) {
+      return isEqual(x[i], y[i]);
+    })
+  );
 }
 export function isNumber(value) {
   return /^\d+$/.test(value);

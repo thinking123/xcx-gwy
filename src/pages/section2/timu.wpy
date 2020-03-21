@@ -8,8 +8,16 @@
       day="{{50}}"
     />
 
-    <swiper bindchange="onSwiperChange" :current="timuConfig.index">
-      <swiper-item v-for="(item, index) in timuItems" :key="item.id">
+    <swiper
+      bindchange="onSwiperChange"
+      :current="timuConfig.index"
+      style="height:{{height}}px"
+    >
+      <swiper-item
+        v-for="(item, index) in timuItems"
+        :key="item.id"
+        style="height:{{height}}px"
+      >
         <TimuItem
           :timuItem="item"
           v-if="item"
@@ -88,13 +96,16 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
-import { getQuestionList } from '@/http/http-business';
+import { getQuestionList, recordSubjectNote } from '@/http/http-business';
 import { navToPage } from '@/common/navUtils';
 import eventHub from '@/common/eventHub';
-
+import { basic } from '@/mixins/basic';
+import { rpxTopx } from '@/mixins/rpxTopx';
+import { isEmptyString } from '@/common/utils';
 const type = 'timu-list';
 wepy.page({
   store,
+  mixins: [basic, rpxTopx],
   computed: {
     ...mapGetters(['items', 'curTimu', 'timuConfig', 'timuItems']),
     params() {
@@ -145,16 +156,25 @@ wepy.page({
       // return this.timuItems;
     }
   },
+  watch: {
+    show(v) {
+      if (v) {
+        this.editText = '';
+      }
+    }
+  },
   data: {
     cuoti: true,
     show: false,
     showCompleted: false,
     showNav: true,
     editText: '',
-    subjectId: ''
+    subjectId: '',
+    height: 0
   },
   methods: {
     ...mapMutations(['setTimuItems', 'setTimuConfig']),
+
     onSwiperChange(e) {
       const { current, source } = e.$wx.detail;
       if (source == 'touch') {
@@ -195,7 +215,14 @@ wepy.page({
       this.editText = v;
     },
     onSubmit() {
-      this.show = false;
+      if (!isEmptyString(this.editText) && this.curTimu) {
+        recordSubjectNote(this.curTimu.id, this.editText, 3).then(res => {
+          if (res) {
+            this.show = false;
+            this.editText = '';
+          }
+        });
+      }
     },
     getItems(p) {
       getQuestionList(this.subjectId).then(res => {
@@ -218,7 +245,7 @@ wepy.page({
       });
     },
     onComment(v) {
-      navToPage('/pages/section2/mediaCommentPage', {
+      navToPage('/pages/section2/mediaSubmitCommentPage', {
         subjectId: this.curTimu.subjectId
       });
     }
@@ -240,6 +267,10 @@ wepy.page({
     this.getItems();
     eventHub.$on('showCompleted', showCompleted => {
       this.showCompleted = true;
+    });
+
+    this.getSystemInfo().then(({ windowHeight }) => {
+      this.height = windowHeight - this.rpxTopx(120 + 100);
     });
   },
   onUnload() {
@@ -309,9 +340,12 @@ page {
   background-color: #fff;
 }
 
-swiper {
-  height: 750px;
+swiper-item {
+  overflow-y: auto;
 }
+// swiper {
+//   height: auto !important;
+// }
 </style>
 <config>
   {

@@ -211,7 +211,7 @@ wepy.component({
 
           // cb(res);
 
-          if (!!res && Array.isArray(res) && res.length > 0) {
+          if (!!res && Array.isArray(res)) {
             const _items = [...items, ...res];
             this.curItems = _items;
             this.setItems({ items: _items, type });

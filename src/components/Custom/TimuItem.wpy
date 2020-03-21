@@ -27,7 +27,6 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters } from '@wepy/x';
-
 wepy.component({
   store,
   data: {

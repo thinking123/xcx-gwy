@@ -1,150 +1,163 @@
 <template>
   <div class="page timuCuoti">
     <div class="row1">
-      <CircleText :text="selText" external-cls="col1"/>
-      <span class="col2">{{text}}</span>
-      <CircleText :text="item.firstText"
-                  v-for="(item, index) in items1"
-                  :key="index"
-                  @click.native="onCircleText(index)"
-                  type="info"
-                  external-cls="col3"/>
+      <CircleText :text="selText" external-cls="col1" v-if="sel > -1" />
+      <span class="col2">{{ text }}</span>
+      <CircleText
+        :text="item.title[0]"
+        v-for="(item, index) in items1"
+        :key="index"
+        @click.native="onCircleText(index)"
+        type="info"
+        external-cls="col3"
+      />
     </div>
 
     <div class="row2">
-      <TimuCuotiItem   v-for="(item, index) in items2"
-                       external-cls="TimuCuotiItem"
-                       :cuoti="item"
-                       :key="index"/>
+      <CListWrap1
+        :type="type"
+        :params="params"
+        url="/api/subjectQuestion/getErrorList"
+        @loaded="onLoaded"
+        :reloadKey="refreshKey1"
+      >
+        <TimuCuotiItem
+          v-for="(item, index) in clist"
+          external-cls="TimuCuotiItem"
+          :cuoti="item"
+          :key="index"
+        />
+      </CListWrap1>
     </div>
 
-    <FixedBottomCuoti wrongNum="{{5}}" @btn="onBtn"/>
+    <FixedBottomCuoti wrongNum="{{total}}" @btn="onBtn" />
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { navToPage } from '@/common/navUtils';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { getSubjecListByType } from '@/http/http-business';
+import { delNullProperty } from '@/common/utils';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      selText(){
-        if(this.items1.length > 0){
-          let text = this.items1[this.sel].firstText;
-          return text;
-        }
+const type = 'timu-list-cuoti';
 
-        return '';
-      },
-      text(){
-        if(this.items1.length > 0){
-          let text = this.items1[this.sel].text;
-          return text;
-        }
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['items', 'user']),
+    clist() {
+      const list = this.items[this.type];
+      return list || [];
+    },
+    params() {
+      let obj = {
+        userId: this.user.id,
+        subjectId: this.sel > -1 ? this.items1[this.sel].id : ''
+      };
 
-        return '';
-      }
+      obj = delNullProperty(obj);
+      return obj;
     },
-    data: {
-      items1:[],
-      items2:[],
-      sel:0,
-    },
-    methods: {
-      onCircleText(index){
-        this.sel = index;
-      },
-      onBtn(){
-        const pages = getCurrentPages();
-        console.log('pages' , pages)
-        navToPage('/pages/section2/timu');
-      }
-    },
-    onShow(){
-
-    },
-    created () {
-      let arr = [];
-      for(let i = 0 ; i < 14 ; i++){
-        const text = `${i}省部`;
-
-        const firstText = text ? text.charAt(0) : '';
-        arr.push({
-          text,
-          firstText,
-          id:i
-        });
+    selText() {
+      if (this.items1.length > 0 && this.sel > -1) {
+        let text = this.items1[this.sel].title[0];
+        return text;
       }
 
-      this.items1 = arr;
-
-      arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        let text = `人际题，领导安排任务，你与小王有矛盾`;
-        text = i % 2 ? text :  `人际题，领导安排任务，你与小王有矛盾,人际题，领导安排任务，你与小王有矛盾，不`;
-
-        const firstText = text ? text.charAt(0) : '';
-        arr.push({
-          firstText:i+1,
-          publishDate:'2小时前',
-          text:text,
-          wrongNum:i+1,
-          id:i
-        });
+      return '';
+    },
+    text() {
+      if (this.items1.length > 0 && this.sel > -1) {
+        let text = this.items1[this.sel].title;
+        return text;
       }
 
-      this.items2 = arr;
+      return '';
     }
-  });
+  },
+  data: {
+    refreshKey1: new Date().getTime(),
+    items1: [],
+    items2: [],
+    sel: -1,
+    type,
+    subjectId: '',
+    total: 0
+  },
+  methods: {
+    onLoaded(res) {
+      this.total = res.total || 0;
+    },
+    onCircleText(index) {
+      if (this.sel != index) {
+        this.sel = index;
+      } else {
+        this.sel = -1;
+      }
+      this.refreshKey1 = new Date().getTime();
+    },
+    onBtn() {
+      navToPage('/pages/section2/timu');
+    }
+  },
+  onShow() {},
+  onLoad(q = {}) {
+    // this.subjectId = q.subjectId;
+    getSubjecListByType(3).then(res => {
+      this.items1 = res;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
-  }
-  .timuCuoti{
-    .row1{
-      min-width:750rpx;
-      overflow-x: auto;
-      height:120rpx;
-      padding: 20rpx 38rpx;
-      box-sizing: border-box;
-      background:rgba(255,255,255,1);
-      box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.timuCuoti {
+  .row1 {
+    min-width: 750rpx;
+    overflow-x: auto;
+    height: 120rpx;
+    padding: 20rpx 38rpx;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0rpx 4rpx 12rpx 0rpx rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
 
-      .col1{
-
-      }
-      .col2{
-        margin: 0 42rpx 0 16rpx;
-        white-space: nowrap;
-
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(79,172,27,1);
-        font-size:32rpx;
-      }
-      .col3{
-        margin-right: 40rpx;
-      }
+    .col1 {
+      align-self: flex-start;
     }
+    .col2 {
+      margin: 0 42rpx 0 16rpx;
+      white-space: nowrap;
 
-    .row2{
-      display: flex;
-      flex-direction: column;
-      padding-top: 30rpx;
-      align-items: center;
-      .TimuCuotiItem{
-        margin-bottom: 20rpx;
-      }
+      font-family: PingFangSC-Medium, PingFangSC;
+      font-weight: 500;
+      color: rgba(79, 172, 27, 1);
+      font-size: 32rpx;
+    }
+    .col3 {
+      margin-right: 40rpx;
     }
   }
+
+  .row2 {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30rpx;
+    align-items: center;
+    .TimuCuotiItem {
+      margin: 0 auto 20rpx;
+    }
+  }
+}
 </style>
 <config>
 {
@@ -153,6 +166,8 @@
   CircleText:'~Custom/CircleText',
   TimuCuotiItem:'~Custom/TimuCuotiItem',
   FixedBottomCuoti:'~Custom/FixedBottomCuoti',
+  CListWrap1:'~UI/CListWrap1',
+
     }
 }
 </config>

@@ -238,10 +238,12 @@ wepy.page({
       });
     },
     handleIconText(index) {
-      const routes = ['timu', 'timu?p=cuoti', 'timuCuoti'].map(
+      const routes = ['timu', 'timuCuoti', 'bijiben'].map(
         r => `/pages/section2/${r}`
       );
-      navToPage(routes[index]);
+      navToPage(routes[index], {
+        // subjectId
+      });
     },
     onClose() {
       this.showCDialog = false;

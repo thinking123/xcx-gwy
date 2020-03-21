@@ -113,48 +113,25 @@ wepy.component({
         const { rightRag: rightIndex } = this.answer;
 
         const isAnswerRight = rightIndex === index;
+        const c = 65 + rightIndex; // A
 
-        const timu = {
-          ...this.timu,
-          hadSelected: true,
-          myTag: index
-        };
-        this.timuItems.splice(this.timuConfig.index, 1, timu);
-        this.setTimuItems(this.timuItems.slice());
-        if (this.timuConfig.index + 1 == this.timuConfig.total) {
-          eventHub.$emit('showCompleted', {});
-        }
-        // this.setTimuConfig({
-        //   showCompleted:this.timuConfig.index == this.index
-        // });
-
-        // recordAnswerResult(
-        //   this.curTimu.id,
-        //   item.originTag,
-        //   isAnswerRight,
-        //   this.subjectId
-        // ).then(res => {
-        //   this.setCurTimu({
-        //     ...this.curTimu,
-        //     hadSelected: true,
-        //     myTag: index
-        //   });
-        // });
-
-        // const item = this.timu.items[index];
-        // const rightIndex = this.answer.rightRag;
-        // const rightItem = this.timu.items[rightIndex];
-
-        // if (index == rightIndex) {
-        //   item.status = 1;
-        // } else {
-        //   rightItem.status = 1;
-        //   rightItem.error = true;
-        //   item.status = 2;
-        // }
-        // if (this.onlyShowTimu) {
-        //   item.status = 1;
-        // }
+        recordAnswerResult(
+          this.timu.id,
+          String.fromCharCode(c),
+          isAnswerRight ? 1 : 0,
+          this.subjectId
+        ).then(res => {
+          const timu = {
+            ...this.timu,
+            hadSelected: true,
+            myTag: index
+          };
+          this.timuItems.splice(this.timuConfig.index, 1, timu);
+          this.setTimuItems(this.timuItems.slice());
+          if (this.timuConfig.index + 1 == this.timuConfig.total) {
+            eventHub.$emit('showCompleted', {});
+          }
+        });
       }
     }
   },
