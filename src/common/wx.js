@@ -20,6 +20,30 @@ export function _wxLogin() {
   });
 }
 
+export function _clearStorage() {
+  return new Promise((resolve, reject) => {
+    wx.clearStorage({
+      success: res => {
+        resolve(res);
+      },
+      fail: err => {
+        console.log('login error', err);
+        reject(err);
+      }
+    });
+  });
+}
+
+export function _wxLogout() {
+  return _clearStorage().then(() => {
+    commit('resetState');
+    wx.hideLoading();
+    wx.reLaunch({
+      url: '/pages/login/login'
+    });
+  });
+}
+
 export function _wxGetSetting() {
   return new Promise((resolve, reject) => {
     wx.getSetting({

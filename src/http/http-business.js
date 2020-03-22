@@ -1411,7 +1411,9 @@ export function recordAnswerResult(questionId, userAnswer, isRight, subjectId) {
     subjectId,
     userId: store.state.user.id
   };
-  return post(url, data, '').then(res => parseRes(res, ''));
+
+  url = urlParams(url, data);
+  return post(url, {}, '').then(res => parseRes(res, ''));
 }
 /**
  *
@@ -1468,7 +1470,10 @@ export function recordSubjectNote(questionId, noteContent, type) {
     type,
     userId: store.state.user.id
   };
-  return post(url, data, '').then(res => parseRes(res, ''));
+
+  url = urlParams(url, data);
+
+  return post(url, {}, '').then(res => parseRes(res, ''));
 }
 
 /**
@@ -2183,6 +2188,140 @@ export function getQuestionList(subjectId) {
   // const errMsg = '打卡失败';
 
   url = urlParams(url, { subjectId });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/subjectQuestion/getDailyPractice
+每日一练 --编号 A005
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "createTime": "string",
+    "errorRate": "string",
+    "id": 0,
+    "materialContent": "string",
+    "questAnwser": "string",
+    "questContent": "string",
+    "questExplain": "string",
+    "questImage": "string",
+    "questReadyA": "string",
+    "questReadyB": "string",
+    "questReadyC": "string",
+    "questReadyD": "string",
+    "questSort": 0,
+    "questType": 0,
+    "subjectId": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+
+ */
+export function getDailyPractice() {
+  let url = '/api/subjectQuestion/getDailyPractice';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { userId: store.state.user.id });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/school/selectPro
+获取省级地区
+
+Response Class (Status 200)
+Successful — 请求已完成
+
+ModelExample Value
+JsonResult«城市地区表» {
+message (string, optional): 响应提示 ,
+path (string, optional): 路径 ,
+rows (城市地区表, optional): 响应数据 ,
+status (string, optional): 响应状态
+}
+城市地区表 {
+adCode (string, optional): adCode ,
+cityCaption (string, optional): 名称 ,
+cityOrder (integer, optional),
+cityState (integer, optional),
+parentCode (string, optional),
+parentLevel (integer, optional),
+userNum (integer, optional)
+}
+
+
+
+ */
+export function schoolselectPro() {
+  let url = '/api/school/selectPro';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
+GET /api/school/selectSchoolByCity
+获取下一级地区
+
+Response Class (Status 200)
+Successful — 请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "adCode": "string",
+    "competentDepartment": "string",
+    "id": 0,
+    "identificationCode": "string",
+    "name": "string",
+    "schoolCity": "string",
+    "schoolLevle": "string"
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+adCode	
+adCode
+
+query	string
+
+
+
+ */
+export function selectSchoolByCity(adCode) {
+  let url = '/api/school/selectSchoolByCity';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+  url = urlParams(url, { adCode });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 

@@ -18,7 +18,7 @@
       </div>
       <image mode="aspectFit" class="col3" src="btn_arrowr@3x" />
     </div>
-    <CColumnTextItem external-cls="row2" :items="titles" @item="onItemClick" />
+    <CColumnTextItem external-cls="row2" :items="_titles" @item="onItemClick" />
 
     <div class="row3">
       <CLabelRightButton
@@ -43,31 +43,35 @@ import store from 'store';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
-
+import { getMsgById } from '@/http/http-business';
 wepy.page({
   store,
   config: {
     navigationBarTitleText: ''
   },
   computed: {
-    ...mapGetters(['isSigned', 'user'])
+    ...mapGetters(['isSigned', 'user']),
+    _titles() {
+      this.titles[2].top = this.user.fansNum;
+      return this.titles;
+    }
   },
   data: {
     titles: [
       {
-        top: '60',
+        top: '0',
         bottom: '邀请奖励'
       },
       {
-        top: '60',
+        top: '0',
         bottom: '好友'
       },
       {
-        top: '60',
+        top: '0',
         bottom: '粉丝'
       },
       {
-        top: '60',
+        top: '0',
         bottom: '收藏'
       }
     ],
@@ -103,6 +107,8 @@ wepy.page({
     ]
   },
   methods: {
+    ...mapMutations(['setUser']),
+
     onHeaderClick() {
       navToPage('/pages/section3/selfPage');
     },
@@ -128,9 +134,18 @@ wepy.page({
         r ? (i != 1 ? `/pages/section3/${r}` : `/pages/section4/${r}`) : null
       );
       navToPage(routes[index]);
+    },
+    init() {
+      if (this.isSigned) {
+        const user = getMsgById(this.user.id).then(user => {
+          this.setUser(user);
+        });
+      }
     }
   },
-  onShow() {},
+  onShow() {
+    this.init();
+  },
   created() {
     this.btns.map(m => {
       m.icon = getImgUrlEx(m.icon);

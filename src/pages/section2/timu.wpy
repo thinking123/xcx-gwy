@@ -96,7 +96,11 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
-import { getQuestionList, recordSubjectNote } from '@/http/http-business';
+import {
+  getQuestionList,
+  recordSubjectNote,
+  getDailyPractice
+} from '@/http/http-business';
 import { navToPage } from '@/common/navUtils';
 import eventHub from '@/common/eventHub';
 import { basic } from '@/mixins/basic';
@@ -170,7 +174,8 @@ wepy.page({
     showNav: true,
     editText: '',
     subjectId: '',
-    height: 0
+    height: 0,
+    ai: false
   },
   methods: {
     ...mapMutations(['setTimuItems', 'setTimuConfig']),
@@ -225,7 +230,8 @@ wepy.page({
       }
     },
     getItems(p) {
-      getQuestionList(this.subjectId).then(res => {
+      const ps = this.ai ? getDailyPractice() : getQuestionList(this.subjectId);
+      ps.then(res => {
         res = res.map(m => {
           // 还没有答题过
           m.hadSelected = false;
@@ -252,12 +258,13 @@ wepy.page({
   },
   onShow() {},
   onLoad(query = {}) {
-    let { referrer, subjectId, item } = query;
+    let { referrer, subjectId, item = '{}', ai = false } = query;
     this.subjectId = subjectId;
+    this.ai = ai;
     item = JSON.parse(item);
     this.setTimuConfig({
       total: item.questionNum || 5,
-      title: item.title
+      title: item.title || ''
     });
     if (referrer && referrer.indexOf('timuCuoti')) {
       this.setTimuConfig({

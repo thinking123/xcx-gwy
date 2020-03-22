@@ -238,7 +238,7 @@ wepy.page({
       });
     },
     handleIconText(index) {
-      const routes = ['timu', 'timuCuoti', 'bijiben'].map(
+      const routes = ['timu?ai=true', 'timuCuoti', 'bijiben'].map(
         r => `/pages/section2/${r}`
       );
       navToPage(routes[index], {

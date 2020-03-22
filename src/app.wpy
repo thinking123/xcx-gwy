@@ -76,6 +76,21 @@ wepy.app({
     "pages/section1/question",
     "pages/section1/map",
     
+
+
+    "pages/section2/bijiben",
+    "pages/section2/timu",
+    "pages/section2/timuCuoti",
+    "pages/section2/mediaSubmitCommentPage",
+    "pages/section2/mediaCommentPage",
+    "pages/section2/mediaPlayDetail",
+    "pages/section2/mediaDetail",
+    "pages/section2/mediaIntro",
+    "pages/section2/searchPage",
+    "pages/section2/bwktDetail",
+    "pages/homeSection2",
+
+
     "pages/section3/myReportPage",
     "pages/section3/myMsg",
     "pages/section3/myNote",
@@ -89,17 +104,6 @@ wepy.app({
     "pages/section3/moneyDetail",
     "pages/section3/selfPage",
     "pages/homeSection3",
-    "pages/section2/bijiben",
-    "pages/section2/timu",
-    "pages/section2/timuCuoti",
-    "pages/section2/mediaSubmitCommentPage",
-    "pages/section2/mediaCommentPage",
-    "pages/section2/mediaPlayDetail",
-    "pages/section2/mediaDetail",
-    "pages/section2/mediaIntro",
-    "pages/section2/searchPage",
-    "pages/section2/bwktDetail",
-    "pages/homeSection2",
 
     "pages/login/loginInput",
     "pages/login/register",
@@ -138,6 +142,21 @@ wepy.app({
     "pages/section2/searchPage",
     "pages/section2/bwktDetail",
     "pages/homeSection2",
+
+    "pages/section3/myReportPage",
+    "pages/section3/myMsg",
+    "pages/section3/myNote",
+    "pages/section3/taskPage",
+    "pages/section3/myCollectPage",
+    "pages/section3/myFansPage",
+    "pages/section3/myFriendPage",
+    "pages/section3/friendPage",
+    "pages/section3/sharePage",
+    "pages/section3/takeMoney",
+    "pages/section3/moneyDetail",
+    "pages/section3/selfPage",
+    "pages/homeSection3",
+    
 
   ],
   window: {

@@ -11,7 +11,7 @@
       <CLabelRightButton
         type="normal"
         text="昵称"
-        :rightText="user.nickName"
+        :rightText="user.userName"
         @click.native="onClickCLabelRightButton(1)"
         external-cls="CLabelRightButton"
       />
@@ -26,7 +26,7 @@
         type="normal"
         text="手机号"
         hideRightIcon="{{true}}"
-        rightText="{{user.phone}}"
+        rightText="{{user.userPhone}}"
         @click.native="onClickCLabelRightButton(3)"
         external-cls="CLabelRightButton"
       />
@@ -51,7 +51,7 @@
       <CLabelRightButton
         type="normal"
         text="学习目标"
-        :rightText="user.dest"
+        :rightText="user.learnTarget"
         showLine="{{false}}"
         @click.native="onClickCLabelRightButton(6)"
         external-cls="CLabelRightButton"
@@ -67,7 +67,13 @@
       @item="onHeaderItem"
       :items="headers"
     />
-
+    <CListPoper
+      :show="showLogout"
+      showClose="{{true}}"
+      @close="showLogout = false"
+      @item="onLogoutItem"
+      :items="logouts"
+    />
     <CPopup
       :show="showNick"
       position="bottom"
@@ -86,7 +92,7 @@
             <CLabelInput
               placeholder="请输入姓名"
               label="昵称"
-              :val.sync="user.nickName"
+              :val="user.userName"
               :showLine="false"
               @update:val="onNickVal"
             />
@@ -115,7 +121,7 @@
             <CListSelect
               key="id"
               labelKey="text"
-              :sel="user.sex"
+              :sel="user.userSex"
               :items="sexItems"
               external-cls="row"
               @change="onSexChange"
@@ -140,7 +146,7 @@
         />
         <div class="body">
           <CTextarea
-            :val="user.dest"
+            :val="user.learnTarget"
             @change="onChangeDest"
             placeholder="请填写"
             total="{{200}}"
@@ -194,8 +200,14 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
-import { getImgUrlEx } from '@/common/utils';
-
+import { getImgUrlEx, isEmptyString } from '@/common/utils';
+import { _wxLogout } from '@/common/wx';
+import {
+  updateMsgById,
+  selectSchoolByCity,
+  schoolselectPro
+} from '@/http/http-business';
+import Upload from '@/common/Upload';
 wepy.page({
   store,
   config: {
@@ -204,8 +216,8 @@ wepy.page({
   computed: {
     ...mapGetters(['isSigned', 'user']),
     selSex() {
-      if (this.user.sex) {
-        const item = this.sexItems.find(f => f.id == this.user.sex);
+      if (this.user.userSex) {
+        const item = this.sexItems.find(f => f.id == this.user.userSex);
 
         return item.text;
       }
@@ -215,18 +227,10 @@ wepy.page({
   },
   data: {
     icon1: 'img_my_head@3x',
-    user: {
-      header: '',
-      nickName: 'nickname',
-      sex: 0,
-      phone: '1596886096',
-      bindWx: false,
-      school: '东华大学',
-      schoolId: 0,
-      dest: '学习申论'
-    },
     showHeader: false,
+    showLogout: false,
     headers: ['拍照', '手机相册'],
+    logouts: ['确定'],
     dest: '',
     nick: '',
     showDest: false,
@@ -244,6 +248,8 @@ wepy.page({
     curSelSchool: ''
   },
   methods: {
+    ...mapMutations(['setUser']),
+
     onClickCLabelRightButton(index) {
       console.log('btn', index);
       switch (index) {
@@ -262,31 +268,56 @@ wepy.page({
         case 6:
           this.showDest = true;
           break;
+        case 7:
+          this.showLogout = true;
+          break;
       }
     },
+    onLogoutItem(index) {
+      wx.showLoading({ mask: true });
+      _wxLogout().finally(() => {
+        wx.hideLoading();
+      });
+    },
     onHeaderItem(index) {
-      console.log(index);
       this.showHeader = false;
+      const upload = new Upload(1, index == 0 ? ['camera'] : ['album']);
+      upload.upload().then(url => {
+        return this.updateUser({
+          userHead: url
+        });
+      });
     },
     onChangeDest(v) {
       this.dest = v;
     },
-
     onNickVal(v) {
       this.nick = v;
     },
-
     onSubmitDest() {
-      this.user.dest = this.dest;
+      if (!isEmptyString(this.dest) && this.dest != this.user.learnTarget) {
+        this.updateUser({
+          learnTarget: this.dest
+        });
+      }
       this.showDest = false;
     },
-
     onSubmitNick() {
+      if (!isEmptyString(this.nick) && this.nick != this.user.userName) {
+        this.updateUser({
+          userName: this.nick
+        });
+      }
       this.showNick = false;
-      this.user.nickName = this.nick;
     },
     onSexChange(key) {
-      this.user.sex = key;
+      if (key !== this.user.userSex) {
+        this.updateUser({
+          userSex: key
+        });
+      }
+
+      this.showSex = false;
     },
     onExpand(exp) {
       this.expandItems = exp;
@@ -294,9 +325,17 @@ wepy.page({
     onClickCCollapseItem({ id }) {
       this.curSelSchool = id;
       // this.showSchool = false;
+    },
+    updateUser(userInfo) {
+      return updateMsgById(this.user.id, userInfo).then(() => {
+        this.setUser(userInfo);
+      });
     }
   },
   onShow() {},
+  onLoad() {
+    schoolselectPro();
+  },
   created() {
     this.icon1 = getImgUrlEx(this.icon1);
     const arr = [];

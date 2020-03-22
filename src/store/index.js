@@ -30,57 +30,58 @@ const mockToken = null;
 
 const userId = 3;
 
-export default new Vuex.Store({
-  state: {
-    counter: 0,
-    token: mockToken,
-    queue: [],
-    activeTabIndex: 0,
-    tabbar,
-    nickName: 'default Nickname',
-    deviceId: 'deviceId',
-    wx: {},
-    userInfo: {},
-    systemInfo: {},
-    showMediaPlay: false,
-    isMediaPlaying: false,
-    playMedia: {},
-    items: {},
-    user: {
-      id: 3,
-      userName: '',
-      learnTarget: '',
-      learnTitle: '',
-      schoolName: '',
-      userIntegral: 0,
-      learnNum: 0
-    },
-    location: null,
-    totalOnlineNum: 0,
-    learnTime: null,
-    teacher: {},
-    audioInfo: {
-      isPlaying: false,
-      isSeeking: false,
-      canDraging: false,
-      totalTime: 0,
-      currentTime: 0,
-      curProgress: 0
-    },
-    playAudioInfo: null,
-    userHideMediaPlayBar: false,
-    audioSubject: null,
-    playVideoInfo: null,
-    curTimu: null,
-    timuConfig: {
-      index: 0,
-      total: 0,
-      title: '',
-      night: false,
-      cuoti: false
-    },
-    timuItems: []
+const initState = {
+  counter: 0,
+  token: mockToken,
+  queue: [],
+  activeTabIndex: 0,
+  tabbar,
+  nickName: 'default Nickname',
+  deviceId: 'deviceId',
+  wx: {},
+  userInfo: {},
+  systemInfo: {},
+  showMediaPlay: false,
+  isMediaPlaying: false,
+  playMedia: {},
+  items: {},
+  user: {
+    // id: 3,
+    // userName: '',
+    // learnTarget: '',
+    // learnTitle: '',
+    // schoolName: '',
+    // userIntegral: 0,
+    // learnNum: 0
   },
+  location: null,
+  totalOnlineNum: 0,
+  learnTime: null,
+  teacher: {},
+  audioInfo: {
+    isPlaying: false,
+    isSeeking: false,
+    canDraging: false,
+    totalTime: 0,
+    currentTime: 0,
+    curProgress: 0
+  },
+  playAudioInfo: null,
+  userHideMediaPlayBar: false,
+  audioSubject: null,
+  playVideoInfo: null,
+  curTimu: null,
+  timuConfig: {
+    index: 0,
+    total: 0,
+    title: '',
+    night: false,
+    cuoti: false
+  },
+  timuItems: []
+};
+export default new Vuex.Store({
+  state: initState,
   mutations: {
     setSystemInfo(state, systemInfo) {
       state.systemInfo = systemInfo;
@@ -134,8 +135,8 @@ export default new Vuex.Store({
       state.userInfo = userInfo;
     },
     setUser(state, user) {
-      state.user = user;
-      state.activeTabIndex = 0;
+      state.user = { ...state.user, ...user };
+      // state.activeTabIndex = 0;
       state.token = user ? user.token : null;
     },
     setLocation(state, location) {
@@ -172,6 +173,9 @@ export default new Vuex.Store({
         learnTime.lastTime = learnTime.remaindLearnTime;
       }
       state.learnTime = learnTime;
+    },
+    resetState(state) {
+      Object.assign(state, initState);
     }
   },
   getters: {
@@ -293,5 +297,7 @@ export default new Vuex.Store({
       return state.audioSubject;
     }
   },
-  actions: {}
+  actions: {
+    logout({ commit }) {}
+  }
 });
