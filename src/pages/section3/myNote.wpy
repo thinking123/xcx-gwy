@@ -1,297 +1,384 @@
 <template>
   <div class="page selfPage">
-    <CTab :tabs="tabs" bottomLine="128" bottomLineOffset="123" @changeTab="handleTab" external-cls="CTab"/>
-    <div class="line"/>
-    <block v-if="selectedTab == 0">
+    <CTab
+      :tabs="tabs"
+      bottomLine="128"
+      bottomLineOffset="123"
+      @changeTab="handleTab"
+      external-cls="CTab"
+    />
+    <div class="line" />
+    <div style="display: {{selectedTab == 0 ? 'block' : 'none'}}">
       <div class="row1">
-        <RoundSelectBtn  @sel="onRoundSelectBtn" :sel="show"/>
-
-        <OrderItems1 :order="order" @change="onOrder"/>
+        <RoundSelectBtn
+          @sel="onRoundSelectBtn"
+          :sel="show"
+          :placeholder="selVal"
+        />
+        <OrderItems1 :order="order" @change="onOrder" toggle="{{false}}" />
       </div>
       <div class="row2">
-        <BijiItem  v-for="item in items" :biji="item"
-                   :key="item.id"
-                   external-cls="BijiItem"/>
+        <CListWrap1
+          :type="type1"
+          :params="params1"
+          url="/api/my/getNoteList"
+          :reloadKey="refreshKey1"
+          :show="selectedTab == 0"
+        >
+          <BijiItem
+            v-for="(item, index) in clist1"
+            :biji="item"
+            :key="item.id"
+            :index="index"
+            external-cls="BijiItem"
+          />
+        </CListWrap1>
       </div>
+    </div>
 
-    </block>
-    <block v-if="selectedTab == 1">
+    <div style="display: {{selectedTab == 1 ? 'block' : 'none'}}">
       <div class="row3">
-        <CircleText :text="selText" external-cls="col1"/>
-        <span class="col2">{{text}}</span>
-        <CircleText :text="item.firstText"
-                    v-for="(item, index) in items1"
-                    :key="index"
-                    @click.native="onCircleText(index)"
-                    type="info"
-                    external-cls="col3"/>
+        <CircleText :text="selText" external-cls="col1" v-if="sel > -1" />
+        <span class="col2">{{ text }}</span>
+        <CircleText
+          :text="item.title[0]"
+          v-for="(item, index) in items1"
+          :key="index"
+          @click.native="onCircleText(index)"
+          type="info"
+          external-cls="col3"
+        />
       </div>
 
       <div class="row4">
-        <TimuCuotiItem   v-for="(item, index) in items2"
-                         external-cls="TimuCuotiItem"
-                         :cuoti="item"
-                         :key="index"/>
+        <CListWrap1
+          :type="type2"
+          :params="params2"
+          url="/api/my/getErrorList"
+          @loaded="onLoaded"
+          :reloadKey="refreshKey2"
+        >
+          <TimuCuotiItem
+            v-for="(item, index) in clist2"
+            external-cls="TimuCuotiItem"
+            :cuoti="item"
+            :key="index"
+          />
+        </CListWrap1>
       </div>
 
-      <FixedBottomCuoti wrongNum="{{5}}" @btn="onBtn"/>
+      <FixedBottomCuoti wrongNum="{{total}}" @btn="onBtn" />
+    </div>
 
-    </block>
+    <CPopup
+      :show="show"
+      position="bottom"
+      @close="show = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
+      <div class="filter">
+        <HeaderClose text="筛选" @click="show = false" />
 
-    <CPopup  :show="show"
-             position="bottom"
-             @close="show=false"
-             zIndex="1000"
-             overlay="{{ true }}">
-      <div class="time">
-        <HeaderClose text="筛选"  external-cls="header" @click="show=false"/>
         <div class="body">
-          <TwoColumnPickerView @change="hanleTime" external-cls="TwoColumnPickerView"  :hours="hs" :mins="ms"/>
-          <CButton text="确认"  @tap.native="handleSetTime" external-cls="CButton"/>
+          <picker-view
+            indicator-class="indicatorCls"
+            style="width: 630rpx; height:602rpx;"
+            value="{{val}}"
+            bindpickstart="bindStart"
+            bindchange="bindChange"
+            bindpickend="bindPickEnd"
+          >
+            <picker-view-column>
+              <view wx:for="{{items1}}" class="item">{{ item.title }}</view>
+            </picker-view-column>
+          </picker-view>
+
+          <CButton text="确认" @tap.native="onSubmit" external-cls="btn" />
         </div>
-
       </div>
-
     </CPopup>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import { navToPage } from '@/common/navUtils';
+import wepy from '@wepy/core';
+import store from 'store';
+import { navToPage } from '@/common/navUtils';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { getSubjecListByType } from '@/http/http-business';
+import { delNullProperty } from '@/common/utils';
+const type1 = 'mynote-list1';
+const type2 = 'mynote-list2';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-      selText(){
-        if(this.items1.length > 0){
-          let text = this.items1[this.selCt].firstText;
-          return text;
-        }
-
-        return '';
-      },
-      text(){
-        if(this.items1.length > 0){
-          let text = this.items1[this.selCt].text;
-          return text;
-        }
-
-        return '';
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['items', 'user']),
+    selVal() {
+      if (this.tempVal[0] !== undefined && this.tempVal[0] > -1) {
+        const i = this.tempVal[0] > -1 ? this.tempVal[0] : -1;
+        const t = this.items1[i];
+        return t ? t.title : '';
       }
+      return '请选择';
     },
-    data: {
-      tabs:[
-        {text:'笔记感悟'},
-        {text:'我的错题'},
-      ],
-      selectedTab:0,
-      show:false,
-      hs:[
-        '一级分类',
-        '一级分类',
-        '一级分类',
-        '一级分类',
-      ],
-      ms:[
-        '言语理解与表达',
-        '数量关系'
-      ],
-      order:0,
-      items:[],
-      items1:[],
-      items2:[],
-      selCt:0,
+    clist1() {
+      const list = this.items[this.type1];
+      return list || [];
     },
-    methods: {
-      handleTab({tab ,index}){
-        this.selectedTab = index;
-      },
-      hanleTime(v){
-        console.log('time:' , v)
-        this.setTime = v;
-      },
-      handleSetTime(){
-        this.show = false;
-        this.time = this.setTime;
-        this.selText = this.time.join('|');
-      },
-      onOrder(order){
-        this.order = order;
-      },
-      onRoundSelectBtn(show){
-        this.show = show;
-      },
-      onCircleText(index){
-        this.selCt = index;
-      },
-      onBtn(){
-        const pages = getCurrentPages();
-        console.log('pages' , pages)
-        navToPage('/pages/section2/timu');
-      }
-    },
-    onShow(){
+    params1() {
+      const i = this.tempVal[0] > -1 ? this.tempVal[0] : -1;
+      const t = this.items1[i];
+      let obj = {
+        subjectId: t ? t.id : '',
+        userId: this.user.id,
+        sortType: this.order
+      };
+      obj = delNullProperty(obj);
 
+      return obj;
     },
-    created() {
-      let arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        arr.push({
-          index:i + 1,
-          id:i,
-          title:'数量关系 > 数学关系 > 数列问题',
-          text:'题不难，就是太费时间算了，想节约时间少算',
-          publishDate:'1小时前',
-        })
-      }
-      this.items = arr;
+    clist2() {
+      const list = this.items[this.type2];
+      return list || [];
+    },
+    params2() {
+      let obj = {
+        userId: this.user.id,
+        subjectId: this.sel > -1 ? this.items1[this.sel].id : ''
+      };
 
-      arr = [];
-      for(let i = 0 ; i < 14 ; i++){
-        const text = `${i}省部`;
-
-        const firstText = text ? text.charAt(0) : '';
-        arr.push({
-          text,
-          firstText,
-          id:i
-        });
+      obj = delNullProperty(obj);
+      return obj;
+    },
+    selText() {
+      if (this.items1.length > 0 && this.sel > -1) {
+        let text = this.items1[this.sel].title[0];
+        return text;
       }
 
-      this.items1 = arr;
-
-      arr = [];
-      for(let i = 0 ; i < 10 ; i++){
-        let text = `人际题，领导安排任务，你与小王有矛盾`;
-        text = i % 2 ? text :  `人际题，领导安排任务，你与小王有矛盾,人际题，领导安排任务，你与小王有矛盾，不`;
-
-        const firstText = text ? text.charAt(0) : '';
-        arr.push({
-          firstText:i+1,
-          publishDate:'2小时前',
-          text:text,
-          wrongNum:i+1,
-          id:i
-        });
+      return '';
+    },
+    text() {
+      if (this.items1.length > 0 && this.sel > -1) {
+        let text = this.items1[this.sel].title;
+        return text;
       }
 
-      this.items2 = arr;
+      return '';
     }
-  });
+  },
+  data: {
+    tabs: [{ text: '笔记感悟' }, { text: '我的错题' }],
+    selectedTab: 0,
+    show: false,
+    hs: ['一级分类', '一级分类', '一级分类', '一级分类'],
+    ms: ['言语理解与表达', '数量关系'],
+    order: 1,
+    items: [],
+    items2: [],
+    selCt: 0,
+    sel: -1,
+    type1,
+    type2,
+    val: [],
+    tempVal: [-1],
+    items1: [],
+    refreshKey1: new Date().getTime(),
+    pickRuning: false,
+    total: 0,
+    refreshKey2: new Date().getTime()
+  },
+  methods: {
+    onLoaded(res) {
+      this.total = res.total || 0;
+    },
+    handleTab({ tab, index }) {
+      this.selectedTab = index;
+    },
+    hanleTime(v) {
+      console.log('time:', v);
+      this.setTime = v;
+    },
+    handleSetTime() {
+      this.show = false;
+      this.time = this.setTime;
+      this.selText = this.time.join('|');
+    },
+    onOrder(order) {
+      this.order = order;
+    },
+    onRoundSelectBtn(show) {
+      this.show = show;
+    },
+    onCircleText(index) {
+      if (this.sel != index) {
+        this.sel = index;
+      } else {
+        this.sel = -1;
+      }
+      this.refreshKey2 = new Date().getTime();
+    },
+    onBtn() {
+      const pages = getCurrentPages();
+      console.log('pages', pages);
+      navToPage('/pages/section2/timu');
+    },
+    onSubmit() {
+      if (this.pickRuning) return;
+      this.show = false;
+      this.tempVal = this.val.length == 0 ? [0] : this.val;
+      this.refreshKey1 = new Date().getTime();
+    },
+    bindChange(e) {
+      this.val = e.$wx.detail.value;
+    },
+    bindPickEnd(e) {
+      this.pickRuning = false;
+    },
+    bindStart() {
+      this.pickRuning = true;
+    }
+  },
+  onShow() {},
+  onLoad() {
+    getSubjecListByType(3).then(res => {
+      this.items1 = res;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
+page {
+  background: rgba(242, 242, 242, 1);
+}
+.selfPage {
+  ctab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .selfPage{
-    ctab{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .CTab{
-      width: 750rpx;
-      font-size:32rpx;
-      font-family:PingFangSCSemibold-,PingFangSCSemibold;
-      font-weight:normal;
-      color:rgba(102,102,102,1);
-    }
+  .CTab {
+    width: 750rpx;
+    font-size: 32rpx;
+    font-family: PingFangSCSemibold-, PingFangSCSemibold;
+    font-weight: normal;
+    color: rgba(102, 102, 102, 1);
+  }
 
-    .line{
-      width:750rpx;
-      height:1px;
-      background:rgba(230,230,230,1);
-    }
+  .line {
+    width: 750rpx;
+    height: 1px;
+    background: rgba(230, 230, 230, 1);
+  }
 
-    .row1{
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      padding: 24rpx 30rpx;
-      background:rgba(255,255,255,1);
-      justify-content: space-between;
+  .row1 {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 24rpx 30rpx;
+    background: rgba(255, 255, 255, 1);
+    justify-content: space-between;
 
+    width: 750rpx;
+    height: 112rpx;
+    background: rgba(255, 255, 255, 1);
+  }
 
-      width:750rpx;
-      height:112rpx;
-      background:rgba(255,255,255,1);
-    }
-
-    .row2{
-      padding-top: 30rpx;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      .BijiItem{
-        margin-bottom: 20rpx;
-      }
-    }
-
-
-    .row3{
-      min-width:750rpx;
-      overflow-x: auto;
-      height:120rpx;
-      padding: 20rpx 38rpx;
-      box-sizing: border-box;
-      background:rgba(255,255,255,1);
-      box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
-
-      .col1{
-
-      }
-      .col2{
-        margin: 0 42rpx 0 16rpx;
-        white-space: nowrap;
-
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(79,172,27,1);
-        font-size:32rpx;
-      }
-      .col3{
-        margin-right: 40rpx;
-      }
-    }
-
-    .row4{
-      display: flex;
-      flex-direction: column;
-      padding-top: 30rpx;
-      align-items: center;
-      .TimuCuotiItem{
-        margin-bottom: 20rpx;
-      }
-    }
-
-
-    .time{
-
-      .body{
-
-        height: 762rpx;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .TwoColumnPickerView{
-          margin: 62rpx 0 64rpx 0;
-        }
-
-        .CButton{
-          margin-bottom: 62rpx;
-        }
-      }
-
+  .row2 {
+    padding-top: 30rpx;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .BijiItem {
+      margin: 0 auto 20rpx;
     }
   }
 
+  .row3 {
+    min-width: 750rpx;
+    overflow-x: auto;
+    height: 120rpx;
+    padding: 20rpx 38rpx;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0rpx 4rpx 12rpx 0rpx rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+
+    .col1 {
+    }
+    .col2 {
+      margin: 0 42rpx 0 16rpx;
+      white-space: nowrap;
+
+      font-family: PingFangSC-Medium, PingFangSC;
+      font-weight: 500;
+      color: rgba(79, 172, 27, 1);
+      font-size: 32rpx;
+    }
+    .col3 {
+      margin-right: 40rpx;
+    }
+  }
+
+  .row4 {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30rpx;
+    align-items: center;
+    .TimuCuotiItem {
+      margin-bottom: 20rpx;
+    }
+  }
+
+  .time {
+    .body {
+      height: 762rpx;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .TwoColumnPickerView {
+        margin: 62rpx 0 64rpx 0;
+      }
+
+      .CButton {
+        margin-bottom: 62rpx;
+      }
+    }
+  }
+}
+
+.filter {
+  height: 880rpx;
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .indicatorCls {
+      font-weight: 400;
+      height: 124rpx !important;
+      color: #4fac1b;
+      border-color: #4fac1b;
+    }
+  }
+
+  .item {
+    font-size: 36rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn {
+    width: 690rpx;
+    height: 96rpx;
+  }
+}
 </style>
 <config>
   {
@@ -309,6 +396,8 @@
   CircleText:'~Custom/CircleText',
   TimuCuotiItem:'~Custom/TimuCuotiItem',
   FixedBottomCuoti:'~Custom/FixedBottomCuoti',
+  CListWrap1:'~UI/CListWrap1',
+
   }
   }
 </config>
