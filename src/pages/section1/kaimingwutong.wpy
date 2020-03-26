@@ -150,11 +150,6 @@ wepy.page({
       return list || [];
     },
     dockerList() {
-      // if (this.selectedTab == 1) {
-      //   // return [{ text: '分类' }, { text: '地区' }, { text: '费用' }];
-      //   return [{ text: '分类' }, { text: '地区' }];
-      // }
-      // return [{ text: '等级' }, { text: '地区' }, { text: '部门' }];
       return this.getSelLabel();
     },
     params1() {

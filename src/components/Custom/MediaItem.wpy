@@ -24,12 +24,12 @@
         <span>{{ media.time }}</span> | <span>{{ media.numStudents }}</span
         >人学过 | 已学 <span>{{ media.studyRate }}</span>
       </div>
-      <div class="row3" v-if="type != 'text'">
+      <div class="row3" v-if="typeItem != 'text'">
         <span>学友评价</span>
         <CRate :rate="media.score" external-cls="cRate" />
       </div>
 
-      <block v-if="typeItem != 'text'">
+      <block v-if="typeItem != 'text' && !single">
         <image
           src="btn_audio_on@3x"
           v-if="isLearning"
@@ -45,6 +45,12 @@
           @click.stop="onClick"
         />
       </block>
+      <image
+        src="btn_liked@3x"
+        class="follow"
+        @click.stop="onFollow"
+        v-if="showFollow"
+      />
     </div>
   </div>
 </template>
@@ -72,7 +78,9 @@ wepy.component({
     subject: Object,
     totalChaper: Number,
     selfNav: Boolean,
-    sel: Boolean
+    sel: Boolean,
+    single: Boolean,
+    showFollow: Boolean
   },
   events: {},
   computed: {
@@ -92,11 +100,15 @@ wepy.component({
     }
   },
   methods: {
+    onFollow() {
+      this.$emit('onFollow');
+    },
     onNav() {
       if (!this.selfNav) {
         navToPage('/pages/section2/mediaPlayDetail', {
           media: JSON.stringify(this.media),
-          totalChaper: this.totalChaper
+          totalChaper: this.totalChaper,
+          single: this.single
         });
       }
     },
@@ -130,6 +142,16 @@ wepy.component({
   .wrap {
     width: 100%;
     height: 100%;
+    position: relative;
+
+    .follow {
+      position: absolute;
+      top: 50%;
+      right: -10rpx;
+      transform: translateY(-50%);
+      width: 100rpx;
+      height: 100rpx;
+    }
   }
   &.MediaItem__text {
     display: flex;

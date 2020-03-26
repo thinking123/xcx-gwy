@@ -14,12 +14,16 @@
       :params="params1"
       :show="selectedTab == 0"
       url="/api/my/getCollectList"
+      :reloadKey="refreshKey1"
     >
-      <MyCollectMedia
+      <MediaItem
         v-for="item in clist1"
-        :key="item.id"
         :media="item"
+        :key="item.id"
         external-cls="MyCollectMedia"
+        showFollow
+        @onFollow="onFollow(item, 1)"
+        single
       />
     </CListWrap1>
 
@@ -28,18 +32,19 @@
       :params="params2"
       :show="selectedTab == 1"
       url="/api/my/getCollectList"
+      :reloadKey="refreshKey1"
     >
-      <ClassCard1
-        v-for="item in clist2"
-        :key="item.id"
-        :num1="item.num1"
-        :num2="item.num2"
-        :free="item.free"
-        :title="item.title"
-        :price="item.price"
-        :good="item.good"
-        :liked="item.liked"
+      <MediaItem
+        v-for="m in clist2"
+        :key="m.id"
+        :media="m"
+        typeItem="text"
         external-cls="classCard1"
+        selfNav
+        @click="onNav(m)"
+        showFollow
+        @onFollow="onFollow(m, 2)"
+        single
       />
     </CListWrap1>
 
@@ -48,12 +53,14 @@
       :params="params3"
       :show="selectedTab == 2"
       url="/api/my/getQuestionCollectList"
+      :reloadKey="refreshKey1"
     >
       <MyCollectTopic
         v-for="item in clist3"
         :key="item.id"
         :topic="item"
         external-cls="MyCollectTopic"
+        @onFollow="onFollow(item, 3)"
       />
     </CListWrap1>
   </div>
@@ -62,7 +69,9 @@
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { mapGetters } from '@wepy/x';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { subjectCollect, forumforumCollect } from '@/http/http-business';
+import { navToPage } from '@/common/navUtils';
 
 const type1 = 'myCollectPage_1';
 const type2 = 'myCollectPage_2';
@@ -109,14 +118,48 @@ wepy.page({
     selectedTab: 0,
     type1,
     type2,
-    type3
+    type3,
+    refreshKey1: new Date().getTime()
   },
   methods: {
+    ...mapMutations(['setItems']),
     handleTab({ tab, index }) {
       this.selectedTab = index;
+    },
+    onNav(m) {
+      navToPage('/pages/section2/bwktDetail', {
+        subjectId: m.subjectId,
+        videoItem: JSON.stringify(m),
+        single: true
+      });
+    },
+    onFollow(item, type) {
+      if (type == 1) {
+        subjectCollect(item.id, 2).then(res => {
+          const list = this.items[type2].filter(f => f.id !== item.id);
+          this.setItems({
+            items: list,
+            type: type1
+          });
+        });
+      }
+      if (type == 2) {
+        subjectCollect(item.id, 3).then(res => {
+          const list = this.items[type2].filter(f => f.id !== item.id);
+          this.setItems({
+            items: list,
+            type: type2
+          });
+        });
+      }
+      if (type == 3) {
+        forumforumCollect(id);
+      }
     }
   },
-  onShow() {}
+  onShow() {
+    this.refreshKey1 = new Date().getTime();
+  }
 });
 </script>
 <style lang="scss">
@@ -137,34 +180,15 @@ page {
     background: rgba(230, 230, 230, 1);
   }
 
-  .tab1 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .MyCollectMedia {
-      margin-bottom: 32rpx;
-    }
-
-    mycollectmedia:first-child {
-      margin-top: 32rpx;
-    }
+  .MyCollectMedia {
+    margin: 32rpx auto;
   }
-  .tab2 {
-    .classCard1 {
-      margin: 30rpx 32rpx;
-    }
+  .classCard1 {
+    margin: 32rpx auto;
   }
-  .tab3 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    mycollecttopic {
-      margin-bottom: 32rpx;
-      &:first-child {
-        margin-top: 30rpx;
-      }
-    }
+  .MyCollectTopic {
+    margin: 32rpx auto;
   }
 }
 </style>
@@ -177,6 +201,7 @@ page {
   ClassCard1:'~Custom/ClassCard1',
   MyCollectTopic:'~Custom/MyCollectTopic',
   CListWrap1:'~UI/CListWrap1',
+  MediaItem:'~Custom/MediaItem',
 
     }
 }

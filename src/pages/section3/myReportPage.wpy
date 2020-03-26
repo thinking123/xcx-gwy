@@ -1,345 +1,367 @@
 <template>
   <div class="page myReportPage">
-
-    <CHeaderPanel title="帖子数据"
-                  external-cls__header="CHeaderPanel1"
-                  external-cls="CHeaderPanel"
+    <CHeaderPanel
+      title="帖子数据"
+      external-cls__header="CHeaderPanel1"
+      external-cls="CHeaderPanel"
     >
       <div class="c1">
-        <CRect max="30" cur="20" dir="1"
-               label="已浏览"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect1__wrap"
-               external-cls="crect1"/>
-        <CRect max="30" cur="4" dir="1"
-               label="已发帖"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect2__wrap"
-               external-cls="crect1"/>
-        <CRect max="30" cur="10" dir="1"
-               label="已回复"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect3__wrap"
-               external-cls="crect1"/>
+        <CRect
+          max="30"
+          :cur="reportData.forumScanNum"
+          dir="1"
+          label="已浏览"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect1__wrap"
+          external-cls="crect1"
+        />
+        <CRect
+          max="30"
+          :cur="reportData.forumNum"
+          dir="1"
+          label="已发帖"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect2__wrap"
+          external-cls="crect1"
+        />
+        <CRect
+          max="30"
+          :cur="reportData.forumEvaluateNum"
+          dir="1"
+          label="已回复"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect3__wrap"
+          external-cls="crect1"
+        />
       </div>
     </CHeaderPanel>
 
-    <CHeaderPanel title="视频数据"
-                  external-cls__header="CHeaderPanel2"
-                  external-cls="CHeaderPanel"
+    <CHeaderPanel
+      title="视频数据"
+      external-cls__header="CHeaderPanel2"
+      external-cls="CHeaderPanel"
     >
       <div class="c2">
-        <CRect max="30" cur="20" dir="0"
-               label="已看视频"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect1__wrap"
-               external-cls="crect1"/>
-        <CRect max="30" cur="4" dir="0"
-               label="已评论"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect2__wrap"
-               external-cls="crect1"/>
-        <CRect max="30" cur="10" dir="0"
-               label="被采纳"
-               external-cls__inner="crect1__inner"
-               external-cls__wrap="crect3__wrap"
-               external-cls="crect1"/>
+        <CRect
+          max="30"
+          :cur="reportData.videoNum"
+          dir="0"
+          label="已看视频"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect1__wrap"
+          external-cls="crect1"
+        />
+        <CRect
+          max="30"
+          :cur="reportData.videoEvaluate"
+          dir="0"
+          label="已评论"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect2__wrap"
+          external-cls="crect1"
+        />
+        <CRect
+          max="30"
+          :cur="reportData.videoEvaluate"
+          dir="0"
+          label="被采纳"
+          external-cls__inner="crect1__inner"
+          external-cls__wrap="crect3__wrap"
+          external-cls="crect1"
+        />
       </div>
     </CHeaderPanel>
 
-    <CHeaderPanel title="音频数据"
-                  external-cls__header="CHeaderPanel3"
-                  external-cls="CHeaderPanel"
+    <CHeaderPanel
+      title="音频数据"
+      external-cls__header="CHeaderPanel3"
+      external-cls="CHeaderPanel"
     >
       <div class="c3">
-        <CCircle  external-cls="CCircle1" radius="16">
+        <CCircle external-cls="CCircle1" radius="16">
           <div class="col1">
-            <span>{{reportData.media.listenNum}}</span>
+            <span>{{ reportData.soundNum }}</span>
             <span>已听音频</span>
           </div>
         </CCircle>
-        <CCircle  external-cls="CCircle2" radius="16">
+        <CCircle external-cls="CCircle2" radius="16">
           <div class="col1">
-            <span>{{formatTime}}</span>
+            <span>{{ reportData.soundTime }}</span>
             <span>总时长</span>
           </div>
         </CCircle>
-        <CCircle  external-cls="CCircle3" radius="16">
+        <CCircle external-cls="CCircle3" radius="16">
           <div class="col1">
-            <span>{{reportData.media.listenNum}}</span>
+            <span>{{ reportData.soundEvaluate }}</span>
             <span>被采纳</span>
           </div>
         </CCircle>
       </div>
     </CHeaderPanel>
-    <CHeaderPanel title="答题数据"
-                  external-cls__header="CHeaderPanel4"
-                  external-cls="CHeaderPanel"
+    <CHeaderPanel
+      title="答题数据"
+      external-cls__header="CHeaderPanel4"
+      external-cls="CHeaderPanel"
     >
       <div class="c4">
         <div class="r1">
           <div class="col1">
-            <span>{{reportData.dati.datiNum}}</span>
+            <span>{{ reportData.questionNum }}</span>
             <span>已答题</span>
           </div>
           <div class="col1">
-            <span>{{totalT}}</span>
+            <span>{{ reportData.questionTime }}</span>
             <span>总时长</span>
           </div>
           <div class="col1">
-            <span>{{reportData.dati.commentNum}}</span>
+            <span>{{ reportData.noteNum }}</span>
             <span>评论时长</span>
           </div>
         </div>
 
         <div class="r2">
-          <RightWrongTip text="正确率" :num="reportData.dati.rightNum" external-cls="RightWrongTip1"/>
-          <RightWrongTip text="预计得分" :num="reportData.dati.rightCount" external-cls="RightWrongTip2"/>
+          <RightWrongTip
+            text="正确率"
+            :num="reportData.rightRate"
+            external-cls="RightWrongTip1"
+          />
+          <RightWrongTip
+            text="预计得分"
+            :num="reportData.estimateScore"
+            external-cls="RightWrongTip2"
+          />
         </div>
       </div>
-
-
     </CHeaderPanel>
-
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
-  import {formatTime as ft} from '@/common/utils';
-
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
-        formatTime(){
-
-          return ft(this.reportData.media.totoal);
-        },
-        totalT(){
-
-          return ft(this.reportData.dati.totoal);
-        }
-    },
-    data: {
-      reportData:{
-          tiezi:{
-            viewNum:100,
-            publishNum:200,
-            backNum:100,
-          },
-
-          video:{
-            viewNum:100,
-            commentNum:200,
-            useNum:100,
-          },
-          media:{
-            listenNum:100,
-            totoal:200,// s
-            useNum:100,
-          },
-
-          dati:{
-            datiNum:100,
-            totoal:200,// s
-            commentNum:200,// s
-            rightNum:0.9,
-            rightCount:100,
-          },
-      }
-    },
-    methods: {
-    },
-    onShow(){
-
-    },
-    created () {
-
-    }
-  });
+import wepy from '@wepy/core';
+import store from 'store';
+import { formatTime as ft } from '@/common/utils';
+import { getReport } from '@/http/http-business';
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {},
+  data: {
+    reportData: {}
+  },
+  methods: {},
+  onShow() {},
+  onLoad() {
+    getReport().then(res => {
+      this.reportData = res;
+    });
+  }
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
+page {
+  background: rgba(242, 242, 242, 1);
+  display: flex;
+  flex-direction: column;
+}
+.myReportPage {
+  .CHeaderPanel1 {
+    background: linear-gradient(
+      270deg,
+      rgba(157, 214, 94, 1) 0%,
+      rgba(79, 172, 27, 1) 100%
+    );
+  }
+  .CHeaderPanel2 {
+    background: linear-gradient(
+      270deg,
+      rgba(100, 153, 217, 1) 0%,
+      rgba(52, 96, 177, 1) 100%
+    );
+  }
+  .CHeaderPanel3 {
+    background: linear-gradient(
+      270deg,
+      rgba(247, 205, 50, 1) 0%,
+      rgba(253, 124, 50, 1) 100%
+    );
+  }
+  .CHeaderPanel4 {
+    background: linear-gradient(
+      270deg,
+      rgba(107, 194, 254, 1) 0%,
+      rgba(57, 143, 252, 1) 100%
+    );
+  }
+  .CHeaderPanel {
+    margin-top: 32rpx;
+  }
+
+  .c1 {
+    background: #fff;
+    padding: 50rpx;
+    box-sizing: border-box;
+    height: 380rpx;
     display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    .crect1__wrap {
+      width: 28rpx;
+      height: 180rpx;
+    }
+    .crect2__wrap {
+      width: 28rpx;
+      height: 180rpx;
+    }
+    .crect3__wrap {
+      width: 28rpx;
+      height: 180rpx;
+    }
+    .crect1__inner {
+      background: linear-gradient(
+        180deg,
+        rgba(157, 214, 94, 1) 0%,
+        rgba(79, 172, 27, 1) 100%
+      );
+    }
+  }
+  .c2 {
+    background: #fff;
+    padding: 50rpx;
+    box-sizing: border-box;
+    height: 426rpx;
+    display: flex;
+    justify-content: space-around;
     flex-direction: column;
+    align-items: flex-start;
+    .crect1__wrap {
+      width: 400rpx;
+      height: 28rpx;
+    }
+    .crect2__wrap {
+      width: 400rpx;
+      height: 28rpx;
+    }
+    .crect3__wrap {
+      width: 400rpx;
+      height: 28rpx;
+    }
+    .crect1__inner {
+      background: linear-gradient(
+        270deg,
+        rgba(100, 153, 217, 1) 0%,
+        rgba(52, 96, 177, 1) 100%
+      );
+    }
   }
-  .myReportPage{
-
-    .CHeaderPanel1{
-      background:linear-gradient(270deg,rgba(157,214,94,1) 0%,rgba(79,172,27,1) 100%);
-
+  .c3 {
+    background: #fff;
+    padding: 50rpx;
+    box-sizing: border-box;
+    height: 426rpx;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    ccircle {
+      margin-right: 20rpx;
+      &:last-child {
+        margin-right: 0;
+      }
     }
-    .CHeaderPanel2{
-      background:linear-gradient(270deg,rgba(100,153,217,1) 0%,rgba(52,96,177,1) 100%);
-
-    }
-    .CHeaderPanel3{
-      background:linear-gradient(270deg,rgba(247,205,50,1) 0%,rgba(253,124,50,1) 100%);
-    }
-    .CHeaderPanel4{
-      background:linear-gradient(270deg,rgba(107,194,254,1) 0%,rgba(57,143,252,1) 100%);
-     }
-    .CHeaderPanel{
-      margin-top: 32rpx;
+    .CCircle1 {
+      background-color: #3561b2;
+      width: 190rpx;
+      height: 190rpx;
     }
 
-    .c1{
-      background: #fff;
-      padding: 50rpx;
-      box-sizing: border-box;
-      height: 380rpx;
+    .CCircle2 {
+      background-color: #fd7c32;
+      width: 230rpx;
+      height: 230rpx;
+    }
+
+    .CCircle3 {
+      background-color: #398ffc;
+      width: 190rpx;
+      height: 190rpx;
+    }
+
+    .col1 {
+      font-size: 40rpx;
+      font-family: PingFangSC-, PingFang SC;
+      font-weight: normal;
+      color: rgba(53, 97, 178, 1);
       display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-      .crect1__wrap{
-        width:28rpx;
-        height:180rpx;
-      }
-      .crect2__wrap{
-        width:28rpx;
-        height:60rpx;
-      }
-      .crect3__wrap{
-        width:28rpx;
-        height:100rpx;
-      }
-      .crect1__inner{
-        background:linear-gradient(180deg,rgba(157,214,94,1) 0%,rgba(79,172,27,1) 100%);
-      }
-    }
-    .c2{
-      background: #fff;
-      padding: 50rpx;
-      box-sizing: border-box;
-      height: 426rpx;
-      display: flex;
-      justify-content: space-around;
       flex-direction: column;
-      align-items: flex-start;
-      .crect1__wrap{
-        width:400rpx;
-        height:28rpx;
-      }
-      .crect2__wrap{
-        width:400rpx;
-        height:28rpx;
-      }
-      .crect3__wrap{
-        width:400rpx;
-        height:28rpx;
-      }
-      .crect1__inner{
-        background:linear-gradient(270deg,rgba(100,153,217,1) 0%,rgba(52,96,177,1) 100%);
-      }
-    }
-    .c3{
-      background: #fff;
-      padding: 50rpx;
-      box-sizing: border-box;
-      height: 426rpx;
-      display: flex;
-      justify-content: space-around;
       align-items: center;
-      ccircle{
-        margin-right: 20rpx;
-        &:last-child{
-          margin-right: 0;
-        }
-      }
-      .CCircle1{
-        background-color: #3561B2;
-        width:190rpx;
-        height:190rpx;
-      }
-
-      .CCircle2{
-        background-color: #FD7C32;
-        width:230rpx;
-        height:230rpx;
-      }
-
-      .CCircle3{
-        background-color: #398FFC;
-        width:190rpx;
-        height:190rpx;
-      }
-
-      .col1{
-        font-size:40rpx;
-        font-family:PingFangSC-,PingFang SC;
-        font-weight:normal;
-        color:rgba(53,97,178,1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        >label:last-child{
-          font-size:28rpx;
-          font-family:PingFang-SC-Regular,PingFang-SC;
-          font-weight:400;
-          color:rgba(0,0,0,1);
-          margin-top: 16rpx;
-        }
+      justify-content: center;
+      white-space: nowrap;
+      > label:last-child {
+        font-size: 28rpx;
+        font-family: PingFang-SC-Regular, PingFang-SC;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 1);
+        margin-top: 16rpx;
       }
     }
-
-    .c4{
-      padding: 48rpx 74rpx;
-      box-sizing: border-box;
-      .r1{
-
-        font-size:28rpx;
-        font-family:PingFang-SC-Regular,PingFang-SC;
-        font-weight:400;
-        color:rgba(0,0,0,1);
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .col1{
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          justify-content: center;
-          &>label:first-child{
-            margin-bottom: 20rpx;
-            font-size:40rpx;
-            font-family:PingFangSC-,PingFang SC;
-            font-weight:normal;
-            color:rgba(0,0,0,1);
-          }
-        }
-      }
-      .r2{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 48rpx;
-        .RightWrongTip1{
-          margin-right: 70rpx;
-          width:240rpx;
-          height:240rpx;
-          color:#44CB45;
-          background:linear-gradient(225deg,rgba(219,249,99,0.1) 0%,rgba(68,203,69,0.1) 100%);
-        }
-        .RightWrongTip2{
-          width:240rpx;
-          height:240rpx;
-          color:#1D92FB;
-          background:linear-gradient(229deg,rgba(55,216,254,0.1) 0%,rgba(29,146,251,0.1) 100%);
-        }
-      }
-    }
-
-
-
   }
+
+  .c4 {
+    padding: 48rpx 74rpx;
+    box-sizing: border-box;
+    .r1 {
+      font-size: 28rpx;
+      font-family: PingFang-SC-Regular, PingFang-SC;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 1);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .col1 {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        & > label:first-child {
+          margin-bottom: 20rpx;
+          font-size: 40rpx;
+          font-family: PingFangSC-, PingFang SC;
+          font-weight: normal;
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+    .r2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 48rpx;
+      .RightWrongTip1 {
+        margin-right: 70rpx;
+        width: 240rpx;
+        height: 240rpx;
+        color: #44cb45;
+        background: linear-gradient(
+          225deg,
+          rgba(219, 249, 99, 0.1) 0%,
+          rgba(68, 203, 69, 0.1) 100%
+        );
+      }
+      .RightWrongTip2 {
+        width: 240rpx;
+        height: 240rpx;
+        color: #1d92fb;
+        background: linear-gradient(
+          229deg,
+          rgba(55, 216, 254, 0.1) 0%,
+          rgba(29, 146, 251, 0.1) 100%
+        );
+      }
+    }
+  }
+}
 </style>
 <config>
 {

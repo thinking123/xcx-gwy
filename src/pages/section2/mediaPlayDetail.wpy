@@ -11,18 +11,23 @@
       :draggable="isCur"
     />
     <div class="row3">
-      <IconText
-        @click.native="handleIconText"
-        external-cls="titleIcon titleIcon1"
-        data-set="list"
-        text="播放列表"
-        src="btn_list@3x"
-      />
+      <div style="visibility:{{single ? 'hidden' : 'visible'}}">
+        <IconText
+          @click.native="handleIconText"
+          external-cls="titleIcon titleIcon1"
+          data-set="list"
+          text="播放列表"
+          src="btn_list@3x"
+          v-show="!single"
+        />
+      </div>
+
       <PlayController
         @onPre="onPre"
         @onNext="onNext"
         :isPlaying="isPlaying"
         @onPlay="onPlayControllerPlay"
+        single="{{single}}"
       />
       <IconText
         @click.native="handleIconText"
@@ -34,6 +39,7 @@
     </div>
 
     <ClassCard
+      v-if="!single"
       :title="audioSubject.viceTitle"
       :info="classCardInfo"
       selfNav
@@ -96,11 +102,6 @@ wepy.page({
   config: {
     navigationBarTitleText: ''
   },
-  watch: {
-    'audioInfo.totalTime'(v, ov) {
-      console.log(v, ov);
-    }
-  },
   computed: {
     ...mapGetters([
       'audioInfo',
@@ -153,7 +154,8 @@ wepy.page({
     show: false,
     media: {},
     type,
-    totalChaper: 0
+    totalChaper: 0,
+    single: false
   },
   methods: {
     ...mapMutations([
@@ -167,12 +169,16 @@ wepy.page({
     },
     onInput(v) {
       navToPage('/pages/section2/mediaSubmitCommentPage', {
-        subjectId: this.audioSubject.id
+        subjectId: this.audioSubject
+          ? this.audioSubject.id
+          : this.media.subjectId
       });
     },
     onComment(v) {
       navToPage('/pages/section2/mediaCommentPage', {
-        subjectId: this.audioSubject.id
+        subjectId: this.audioSubject
+          ? this.audioSubject.id
+          : this.media.subjectId
       });
     },
     onLike(v) {
@@ -220,12 +226,17 @@ wepy.page({
   onShow() {},
   onLoad(query = {}) {
     this.media = JSON.parse(query.media);
+    this.single = query.single;
     this.totalChaper = query.totalChaper;
+
     this.onEnd = this.onEnd.bind(this);
     audio.addEvent('onEnded', this.onEnd);
   },
   onUnload() {
     audio.removeEvent('onEnded', this.onEnd);
+    if (this.single) {
+      audio.stop();
+    }
   }
 });
 </script>

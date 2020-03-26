@@ -2,120 +2,126 @@
   <div class="page taskPage">
     <div class="row1">
       <div class="col1">
-        {{task.day}}
+        {{ task.day }}
       </div>
       <div class="col2">
-        <span>  {{task.cur}}</span>
+        <span> {{ total }}</span>
         /
-        <span>  {{task.total}}</span>
+        <span> {{ total }}</span>
       </div>
-
     </div>
-    <TaskItem v-for="item in items1" :key="item.id"
-              :task="item"
-              @btn="onBtn"
-              external-cls="TaskItem"/>
+
+    <CListWrap1
+      :type="type1"
+      :params="params1"
+      url="/api/my/getNewsList"
+      @loaded="onLoaded"
+    >
+      <TaskItem
+        v-for="item in clist1"
+        :key="item.id"
+        :task="item"
+        @btn="onBtn"
+        external-cls="TaskItem"
+      />
+    </CListWrap1>
   </div>
 </template>
 
 <script>
-  import wepy from '@wepy/core';
-  import store from 'store';
+import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters } from '@wepy/x';
 
-  wepy.page({
-    store,
-    config: {
-      navigationBarTitleText: ''
-    },
-    computed: {
+const type = 'taskpage-list1';
 
+wepy.page({
+  store,
+  config: {
+    navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['items', 'user']),
+    clist1() {
+      const list = this.items[this.type1];
+      return list || [];
     },
-    data: {
-      task:{
-        day:'2019年7月27日',
-        cur:102,
-        total:126,
-      },
-
-      items1:[],
-    },
-    methods: {
-      onBtn(task){
-        console.log(task);
-      }
-    },
-    onShow(){
-
-    },
-    created () {
-      let  arr = [];
-      for (let i = 0; i < 10; i++) {
-        arr.push({
-          id: i,
-          title: `数量关系${i}`,
-          point: 2,
-          completed:i%2
-
-        });
-      }
-      this.items1 = arr;
+    params1() {
+      return {
+        userId: this.user.id,
+        planState: 0
+      };
     }
-  });
+  },
+  data: {
+    total: 0,
+    type
+  },
+  methods: {
+    onLoaded(res) {
+      this.total = res.total || 0;
+    },
+    onBtn(task) {
+      console.log(task);
+    }
+  },
+  onShow() {}
+});
 </script>
 <style lang="scss">
-  page{
-    background:rgba(242,242,242,1);
-  }
+page {
+  background: rgba(242, 242, 242, 1);
+}
 
-  .taskPage{
+.taskPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .row1 {
+    width: 750rpx;
+    height: 100rpx;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0rpx 4rpx 12rpx 0rpx rgba(0, 0, 0, 0.08);
+    padding: 30rpx 40rpx;
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    .row1{
-      width:750rpx;
-      height:100rpx;
-      background:rgba(255,255,255,1);
-      box-shadow:0rpx 4rpx 12rpx 0rpx rgba(0,0,0,0.08);
-      padding: 30rpx 40rpx;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .col1{
-        font-size:28rpx;
-        line-height:40rpx;
+    .col1 {
+      font-size: 28rpx;
+      line-height: 40rpx;
 
-        font-size:28rpx;
-        font-family:PingFangSC-Semibold,PingFang SC;
-        font-weight:600;
-        color:rgba(79,172,27,1);
-      }
-
-      .col2{
-        display: flex;
-        align-items: center;
-        font-size:32rpx;
-        font-family:PingFangSC-Semibold,PingFang SC;
-        font-weight:600;
-        color:rgba(153,153,153,1);
-        >label:first-child{
-          font-size:48rpx;
-          font-family:PingFangSC-Semibold,PingFang SC;
-          font-weight:600;
-          color:rgba(79,172,27,1);
-          line-height:66rpx;
-          margin-right: 12rpx;
-        }
-      }
+      font-size: 28rpx;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      color: rgba(79, 172, 27, 1);
     }
 
-    taskitem{
-      margin-bottom: 32rpx;
-      &:first-of-type{
-        margin-top: 32rpx;
+    .col2 {
+      display: flex;
+      align-items: center;
+      font-size: 32rpx;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      color: rgba(153, 153, 153, 1);
+      > label:first-child {
+        font-size: 48rpx;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: rgba(79, 172, 27, 1);
+        line-height: 66rpx;
+        margin-right: 12rpx;
       }
     }
   }
+
+  taskitem {
+    margin-bottom: 32rpx;
+    &:first-of-type {
+      margin-top: 32rpx;
+    }
+  }
+}
 </style>
 <config>
 {
@@ -123,6 +129,8 @@
     usingComponents: {
 
   TaskItem:'~Custom/TaskItem',
+  CListWrap1:'~UI/CListWrap1',
+
     }
 }
 </config>

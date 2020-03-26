@@ -2037,6 +2037,60 @@ export function teacherDetails(id, audioTimeSize) {
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 /**
+GET /api/my/getReport
+获取报告数据 --编号 A009
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "estimateScore": 0,
+    "forumEvaluateNum": 0,
+    "forumNum": 0,
+    "forumScanNum": 0,
+    "noteNum": 0,
+    "questionNum": 0,
+    "questionTime": 0,
+    "rightRate": 0,
+    "soundEvaluate": 0,
+    "soundNum": 0,
+    "soundTime": 0,
+    "videoEvaluate": 0,
+    "videoNum": 0,
+    "videoTime": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+ */
+export function getReport() {
+  let url = '/api/my/getReport';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { userId: store.state.user.id });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
 GET /api/subjecAudio/rateLearning
 随听音频/部委课堂 更新学习进度 --编号 A004
 

@@ -1,6 +1,12 @@
 <template>
   <div class="PlayController external-cls">
-    <image src="btn_last@3x" class="icon1" mode="aspectFill" @click="onPre" />
+    <image
+      src="btn_last@3x"
+      class="icon1"
+      mode="aspectFill"
+      @click="onPre"
+      style="visibility:{{single ? 'hidden' : 'visible'}}"
+    />
     <image
       src="btn_audio_on_big@3x"
       class="icon2"
@@ -15,7 +21,13 @@
       @click="onPlay"
       v-else
     />
-    <image src="btn_next@3x" class="icon4" mode="aspectFill" @click="onNext" />
+    <image
+      src="btn_next@3x"
+      class="icon4"
+      mode="aspectFill"
+      style="visibility:{{single ? 'hidden' : 'visible'}}"
+      @click="onNext"
+    />
   </div>
 </template>
 <script>
@@ -24,7 +36,8 @@ import wepy from '@wepy/core';
 wepy.component({
   externalClasses: ['external-cls'],
   props: {
-    isPlaying: Boolean
+    isPlaying: Boolean,
+    single: Boolean
   },
   methods: {
     onPre() {

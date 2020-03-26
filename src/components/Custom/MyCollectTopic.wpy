@@ -1,134 +1,114 @@
 <template>
   <div class="MyCollectTopic external-cls">
-
-    <CCircleImg external-cls="row1" :src="topic.img"/>
+    <CCircleImg external-cls="row1" :src="topic.img" />
 
     <div class="row2">
-      <span>{{topic.title}}</span>
-      <span>帖子：{{topic.tiezi}}{{' | '}}关注：{{topic.followed}}</span>
-
-
+      <span>{{ topic.title }}</span>
+      <span
+        >帖子：{{ topic.forumNum }}{{ ' | ' }}关注：{{ topic.collectNum }}</span
+      >
     </div>
-    <image :src="icon1" class="row3"/>
+    <image src="btn_liked@3x" class="row3" @click="onFollow" />
   </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
+import wepy from '@wepy/core';
 
-  wepy.component({
-    data: {
-      icon1:'btn_liked@3x',
-    },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      topic:{
-        type:Object,
-        default:{
-          title:'',
-          img:'',
-          tiezi:0,
-          followed:0
-        }
+wepy.component({
+  data: {},
+  externalClasses: ['external-cls'],
+  props: {
+    topic: {
+      type: Object,
+      default: {
+        title: '',
+        img: '',
+        tiezi: 0,
+        followed: 0
       }
-
-    },
-    events: {
-
-    },
-    computed:{
-
-    },
-    methods: {
-
-    },
-    created(){
-      this.icon1 = getImgUrlEx(this.icon1);
-    },
-    onLoad () {
-
     }
-  });
-</script>
-<style lang="scss">
-  $white:#FFFFFF;
-  $lineColor:#CCCCCC;
-  $textBlack:#000000;
-  $textBlack1:#333333;
-  $disabledColor:lightgray;
-  $zIndexTop:900;
-  $zIndexMiddle:50;
-
-  $pageBg:#F2F2F2;
-  $pageBgGray:#F5F5F5;
-
-
-  $primaryColor:#4FAC1B;
-  $redColor:#EE4138;
-  $infoColor:#FFFFFF;
-  $textColor:#333333;
-  $textColorGray:#999999;
-  $textColorGray1:#666666;
-
-  .MyCollectTopic{
-    width:690rpx;
-    height:184rpx;
-    background:rgba(255,255,255,1);
-    border-radius:8rpx;
-    box-sizing: border-box;
-    display: flex;
-    position: relative;
-    padding: 32rpx 40rpx 32rpx 30rpx;
-    align-items: center;
-    justify-content: space-between;
-    .row1{
-      width:120rpx;
-      height:120rpx;
-      margin-right: 24rpx;
-      }
-
-
-
-      .col2{
-        display: flex;
-        align-items: center;
-        font-size:28rpx;
-        font-weight:400;
-        color:rgba(98,100,102,1);
-
-        .icon2{
-          width:32rpx;
-          height:32rpx;
-          margin-right: 34rpx;
-        }
-      }
-
-
-    .row2{
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      >label:first-child{
-        font-size:36rpx;
-        color:rgba(0,0,0,1);
-        margin-bottom: 24rpx;
-      }
-
-      >label:last-child{
-        font-size:28rpx;
-        color:rgba(153,153,153,1);
-      }
-
-    }
-    .row3{
-      width:100rpx;
-      height:100rpx;
-
-      /*margin-bottom: 42rpx;*/
+  },
+  events: {},
+  computed: {},
+  methods: {
+    onFollow() {
+      this.$emit('onFollow');
     }
   }
+});
+</script>
+<style lang="scss">
+$white: #ffffff;
+$lineColor: #cccccc;
+$textBlack: #000000;
+$textBlack1: #333333;
+$disabledColor: lightgray;
+$zIndexTop: 900;
+$zIndexMiddle: 50;
+
+$pageBg: #f2f2f2;
+$pageBgGray: #f5f5f5;
+
+$primaryColor: #4fac1b;
+$redColor: #ee4138;
+$infoColor: #ffffff;
+$textColor: #333333;
+$textColorGray: #999999;
+$textColorGray1: #666666;
+
+.MyCollectTopic {
+  width: 690rpx;
+  height: 184rpx;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  padding: 32rpx 40rpx 32rpx 30rpx;
+  align-items: center;
+  justify-content: space-between;
+  .row1 {
+    width: 120rpx;
+    height: 120rpx;
+    margin-right: 24rpx;
+  }
+
+  .col2 {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    font-weight: 400;
+    color: rgba(98, 100, 102, 1);
+
+    .icon2 {
+      width: 32rpx;
+      height: 32rpx;
+      margin-right: 34rpx;
+    }
+  }
+
+  .row2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    > label:first-child {
+      font-size: 36rpx;
+      color: rgba(0, 0, 0, 1);
+      margin-bottom: 24rpx;
+    }
+
+    > label:last-child {
+      font-size: 28rpx;
+      color: rgba(153, 153, 153, 1);
+    }
+  }
+  .row3 {
+    width: 100rpx;
+    height: 100rpx;
+
+    /*margin-bottom: 42rpx;*/
+  }
+}
 </style>
 <config>
   {
@@ -139,4 +119,3 @@
   }
   }
 </config>
-

@@ -150,6 +150,12 @@ wepy.page({
     this.btns.map(m => {
       m.icon = getImgUrlEx(m.icon);
     });
+  },
+  onLoad() {
+    if (DEV) {
+      // navToPage('/pages/section3/myCollectPage');
+      navToPage('/pages/section3/myReportPage');
+    }
   }
 });
 </script>

@@ -31,17 +31,13 @@ wepy.page({
     ...mapGetters(['user', 'items', 'playVideoInfo']),
     playSrc() {
       if (this.playVideoInfo && this.playVideoInfo.url) {
-        this.vd.stop();
+        this.vd().stop();
         return this.playVideoInfo.url;
       }
       return '';
     }
   },
-  //   watch: {
-  //     playVideoInfo(ov, nv) {
 
-  //     }
-  //   },
   data: {},
   methods: {
     ...mapMutations(['setPlayVideoInfo']),
@@ -54,10 +50,13 @@ wepy.page({
     bindwaiting() {},
     bindprogress() {},
     bindloadedmetadata() {},
-    bindcontrolstoggle() {}
-  },
-  attached() {
-    this.vd = wx.createVideoContext('vd', this.$wx);
+    bindcontrolstoggle() {},
+    vd() {
+      if (!this._vd) {
+        this._vd = wx.createVideoContext('vd', this.$wx);
+      }
+      return this._vd;
+    }
   }
 });
 </script>

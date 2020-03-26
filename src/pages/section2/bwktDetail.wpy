@@ -32,21 +32,33 @@
     </block>
 
     <view style="display:{{selectedTab == 1?'block':'none'}}">
-      <CCollapse :value="expandItems" @change="onExpand">
-        <CCollapseItem
-          v-for="item in items1"
-          :key="item.id"
-          collapse-item="collapse-item"
-          :title="item.title"
-          :name="item.id"
-        >
-          <bwktDetailCollapseItem
-            itemKey="{{type+index}}"
-            :index="index"
-            :subjectId="item.id"
-          />
-        </CCollapseItem>
-      </CCollapse>
+      <block v-if="single">
+        <MediaItem
+          :media="videoItem"
+          typeItem="text"
+          external-cls="mediaItem"
+          sel="{{true}}"
+          selfNav
+          @click="onClickVideo"
+        />
+      </block>
+      <block v-else>
+        <CCollapse :value="expandItems" @change="onExpand">
+          <CCollapseItem
+            v-for="item in items1"
+            :key="item.id"
+            collapse-item="collapse-item"
+            :title="item.title"
+            :name="item.id"
+          >
+            <bwktDetailCollapseItem
+              itemKey="{{type+index}}"
+              :index="index"
+              :subjectId="item.id"
+            />
+          </CCollapseItem>
+        </CCollapse>
+      </block>
 
       <CircleIconButton
         src="btn_video_edit@3x"
@@ -155,8 +167,6 @@ wepy.page({
     }
   },
   data: {
-    src:
-      'https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm',
     tabs: [{ text: '课程介绍' }, { text: '课时列表' }, { text: '学友评论' }],
     bottomLine: 1,
     selectedTab: 1,
@@ -171,10 +181,13 @@ wepy.page({
     type,
     heartIcon: 'btn_like@3x',
     heartSelIcon: 'btn_liked@3x',
-    teacher: null
+    teacher: null,
+    single: false,
+    videoItem: null
   },
   methods: {
     ...mapMutations(['setPlayVideoInfo']),
+    onClickVideo() {},
     handleTab({ tab, index }) {
       console.log('tab', tab, index);
       this.selectedTab = index;
@@ -220,10 +233,19 @@ wepy.page({
   },
   onShow() {},
   onLoad(query = {}) {
-    this.subjectId = query.subjectId;
-    getSubjecListByType(2).then(res => {
-      this.items1 = res;
-    });
+    this.single = query.single;
+    if (this.single) {
+      this.videoItem = JSON.parse(query.videoItem);
+      this.subjectId = this.videoItem.subjectId;
+      this.setPlayVideoInfo(this.videoItem);
+    } else {
+      this.subjectId = query.subjectId;
+
+      getSubjecListByType(2).then(res => {
+        this.items1 = res;
+      });
+    }
+
     this.heartIcon = getImgUrlEx(this.heartIcon);
     this.heartSelIcon = getImgUrlEx(this.heartSelIcon);
   }

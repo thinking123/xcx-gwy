@@ -194,7 +194,7 @@ wepy.component({
             message
           } = _res;
           this.isLoading = false;
-          this.$emit('loaded', _res.rows);
+          this.$emit('loaded', _res.rows || {});
           this.loaded = true;
 
           const s = `${status}`;

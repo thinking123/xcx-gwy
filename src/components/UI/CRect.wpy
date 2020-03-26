@@ -1,148 +1,145 @@
 <template>
-  <div class="CRect external-cls" :class="{'vert':dir==1,'hor':dir==0,}">
+  <div class="CRect external-cls" :class="{ vert: dir == 1, hor: dir == 0 }">
     <div class="CRect-label">
-      {{label}}
+      {{ label }}
     </div>
     <div class="CRect--wrap external-cls__wrap">
-      <div class="CRect--inner external-cls__inner" style="height:{{h}};width:{{w}};"/>
+      <div
+        class="CRect--inner external-cls__inner"
+        style="height:{{h}};width:{{w}};"
+      />
     </div>
 
-
     <div class="CRect--text">
-      {{cur}}
+      {{ cur }}
     </div>
   </div>
 </template>
 <script>
-  import wepy from '@wepy/core';
-  import { basic } from '@/mixins/basic';
+import wepy from '@wepy/core';
+import { basic } from '@/mixins/basic';
 
-  wepy.component({
-    data: {
-      h:0,
-      w:0,
+wepy.component({
+  data: {
+    h: 0,
+    w: 0
+  },
+  mixins: [basic],
+  externalClasses: [
+    'external-cls',
+    'external-cls__inner',
+    'external-cls__wrap'
+  ],
+  props: {
+    //dir 0 hor , 1 vert
+    dir: Number,
+    max: {
+      type: Number,
+      default: 100
     },
-    mixins: [basic],
-    externalClasses: [
-      'external-cls',
-      'external-cls__inner',
-      'external-cls__wrap'
-    ],
-    props: {
-      //dir 0 hor , 1 vert
-      dir: Number,
-      max: {
-        type:Number,
-        default:100
-      },
-      cur: {
-        type:Number,
-        default:0
-      },
-      label:String
+    cur: {
+      type: Number,
+      default: 0
     },
-    events: {},
-    computed: {},
-    methods: {},
-    attached() {
+    label: String
+  },
+  events: {},
+  watch: {
+    cur(v) {
+      this.$nextTick(() => {
+        this.rect(v);
+      });
+    }
+  },
+  methods: {
+    rect() {
       this.getRect('.CRect--wrap').then(rect => {
         const { width, height } = rect;
-        const ratio = this.cur/this.max;
-        if(this.dir == 0){
+        const cur = this.cur > this.max ? this.max : this.cur;
+        const ratio = cur / this.max;
+        if (this.dir == 0) {
           this.h = '100%';
-          this.w = `${ratio*100}%`;
-        }else{
+          this.w = `${ratio * 100}%`;
+        } else {
           this.w = '100%';
-          // this.h = `${ratio*100}%`;
-          this.h = `${100}%`;
+          this.h = `${ratio * 100}%`;
         }
       });
-    },
-    created() {
-      const {windowWidth} = wx.getSystemInfoSync();
-      this.windowWidth = windowWidth;
     }
-  });
+  }
+});
 </script>
 <style lang="scss">
-
-
-  .CRect {
-    display: flex;
-    &.vert{
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-
-    }
-    &-label{
-      font-size:28rpx;
-      font-family:PingFang-SC-Regular,PingFang-SC;
-      font-weight:400;
-      color:rgba(0,0,0,1);
-      white-space: nowrap;
-    }
-    &--text{
-      font-size:40rpx;
-      font-family:PingFangSC-,PingFang SC;
-      font-weight:normal;
-      color:rgba(0,0,0,1);
-      white-space: nowrap;
-      &__vert{
-
-      }
-
-      &__hor{
-
-      }
-    }
-
-    &--wrap{
-
-    }
-    &--inner{
-      border-radius:8rpx;
-      overflow: hidden;
-    }
-  }
-  .vert{
-    .CRect{
-      &-label{
-        margin-top: 16rpx;
-        order: 2;
-      }
-      &--text{
-        margin-bottom: 4rpx;
-        order: 0;
-      }
-      &--wrap{
-        order: 1;
-        display: flex;
-        align-items: flex-end;
-      }
-    }
-  }
-  .hor{
-    display: flex;
+.CRect {
+  display: flex;
+  &.vert {
+    flex-direction: column;
     align-items: center;
-    .CRect{
-      &-label{
-        width: 150rpx;
-        margin-left: 4rpx;
-        order: 0;
-        align-self: flex-end;
-      }
-      &--text{
-        margin-right: 16rpx;
-        order: 2;
+    justify-content: flex-end;
+  }
+  &-label {
+    font-size: 28rpx;
+    font-family: PingFang-SC-Regular, PingFang-SC;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 1);
+    white-space: nowrap;
+  }
+  &--text {
+    font-size: 40rpx;
+    font-family: PingFangSC-, PingFang SC;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 1);
+    white-space: nowrap;
+    &__vert {
+    }
 
-      }
-      &--wrap{
-        order: 1;
-        display: flex;
-        align-items: flex-end;
-      }
+    &__hor {
     }
   }
 
+  &--wrap {
+  }
+  &--inner {
+    border-radius: 8rpx;
+    overflow: hidden;
+  }
+}
+.vert {
+  .CRect {
+    &-label {
+      margin-top: 16rpx;
+      order: 2;
+    }
+    &--text {
+      margin-bottom: 4rpx;
+      order: 0;
+    }
+    &--wrap {
+      order: 1;
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+}
+.hor {
+  display: flex;
+  align-items: center;
+  .CRect {
+    &-label {
+      width: 150rpx;
+      margin-left: 4rpx;
+      order: 0;
+      align-self: flex-end;
+    }
+    &--text {
+      margin-right: 16rpx;
+      order: 2;
+    }
+    &--wrap {
+      order: 1;
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+}
 </style>

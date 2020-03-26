@@ -158,7 +158,8 @@ wepy.page({
       navToPage('/pages/section1/luntanPublish');
     },
     handleGz() {
-      forumforumCollect();
+      const id = selArrayVal(this.list1Sel, this.list1, 'id');
+      forumforumCollect(id);
     },
     handleMsgItem(item) {},
     onCOrderList(index) {
