@@ -216,13 +216,8 @@ wepy.page({
   computed: {
     ...mapGetters(['isSigned', 'user']),
     selSex() {
-      if (this.user.userSex) {
-        const item = this.sexItems.find(f => f.id == this.user.userSex);
-
-        return item.text;
-      }
-
-      return '';
+      const item = this.sexItems.find(f => f.id == this.user.userSex);
+      return item ? item.text : '';
     }
   },
   data: {
