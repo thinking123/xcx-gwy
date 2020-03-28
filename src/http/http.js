@@ -23,7 +23,14 @@ function hideLoading(loadingText = '', url) {
   clearTimeout(delay[url]);
   delete delay[url];
 }
-function http(url, data, loadingText, header, method = 'GET') {
+function http(
+  url,
+  data,
+  loadingText,
+  header,
+  _showLoading = true,
+  method = 'GET'
+) {
   // const app = getApp();
   if (url.indexOf('/') == 0) {
     url = url.substr(1);
@@ -47,8 +54,10 @@ function http(url, data, loadingText, header, method = 'GET') {
   const _url = `${baseUrl}${url}`;
   console.log('url', _url);
 
-  commit('pushQueue', url);
-  showLoading(loadingText, url);
+  if (_showLoading) {
+    commit('pushQueue', url);
+    showLoading(loadingText, url);
+  }
 
   return new Promise((resolve, reject) => {
     wx.request({
@@ -57,23 +66,35 @@ function http(url, data, loadingText, header, method = 'GET') {
       header: header,
       method: method,
       success: res => {
-        hideLoading(loadingText, url);
-        commit('popQueue');
+        _showLoading && hideLoading(loadingText, url);
+        _showLoading && commit('popQueue');
         resolve(res ? res.data : null);
       },
       fail: err => {
-        hideLoading(loadingText, url);
-        commit('popQueue');
+        _showLoading && hideLoading(loadingText, url);
+        _showLoading && commit('popQueue');
         reject(err);
       }
     });
   });
 }
 
-export function get(url, params = {}, loadingText = null, headers = {}) {
-  return http(url, params, loadingText, headers);
+export function get(
+  url,
+  params = {},
+  loadingText = null,
+  headers = {},
+  showLoading = true
+) {
+  return http(url, params, loadingText, headers, showLoading);
 }
 
-export function post(url, data = {}, loadingText = null, headers = {}) {
-  return http(url, data, loadingText, headers, 'POST');
+export function post(
+  url,
+  data = {},
+  loadingText = null,
+  headers = {},
+  showLoading = true
+) {
+  return http(url, data, loadingText, headers, showLoading, 'POST');
 }

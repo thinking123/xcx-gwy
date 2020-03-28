@@ -2295,7 +2295,7 @@ export function rateLearning(subjectListId, studyLength) {
     studyLength,
     userId: store.state.user.id
   });
-  return get(url, {}, '').then(res => parseRes(res, ''));
+  return get(url, {}, '', {}, false).then(res => parseRes(res, ''));
 }
 /**
 GET /api/subjecAudio/subjectCollect

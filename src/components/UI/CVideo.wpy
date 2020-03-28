@@ -21,7 +21,9 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
-
+import { tasks } from '@/common/task';
+import { rateLearning } from '@/http/http-business';
+import { debounce } from '@/common/utils';
 wepy.page({
   store,
   props: {
@@ -31,7 +33,6 @@ wepy.page({
     ...mapGetters(['user', 'items', 'playVideoInfo']),
     playSrc() {
       if (this.playVideoInfo && this.playVideoInfo.url) {
-        this.vd().stop();
         return this.playVideoInfo.url;
       }
       return '';
@@ -41,7 +42,13 @@ wepy.page({
   data: {},
   methods: {
     ...mapMutations(['setPlayVideoInfo']),
-    bindtimeupdate() {},
+    update(currentTime) {
+      rateLearning(this.playVideoInfo.subjectId, currentTime);
+    },
+    bindtimeupdate(event) {
+      const { currentTime, duration } = event.$wx.detail;
+      this.update(currentTime);
+    },
     bindpause() {},
     bindplay() {},
     binderror() {},
@@ -52,11 +59,15 @@ wepy.page({
     bindloadedmetadata() {},
     bindcontrolstoggle() {},
     vd() {
-      if (!this._vd) {
-        this._vd = wx.createVideoContext('vd', this.$wx);
-      }
+      // if (!this._vd) {
+      //   this._vd = wx.createVideoContext('vd', this.$wx);
+      // }
       return this._vd;
     }
+  },
+  attached() {
+    this.update = debounce(this.update.bind(this), 1000);
+    this._vd = wx.createVideoContext('vd', this.$wx);
   }
 });
 </script>

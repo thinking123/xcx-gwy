@@ -1,10 +1,10 @@
 <template>
   <div class="TimuCuotiItem external-cls">
-    <CircleText external-cls="row1" :text="firstText" />
+    <CircleText external-cls="row1" :text="firstText" v-if="firstText" />
     <div class="row2">
       <div class="col1">
         <span>{{ cuoti.answerTime }}</span>
-        <span>做错{{ cuoti.errorNum }}次</span>
+        <span v-if="cuoti.errorNum > 0">做错{{ cuoti.errorNum }}次</span>
       </div>
       <div class="col2">
         {{ cuoti.questContent }}

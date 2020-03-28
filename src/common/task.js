@@ -47,7 +47,7 @@ class Task {
   //   }
 }
 
-export class TaskTimer {
+export class Tasks {
   queue = [];
   pending = false;
   timer = null;
@@ -55,44 +55,45 @@ export class TaskTimer {
   time = 1000;
   constructor() {}
 
-  task() {
-    if (this.queue.length > 0) {
-      const diff = (new Date().getTime - this.curTime) / 1000;
-      this.queue.forEach(({ fun, ctx, delay }) => {
-        if (diff >= delay) {
-          fun.bind(ctx);
+  run() {
+    if (Object.keys(this.queue).length > 0) {
+      Object.keys(this.queue).forEach(k => {
+        const { fun, key, ctx, period, lastRun } = this.queue[k];
+        if (!lastRun || period <= (new Date().getTime - lastRun) / 1000) {
+          fun.call(ctx);
+          this.queue[k].lastRun = new Date().getTime;
         }
       });
-      this.timer = setTimeout(this.task, 1000);
+      this.timer = setTimeout(this.run.bind(this), 1000);
     } else {
       this.timer = null;
     }
-
-    this.curTime = new Date().getTime;
   }
 
-  push(fun, ctx, delay = 0) {
-    this.queue.push(() => {
-      fun.bind(ctx);
-    });
+  push(fun, key, period = 0, ctx = null) {
+    if (!this.queue[key]) {
+      this.queue[key] = {
+        fun: function() {
+          fun.bind(ctx);
+        },
+        key,
+        ctx,
+        period
+      };
 
-    if (!this.timer) {
-      this.timer = setTimeout(this.task, 1000);
-    }
-  }
-
-  pop(fun) {
-    let len = this.queue.length;
-    while (--len >= 0) {
-      if (this.queue[len].fun === fun) {
-        this.queue.splice(len, 1);
-        break;
+      if (!this.timer) {
+        this.timer = setTimeout(this.run, 1000);
       }
     }
-    if (this.queue.length == 0) {
-      this.timer = null;
-    }
   }
 
-  stop() {}
+  pop(key) {
+    if (key) {
+      delete this.queue[key];
+    } else {
+      this.queue = Object.create(null);
+    }
+  }
 }
+
+export const tasks = new Tasks();

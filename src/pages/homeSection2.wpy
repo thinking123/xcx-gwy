@@ -46,7 +46,9 @@
       <ClassCard1
         v-for="item in clist2"
         :key="item.id"
-        :num1="item.totalChapter"
+        :item="item"
+        :num1="item.chapter"
+        :num2="item.section"
         :src="item.cover"
         free="{{item.price == 0}}"
         :title="item.title"

@@ -1,7 +1,7 @@
 <template>
   <div class="ClassCard1 external-cls" @click="onNav">
     <div class="col1">
-      <image :src="icon" class="icon" v-if="good" />
+      <image src="label_baokuan@3x" class="icon" v-if="good" />
       <image :src="src" class="bg" />
     </div>
     <div class="col2">
@@ -9,11 +9,11 @@
         {{ title }}
       </div>
       <div class="row2">
-        <image :src="icon1" />
+        <image src="icon_play_gray02@3x" />
         <span class="text1"> 共{{ num1 }}章{{ num2 }}节 </span>
 
         <block v-if="liked">
-          <image :src="icon2" class="icon2" />
+          <image src="btn_liked@3x" class="icon2" />
         </block>
         <!-- <block v-else>
           <span v-if="free" class="text2">
@@ -27,15 +27,10 @@
 </template>
 <script>
 import wepy from '@wepy/core';
-import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
 
 wepy.component({
-  data: {
-    icon: 'label_baokuan@3x',
-    icon1: 'icon_play_gray02@3x',
-    icon2: 'btn_liked@3x'
-  },
+  data: {},
   externalClasses: ['external-cls'],
   props: {
     title: String,
@@ -66,11 +61,7 @@ wepy.component({
       });
     }
   },
-  created() {
-    this.icon2 = getImgUrlEx(this.icon2);
-    this.icon1 = getImgUrlEx(this.icon1);
-    this.icon = getImgUrlEx(this.icon);
-  },
+
   onLoad() {}
 });
 </script>
