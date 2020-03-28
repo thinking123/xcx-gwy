@@ -250,7 +250,15 @@ export function ellipseNumber(num, max = 999) {
   return num;
 }
 
-export function formatDateTime(time) {}
+export function formatDateTime(time, format = '') {}
+
+export function formatLocalDateTime(date = new Date()) {
+  const y = date.getFullYear();
+  let m = date.getMonth() + 1;
+  let d = date.getDate();
+
+  return `${y}年${m}月${d}日`;
+}
 
 export function getDate(date = new Date(), split = '-') {
   const y = date.getFullYear();
@@ -299,3 +307,15 @@ export function selArrayVal(i, arr, key) {
 // export function isObj(obj) {
 //   return typeof obj === 'object' && obj !== null;
 // }
+
+export function debounce(fun, delay) {
+  let inDebounce;
+  return function() {
+    let c = this;
+    let arg = arguments;
+    clearTimeout(inDebounce);
+    inDebounce = setTimeout(() => {
+      fun.apply(c, arg);
+    }, delay);
+  };
+}

@@ -22,7 +22,7 @@
         :key="item.id"
         external-cls="MyCollectMedia"
         showFollow
-        @onFollow="onFollow(item, 1)"
+        @onFollow="onFollow"
         single
       />
     </CListWrap1>
@@ -43,7 +43,7 @@
         selfNav
         @click="onNav(m)"
         showFollow
-        @onFollow="onFollow(m, 2)"
+        @onFollow="onFollow"
         single
       />
     </CListWrap1>
@@ -60,7 +60,7 @@
         :key="item.id"
         :topic="item"
         external-cls="MyCollectTopic"
-        @onFollow="onFollow(item, 3)"
+        @onFollow="onFollow"
       />
     </CListWrap1>
   </div>
@@ -70,7 +70,12 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapMutations } from '@wepy/x';
-import { subjectCollect, forumforumCollect } from '@/http/http-business';
+import {
+  subjectCollect,
+  forumforumCollect,
+  cancelSubjectCollect,
+  cancelForumCollect
+} from '@/http/http-business';
 import { navToPage } from '@/common/navUtils';
 
 const type1 = 'myCollectPage_1';
@@ -133,27 +138,44 @@ wepy.page({
         single: true
       });
     },
-    onFollow(item, type) {
+    onFollow(item) {
+      const type = this.selectedTab + 1;
       if (type == 1) {
-        subjectCollect(item.id, 2).then(res => {
-          const list = this.items[type2].filter(f => f.id !== item.id);
+        const p =
+          item.isCollect == 1
+            ? cancelSubjectCollect(item.id, 2)
+            : subjectCollect(item.id, 2);
+        p.then(res => {
+          const list = this.items[this.type1].filter(f => f.id !== item.id);
           this.setItems({
             items: list,
-            type: type1
+            type: this.type1
           });
         });
       }
       if (type == 2) {
-        subjectCollect(item.id, 3).then(res => {
-          const list = this.items[type2].filter(f => f.id !== item.id);
+        const p =
+          item.isCollect == 1
+            ? cancelSubjectCollect(item.id, 3)
+            : subjectCollect(item.id, 3);
+        p.then(res => {
+          const list = this.items[this.type2].filter(f => f.id !== item.id);
           this.setItems({
             items: list,
-            type: type2
+            type: this.type2
           });
         });
       }
       if (type == 3) {
-        forumforumCollect(id);
+        const p =
+          item.isCollect == 1 ? cancelForumCollect(id) : forumforumCollect(id);
+        p.then(res => {
+          const list = this.items[this.type3].filter(f => f.id !== item.id);
+          this.setItems({
+            items: list,
+            type: this.type3
+          });
+        });
       }
     }
   },

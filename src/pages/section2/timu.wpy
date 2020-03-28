@@ -1,13 +1,12 @@
 <template>
   <div class="page timu" :class="{ 'timu--night': timuConfig.night }">
     <timuHeader
-      showSwitch="{{timuConfig.cuoti}}"
+      showSwitch="{{true}}"
       @edit="onEdit"
       @change="ontimuHeader"
       :isOpen="timuConfig.night"
       day="{{50}}"
     />
-
     <swiper
       bindchange="onSwiperChange"
       :current="timuConfig.index"
@@ -99,7 +98,9 @@ import { mapGetters, mapMutations } from '@wepy/x';
 import {
   getQuestionList,
   recordSubjectNote,
-  getDailyPractice
+  getDailyPractice,
+  getErrorList,
+  recordAllAnswerResult
 } from '@/http/http-business';
 import { navToPage } from '@/common/navUtils';
 import eventHub from '@/common/eventHub';
@@ -168,14 +169,18 @@ wepy.page({
     }
   },
   data: {
-    cuoti: true,
     show: false,
     showCompleted: false,
     showNav: true,
     editText: '',
     subjectId: '',
     height: 0,
-    ai: false
+    ai: false,
+    cuoti: false,
+    pageNum: 0,
+    pages: 1,
+    total: 0,
+    single: false
   },
   methods: {
     ...mapMutations(['setTimuItems', 'setTimuConfig']),
@@ -207,8 +212,8 @@ wepy.page({
         this.setTimuConfig({
           index
         });
-        if (index > this.timuItems.length - 2) {
-          // this.getItems({});
+        if (index > this.timuItems.length - 2 && this.cuoti) {
+          this.getItems({});
         }
       } else {
         this.setTimuConfig({
@@ -230,57 +235,126 @@ wepy.page({
       }
     },
     getItems(p) {
-      const ps = this.ai ? getDailyPractice() : getQuestionList(this.subjectId);
-      ps.then(res => {
-        res = res.map(m => {
-          // 还没有答题过
-          m.hadSelected = false;
-          return m;
-        });
-        let arr = [];
-        if (p) {
-          arr = [...this.timuItems, ...res];
-        } else {
-          arr = res;
-        }
+      if (this.cuoti) {
+        const ps = getErrorList(this.subjectId, this.pageNum + 1).then(
+          ({ list: res, pageNum, pages, total }) => {
+            res = res.map(m => {
+              // 还没有答题过
+              m.hadSelected = false;
+              return m;
+            });
+            let arr = [];
+            if (p) {
+              arr = [...this.timuItems, ...res];
+            } else {
+              arr = res;
+            }
 
-        this.setTimuConfig({
-          total: arr.length
+            this.pageNum = pageNum;
+            this.pages = pages;
+            this.setTimuConfig({
+              total
+            });
+            this.setTimuItems(arr);
+          }
+        );
+      } else {
+        const ps = this.ai
+          ? getDailyPractice()
+          : getQuestionList(this.subjectId);
+        ps.then(res => {
+          res = res.map(m => {
+            // 还没有答题过
+            m.hadSelected = false;
+            return m;
+          });
+          let arr = [];
+          if (p) {
+            arr = [...this.timuItems, ...res];
+          } else {
+            arr = res;
+          }
+
+          this.setTimuConfig({
+            total: arr.length
+          });
+          this.setTimuItems(arr);
         });
-        this.setTimuItems(arr);
-      });
+      }
     },
     onComment(v) {
       navToPage('/pages/section2/mediaSubmitCommentPage', {
         subjectId: this.curTimu.subjectId
       });
+    },
+    recordAllAnswerResult() {
+      const questionIds = [];
+      const userAnswers = [];
+      const isRights = [];
+      const subjectIds = [this.subjectId];
+      timuItems.forEach(t => {
+        if (t.hadSelected) {
+          const rs = t.questAnwser.charCodeAt(0);
+          const c = 65; // A
+          const rightRag = rs - c;
+          questionIds.push(t.id);
+          userAnswers.push(t.questAnwser[0]);
+          isRights.push(rightRag == t.myTag ? 1 : 0);
+        }
+      });
+
+      if (questionIds.length > 0) {
+        recordAllAnswerResult(questionIds, userAnswers, isRights, subjectIds);
+      }
     }
   },
   onShow() {},
   onLoad(query = {}) {
-    let { referrer, subjectId, item = '{}', ai = false } = query;
+    let {
+      referrer,
+      subjectId,
+      item = '{}',
+      ai = false,
+      cuoti = false,
+      single = false
+    } = query;
     this.subjectId = subjectId;
     this.ai = ai;
+    this.single = single;
+    this.cuoti = cuoti;
     item = JSON.parse(item);
     this.setTimuConfig({
       total: item.questionNum || 5,
       title: item.title || ''
     });
-    if (referrer && referrer.indexOf('timuCuoti')) {
-      this.setTimuConfig({
-        cuoti: true
-      });
-    }
-    this.getItems();
+    // if (referrer && referrer.indexOf('timuCuoti')) {
+    //   this.setTimuConfig({
+    //     cuoti: true
+    //   });
+    // }
     eventHub.$on('showCompleted', showCompleted => {
-      this.showCompleted = true;
+      if (!this.single) {
+        this.showCompleted = true;
+      }
     });
 
     this.getSystemInfo().then(({ windowHeight }) => {
       this.height = windowHeight - this.rpxTopx(120 + 100);
     });
+    if (this.single) {
+      this.setTimuConfig({
+        total: 1
+      });
+      item.hadSelected = false;
+      this.setTimuItems([item]);
+    } else {
+      this.getItems();
+    }
   },
   onUnload() {
+    if (this.cuoti) {
+      this.recordAllAnswerResult();
+    }
     this.setTimuItems([]);
     this.setTimuConfig({
       index: 0

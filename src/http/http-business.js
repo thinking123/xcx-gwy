@@ -515,6 +515,55 @@ export function learnPlanAdd(userId, planContent, planTime) {
   });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
+/**
+ /api/subjecAudio/cancelSubjectCollect
+取消关注音频或者视频 --编号 008
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+userId	
+(required)
+用户Id
+
+query	string
+labelId	
+(required)
+视频或者音频id
+
+query	string
+type	
+(required)
+2 音频 3 视频
+
+query	string
+Response Messages
+ */
+export function cancelSubjectCollect(labelId, type) {
+  let url = '/api/subjecAudio/cancelSubjectCollect';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id,
+    labelId,
+    type
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
 
 /**
  *
@@ -825,6 +874,66 @@ export function forumgetCategory() {
 }
 
 /**
+ GET /api/subjecAudio/getSearchRecordList
+获取搜索记录列表 --编号 A011
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "addTime": "string",
+    "createBy": "string",
+    "createTime": "2020-03-27T08:03:58.247Z",
+    "id": 0,
+    "params": {},
+    "remark": "string",
+    "searchName": "string",
+    "searchType": 0,
+    "searchValue": "string",
+    "updateBy": "string",
+    "updateTime": "2020-03-27T08:03:58.247Z",
+    "userId": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+type	
+(required)
+类型 1 随听音频 2部委课堂 3 精炼题目
+
+query
+ */
+export function getSearchRecordList() {
+  let url = '/api/subjecAudio/getSearchRecordList';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
  *
  * GET /api/forum/addScan
  增加阅读量 --编号 007
@@ -1000,6 +1109,50 @@ export function getForumById(userId, id) {
  */
 export function forumforumCollect(labelId) {
   let url = '/api/forum/forumCollect';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, {
+    userId: store.state.user.id,
+    labelId
+  });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+
+/**
+ *GET /api/forum/cancelForumCollect
+取消关注一级分类 --编号 002
+
+Response Class (Status 200)
+手机号未注册
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+userId	
+(required)
+用户Id
+
+query	string
+labelId	
+(required)
+一级分类id
+
+query	string
+
+ */
+export function cancelForumCollect(labelId) {
+  let url = '/api/forum/cancelForumCollect';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
@@ -2301,6 +2454,73 @@ export function getDailyPractice() {
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 /**
+/api/subjectQuestion/getErrorList
+错题列表 --编号 A006
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {
+    "list": [
+      {
+        "answerTime": "string",
+        "errorNum": 0,
+        "id": 0,
+        "questAnwser": "string",
+        "questContent": "string",
+        "questionId": 0,
+        "subjectId": 0,
+        "title": "string",
+        "userAnswer": "string",
+        "userId": 0
+      }
+    ],
+    "pageNum": 0,
+    "pages": 0,
+    "total": 0
+  },
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+subjectId	
+分类id
+
+query	string
+pageNum	
+(required)
+第几页
+
+query	string
+
+ */
+export function getErrorList(subjectId, pageNum) {
+  let url = '/api/subjectQuestion/getErrorList';
+
+  // const loadingText = '打卡...';
+  // const errMsg = '打卡失败';
+
+  url = urlParams(url, { userId: store.state.user.id, subjectId, pageNum });
+  return get(url, {}, '').then(res => parseRes(res, ''));
+}
+/**
 GET /api/school/selectPro
 获取省级地区
 
@@ -2427,6 +2647,76 @@ export function singscore(score, content, subjectListId) {
     score,
     subjectListId,
     time: new Date().toString()
+  };
+  return post(url, data, '').then(res => parseRes(res, ''));
+}
+
+/**
+ POST /api/subjectQuestion/recordAllAnswerResult
+批量记录答题结果 --编号 A010
+
+Response Class (Status 200)
+请求已完成
+
+ModelExample Value
+{
+  "message": "string",
+  "path": "string",
+  "rows": {},
+  "status": "string"
+}
+
+
+Response Content Type 
+Parameters
+Parameter	Value	Description	Parameter Type	Data Type
+token	
+(required)
+token
+
+header	string
+userId	
+(required)
+用户id
+
+query	string
+questionIds	
+(required)
+试题id(用，拼接)
+
+query	string
+userAnswers	
+(required)
+用户答案(用，拼接)
+
+query	string
+isRights	
+(required)
+是否正确(用，拼接)
+
+query	string
+subjectIds	
+(required)
+分类id(用，拼接)
+
+query	string
+ */
+
+export function recordAllAnswerResult(
+  questionIds,
+  userAnswers,
+  isRights,
+  subjectIds
+) {
+  let url = '/api/subjectQuestion/recordAllAnswerResult';
+  // const loadingText = '正在登入...';
+  // const errMsg = '登入失败';
+  const data = {
+    questionIds,
+    userAnswers,
+    isRights,
+    subjectIds,
+    userId: store.state.user.id
   };
   return post(url, data, '').then(res => parseRes(res, ''));
 }

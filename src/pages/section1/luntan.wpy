@@ -38,9 +38,9 @@
     >
       <block slot="header">
         <LunTanHeader
-          title="申论"
-          tieziNum="2008"
-          followNum="100"
+          :title="header.name"
+          :tieziNum="header.collectNum"
+          :followNum="header.forumNum"
           @btn="handleGz"
           v-if="header"
         />
@@ -76,7 +76,8 @@ import {
   forumgetCategory,
   getCity,
   getLabel,
-  selectPro
+  selectPro,
+  cancelForumCollect
 } from '@/http/http-business';
 import { mapGetters } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';

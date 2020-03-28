@@ -101,7 +101,7 @@ wepy.component({
   },
   methods: {
     onFollow() {
-      this.$emit('onFollow');
+      this.$emit('onFollow', this.media);
     },
     onNav() {
       if (!this.selfNav) {

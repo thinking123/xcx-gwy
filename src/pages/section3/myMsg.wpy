@@ -37,7 +37,12 @@
       url="/api/my/getNewsList"
       :show="selectedTab == 2"
     >
-      <SystemItemMsg v-for="item in clist3" :key="item.id" :sysMsg="item" />
+      <SystemItemMsg
+        v-for="item in clist3"
+        :key="item.id"
+        :sysMsg="item"
+        external-cls="SystemItemMsg"
+      />
     </CListWrap1>
   </div>
 </template>
@@ -61,7 +66,15 @@ wepy.page({
     ...mapGetters(['items', 'user']),
     clist1() {
       const list = this.items[this.type1];
-      return list || [];
+      return (list || []).map(m => {
+        const obj = {};
+        obj.head = m.userHead;
+        obj.name = m.userName;
+        obj.content = m.forumContent;
+        obj.time = m.createTime;
+        obj.score = m.score;
+        return obj;
+      });
     },
     params1() {
       return {
@@ -71,7 +84,14 @@ wepy.page({
     },
     clist2() {
       const list = this.items[this.type2];
-      return list || [];
+      return (list || []).map(m => {
+        const obj = {};
+        obj.head = m.userHead;
+        obj.name = m.userName;
+        obj.content = m.privateMsg;
+        obj.time = m.createTime;
+        return obj;
+      });
     },
     params2() {
       return {
@@ -81,7 +101,13 @@ wepy.page({
     },
     clist3() {
       const list = this.items[this.type3];
-      return list || [];
+      return (list || []).map(m => {
+        const obj = {};
+        obj.title = m.sysTitle;
+        obj.msg = m.sysContent;
+        obj.publishDate = m.createTime;
+        return obj;
+      });
     },
     params3() {
       return {
@@ -134,12 +160,16 @@ wepy.page({
     font-weight: normal;
     color: rgba(102, 102, 102, 1);
 
-    height: 160rpx;
+    height: 120rpx;
     box-shadow: 0px 4rpx 12rpx 0px rgba(0, 0, 0, 0.08);
   }
 
-  .row3 {
+  .SystemItemMsg {
     margin-top: 10rpx;
+  }
+
+  .SystemItemMsg + .SystemItemMsg {
+    margin-top: 0;
   }
 }
 </style>

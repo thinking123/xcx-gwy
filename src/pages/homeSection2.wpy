@@ -254,6 +254,11 @@ wepy.page({
     getSubjecListByType(3).then(res => {
       this.items3 = res;
     });
+
+    if (DEV) {
+      navToPage('/pages/section2/searchPage');
+      // navToPage('/pages/section2/timu');
+    }
   },
   created() {
     eventHub.$on('jinlianopened', jinlian => {

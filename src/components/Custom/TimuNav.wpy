@@ -1,5 +1,5 @@
 <template>
-  <div class="TimuNav external-cls" v-if="timuConfig.cuoti">
+  <div class="TimuNav external-cls">
     <div class="wrap" :class="{ night: timuConfig.night }">
       <div
         class="row1"

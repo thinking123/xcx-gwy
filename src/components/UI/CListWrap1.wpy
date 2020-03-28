@@ -35,7 +35,6 @@ import store from 'store';
 import { mapMutations, mapGetters } from '@wepy/x';
 import { get } from '@/http/http';
 import { showMsg, urlParams, isEqual } from '@/common/utils';
-// import {parseRes} from '@/http/http-business';
 
 const defFun = () => {
   console.log('defFun');
@@ -107,6 +106,10 @@ wepy.component({
     cached: {
       type: Boolean,
       default: false
+    },
+    noEncode: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -152,7 +155,7 @@ wepy.component({
     },
     intersectionCb(res) {
       const { isLoading, isEnd, threshold, show } = this;
-      if (!isLoading && !isEnd && show) {
+      if (!isLoading && !isEnd && show && !this.isDetaching) {
         this.getData();
       }
     },
@@ -160,7 +163,7 @@ wepy.component({
       const { url, params = {}, pageNum } = this;
 
       let obj = { ...params, pageNum: pageNum + 1 };
-      let _url = urlParams(url, obj);
+      let _url = urlParams(url, obj, this.noEncode);
       console.log('requdser url', _url);
       return get(_url);
     },
@@ -267,11 +270,12 @@ wepy.component({
   },
   detached() {
     console.log('detached list wrap');
+    this.isDetaching = true;
     const { type } = this;
-    this.resetItems(type);
     if (this.ob) {
       this.ob.disconnect();
     }
+    this.resetItems(type);
   },
   created() {
     console.log('created');
@@ -280,6 +284,7 @@ wepy.component({
     });
   },
   attached() {
+    this.isDetaching = false;
     this.init();
   }
 });

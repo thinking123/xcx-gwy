@@ -2,19 +2,19 @@
   <div class="page taskPage">
     <div class="row1">
       <div class="col1">
-        {{ task.day }}
+        {{ today }}
       </div>
       <div class="col2">
-        <span> {{ total }}</span>
+        <span> {{ comp }}</span>
         /
         <span> {{ total }}</span>
       </div>
     </div>
 
     <CListWrap1
-      :type="type1"
+      :type="type"
       :params="params1"
-      url="/api/my/getNewsList"
+      url="/api/my/getLearnPlanList"
       @loaded="onLoaded"
     >
       <TaskItem
@@ -31,7 +31,9 @@
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { mapGetters } from '@wepy/x';
+import { mapGetters, mapMutations } from '@wepy/x';
+import { formatLocalDateTime } from '@/common/utils';
+import { learnPlanUpdate } from '@/http/http-business';
 
 const type = 'taskpage-list1';
 
@@ -43,14 +45,20 @@ wepy.page({
   computed: {
     ...mapGetters(['items', 'user']),
     clist1() {
-      const list = this.items[this.type1];
+      const list = this.items[this.type];
       return list || [];
     },
     params1() {
       return {
-        userId: this.user.id,
-        planState: 0
+        userId: this.user.id
+        // planState: 0
       };
+    },
+    comp() {
+      return this.clist1.filter(f => f.planState != 0).length;
+    },
+    today() {
+      return formatLocalDateTime();
     }
   },
   data: {
@@ -58,11 +66,25 @@ wepy.page({
     type
   },
   methods: {
+    ...mapMutations(['setItems']),
     onLoaded(res) {
       this.total = res.total || 0;
     },
     onBtn(task) {
-      console.log(task);
+      if (task.planState == 0) {
+        learnPlanUpdate(task.id).then(res => {
+          const list = this.items[this.type].map(f => {
+            if (f.id === task.id) {
+              f.planState = 1;
+            }
+            return f;
+          });
+          this.setItems({
+            items: list,
+            type: this.type
+          });
+        });
+      }
     }
   },
   onShow() {}
@@ -115,11 +137,12 @@ page {
     }
   }
 
-  taskitem {
-    margin-bottom: 32rpx;
-    &:first-of-type {
-      margin-top: 32rpx;
-    }
+  .TaskItem {
+    margin: 32rpx auto;
+  }
+
+  .TaskItem + .TaskItem {
+    margin-top: 0;
   }
 }
 </style>

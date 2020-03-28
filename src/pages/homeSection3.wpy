@@ -153,8 +153,8 @@ wepy.page({
   },
   onLoad() {
     if (DEV) {
-      // navToPage('/pages/section3/myCollectPage');
-      navToPage('/pages/section3/myReportPage');
+      navToPage('/pages/section3/taskPage');
+      // navToPage('/pages/section3/myReportPage');
     }
   }
 });

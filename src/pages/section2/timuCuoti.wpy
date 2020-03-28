@@ -103,7 +103,11 @@ wepy.page({
       this.refreshKey1 = new Date().getTime();
     },
     onBtn() {
-      navToPage('/pages/section2/timu');
+      const subjectId = this.sel > -1 ? this.items1[this.sel].id : '';
+      navToPage('/pages/section2/timu', {
+        cuoti: true,
+        subjectId
+      });
     }
   },
   onShow() {},

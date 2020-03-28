@@ -378,7 +378,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/homeSection3');
+      navToPage('/pages/homeSection2');
       // navToPage('/pages/section2/timu');
     }
   }
