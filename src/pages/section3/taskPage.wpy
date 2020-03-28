@@ -81,7 +81,8 @@ wepy.page({
           });
           this.setItems({
             items: list,
-            type: this.type
+            type: this.type,
+            reset: true
           });
         });
       }

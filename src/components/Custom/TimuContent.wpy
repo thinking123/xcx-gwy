@@ -115,12 +115,17 @@ wepy.component({
         const isAnswerRight = rightIndex === index;
         const c = 65 + rightIndex; // A
 
-        recordAnswerResult(
-          this.timu.id,
-          String.fromCharCode(c),
-          isAnswerRight ? 1 : 0,
-          this.subjectId
-        ).then(res => {
+        let p = Promise.resolve({});
+        if (!this.timuConfig.cuoti) {
+          p = recordAnswerResult(
+            this.timu.id,
+            String.fromCharCode(c),
+            isAnswerRight ? 1 : 0,
+            this.subjectId
+          );
+        }
+
+        p.then(res => {
           const timu = {
             ...this.timu,
             hadSelected: true,

@@ -15,7 +15,7 @@
     </div>
     <CButton
       :text="text"
-      :disabled="task.completed"
+      :disabled="task.planState == 1"
       @tap.native="handleBtn"
       external-cls="btn"
     />
@@ -43,7 +43,7 @@ wepy.component({
   events: {},
   computed: {
     text() {
-      return this.task.completed ? '已完成' : '去完成';
+      return this.task.planState == 1 ? '已完成' : '去完成';
     }
   },
   methods: {

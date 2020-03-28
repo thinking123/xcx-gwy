@@ -90,8 +90,9 @@ export default new Vuex.Store({
       state.totalOnlineNum = totalOnlineNum;
     },
     setItems(state, { items, type }) {
-      const b = state.items[type] || [];
-      const res = [...b, ...items];
+      // const b = state.items[type] || [];
+      // const res = reset ? items : [...b, ...items];
+      const res = items;
       const obj = { ...state.items };
       obj[type] = res;
       state.items = obj;

@@ -212,7 +212,10 @@ wepy.page({
         this.setTimuConfig({
           index
         });
-        if (index > this.timuItems.length - 2 && this.cuoti) {
+        let n =
+          this.timuItems.length < this.total &&
+          index > this.timuItems.length - 2;
+        if (n && this.cuoti) {
           this.getItems({});
         }
       } else {
@@ -292,7 +295,7 @@ wepy.page({
       const userAnswers = [];
       const isRights = [];
       const subjectIds = [this.subjectId];
-      timuItems.forEach(t => {
+      this.timuItems.forEach(t => {
         if (t.hadSelected) {
           const rs = t.questAnwser.charCodeAt(0);
           const c = 65; // A
@@ -325,7 +328,10 @@ wepy.page({
     item = JSON.parse(item);
     this.setTimuConfig({
       total: item.questionNum || 5,
-      title: item.title || ''
+      title: item.title || '',
+      ai,
+      single,
+      cuoti
     });
     // if (referrer && referrer.indexOf('timuCuoti')) {
     //   this.setTimuConfig({
@@ -333,7 +339,7 @@ wepy.page({
     //   });
     // }
     eventHub.$on('showCompleted', showCompleted => {
-      if (!this.single) {
+      if (!this.single && !this.cuoti && !this.ai) {
         this.showCompleted = true;
       }
     });

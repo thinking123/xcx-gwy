@@ -2517,7 +2517,9 @@ export function getErrorList(subjectId, pageNum) {
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, { userId: store.state.user.id, subjectId, pageNum });
+  let p = { userId: store.state.user.id, subjectId, pageNum };
+  p = delNullProperty(p);
+  url = urlParams(url, p);
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 /**
