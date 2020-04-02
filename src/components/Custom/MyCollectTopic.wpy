@@ -32,7 +32,7 @@ wepy.component({
   computed: {},
   methods: {
     onFollow() {
-      this.$emit('onFollow');
+      this.$emit('onFollow', this.topic);
     }
   }
 });

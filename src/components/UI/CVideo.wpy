@@ -47,7 +47,7 @@ wepy.page({
     },
     bindtimeupdate(event) {
       const { currentTime, duration } = event.$wx.detail;
-      this.update(currentTime);
+      this.update(currentTime.toFixed(0));
     },
     bindpause() {},
     bindplay() {},

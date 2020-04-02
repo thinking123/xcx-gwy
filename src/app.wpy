@@ -114,7 +114,7 @@ wepy.app({
 <config>{
   pages: [
     "pages/login/login",
-    
+  
     
     "pages/home",
     "pages/section1/learnPlan",

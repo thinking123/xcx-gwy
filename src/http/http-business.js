@@ -1,5 +1,5 @@
 import { get, post } from './http';
-import { showMsg, urlParams, delNullProperty } from '@/common/utils';
+import { showMsg, urlParams, delNullProperty, debounce } from '@/common/utils';
 import { wx_getLocation } from '@/common/wx';
 import store from 'store';
 const reg = /^2/;
@@ -349,7 +349,12 @@ learnState
 
 query	string
  */
-export function learnTimeSuspend(id, remaindLearnTime, learnState) {
+export function learnTimeSuspend(
+  id,
+  remaindLearnTime,
+  learnState,
+  showLoading
+) {
   let url = '/api/learnTime/suspend';
 
   url = urlParams(url, {
@@ -357,7 +362,7 @@ export function learnTimeSuspend(id, remaindLearnTime, learnState) {
     remaindLearnTime,
     learnState
   });
-  return get(url, {}, '').then(res => parseRes(res, ''));
+  return get(url, {}, '', {}, showLoading).then(res => parseRes(res, ''));
 }
 
 /**
@@ -2748,31 +2753,28 @@ export function getLocalLearnTime(learnTime) {
   });
 }
 
+const _learnTimeSuspend = debounce(learnTimeSuspend, 1000 * 60);
+
 export function updateLocalLearnTime(learnTime) {
   // 多少时间更新
   const updateStep = 10;
   const key = `${store.state.user.id}-learnTime`;
   let pos = Promise.resolve();
   // 1分钟更新一次时间，或者从暂停状态恢复更新时间
-  if (
-    (store.state.learnTime.lastTime - learnTime.remaindLearnTime >=
-      updateStep &&
-      learnTime.learnState == 1) ||
-    store.state.learnTime.learnState == 2
-  ) {
+  if (learnTime.learnState == 1 || store.state.learnTime.learnState == 2) {
     learnTime.lastTime = learnTime.remaindLearnTime;
-    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 1);
+    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 1, false);
   }
 
   if (learnTime.learnState == 2) {
     //暂停
-    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 2);
+    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 2);
   }
 
   if (learnTime.learnState == 3) {
     //结束
     learnTime.remaindLearnTime = 0;
-    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 3);
+    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 3);
   }
 
   store.commit('setLearnTime', learnTime);

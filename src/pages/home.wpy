@@ -141,6 +141,7 @@
             text="确认"
             @tap.native="handleSetTime"
             external-cls="row2"
+            :disabled="setTime.length == 0"
           />
         </div>
       </div>
