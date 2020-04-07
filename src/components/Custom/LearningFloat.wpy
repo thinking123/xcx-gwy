@@ -54,6 +54,10 @@ wepy.component({
         this.clear();
         if (l.learnState == 1) {
           this.timer = setInterval(() => {
+            if (l.learnState != 1) {
+              clearInterval(this.timer);
+              this.timer = null;
+            }
             const { remaindLearnTime } = this.learnTime;
             const rd = remaindLearnTime - 1;
             this.time = Math.floor((learnTime - rd) / 60.0);

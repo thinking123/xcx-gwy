@@ -170,9 +170,6 @@ export default new Vuex.Store({
       state.timuConfig = { ...state.timuConfig, ...timuConfig };
     },
     setLearnTime(state, learnTime) {
-      if (learnTime && !learnTime.lastTime) {
-        learnTime.lastTime = learnTime.remaindLearnTime;
-      }
       state.learnTime = learnTime;
     },
     resetState(state) {

@@ -2753,28 +2753,41 @@ export function getLocalLearnTime(learnTime) {
   });
 }
 
-const _learnTimeSuspend = debounce(learnTimeSuspend, 1000 * 60);
+// const _learnTimeSuspend = debounce(learnTimeSuspend, 1000 * 60);
 
 export function updateLocalLearnTime(learnTime) {
   // 多少时间更新
-  const updateStep = 10;
+  const updateStep = 10 * 1000;
   const key = `${store.state.user.id}-learnTime`;
   let pos = Promise.resolve();
   // 1分钟更新一次时间，或者从暂停状态恢复更新时间
-  if (learnTime.learnState == 1 || store.state.learnTime.learnState == 2) {
-    learnTime.lastTime = learnTime.remaindLearnTime;
-    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 1, false);
+
+  if (learnTime.learnState == 1) {
+    if (!learnTime.lastTime) {
+      learnTime.lastTime = new Date().getTime();
+    }
+    const offset = new Date().getTime() - learnTime.lastTime;
+    // learnTime.lastTime = learnTime.remaindLearnTime;
+    if (offset > updateStep) {
+      learnTime.lastTime = new Date().getTime();
+      pos = learnTimeSuspend(
+        learnTime.id,
+        learnTime.remaindLearnTime,
+        1,
+        false
+      );
+    }
   }
 
   if (learnTime.learnState == 2) {
     //暂停
-    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 2);
+    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 2);
   }
 
   if (learnTime.learnState == 3) {
     //结束
     learnTime.remaindLearnTime = 0;
-    pos = _learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 3);
+    pos = learnTimeSuspend(learnTime.id, learnTime.remaindLearnTime, 3);
   }
 
   store.commit('setLearnTime', learnTime);
