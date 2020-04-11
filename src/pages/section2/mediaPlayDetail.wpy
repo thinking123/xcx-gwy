@@ -13,7 +13,7 @@
     <div class="row3">
       <div style="visibility:{{single ? 'hidden' : 'visible'}}">
         <IconText
-          @click.native="handleIconText"
+          @click="handleIconText"
           external-cls="titleIcon titleIcon1"
           data-set="list"
           text="播放列表"
@@ -29,13 +29,25 @@
         @onPlay="onPlayControllerPlay"
         single="{{single}}"
       />
-      <IconText
-        @click.native="handleIconText"
+      <!-- <IconText
+        @click="handleIconText"
         external-cls="titleIcon titleIcon2"
         data-set="share"
         text="分享课程"
-        src="btn_bottom_share@3x"
-      />
+        src="btn_share_gray@3x"
+      /> -->
+
+      <div class="titleIcon2">
+        <button open-type="share">
+          <image
+            src="btn_share_gray@3x"
+            mode="aspectFit"
+            open-type="share"
+            class="share"
+          />
+        </button>
+        <span>分享课程</span>
+      </div>
     </div>
 
     <ClassCard
@@ -94,7 +106,7 @@ import { audioConnect, audio } from '@/common/audio';
 import { navToPage, navBack } from '@/common/navUtils';
 
 import { mediaPlayListType } from '@/common/constant';
-import { subjectCollect } from '@/http/http-business';
+import { subjectCollect, cancelSubjectCollect } from '@/http/http-business';
 const type = mediaPlayListType;
 
 wepy.page({
@@ -182,7 +194,11 @@ wepy.page({
       });
     },
     onLike(v) {
-      subjectCollect(this.media.id, 2).then(() => {
+      const p =
+        this.media.isCollect == 1
+          ? cancelSubjectCollect(item.id, 2)
+          : subjectCollect(this.media.id, 2);
+      p.then(() => {
         this.media.isCollect = this.media.isCollect == 1 ? 0 : 1;
       });
     },
@@ -248,7 +264,6 @@ wepy.page({
   height: auto;
   .row1 {
     font-size: 40rpx;
-    font-family: PingFangSCSemibold-, PingFangSCSemibold;
     font-weight: normal;
     color: rgba(0, 0, 0, 1);
     line-height: 48rpx;
@@ -276,10 +291,35 @@ wepy.page({
       }
 
       font-size: 24rpx;
-      font-family: PingFang-SC-Regular, PingFang-SC;
       font-weight: 400;
       color: rgba(98, 100, 102, 1);
       line-height: 32rpx;
+    }
+
+    .titleIcon2 {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      margin-top: 30rpx;
+      flex-direction: column;
+
+      font-size: 24rpx;
+      font-weight: 400;
+      color: rgba(98, 100, 102, 1);
+
+      button {
+        background-color: transparent;
+        padding: 0;
+        line-height: 1;
+        &::after {
+          border: none;
+        }
+
+        > image {
+          width: 48rpx;
+          height: 48rpx;
+        }
+      }
     }
   }
 

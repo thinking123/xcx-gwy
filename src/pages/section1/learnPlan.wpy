@@ -329,7 +329,7 @@ wepy.page({
 @import '~newBase';
 .learnPlan {
   background-color: $pageBg;
-  overflow-y: auto;
+  height: auto;
   .header {
     padding: 0 30rpx;
     height: 144rpx;

@@ -22,6 +22,8 @@
       :params="params"
       url="/api/forum/getForumEvaluateById"
       v-if="id"
+      :reloadKey="refreshKey1"
+      emptyTip="没有评论"
     >
       <CommentItem
         v-for="item in clist"
@@ -107,7 +109,8 @@ wepy.page({
     show: false,
     inputVal: '',
     tz: {},
-    id: ''
+    id: '',
+    refreshKey1: new Date().getTime()
   },
   methods: {
     handleCommentItem(item) {
@@ -129,7 +132,9 @@ wepy.page({
         return showMsg('输入内容');
       }
       this.show = false;
-      forumEvaluate(this.id, this.inputVal);
+      forumEvaluate(this.id, this.inputVal).then(() => {
+        this.refreshKey1 = new Date().getTime();
+      });
       this.inputVal = '';
     },
     onNavUser() {
@@ -145,7 +150,7 @@ wepy.page({
       this.id = id;
       this.userId = userId;
       forumaddScan(id);
-      getForumById(userId, id).then(res => {
+      getForumById(id).then(res => {
         console.log(res);
         this.tz = res;
       });

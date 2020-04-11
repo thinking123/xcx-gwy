@@ -67,6 +67,7 @@
         :readerNum="item.scanNum"
         :type="item.type"
         :publishDate="item.addTime"
+        @click="handleMsgItem(item)"
       />
     </CListWrap1>
 
@@ -101,6 +102,7 @@ import store from 'store';
 import { getImgUrlEx, isEmptyString, showMsg } from '@/common/utils';
 import { upPrivateMsg, collectUser, getMsgById } from '@/http/http-business';
 import { mapGetters } from '@wepy/x';
+import { navToPage } from '@/common/navUtils';
 
 const listtype1 = 'nearPageList';
 
@@ -158,6 +160,9 @@ wepy.page({
     inputVal: ''
   },
   methods: {
+    handleMsgItem(item) {
+      navToPage('/pages/section1/luntanDetail', { id: item.id });
+    },
     handleIconBtn(e) {
       const type = e.$wx.target.dataset.set;
       if (type == 'comment') {
@@ -169,7 +174,6 @@ wepy.page({
         });
       }
     },
-    handleMsgItem(item) {},
     handleSubmit() {
       if (isEmptyString(this.inputVal)) {
         return showMsg('输入内容');

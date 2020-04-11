@@ -108,16 +108,14 @@ wepy.component({
         navToPage('/pages/section2/mediaPlayDetail', {
           media: JSON.stringify(this.media),
           totalChaper: this.totalChaper,
-          single: this.single
+          single: this.single ? 'true' : ''
         });
       }
     },
     onClick() {
       audioConnect.play(this.media);
     },
-    onPlay() {
-      // this.$emit('change', this.media);
-    }
+    onPlay() {}
   },
   created() {}
 });

@@ -100,6 +100,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height:auto;
   .row1 {
     width: 750rpx;
     height: 100rpx;

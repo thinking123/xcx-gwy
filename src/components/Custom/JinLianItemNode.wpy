@@ -1,6 +1,6 @@
 <template>
   <div class="JinLianItemNode external-cls">
-    <JinLianItem :jinlian="node" external-cls="JinLianItem" />
+    <JinLianItem :jinlian="node" external-cls="JinLianItem" :index="index" />
     <JinLianItemNode1
       :key="index"
       :node="node.id"
@@ -21,7 +21,8 @@ wepy.component({
   externalClasses: ['external-cls'],
   props: {
     node: Object,
-    tiku: Number
+    tiku: Number,
+    index: Number
   },
   methods: {},
   created() {

@@ -81,6 +81,7 @@
       <JinLianItemNode
         v-for="(item, index) in _items3"
         :key="index"
+        :index="index"
         :node="item"
         :tiku="curSelItem"
       />
@@ -258,9 +259,14 @@ wepy.page({
     });
 
     if (DEV) {
-      navToPage('/pages/section2/searchPage');
+      // navToPage('/pages/section2/searchPage');
       // navToPage('/pages/section2/timu');
     }
+  },
+  onUnload() {
+    eventHub.$off('jinlianopened');
+    eventHub.$off('jinlianedit');
+    eventHub.$off('jinlianClick');
   },
   created() {
     eventHub.$on('jinlianopened', jinlian => {

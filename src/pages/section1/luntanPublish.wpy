@@ -126,7 +126,7 @@ wepy.page({
     },
     handleSetTime() {
       this.show = false;
-      this.time = this.setTime;
+      this.time = this.setTime.length == 0 ? [0, 0] : this.setTime;
       // this.selText = this.time.join('|');
       this.selList1 = this.time[0];
       this.selList2 = this.time[1];

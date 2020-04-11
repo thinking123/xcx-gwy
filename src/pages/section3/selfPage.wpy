@@ -38,6 +38,7 @@
         rightText="{{user.bindWx ? '已经绑定' : '去绑定'}}"
         @click.native="onClickCLabelRightButton(4)"
         external-cls="CLabelRightButton"
+        v-if="false"
       />
     </div>
     <div class="row2">
@@ -99,6 +100,34 @@
           </div>
 
           <CButton text="保存" @tap.native="onSubmitNick" external-cls="row" />
+        </div>
+      </div>
+    </CPopup>
+    <CPopup
+      :show="showPhone"
+      position="bottom"
+      @close="showPhone = false"
+      zIndex="999"
+      overlay="{{ true }}"
+    >
+      <div class="nick">
+        <HeaderClose
+          text="手机号"
+          external-cls="header"
+          @click="showPhone = false"
+        />
+        <div class="body">
+          <div class="CLabelInput">
+            <CLabelInput
+              placeholder="请输入手机号"
+              label="手机号"
+              :val="user.userPhone"
+              :showLine="false"
+              @update:val="onPhoneVal"
+            />
+          </div>
+
+          <CButton text="保存" @tap.native="onSubmitPhone" external-cls="row" />
         </div>
       </div>
     </CPopup>
@@ -176,17 +205,17 @@
               :key="item.id"
               external-cls="collapse-item"
               collapse-item="collapse-item-header"
-              :title="item.text"
+              :title="item.cityCaption"
               :name="item.id"
             >
               <div
-                v-for="m in item.items"
+                v-for="m in item.kmwtSchoolList"
                 :key="m.id"
-                :class="{ selected: curSelSchool == m.id }"
+                :class="{ selected: user.schoolName == m.schoolName }"
                 @click="onClickCCollapseItem(m)"
                 class="collapseItem"
               >
-                {{ m.text }}
+                {{ m.name }}
               </div>
             </CCollapseItem>
           </CCollapse>
@@ -200,7 +229,7 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
-import { getImgUrlEx, isEmptyString } from '@/common/utils';
+import { getImgUrlEx, isEmptyString, isPhone } from '@/common/utils';
 import { _wxLogout } from '@/common/wx';
 import {
   updateMsgById,
@@ -228,8 +257,10 @@ wepy.page({
     logouts: ['确定'],
     dest: '',
     nick: '',
+    phone: '',
     showDest: false,
     showNick: false,
+    showPhone: false,
     showSex: false,
     showSchool: false,
     sexItems: [
@@ -256,6 +287,9 @@ wepy.page({
           break;
         case 2:
           this.showSex = true;
+          break;
+        case 3:
+          this.showPhone = true;
           break;
         case 5:
           this.showSchool = true;
@@ -289,6 +323,9 @@ wepy.page({
     onNickVal(v) {
       this.nick = v;
     },
+    onPhoneVal(v) {
+      this.phone = v;
+    },
     onSubmitDest() {
       if (!isEmptyString(this.dest) && this.dest != this.user.learnTarget) {
         this.updateUser({
@@ -304,6 +341,14 @@ wepy.page({
         });
       }
       this.showNick = false;
+    },
+    onSubmitPhone() {
+      if (isPhone(this.phone) && this.phone != this.user.userPhone) {
+        this.updateUser({
+          userPhone: this.phone
+        });
+      }
+      this.showPhone = false;
     },
     onSexChange(key) {
       if (key !== this.user.userSex) {
@@ -329,30 +374,25 @@ wepy.page({
   },
   onShow() {},
   onLoad() {
-    schoolselectPro();
+    schoolselectPro().then(res => {
+      let f = false;
+      for (let i = 0; i < res.length; i++) {
+        const c = res[0];
+        const s = res[0].kmwtSchoolList;
+        for (let j = 0; j < s.length; j++) {
+          if (this.user.schoolName == s[j].schoolName) {
+            f = true;
+            this.expandItems = [i];
+            break;
+          }
+        }
+        if (f) break;
+      }
+      this.items2 = res;
+    });
   },
   created() {
     this.icon1 = getImgUrlEx(this.icon1);
-    const arr = [];
-    for (let i = 0; i < 10; i++) {
-      let obj = [];
-      for (let j = 0; j < 5; j++) {
-        const v = {
-          text: '中国科学技术大学',
-          id: `${i}-${j}`
-        };
-
-        obj.push(v);
-      }
-
-      arr.push({
-        items: obj,
-        text: '北京',
-        id: i
-      });
-    }
-
-    this.items2 = arr;
   }
 });
 </script>

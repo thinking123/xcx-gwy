@@ -45,16 +45,17 @@
       <block v-else>
         <CCollapse :value="expandItems" @change="onExpand">
           <CCollapseItem
-            v-for="item in items1"
+            v-for="(item, index) in items1"
             :key="item.id"
             collapse-item="collapse-item"
             :title="item.title"
-            :name="item.id"
+            :name="index"
           >
             <bwktDetailCollapseItem
               itemKey="{{type+index}}"
               :index="index"
               :subjectId="item.id"
+              @onloaded1="onloadedList"
             />
           </CCollapseItem>
         </CCollapse>
@@ -62,7 +63,7 @@
 
       <CircleIconButton
         src="btn_video_edit@3x"
-        @click.native="handleIconBtn($event)"
+        @click="handleIconBtn($event)"
         external-cls="circleIconButton3"
         data-set="edit"
         v-if="!!playVideoInfo"
@@ -77,6 +78,7 @@
         :params="params"
         url="/api/subjecAudio/getSubjectScore"
         v-if="playVideoInfo"
+        :reloadKey="refreshKey1"
       >
         <MediaCommentItem v-for="item in clist" :key="item.id" :user="item" />
       </CListWrap1>
@@ -120,14 +122,17 @@
 <script>
 import wepy from '@wepy/core';
 import store from 'store';
-import { getImgUrlEx } from '@/common/utils';
+import { getImgUrlEx, isEmptyString } from '@/common/utils';
 import { mapGetters, mapMutations } from '@wepy/x';
 import { navToPage } from '@/common/navUtils';
 import {
   getSubjecListByType,
   subjectCollect,
-  teacherDetails
+  cancelSubjectCollect,
+  teacherDetails,
+  recordSubjectNote
 } from '@/http/http-business';
+import eventHub from '@/common/eventHub';
 
 const type = 'video-list';
 
@@ -183,7 +188,8 @@ wepy.page({
     heartSelIcon: 'btn_liked@3x',
     teacher: null,
     single: false,
-    videoItem: null
+    videoItem: null,
+    refreshKey1: new Date().getTime()
   },
   methods: {
     ...mapMutations(['setPlayVideoInfo']),
@@ -202,10 +208,15 @@ wepy.page({
       const type = e.$wx.target.dataset.set;
       if (type == 'edit') {
         this.show = true;
+        this.commentVal = '';
       } else {
         // like
         if (this.playVideoInfo) {
-          subjectCollect(this.playVideoInfo.id, 3).then(res => {
+          const p =
+            this.playVideoInfo.isCollect == 0
+              ? subjectCollect(this.playVideoInfo.id, 3)
+              : cancelSubjectCollect(this.playVideoInfo.id, 3);
+          p.then(res => {
             if (res) {
               this.setPlayVideoInfo({
                 ...this.playVideoInfo,
@@ -228,10 +239,16 @@ wepy.page({
       });
     },
     onSubmit() {
+      if (this.playVideoInfo && !isEmptyString(this.commentVal)) {
+        recordSubjectNote(this.playVideoInfo.id, this.commentVal, 2);
+      }
       this.show = false;
-    }
+    },
+    onloadedList() {}
   },
-  onShow() {},
+  onShow() {
+    this.refreshKey1 = new Date().getTime();
+  },
   onLoad(query = {}) {
     this.single = query.single;
     if (this.single) {
@@ -248,6 +265,13 @@ wepy.page({
 
     this.heartIcon = getImgUrlEx(this.heartIcon);
     this.heartSelIcon = getImgUrlEx(this.heartSelIcon);
+
+    eventHub.$on('loadedList', index => {
+      this.expandItems = this.items1.length > 0 ? [0] : [];
+    });
+  },
+  onUnload() {
+    eventHub.$off('loadedList');
   }
 });
 </script>

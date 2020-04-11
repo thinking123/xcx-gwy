@@ -5,6 +5,7 @@
       :params="params1"
       url="/api/near/getNear"
       v-if="longitude"
+      :reloadKey="refreshKey1"
     >
       <NearItem
         v-for="(item, index) in clist1"
@@ -58,7 +59,8 @@ wepy.page({
   data: {
     listtype1,
     longitude: '',
-    latitude: ''
+    latitude: '',
+    refreshKey1: new Date().getTime()
   },
   methods: {
     ...mapMutations(['setLocation']),
@@ -73,6 +75,7 @@ wepy.page({
         this.longitude = longitude;
         this.latitude = latitude;
         this.setLocation({ longitude, latitude });
+        this.refreshKey1 = new Date().getTime();
       });
     }
   },

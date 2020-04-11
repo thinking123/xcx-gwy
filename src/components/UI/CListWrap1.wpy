@@ -12,7 +12,7 @@
         wx:if="{{curItems.length == 0 && loaded && !isError && !noTip}}"
         class="noData"
       >
-        没有数据
+        {{ emptyTip || '没有数据' }}
       </view>
     </view>
     <view class="CListWrap-loading"> </view>
@@ -67,6 +67,7 @@ wepy.component({
       default: 1000
     },
     url: String,
+    emptyTip: String,
     params: {
       type: Object,
       default: {}

@@ -9,7 +9,7 @@
     @click="onNav"
   >
     <block v-if="jinlian.level <= 1">
-      <div class="vertLine icon1">
+      <div class="vertLine icon1" :class="{ showVert: showVert }">
         <image
           mode="aspectFit"
           src="icon_fold@3x"
@@ -43,15 +43,17 @@
 </template>
 <script>
 import wepy from '@wepy/core';
+import store from 'store';
 import { getImgUrlEx } from '@/common/utils';
-
+import { mapGetters, mapMutations } from '@wepy/x';
 import eventHub from '@/common/eventHub';
+const type = 'jinlianitem-list';
+
 wepy.component({
+  store,
   data: {
-    // icon1:'icon_unfold@3x',
-    // icon3:'icon_fold@3x',
-    // icon2:'btn_edit@3x',
-    isOpened: false
+    isOpened: false,
+    type
   },
   externalClasses: ['external-cls'],
   props: {
@@ -72,13 +74,23 @@ wepy.component({
     index: Number,
     total: Number
   },
-  events: {},
-  watch: {
-    index(d) {
-      this.jinlian.level == 2 && console.log('d : ', d, this.notLastItem);
-    }
-  },
   computed: {
+    ...mapGetters(['items']),
+    showVert() {
+      const list = this.items[this.type + this.index] || [];
+      console.log(
+        '  this.jinlian.level == 1',
+        this.jinlian.level == 1,
+        this.isOpened,
+        list.length > 0
+      );
+      return (
+        !!this.jinlian &&
+        this.isOpened &&
+        list.length > 0 &&
+        this.jinlian.level == 1
+      );
+    },
     rightRatio() {
       if (this.jinlian && this.jinlian.total && this.jinlian.wrong) {
         const str = (1 - this.jinlian.wrong / this.jinlian.total) * 100;
@@ -196,7 +208,7 @@ wepy.component({
   }
 
   &.opened {
-    .vertLine::after {
+    .showVert.vertLine::after {
       content: '';
       width: 8rpx;
       height: 84rpx;

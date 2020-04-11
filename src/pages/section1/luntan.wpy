@@ -35,12 +35,14 @@
       :params="params"
       :url="url"
       v-if="list1Sel > -1"
+      :reloadKey="refreshKey1"
     >
       <block slot="header">
         <LunTanHeader
           :title="header.name"
           :tieziNum="header.collectNum"
           :followNum="header.forumNum"
+          :isCollect="header.isCollec == 1"
           @btn="handleGz"
           v-if="header"
         />
@@ -51,6 +53,7 @@
         :desc="item.content"
         showLine="{{index < 2}}"
         :type="index"
+        @click="handleMsgItem(item)"
       />
 
       <LunTanMsgItem
@@ -60,11 +63,11 @@
         :name="item.userId"
         :readerNum="item.scanNum"
         :publishDate="item.addTime"
-        @click.native="handleMsgItem(item)"
+        @click="handleMsgItem(item)"
       />
     </CListWrap1>
 
-    <FixedPublishBtn @click.native="onPubish" />
+    <FixedPublishBtn @click="onPubish" />
   </div>
 </template>
 
@@ -137,7 +140,6 @@ wepy.page({
     }
   },
   data: {
-    msgItems: [],
     showDocker: false,
     // list: [{ text: '分类' }, { text: '地区' }, { text: '人气' }],
     selOrder: -1,
@@ -152,17 +154,31 @@ wepy.page({
     labelId: '',
     cityCode: '',
     url: '/api/forum/getForumList',
-    listtype
+    listtype,
+    refreshKey1: new Date().getTime()
   },
   methods: {
     onPubish() {
       navToPage('/pages/section1/luntanPublish');
     },
     handleGz() {
-      const id = selArrayVal(this.list1Sel, this.list1, 'id');
-      forumforumCollect(id);
+      const item = this.list1Sel > -1 ? this.list1[this.list1Sel] : null;
+      if (item) {
+        const p =
+          item.isCollec == 1
+            ? cancelForumCollect(item.id)
+            : forumforumCollect(item.id);
+        p.then(() => {
+          item.isCollec = item.isCollec == 1 ? 0 : 1;
+          const tmp = this.list1.slice();
+          tmp.splice(this.list1Sel, 1, { ...item });
+          this.list1 = tmp;
+        });
+      }
     },
-    handleMsgItem(item) {},
+    handleMsgItem(item) {
+      navToPage('/pages/section1/luntanDetail', { id: item.id });
+    },
     onCOrderList(index) {
       this.selOrder = index;
       // console.log(' this.selOrder :',  this.selOrder );
@@ -205,32 +221,8 @@ wepy.page({
       this.selOrder = -1;
     }
   },
-  onShow() {},
-  created() {
-    const arr = [];
-    for (let i = 0; i < 10; i++) {
-      const v = {
-        title:
-          '[学习交流] 麻烦大神帮忙看看这种不限定主体和文种的论述题该怎么组织答案呢？',
-        name: 'Smile',
-        readerNum: '123213',
-        publishDate: '2019-08-12',
-        id: i
-      };
 
-      arr.push(v);
-    }
-
-    this.msgItems = arr;
-  },
   onLoad() {
-    // forumgetCategory().then(res => {
-    //     this.list1 = res.map(m=>{
-    //       m.text = m.categoryName;
-    //       return m;
-    //     })
-    // });
-
     selectPro().then(res => {
       this.list2 = res;
     });
@@ -239,6 +231,9 @@ wepy.page({
       this.list1 = res;
       this.list1Sel = 0;
     });
+  },
+  onShow() {
+    this.refreshKey1 = new Date().getTime();
   }
 });
 </script>

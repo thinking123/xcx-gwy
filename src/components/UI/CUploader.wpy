@@ -1,151 +1,165 @@
 <template>
-    <div class="CUploader external-cls">
-      <view class="CUploader__hd" v-if="title">
-        <view class="CUploader__overview">
-          <view class="CUploader__title">{{title}}</view>
-          <view class="CUploader__info">{{files.length}}/2</view>
-        </view>
+  <div class="CUploader external-cls">
+    <view class="CUploader__hd" v-if="title">
+      <view class="CUploader__overview">
+        <view class="CUploader__title">{{ title }}</view>
+        <view class="CUploader__info">{{ files.length }}/2</view>
       </view>
+    </view>
 
-      <view class="CUploader__bd">
-        <view class="CUploader__files" id="uploaderFiles">
-          <view class="CUploader__file" @click="previewImage" id="{{item}}" v-for="(item,index) in files" :key="item">
-            <image class="CUploader__img" src="{{item}}" mode="aspectFill" />
-            <span class="CUploader__del" @click="onDel(index)">删除</span>
-          </view>
+    <view class="CUploader__bd">
+      <view class="CUploader__files" id="uploaderFiles">
+        <view
+          class="CUploader__file"
+          @click="previewImage"
+          id="{{item}}"
+          v-for="(item, index) in files"
+          :key="item"
+        >
+          <image class="CUploader__img" :src="item" mode="aspectFill" />
+          <div class="CUploader__del" @click.stop="onDel(index)">
+            <image src="btn_reset_gray" v-show="!!val" mode="scaleToFill" />
+          </div>
         </view>
         <view class="CUploader__input-box">
-          <image class="CUploader__input" @click="chooseImage" :src="uploadImg" mode="scaleToFill"></image>
+          <image
+            class="CUploader__input"
+            @click="chooseImage"
+            src="btn_upload@3x"
+            mode="scaleToFill"
+          />
         </view>
       </view>
-    </div>
+    </view>
+  </div>
 </template>
 <script>
-  import wepy from '@wepy/core'
-  import {getImgUrlEx} from '@/common/utils';
-  import {baseUrl} from '@/common/constant';
+import wepy from '@wepy/core';
+import { baseUrl } from '@/common/constant';
 
-  wepy.component({
-    data: {
-      files: [],
-      uploadImg:'btn_upload@3x',
-      filesUrl:[],
-      uploading:false,
+wepy.component({
+  data: {
+    files: [],
+    filesUrl: [],
+    uploading: false
+  },
+  externalClasses: ['external-cls'],
+  props: {
+    title: String,
+    count: {
+      type: Number,
+      default: 1
     },
-    externalClasses:[
-      'external-cls'
-    ],
-    props:{
-      title:String,
-      count:{
-        type:Number,
-        default:1
-      },
-      total:{
-        type:Number,
-        default:1
-      }
-    },
-    events: {
-
-    },
-    computed:{
-
-    },
-    methods: {
-      chooseImage: function (e) {
-        if(this.uploading || this.files.length >= this.total) {
-          return;
-        }
-          const _ts = this;
-        wx.chooseImage({
-          count:this.count,
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-          success: res => {
-            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-            console.log('res' , res,this.files)
-
-            const url = `${baseUrl}/api/upload/uploadImg`;
-
-            this.uploading = true;
-            wx.uploadFile({
-              url,
-              filePath: res.tempFilePaths[0],
-              name: 'file',
-              success(_res) {
-                _ts.files = [..._ts.files , ...res.tempFilePaths]
-
-                const __res = JSON.parse(_res.data);
-                _ts.filesUrl = [..._ts.filesUrl , __res.rows];
-                console.log('_res.rows' , __res , __res.rows)
-
-                _ts.$emit('uploaded' , _ts.filesUrl);
-                _ts.uploading = false;
-              },
-              fail(){
-                _ts.uploading = false;
-              }
-            });
-
-          }
-        })
-      },
-      previewImage: function(e){
-        if(!this.uploading){
-          wx.previewImage({
-            current: e.currentTarget.id, // 当前显示图片的http链接
-            urls: this.files // 需要预览的图片http链接列表
-          })
-        }
-      },
-      onDel(index){
-        this.files =  this.files.splice(index , 1);
-        this.filesUrl =  this.files.splice(index , 1);
-        this.$emit('uploaded' , this.filesUrl);
-
-      }
-    },
-    created(){
-      this.uploadImg = getImgUrlEx(this.uploadImg);
-    },
-    onLoad () {
-
+    total: {
+      type: Number,
+      default: 1
     }
-  });
+  },
+  events: {},
+  computed: {},
+  methods: {
+    chooseImage: function(e) {
+      if (this.uploading || this.files.length >= this.total) {
+        return;
+      }
+      const _ts = this;
+      wx.chooseImage({
+        count: this.count,
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: res => {
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          console.log('res', res, this.files);
+
+          const url = `${baseUrl}/api/upload/uploadImg`;
+
+          this.uploading = true;
+          wx.uploadFile({
+            url,
+            filePath: res.tempFilePaths[0],
+            name: 'file',
+            success(_res) {
+              // _ts.files = [..._ts.files, ...res.tempFilePaths];
+
+              const __res = JSON.parse(_res.data);
+              _ts.filesUrl = [..._ts.filesUrl, __res.rows];
+              console.log('_res.rows', __res, __res.rows);
+
+              _ts.files = _ts.filesUrl;
+              console.log('uplaod url : ', _ts.files);
+              _ts.$emit('uploaded', _ts.filesUrl);
+              _ts.uploading = false;
+            },
+            fail() {
+              _ts.uploading = false;
+            }
+          });
+        }
+      });
+    },
+    previewImage: function(e) {
+      if (!this.uploading) {
+        wx.previewImage({
+          current: e.currentTarget.id, // 当前显示图片的http链接
+          urls: this.files // 需要预览的图片http链接列表
+        });
+      }
+    },
+    onDel(index) {
+      const tmp = this.files.slice();
+      tmp.splice(index, 1);
+      this.files = tmp;
+      this.filesUrl = tmp;
+      this.$emit('uploaded', this.filesUrl);
+    }
+  }
+});
 </script>
 <style lang="scss">
-  .CUploader{
-
-    &__del{
-      min-width: 50rpx;
-      position: absolute;
-      top:0;
-      right:0;
-      white-space: nowrap;
+.CUploader {
+  &__del {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 44rpx;
+    height: 44rpx;
+    display: block;
+    z-index: 100;
+    > image {
+      width: 44rpx;
+      height: 44rpx;
+      display: block;
     }
-    .CUploader__bd{
-      .CUploader__files{
-        display: flex;
-        flex-wrap: wrap;
+    &::after {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      content: '';
+    }
+  }
+  .CUploader__bd {
+    .CUploader__files {
+      display: flex;
+      flex-wrap: wrap;
 
-        .CUploader__file{
-          margin: 0 10rpx 0 0;
-          position: relative;
-        }
-        .CUploader__img{
-          width:240rpx;
-          height:240rpx;
-        }
+      .CUploader__file {
+        margin: 0 10rpx 0 0;
+        position: relative;
       }
+      .CUploader__img {
+        width: 240rpx;
+        height: 240rpx;
+      }
+    }
 
-      .CUploader__input-box{
-        .CUploader__input{
-          width:240rpx;
-          height:240rpx;
-        }
-
+    .CUploader__input-box {
+      .CUploader__input {
+        width: 240rpx;
+        height: 240rpx;
       }
     }
   }
+}
 </style>

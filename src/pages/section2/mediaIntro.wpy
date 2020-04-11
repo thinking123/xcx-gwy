@@ -2,8 +2,8 @@
   <div class="page mediaIntro">
     <div class="header">
       <image class="headerImg" mode="center" :src="teacher.upperBody" />
-      <button class="icon">
-        <image src="btn_bottom_share@3x" mode="aspectFit" open-type="share" />
+      <button class="icon" open-type="share">
+        <image src="btn_bottom_share@3x" mode="aspectFit" class="share" />
       </button>
 
       <div class="content">
@@ -87,8 +87,6 @@ wepy.page({
     }
 
     .icon {
-      width: 44rpx;
-      height: 44rpx;
       position: absolute;
       right: 40rpx;
       top: 40rpx;
@@ -136,6 +134,21 @@ wepy.page({
       line-height: 40rpx;
       margin-top: 32rpx;
     }
+  }
+}
+
+.share {
+  width: 44rpx;
+  height: 44rpx;
+  position: relative;
+}
+
+button {
+  background-color: transparent;
+  padding: 0;
+  line-height: 1;
+  &::after {
+    border: none;
   }
 }
 </style>

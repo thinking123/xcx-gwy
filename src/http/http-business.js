@@ -1068,14 +1068,14 @@ query	string
 
 
  */
-export function getForumById(userId, id) {
+export function getForumById(id) {
   let url = '/api/forum/getForumById';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
   url = urlParams(url, {
-    userId,
+    userId: store.state.user.id,
     id
   });
   return get(url, {}, '').then(res => parseRes(res, ''));

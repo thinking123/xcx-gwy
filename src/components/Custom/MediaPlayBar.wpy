@@ -28,7 +28,7 @@
         </div>
       </div>
       <image
-        src="btn_arrowup@3x"
+        src="btn_arrowup_gray@3x"
         class="icon2"
         mode="aspectFit"
         @click.stop="onNav"
