@@ -31,6 +31,7 @@ wepy.page({
     rate: 0,
     val: '',
     show: false,
+    showTip: false,
     count: 5,
     sec: 3,
     subjectId: ''
@@ -52,18 +53,23 @@ wepy.page({
           this.val,
           this.subjectId ? this.subjectId : this.audioSubject.id
         ).then(() => {
-          this.show = true;
-          clearInterval(this.time);
-          this.time = setInterval(() => {
-            if (this.sec > 0) {
-              this.sec -= 1;
-            } else {
-              this.show = false;
-              clearInterval(this.time);
-              this.sec = 3;
-              navBack();
-            }
-          }, 1000);
+          if (this.showTip) {
+            this.show = true;
+            clearInterval(this.time);
+            this.time = setInterval(() => {
+              if (this.sec > 0) {
+                this.sec -= 1;
+              } else {
+                this.show = false;
+                clearInterval(this.time);
+                this.sec = 3;
+                navBack();
+              }
+            }, 1000);
+            return;
+          }
+
+          navBack();
         });
       }
     }

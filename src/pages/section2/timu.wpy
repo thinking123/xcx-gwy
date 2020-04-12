@@ -408,7 +408,6 @@ page {
   }
 }
 .TimuCompletedTip {
-  height: 712rpx;
 }
 .TimuAnswer {
   margin-bottom: 32rpx;

@@ -3,7 +3,7 @@
     <MediaHeaderCard :title="subject.viceTitle" />
     <div class="row1">
       <CSelector :items="selItems" @change="onChange" :sel="sel" />
-      <span class="col1"> 已更新{{ totalChaper}}讲 </span>
+      <span class="col1"> 已更新{{ totalChaper }}讲 </span>
       <OrderItems :order="order" @change="onOrder" />
     </div>
     <div class="row2">
@@ -144,6 +144,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: auto;
   .row1 {
     width: 100%;
     box-sizing: border-box;

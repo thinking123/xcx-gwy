@@ -1,6 +1,6 @@
 <template>
   <div class="MediaPlayItem external-cls" :class="{ sel: sel }">
-    <image :src="icon" class="icon" mode="aspectFit" />
+    <image src="btn_close_small@3x" class="icon" mode="aspectFit" />
     <div class="content">
       <div class="row1">
         {{ title }}
@@ -20,21 +20,13 @@ import wepy from '@wepy/core';
 import { getImgUrlEx } from '@/common/utils';
 
 wepy.component({
-  data: {
-    icon: 'btn_close_small@3x'
-  },
+  data: {},
   externalClasses: ['external-cls'],
   props: {
     title: String,
     time: String,
     desc: String,
     sel: Boolean
-  },
-  events: {},
-  computed: {},
-  methods: {},
-  created() {
-    this.icon = getImgUrlEx(this.icon);
   }
 });
 </script>

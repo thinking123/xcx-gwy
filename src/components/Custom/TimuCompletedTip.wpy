@@ -180,7 +180,6 @@ wepy.component({
 <style lang="scss">
 .TimuCompletedTip {
   .row1 {
-    height: 480rpx;
     background: rgba(29, 146, 251, 1);
     padding-top: 40rpx;
     .col1 {

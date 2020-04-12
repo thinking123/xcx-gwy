@@ -44,6 +44,7 @@ import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { getImgUrlEx } from '@/common/utils';
 import { navToPage } from '@/common/navUtils';
 import { getMsgById } from '@/http/http-business';
+import { CDNUrl } from '@/common/constant';
 wepy.page({
   store,
   config: {
@@ -78,31 +79,31 @@ wepy.page({
     btns: [
       {
         text: '今日任务',
-        icon: 'icon_my01@3x'
+        icon: `${CDNUrl}icon_my01@3x.png`
       },
       {
         text: '人工智能',
-        icon: 'icon_my02@3x'
+        icon: `${CDNUrl}icon_my02@3x.png`
       },
       {
         text: '心灵测试',
-        icon: 'icon_my03@3x'
+        icon: `${CDNUrl}icon_my03@3x.png`
       },
       {
         text: '我的笔记',
-        icon: 'icon_my04@3x'
+        icon: `${CDNUrl}icon_my04@3x.png`
       },
       {
         text: '我的信息',
-        icon: 'icon_my05@3x'
+        icon: `${CDNUrl}icon_my05@3x.png`
       },
       {
         text: '我的报告',
-        icon: 'icon_my06@3x'
+        icon: `${CDNUrl}icon_my06@3x.png`
       },
       {
         text: '设置',
-        icon: 'icon_my07@3x'
+        icon: `${CDNUrl}icon_my07@3x.png`
       }
     ]
   },
@@ -146,14 +147,9 @@ wepy.page({
   onShow() {
     this.init();
   },
-  created() {
-    this.btns.map(m => {
-      m.icon = getImgUrlEx(m.icon);
-    });
-  },
   onLoad() {
     if (DEV) {
-      navToPage('/pages/section3/taskPage');
+      // navToPage('/pages/section3/taskPage');
       // navToPage('/pages/section3/myReportPage');
     }
   }
@@ -162,9 +158,11 @@ wepy.page({
 <style lang="scss">
 page {
   background: rgba(242, 242, 242, 1);
+  overflow-x: hidden;
 }
 .homeSection3 {
   background: rgba(242, 242, 242, 1);
+  width: 100%;
   .row1 {
     width: 750rpx;
     height: 208rpx;
@@ -243,6 +241,7 @@ page {
   .row3 {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
     clabelrightbutton:nth-of-type(1) {
       margin-bottom: 24rpx;
     }

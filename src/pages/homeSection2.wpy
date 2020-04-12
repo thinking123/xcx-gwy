@@ -177,15 +177,15 @@ wepy.page({
     titleIcons: [
       {
         text: 'AI每日练',
-        src: 'icon_course01@3x'
+        src: 'https://qiniu.kaimingwutong.com/icon_course01@3x.png'
       },
       {
         text: '高频错题',
-        src: 'icon_course02@3x'
+        src: 'https://qiniu.kaimingwutong.com/icon_course02@3x.png'
       },
       {
         text: '笔记本',
-        src: 'icon_course03@3x'
+        src: 'https://qiniu.kaimingwutong.com/icon_course03@3x.png'
       }
     ],
 
@@ -283,11 +283,6 @@ wepy.page({
         this.showCDialog = true;
       }
     });
-
-    this.titleIcons = this.titleIcons.map(m => {
-      m.src = getImgUrlEx(m.src);
-      return m;
-    });
   }
 });
 </script>
@@ -366,7 +361,6 @@ page {
   }
 
   .learn {
-    height: 712rpx;
     .body {
       display: flex;
       flex-direction: column;

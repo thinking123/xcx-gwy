@@ -124,6 +124,7 @@
               :val="user.userPhone"
               :showLine="false"
               @update:val="onPhoneVal"
+              type="number"
             />
           </div>
 
@@ -154,6 +155,7 @@
               :items="sexItems"
               external-cls="row"
               @change="onSexChange"
+              toggle="{{false}}"
             />
           </div>
         </div>
@@ -229,7 +231,7 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { mapGetters, mapState, mapMutations } from '@wepy/x';
-import { getImgUrlEx, isEmptyString, isPhone } from '@/common/utils';
+import { getImgUrlEx, isEmptyString, isPhone, showMsg } from '@/common/utils';
 import { _wxLogout } from '@/common/wx';
 import {
   updateMsgById,
@@ -275,9 +277,7 @@ wepy.page({
   },
   methods: {
     ...mapMutations(['setUser']),
-
     onClickCLabelRightButton(index) {
-      console.log('btn', index);
       switch (index) {
         case 0:
           this.showHeader = true;
@@ -327,28 +327,37 @@ wepy.page({
       this.phone = v;
     },
     onSubmitDest() {
-      if (!isEmptyString(this.dest) && this.dest != this.user.learnTarget) {
-        this.updateUser({
-          learnTarget: this.dest
-        });
+      if (!isEmptyString(this.dest)) {
+        this.dest != this.user.learnTarget &&
+          this.updateUser({
+            learnTarget: this.dest
+          });
+        this.showDest = false;
+      } else {
+        showMsg('输入内容');
       }
-      this.showDest = false;
     },
     onSubmitNick() {
-      if (!isEmptyString(this.nick) && this.nick != this.user.userName) {
-        this.updateUser({
-          userName: this.nick
-        });
+      if (!isEmptyString(this.nick)) {
+        this.nick != this.user.userName &&
+          this.updateUser({
+            userName: this.nick
+          });
+        this.showNick = false;
+      } else {
+        showMsg('输入内容');
       }
-      this.showNick = false;
     },
     onSubmitPhone() {
-      if (isPhone(this.phone) && this.phone != this.user.userPhone) {
-        this.updateUser({
-          userPhone: this.phone
-        });
+      if (isPhone(this.phone)) {
+        this.phone != this.user.userPhone &&
+          this.updateUser({
+            userPhone: this.phone
+          });
+        this.showPhone = false;
+      } else {
+        showMsg('输入正确的手机号码');
       }
-      this.showPhone = false;
     },
     onSexChange(key) {
       if (key !== this.user.userSex) {
@@ -364,7 +373,6 @@ wepy.page({
     },
     onClickCCollapseItem({ id }) {
       this.curSelSchool = id;
-      // this.showSchool = false;
     },
     updateUser(userInfo) {
       return updateMsgById(this.user.id, userInfo).then(() => {
@@ -372,7 +380,6 @@ wepy.page({
       });
     }
   },
-  onShow() {},
   onLoad() {
     schoolselectPro().then(res => {
       let f = false;

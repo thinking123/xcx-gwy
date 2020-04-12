@@ -206,26 +206,26 @@ wepy.page({
     titleIcons: [
       {
         text: '起床睡觉',
-        src: 'home_icon_nav01.png'
+        src: 'https://qiniu.kaimingwutong.com/home_icon_nav01.png'
       },
       {
         text: '学习计时',
-        src: 'home_icon_nav02.png'
+        src: 'https://qiniu.kaimingwutong.com/home_icon_nav02.png'
       },
       {
         text: '学习日记',
-        src: 'home_icon_nav03.png'
+        src: 'https://qiniu.kaimingwutong.com/home_icon_nav03.png'
       },
       {
         text: '学习计划',
-        src: 'home_icon_nav04.png'
+        src: 'https://qiniu.kaimingwutong.com/home_icon_nav04.png'
       }
     ],
     panelIcons: [
-      'home_img_huiyuan@3x.png',
-      'home_img_kaiming@3x.png',
-      'home_img_luntan@3x.png',
-      'home_img_fujin@3x.png'
+      'https://qiniu.kaimingwutong.com/home_img_huiyuan@3x.png',
+      'https://qiniu.kaimingwutong.com/home_img_kaiming@3x.png',
+      'https://qiniu.kaimingwutong.com/home_img_luntan@3x.png',
+      'https://qiniu.kaimingwutong.com/home_img_fujin@3x.png'
     ],
     getupShow: false,
     learnShow: false,
@@ -371,11 +371,11 @@ wepy.page({
     getUserNum();
   },
   created() {
-    this.titleIcons = this.titleIcons.map(m => {
-      m.src = getImgUrlEx(m.src);
-      return m;
-    });
-    this.panelIcons = this.panelIcons.map(getImgUrlEx);
+    // this.titleIcons = this.titleIcons.map(m => {
+    //   m.src = getImgUrlEx(m.src);
+    //   return m;
+    // });
+    // this.panelIcons = this.panelIcons.map(getImgUrlEx);
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {

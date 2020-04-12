@@ -1,5 +1,5 @@
 import Circle from '../CircleTimer';
-import { isEmptyObject } from '@/common/utils';
+import { isEmptyObject, debounce } from '@/common/utils';
 import { mapGetters, mapState, mapMutations, mapActions } from '@wepy/x';
 import store from 'store';
 import { updateLocalLearnTime, getLearnTime } from '@/http/http-business';
@@ -48,6 +48,10 @@ Component({
       this.updateTime();
     }
   },
+  created() {
+    this.handleStop = debounce(this.handleStop.bind(this), 1000);
+    this.handlePause = debounce(this.handlePause.bind(this), 1000);
+  },
   attached() {
     const learnTime = store.state.learnTime;
     const startTime = new Date();
@@ -89,6 +93,7 @@ Component({
     isPause: false,
     isOperating: false
   },
+
   methods: {
     endCb() {
       updateLocalLearnTime({
@@ -127,9 +132,10 @@ Component({
 
       const isStop = learnTime.learnState == 3;
 
-      if (isStop || this.data.isOperating) {
+      if (isStop || this.isOperating) {
         return;
       }
+      this.isOperating = true;
       this._setData({ isOperating: true })
         .then(() => {
           return updateLocalLearnTime({
@@ -141,10 +147,12 @@ Component({
           if (res) {
             this.circle.stop();
             return this._setData({
-              isStop: true,
-              isOperating: false
+              isStop: true
             });
           }
+        })
+        .finally(res => {
+          this.isOperating = false;
         });
     },
     handlePause: function() {
@@ -153,9 +161,13 @@ Component({
       const isPause = learnTime.learnState == 2;
       const isStop = learnTime.learnState == 3;
 
-      if (isStop || this.data.isOperating) {
+      if (isStop || this.isOperating) {
+        console.log('this.data.isOperating', this.isOperating);
         return;
       }
+
+      this.isOperating = true;
+
       this._setData({ isOperating: true })
         .then(() => {
           return isPause ? getLearnTime(learnTime.id) : Promise.resolve();
@@ -176,10 +188,12 @@ Component({
               store.state.learnTime.remaindLearnTime * 1000
             );
             return this._setData({
-              isPause: !isPause,
-              isOperating: false
+              isPause: !isPause
             });
           }
+        })
+        .finally(res => {
+          this.isOperating = false;
         });
     }
   }

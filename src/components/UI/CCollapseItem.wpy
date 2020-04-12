@@ -6,7 +6,7 @@
       bind:click="onClick"
     >
       <span class="c-collapse-title">{{ title }}</span>
-      <image :src="icon" class="icon" />
+      <image src="btn_arrowdown_gray@3x" class="icon" />
     </div>
     <view
       :class="{ 'c-collapse__wrapper--transition': transition }"
@@ -52,13 +52,9 @@ wepy.component({
   data: {
     contentHeight: 0,
     expanded: false,
-    transition: false,
-    icon: 'btn_arrowdown_gray@3x'
+    transition: false
   },
 
-  created() {
-    this.icon = getImgUrlEx(this.icon);
-  },
   attached() {
     this.updateExpanded()
       .then(nextTick)

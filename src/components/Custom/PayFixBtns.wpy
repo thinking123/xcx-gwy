@@ -83,6 +83,7 @@ $originColor: #ff6600;
       font-weight: 400;
       color: rgba(45, 49, 51, 1);
       line-height: 28rpx;
+      flex:1;
     }
 
     .row2 {
@@ -102,6 +103,7 @@ $originColor: #ff6600;
       }
     }
     .no-opend-row1 {
+      flex:1;
       font-size: 36rpx;
       font-family: PingFangSC-Semibold, PingFangSC;
       font-weight: 600;

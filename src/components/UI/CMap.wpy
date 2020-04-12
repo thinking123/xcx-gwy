@@ -6,9 +6,7 @@
     longitude="102.32452"
     scale="3"
   >
-    <cover-view class="cover-view" bindtap="onClick">
-      全国:{{ total || 0 }}
-    </cover-view>
+    <view class="cover-view" bindtap="onClick"> 全国:{{ total || 0 }} </view>
   </map>
 </template>
 <script>

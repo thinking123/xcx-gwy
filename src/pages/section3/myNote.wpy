@@ -332,7 +332,7 @@ page {
     padding-top: 30rpx;
     align-items: center;
     .TimuCuotiItem {
-      margin-bottom: 20rpx;
+      margin: 0 auto 20rpx;
     }
   }
 
