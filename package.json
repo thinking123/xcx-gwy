@@ -5,7 +5,7 @@
   "main": "weapp/app.js",
   "scripts": {
     "d": "sudo ./node_modules/.bin/wepy build --watch --log trace ",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache --watch",
     "c": "sudo rm -rf weapp",
     "pred": "clear && sudo rm -rf weapp",
     "test": "echo \"Error: no test specified\" && exit 1"

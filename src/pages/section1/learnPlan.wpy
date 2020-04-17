@@ -272,7 +272,8 @@ wepy.page({
       };
 
       if (verify()) {
-        const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+        const str = `${this.seLdate} ${this.seLtime}`;
+        const selDate = Date.parse(str);
         const totalT = selDate.getTime();
 
         learnPlanAdd(this.user.id, this.learnContent, totalT).then(res => {
@@ -304,8 +305,10 @@ wepy.page({
       this.setTime = v;
     },
     isValidTime() {
-      if (this.seLtime && this.seLdate) {
-        const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+      if (!!this.seLtime && !!this.seLdate) {
+        // const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
+        const selDate = Date.parse(`${this.seLdate} ${this.seLtime}`);
+        console.log('selDate', selDate);
         return selDate.getTime() > new Date().getTime();
       }
 
@@ -313,6 +316,8 @@ wepy.page({
     },
     handleSetTime() {
       this.timeShow = false;
+
+      console.log(this.seLtime, this.seLdate, this.isValidTime());
 
       if (this.isValidTime()) {
         this.learnTip = `选择时间：${this.seLdate} ${this.seLtime}`;

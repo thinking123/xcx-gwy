@@ -136,22 +136,20 @@ Component({
         return;
       }
       this.isOperating = true;
-      this._setData({ isOperating: true })
-        .then(() => {
-          return updateLocalLearnTime({
-            ...learnTime,
-            learnState: 3
-          });
-        })
+      updateLocalLearnTime({
+        ...learnTime,
+        learnState: 3
+      })
         .then(res => {
           if (res) {
             this.circle.stop();
-            return this._setData({
+            this._setData({
               isStop: true
             });
           }
+          this.isOperating = false;
         })
-        .finally(res => {
+        .catch(res => {
           this.isOperating = false;
         });
     },
@@ -162,16 +160,14 @@ Component({
       const isStop = learnTime.learnState == 3;
 
       if (isStop || this.isOperating) {
-        console.log('this.data.isOperating', this.isOperating);
+        console.log('start isOperating', this.isOperating);
         return;
       }
 
       this.isOperating = true;
 
-      this._setData({ isOperating: true })
-        .then(() => {
-          return isPause ? getLearnTime(learnTime.id) : Promise.resolve();
-        })
+      let pos = isPause ? getLearnTime(learnTime.id) : Promise.resolve();
+      pos
         .then(res => {
           let l = learnTime;
           if (res) {
@@ -187,13 +183,16 @@ Component({
             this.circle[isPause ? 'resume' : 'pause'](
               store.state.learnTime.remaindLearnTime * 1000
             );
-            return this._setData({
+            this._setData({
               isPause: !isPause
             });
           }
-        })
-        .finally(res => {
+
           this.isOperating = false;
+        })
+        .catch(res => {
+          this.isOperating = false;
+          console.log('finally isOperating', this.isOperating);
         });
     }
   }

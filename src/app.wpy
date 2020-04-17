@@ -105,6 +105,17 @@ wepy.app({
     "pages/section3/selfPage",
     "pages/homeSection3",
 
+ "pages/section4/timuPage",
+    "pages/section4/xinzuoPage",
+    "pages/section4/baziResultPage",
+    "pages/section4/mianxianResultPage",
+    "pages/section4/baziPage",
+    "pages/section4/mianxianPage",
+    "pages/section4/resultPage",
+    "pages/section4/tianziliaoPage",
+    "pages/section4/zhcsPage",
+    "pages/section4/rgznPage",
+
     "pages/login/loginInput",
     "pages/login/register",
    
@@ -114,7 +125,8 @@ wepy.app({
 <config>{
   pages: [
     "pages/login/login",
-  
+ "pages/login/loginInput",
+    "pages/login/register",
     
     "pages/home",
     "pages/section1/learnPlan",
@@ -156,7 +168,17 @@ wepy.app({
     "pages/section3/moneyDetail",
     "pages/section3/selfPage",
     "pages/homeSection3",
-    
+
+     "pages/section4/timuPage",
+    "pages/section4/xinzuoPage",
+    "pages/section4/baziResultPage",
+    "pages/section4/mianxianResultPage",
+    "pages/section4/baziPage",
+    "pages/section4/mianxianPage",
+    "pages/section4/resultPage",
+    "pages/section4/tianziliaoPage",
+    "pages/section4/zhcsPage",
+    "pages/section4/rgznPage",
 
   ],
   window: {
