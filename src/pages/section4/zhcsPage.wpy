@@ -20,6 +20,7 @@
 import wepy from '@wepy/core';
 import store from 'store';
 import { getImgUrlEx } from '@/common/utils';
+import { navToPage } from '@/common/navUtils';
 
 wepy.page({
   store,
@@ -52,6 +53,7 @@ wepy.page({
         '',
         'xinzuoPage'
       ].map(r => (r ? `/pages/section4/${r}` : null));
+      navToPage(routes[index]);
       console.log(index);
     }
   },
