@@ -208,6 +208,10 @@ wepy.page({
         text: '起床睡觉',
         src: 'https://qiniu.kaimingwutong.com/home_icon_nav01.png'
       },
+         {
+        text: '今日任务',
+        src: 'https://qiniu.kaimingwutong.com/home_icon_nav04.png'
+      },
       {
         text: '学习计时',
         src: 'https://qiniu.kaimingwutong.com/home_icon_nav02.png'
@@ -215,17 +219,17 @@ wepy.page({
       {
         text: '学习日记',
         src: 'https://qiniu.kaimingwutong.com/home_icon_nav03.png'
-      },
-      {
-        text: '学习计划',
-        src: 'https://qiniu.kaimingwutong.com/home_icon_nav04.png'
       }
+   
     ],
     panelIcons: [
       'https://qiniu.kaimingwutong.com/home_img_huiyuan@3x.png',
-      'https://qiniu.kaimingwutong.com/home_img_kaiming@3x.png',
+      'https://qiniu.kaimingwutong.com/home_img_fujin@3x.png',
+
       'https://qiniu.kaimingwutong.com/home_img_luntan@3x.png',
-      'https://qiniu.kaimingwutong.com/home_img_fujin@3x.png'
+
+      'https://qiniu.kaimingwutong.com/home_img_kaiming@3x.png',
+
     ],
     getupShow: false,
     learnShow: false,
@@ -249,19 +253,20 @@ wepy.page({
         case 0:
           this.getupShow = true;
           break;
-        case 1:
+           case 1:
+          navToPage('/pages/section1/learnPlan');
+          break;
+        case 2:
           this.learnShow = true;
           this.learnTip = '';
           this.learnContent = '';
           this.setTime = [];
           this.time = [];
           break;
-        case 2:
+        case 3:
           navToPage('/pages/section1/learnLog');
           break;
-        case 3:
-          navToPage('/pages/section1/learnPlan');
-          break;
+       
       }
     },
     handleImage(index) {
@@ -269,14 +274,15 @@ wepy.page({
         case 0:
           navToPage('/pages/section1/MemberCenter');
           break;
-        case 1:
-          navToPage('/pages/section1/kaimingwutong');
+                case 1:
+          navToPage('/pages/section1/nearPage');
           break;
+     
         case 2:
           navToPage('/pages/section1/luntan');
           break;
-        case 3:
-          navToPage('/pages/section1/nearPage');
+     case 3:
+          navToPage('/pages/section1/kaimingwutong');
           break;
       }
     },
@@ -379,7 +385,7 @@ wepy.page({
 
     // navToPage('/pages/section1/nearDetailPage')
     if (DEV) {
-      navToPage('/pages/homeSection3');
+      // navToPage('/pages/homeSection3');
       // navToPage('/pages/section2/timu');
     }
   }

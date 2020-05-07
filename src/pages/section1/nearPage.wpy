@@ -102,7 +102,7 @@ wepy.page({
 </style>
 <config>
 {
-    navigationBarTitleText: '附近的人',
+    navigationBarTitleText: '查找学友',
     usingComponents: {
 
   'NearItem':'~Custom/NearItem',

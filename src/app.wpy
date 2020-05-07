@@ -102,6 +102,7 @@ wepy.app({
     "pages/section3/sharePage",
     "pages/section3/takeMoney",
     "pages/section3/moneyDetail",
+    "pages/section3/invitationcodePage",
     "pages/section3/selfPage",
     "pages/homeSection3",
 
@@ -119,13 +120,18 @@ wepy.app({
     "pages/login/loginInput",
     "pages/login/register",
    
+
+
+    "pages/login/loginInput",
+    "pages/login/register",
  */
 </script>
 
 <config>{
   pages: [
     "pages/login/login",
- "pages/login/loginInput",
+
+    "pages/login/loginInput",
     "pages/login/register",
     
     "pages/home",
@@ -166,6 +172,7 @@ wepy.app({
     "pages/section3/sharePage",
     "pages/section3/takeMoney",
     "pages/section3/moneyDetail",
+    "pages/section3/invitationcodePage",
     "pages/section3/selfPage",
     "pages/homeSection3",
 

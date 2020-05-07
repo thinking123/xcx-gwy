@@ -104,6 +104,10 @@ wepy.page({
       {
         text: '设置',
         icon: `${CDNUrl}icon_my07@3x.png`
+      },
+      {
+        text: '填写邀请码',
+        icon: `${CDNUrl}icon_my07@3x.png`
       }
     ]
   },
@@ -130,7 +134,8 @@ wepy.page({
         'myNote',
         'myMsg',
         'myReportPage',
-        ''
+        '',
+        'invitationcodePage'
       ].map((r, i) =>
         r ? (i != 1 ? `/pages/section3/${r}` : `/pages/section4/${r}`) : null
       );

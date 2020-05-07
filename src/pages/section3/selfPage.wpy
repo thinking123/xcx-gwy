@@ -410,7 +410,7 @@ page {
 .selfPage {
   .CLabelRightButton {
     width: 690rpx;
-    height: 120rpx;
+    height: 100rpx;
     padding: 30rpx 0;
     box-sizing: border-box;
     margin: 0 30rpx;

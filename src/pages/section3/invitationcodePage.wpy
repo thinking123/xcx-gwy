@@ -1,0 +1,59 @@
+<template>
+  <div class="page baziPage">
+    <CLabelInput
+      placeholder="请输入邀请码"
+      label="邀请码"
+      :val="code"
+      @update:val="handlev"
+    />
+    <CButton text="确认" @tap="onSubmit" external-cls="submit" />
+  </div>
+</template>
+
+<script>
+import wepy from '@wepy/core';
+import { isEmptyString, showMsg } from '@/common/utils';
+import { navBack } from '@/common/navUtils';
+
+wepy.page({
+  config: {
+    navigationBarTitleText: ''
+  },
+  data: {
+    code: ''
+  },
+  methods: {
+    handlev(v) {
+      this.code = v;
+    },
+    onSubmit() {
+      if (isEmptyString(this.code)) {
+        return showMsg('请填写邀请码');
+      }
+      console.log('this code ', this.code);
+      navBack();
+    }
+  }
+});
+</script>
+<style lang="scss">
+.baziPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .submit {
+    margin-top: 48rpx;
+    font-size: 36rpx;
+  }
+}
+</style>
+<config>
+{
+    navigationBarTitleText: '邀请码',
+    usingComponents: {
+  CLabelInput:'~UI/CLabelInput',
+  CButton:'~UI/CButton',
+    }
+}
+</config>

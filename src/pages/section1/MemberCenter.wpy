@@ -22,6 +22,16 @@
         :src="item.src"
       />
     </div>
+    <div class="row3">
+      <IconText
+        v-for="(item, index) in titleIcons3"
+        @click.native="handleIconText(index)"
+        external-cls="titleIcon"
+        :key="index"
+        :text="item.text"
+        :src="item.src"
+      />
+    </div>
     <div class="row4 text">VIP特享</div>
     <ClassCard
       title="课程名称，如资料分析"
@@ -67,15 +77,15 @@ wepy.page({
   data: {
     titleIcons1: [
       {
-        text: '真题解析',
+        text: '免费音频',
         src: 'icon_rights01@3x'
       },
       {
-        text: '购买折扣',
+        text: '课程折扣',
         src: 'icon_rights02@3x'
       },
       {
-        text: '名师经典课堂',
+        text: '小群名师答疑',
         src: 'icon_rights03@3x'
       }
     ],
@@ -89,7 +99,21 @@ wepy.page({
         src: 'icon_rights05@3x'
       },
       {
-        text: '免费考点分析',
+        text: '免费职位分析',
+        src: 'icon_rights06@3x'
+      }
+    ],
+    titleIcons3: [
+      {
+        text: 'AI 每日任务',
+        src: 'icon_rights04@3x'
+      },
+      {
+        text: 'AI 自我分析',
+        src: 'icon_rights05@3x'
+      },
+      {
+        text: 'AI 成绩分析',
         src: 'icon_rights06@3x'
       }
     ],

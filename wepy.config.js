@@ -51,7 +51,7 @@ module.exports = {
       BASE_URL: JSON.stringify('https://www.kaimingwutong.com/'),
       // 'process.env.NODE_ENV': 'development',
       // 'typeof window': JSON.stringify('undefined'),
-      DEV: false,
+      DEV: true,
       CDN: JSON.stringify(CDN)
     }),
     SrcPlugin({

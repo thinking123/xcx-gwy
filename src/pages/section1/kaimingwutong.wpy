@@ -40,7 +40,15 @@
             external-cls="CListSelect1"
             :sel="list2Sel1"
             @change="onCListSelect1"
-            v-else
+            v-if="selectedTab == 1"
+          />
+          <CListSelect
+            :items="labs"
+            labelKey="name"
+            external-cls="CListSelect1"
+            :sel="list3Sel1"
+            @change="onCListSelect1"
+            v-if="selectedTab == 2"
           />
         </div>
         <div style="display:{{selOrder==1?'block':'none'}}">
@@ -58,7 +66,15 @@
             external-cls="CListSelect1"
             :sel="list2Sel2"
             @change="onCListSelect2"
-            v-else
+            v-if="selectedTab == 1"
+          />
+          <CListSelect
+            :items="pros"
+            labelKey="cityCaption"
+            external-cls="CListSelect1"
+            :sel="list3Sel2"
+            @change="onCListSelect2"
+            v-if="selectedTab == 2"
           />
         </div>
         <div style="display:{{selOrder==2?'block':'none'}}">
@@ -76,7 +92,15 @@
             external-cls="CListSelect1"
             :sel="list2Sel3"
             @change="onCListSelect3"
-            v-else
+            v-if="selectedTab == 1"
+          />
+          <CListSelect
+            :items="frees"
+            labelKey="name"
+            external-cls="CListSelect1"
+            :sel="list3Sel3"
+            @change="onCListSelect3"
+            v-if="selectedTab == 2"
           />
         </div>
       </div>
@@ -119,6 +143,27 @@
         />
       </div>
     </CListWrap1>
+    <CListWrap1
+      :type="listtype3"
+      :params="params3"
+      url="/api/kmwt/getSoundRecordList"
+      :show="selectedTab == 2"
+      v-if="loaded"
+    >
+      <div class="gwtRecord">
+        <ClassCard1
+          v-for="item in clist3"
+          :key="item.id"
+          :num1="item.recordChapter"
+          :num2="item.recordSection"
+          :free="item.free"
+          :title="item.recordTitle"
+          :good="item.good"
+          :price="item.price"
+          external-cls="gwtRecord-item"
+        />
+      </div>
+    </CListWrap1>
   </div>
 </template>
 <script>
@@ -136,6 +181,7 @@ import store from 'store';
 
 const listtype1 = 'forum_getkmwtList1';
 const listtype2 = 'forum_getkmwtList2';
+const listtype3 = 'forum_getkmwtList3';
 
 wepy.page({
   store,
@@ -147,6 +193,10 @@ wepy.page({
     },
     clist2() {
       const list = this.items[this.listtype2];
+      return list || [];
+    },
+    clist3() {
+      const list = this.items[this.listtype3];
       return list || [];
     },
     dockerList() {
@@ -171,14 +221,23 @@ wepy.page({
       p = delNullProperty(p);
 
       return p;
+    },
+    params3() {
+      let p = {
+        labelId: selArrayVal(this.list3Sel1, this.labs, 'id'),
+        cityCodeProvince: selArrayVal(this.list3Sel2, this.pros, 'adCode'),
+        freeId: selArrayVal(this.list3Sel3, [], 'id')
+      };
+      p = delNullProperty(p);
+
+      return p;
     }
   },
   data: {
     expanded: false,
     items1: [],
     items2: [],
-
-    tabs: [{ text: '公务员' }, { text: '录播' }],
+    tabs: [{ text: '公务员' }, { text: '事业单位' }, { text: '国家企业' }],
     selectedTab: 0,
     iconText: {
       text: '发表提问',
@@ -193,12 +252,16 @@ wepy.page({
     selOrder: -1,
     list1Sel1: -1,
     list2Sel1: -1,
+    list3Sel1: -1,
     list1Sel2: -1,
     list2Sel2: -1,
+    list3Sel2: -1,
     list1Sel3: -1,
     list2Sel3: -1,
+    list3Sel3: -1,
     listtype1,
     listtype2,
+    listtype3,
     loaded: false
   },
   methods: {
@@ -212,10 +275,15 @@ wepy.page({
         const t3 =
           selArrayVal(this.list1Sel3, this.deps, 'departmentName') || '部门';
         arr = [t1, t2, t3];
-      } else {
+      } else if (this.selectedTab == 1) {
         const t1 = selArrayVal(this.list2Sel1, this.labs, 'name') || '分类';
         const t2 =
           selArrayVal(this.list2Sel2, this.pros, 'cityCaption') || '地区';
+        arr = [t1, t2];
+      } else {
+        const t1 = selArrayVal(this.list3Sel1, this.labs, 'name') || '分类';
+        const t2 =
+          selArrayVal(this.list3Sel2, this.pros, 'cityCaption') || '地区';
         arr = [t1, t2];
       }
       return arr.map(t => ({
@@ -261,8 +329,12 @@ wepy.page({
         this.list1Sel1 = index;
         this.showDocker = false;
         this.selOrder = -1;
-      } else {
+      } else if (this.selectedTab == 1) {
         this.list2Sel1 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else {
+        this.list3Sel1 = index;
         this.showDocker = false;
         this.selOrder = -1;
       }
@@ -272,8 +344,12 @@ wepy.page({
         this.list1Sel2 = index;
         this.showDocker = false;
         this.selOrder = -1;
-      } else {
+      } else if (this.selectedTab == 1) {
         this.list2Sel2 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else {
+        this.list3Sel2 = index;
         this.showDocker = false;
         this.selOrder = -1;
       }
@@ -281,6 +357,10 @@ wepy.page({
     onCListSelect3(index) {
       if (this.selectedTab == 0) {
         this.list1Sel3 = index;
+        this.showDocker = false;
+        this.selOrder = -1;
+      } else if (this.selectedTab == 1) {
+        this.list2Sel3 = index;
         this.showDocker = false;
         this.selOrder = -1;
       } else {
@@ -294,34 +374,6 @@ wepy.page({
     this.init();
   },
   created() {
-    // let arr = [];
-    // for (let i = 0; i < 20; i++) {
-    //   arr.push({
-    //     header: '',
-    //     name: 'name',
-    //     level: '省部',
-    //     bm: '湖南 | 行政部',
-    //     desc: '答疑解惑，我们的职责,答疑解惑，我们的职责',
-    //     id: i
-    //   });
-    // }
-
-    // this.items1 = arr;
-
-    // arr = [];
-    // for (let i = 0; i < 20; i++) {
-    //   arr.push({
-    //     num1: '2',
-    //     num2: '2',
-    //     free: i % 2,
-    //     price: i * 6,
-    //     title: '真题讲课程名称课程名称课程名称课程名称',
-    //     good: 'good',
-    //     id: i
-    //   });
-    // }
-    // this.items2 = arr;
-
     this.iconText.src = getImgUrlEx(this.iconText.src);
   }
 });
@@ -339,7 +391,7 @@ wepy.page({
     align-items: center;
     background-color: #ffffff;
     .ctab {
-      width: 460rpx;
+      width: 600rpx;
     }
     .titleIcon {
       font-size: 28rpx;
