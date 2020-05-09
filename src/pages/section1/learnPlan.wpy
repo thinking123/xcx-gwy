@@ -273,7 +273,8 @@ wepy.page({
 
       if (verify()) {
         const str = `${this.seLdate} ${this.seLtime}`;
-        const selDate = Date.parse(str);
+        // const selDate = Date.parse(str);
+        const selDate = new Date(str);
         const totalT = selDate.getTime();
 
         learnPlanAdd(this.user.id, this.learnContent, totalT).then(res => {
@@ -307,8 +308,9 @@ wepy.page({
     isValidTime() {
       if (!!this.seLtime && !!this.seLdate) {
         // const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
-        const selDate = Date.parse(`${this.seLdate} ${this.seLtime}`);
-        console.log('selDate', selDate);
+        // let selDate = Date.parse(`${this.seLdate} ${this.seLtime}`);
+        // console.log('selDate', selDate);
+        const selDate = new Date(`${this.seLdate} ${this.seLtime}`);
         return selDate.getTime() > new Date().getTime();
       }
 

@@ -196,7 +196,7 @@ wepy.page({
     onLike(v) {
       const p =
         this.media.isCollect == 1
-          ? cancelSubjectCollect(item.id, 2)
+          ? cancelSubjectCollect(this.media.id, 2)
           : subjectCollect(this.media.id, 2);
       p.then(() => {
         this.media.isCollect = this.media.isCollect == 1 ? 0 : 1;

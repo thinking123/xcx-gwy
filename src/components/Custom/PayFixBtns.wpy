@@ -10,7 +10,7 @@
         </block>
         <block v-else>
           <div class="no-opend-row1">
-            <span class="row3">{{ nowPrice }}/年</span>
+            <span class="row3">{{ nowPrice }}/半年</span>
             <span class="row4">¥{{ originPrice }}</span>
           </div>
         </block>
@@ -20,7 +20,7 @@
           <div class="row1">
             续费
           </div>
-          <div class="row2">¥{{ continuePrice }}/年</div>
+          <div class="row2">¥{{ continuePrice }}/半年</div>
         </block>
         <block v-else>
           <span class="row3">立即开通</span>
@@ -83,7 +83,7 @@ $originColor: #ff6600;
       font-weight: 400;
       color: rgba(45, 49, 51, 1);
       line-height: 28rpx;
-      flex:1;
+      flex: 1;
     }
 
     .row2 {
@@ -103,7 +103,7 @@ $originColor: #ff6600;
       }
     }
     .no-opend-row1 {
-      flex:1;
+      flex: 1;
       font-size: 36rpx;
       font-family: PingFangSC-Semibold, PingFangSC;
       font-weight: 600;

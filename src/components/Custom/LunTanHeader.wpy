@@ -34,7 +34,7 @@ wepy.component({
   computed: {},
   methods: {
     handleBtn() {
-      !this.isCollect && this.$emit('btn');
+      this.$emit('btn');
     }
   },
   created() {}

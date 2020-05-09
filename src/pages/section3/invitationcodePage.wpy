@@ -3,7 +3,7 @@
     <CLabelInput
       placeholder="请输入邀请码"
       label="邀请码"
-      :val="code"
+      :val="user.invitationCode"
       @update:val="handlev"
     />
     <CButton text="确认" @tap="onSubmit" external-cls="submit" />
@@ -12,17 +12,25 @@
 
 <script>
 import wepy from '@wepy/core';
+import store from 'store';
+import { mapGetters, mapState, mapMutations } from '@wepy/x';
 import { isEmptyString, showMsg } from '@/common/utils';
 import { navBack } from '@/common/navUtils';
+import { updateMsgById } from '@/http/http-business';
 
 wepy.page({
+  store,
   config: {
     navigationBarTitleText: ''
+  },
+  computed: {
+    ...mapGetters(['user'])
   },
   data: {
     code: ''
   },
   methods: {
+    ...mapMutations(['setUser']),
     handlev(v) {
       this.code = v;
     },
@@ -31,7 +39,16 @@ wepy.page({
         return showMsg('请填写邀请码');
       }
       console.log('this code ', this.code);
-      navBack();
+
+      this.updateUser({
+        invitationCode: this.code
+      });
+    },
+    updateUser(userInfo) {
+      return updateMsgById(this.user.id, userInfo).then(() => {
+        this.setUser(userInfo);
+        navBack();
+      });
     }
   }
 });
