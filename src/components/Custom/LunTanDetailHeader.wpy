@@ -43,7 +43,7 @@ wepy.component({
   },
   methods: {
     handleBtn() {
-      !this.followed && this.$emit('btn');
+      this.$emit('btn');
     }
   }
 });

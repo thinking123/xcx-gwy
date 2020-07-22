@@ -79,7 +79,7 @@
         </div>
         <div style="display:{{selOrder==2?'block':'none'}}">
           <CListSelect
-            :items="deps"
+            :items="deps1"
             labelKey="departmentName"
             external-cls="CListSelect1"
             :sel="list1Sel3"
@@ -87,16 +87,16 @@
             v-if="selectedTab == 0"
           />
           <CListSelect
-            :items="frees"
-            labelKey="name"
+            :items="deps2"
+            labelKey="departmentName"
             external-cls="CListSelect1"
             :sel="list2Sel3"
             @change="onCListSelect3"
             v-if="selectedTab == 1"
           />
           <CListSelect
-            :items="frees"
-            labelKey="name"
+            :items="deps3"
+            labelKey="departmentName"
             external-cls="CListSelect1"
             :sel="list3Sel3"
             @change="onCListSelect3"
@@ -206,7 +206,7 @@ wepy.page({
       let p = {
         gwyLevel: selArrayVal(this.list1Sel1, this.gwyLevels, 'id'),
         gwyCity: selArrayVal(this.list1Sel2, this.pros, 'adCode'),
-        gwyDepartment: selArrayVal(this.list1Sel3, this.deps, 'id')
+        gwyDepartment: selArrayVal(this.list1Sel3, this.deps1, 'id')
       };
       p = delNullProperty(p);
 
@@ -216,7 +216,7 @@ wepy.page({
       let p = {
         labelId: selArrayVal(this.list2Sel1, this.labs, 'id'),
         cityCodeProvince: selArrayVal(this.list2Sel2, this.pros, 'adCode'),
-        freeId: selArrayVal(this.list2Sel3, [], 'id')
+        gwyDepartment: selArrayVal(this.list2Sel3, this.deps2, 'id')
       };
       p = delNullProperty(p);
 
@@ -226,7 +226,7 @@ wepy.page({
       let p = {
         labelId: selArrayVal(this.list3Sel1, this.labs, 'id'),
         cityCodeProvince: selArrayVal(this.list3Sel2, this.pros, 'adCode'),
-        freeId: selArrayVal(this.list3Sel3, [], 'id')
+        gwyDepartment: selArrayVal(this.list3Sel3, this.deps3, 'id')
       };
       p = delNullProperty(p);
 
@@ -245,7 +245,9 @@ wepy.page({
     },
     gwyLevels: [],
     pros: [],
-    deps: [],
+    deps1: [],
+    deps2: [],
+    deps3: [],
     labs: [],
     frees: [{ name: '免费' }],
     showDocker: false,
@@ -273,18 +275,23 @@ wepy.page({
         const t2 =
           selArrayVal(this.list1Sel2, this.pros, 'cityCaption') || '地区';
         const t3 =
-          selArrayVal(this.list1Sel3, this.deps, 'departmentName') || '部门';
+          selArrayVal(this.list1Sel3, this.deps1, 'departmentName') || '部门';
         arr = [t1, t2, t3];
       } else if (this.selectedTab == 1) {
         const t1 = selArrayVal(this.list2Sel1, this.labs, 'name') || '分类';
         const t2 =
           selArrayVal(this.list2Sel2, this.pros, 'cityCaption') || '地区';
-        arr = [t1, t2];
+        const t3 =
+          selArrayVal(this.list2Sel3, this.deps2, 'departmentName') || '部门';
+        arr = [t1, t2, t3];
       } else {
         const t1 = selArrayVal(this.list3Sel1, this.labs, 'name') || '分类';
         const t2 =
           selArrayVal(this.list3Sel2, this.pros, 'cityCaption') || '地区';
-        arr = [t1, t2];
+        const t3 =
+          selArrayVal(this.list3Sel3, this.deps3, 'departmentName') || '部门';
+
+        arr = [t1, t2, t3];
       }
       return arr.map(t => ({
         text: t
@@ -301,13 +308,17 @@ wepy.page({
       Promise.all([
         getGwyLevel(),
         kmwtSelectPro(),
-        getDepartment(),
+        getDepartment(1),
+        getDepartment(2),
+        getDepartment(3),
         getLabel()
       ]).then(vs => {
         this.gwyLevels = vs[0];
         this.pros = vs[1];
-        this.deps = vs[2];
-        this.labs = vs[3];
+        this.deps1 = vs[2];
+        this.deps2 = vs[3];
+        this.deps3 = vs[4];
+        this.labs = vs[5];
         this.loaded = true;
       });
     },
@@ -364,7 +375,7 @@ wepy.page({
         this.showDocker = false;
         this.selOrder = -1;
       } else {
-        this.list2Sel3 = index;
+        this.list3Sel3 = index;
         this.showDocker = false;
         this.selOrder = -1;
       }

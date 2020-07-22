@@ -2027,13 +2027,13 @@ header	string
 
 
  */
-export function getDepartment() {
+export function getDepartment(isDel) {
   let url = '/api/kmwt/getDepartment';
 
   // const loadingText = '打卡...';
   // const errMsg = '打卡失败';
 
-  url = urlParams(url, {});
+  url = urlParams(url, { isDel });
   return get(url, {}, '').then(res => parseRes(res, ''));
 }
 /**

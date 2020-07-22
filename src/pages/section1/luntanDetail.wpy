@@ -69,7 +69,8 @@ import {
   forumaddScan,
   forumuserCollect,
   getForumById,
-  forumEvaluate
+  forumEvaluate,
+  cancelForumCollect
 } from '@/http/http-business';
 import { navToPage } from '@/common/navUtils';
 import { mapGetters } from '@wepy/x';
@@ -123,7 +124,12 @@ wepy.page({
       navToPage('/pages/section1/luntanPublish');
     },
     onFollow() {
-      forumuserCollect(this.userId).then(() => {
+      const p =
+        this.tz.isCollec == 1
+          ? cancelForumCollect(this.tz.postLabel)
+          : forumforumCollect(this.tz.postLabel);
+
+      fp.then(() => {
         this.tz.isCollec = !this.tz.isCollec;
       });
     },
